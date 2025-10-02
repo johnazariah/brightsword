@@ -9,15 +9,19 @@ namespace BrightSword.SwissKnife.Tests
 {
     public class StringExtensionsTests
     {
-    private static readonly string[] CamelCaseExampleExpected = new string[] { "Camel", "Case", "Example" };
-    private static readonly string[] XMLHttpRequestExpected = new string[] { "XML", "Http", "Request" };
+        private static readonly string[] CamelCaseExampleExpected = new[] { "Camel", "Case", "Example" };
+        private static readonly string[] XMLHttpRequestExpected = new[] { "XML", "Http", "Request" };
+
+        private static readonly string[] EmptyStringArray = System.Array.Empty<string>();
 
         public static TheoryData<string, string[]> SplitCamelCaseData() => new TheoryData<string, string[]>
         {
             { "CamelCaseExample", CamelCaseExampleExpected },
             { "XMLHttpRequest", XMLHttpRequestExpected },
-            { string.Empty, System.Array.Empty<string>() }
+            { string.Empty, EmptyStringArray }
         };
+
+        private static readonly string[] PartOneTwo = new[] { "part", "one", "two" };
 
         [Theory]
         [MemberData(nameof(SplitCamelCaseData))]
@@ -31,7 +35,7 @@ namespace BrightSword.SwissKnife.Tests
         public void SplitDottedWorks()
         {
             var actual = "part.one.two".SplitDotted().ToArray();
-            Assert.Equal(new[] { "part", "one", "two" }, actual);
+            Assert.Equal(PartOneTwo, actual);
         }
 
         [Property]

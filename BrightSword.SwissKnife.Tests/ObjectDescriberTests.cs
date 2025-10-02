@@ -6,7 +6,7 @@ namespace BrightSword.SwissKnife.Tests
 {
     public class ObjectDescriberTests
     {
-        private class C { public int Prop { get; set; } public void Method() { } }
+    private sealed class C { public int Prop { get; set; } public static void Method() { } }
 
         [Fact]
         public void GetName_MemberExpression_Works()
@@ -18,7 +18,7 @@ namespace BrightSword.SwissKnife.Tests
         [Fact]
         public void GetName_MethodCall_Works()
         {
-            var name = ObjectDescriber.GetName(() => new C().Method());
+            var name = ObjectDescriber.GetName(() => C.Method());
             Assert.Equal("Method", name);
         }
     }

@@ -7,12 +7,19 @@ namespace BrightSword.SwissKnife.Tests
     public class AttributeExtensionsTests
     {
     [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    private class SampleAttr : System.Attribute { public string Name { get; } public SampleAttr(string name) { Name = name; } }
+    private sealed class SampleAttr : System.Attribute
+    {
+        public string Name { get; }
+        public SampleAttr(string name) { Name = name; }
+    }
 
         [SampleAttr("Cls")]
-        private class C
+        private sealed class C
         {
-            [SampleAttr("Mth")] public void M() { }
+            [SampleAttr("Mth")]
+            #pragma warning disable CA1822 // Method does not access instance data - kept instance for reflection-based attribute lookup
+            public void M() { }
+            #pragma warning restore CA1822
         }
 
         [Fact]
