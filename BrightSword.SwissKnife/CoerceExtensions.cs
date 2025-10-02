@@ -13,7 +13,7 @@ namespace BrightSword.SwissKnife
 
             if (targetType == typeof(bool))
             {
-                var str = value.ToString();
+                var str = Convert.ToString(value);
                 if (string.IsNullOrEmpty(str))
                 {
                     return false;
@@ -31,21 +31,21 @@ namespace BrightSword.SwissKnife
 
             if (targetType.IsEnum)
             {
-                return value.CoerceType(targetType, out var returnValue, _ => true, (_type, _value) => Enum.Parse(_type, _value.ToString(), true), defaultValue)
+                return value.CoerceType(targetType, out var returnValue, _ => true, (_type, _value) => Enum.Parse(_type, Convert.ToString(_value), true), defaultValue)
                     ? returnValue
                     : throw new InvalidCastException($"Cannot cast {value} to {targetType}");
             }
 
-            if (value.CoerceType(targetType, out var parsed, (_, _value) => bool.Parse(_value.ToString()), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => decimal.Parse(_value.ToString()), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => long.Parse(_value.ToString()), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => int.Parse(_value.ToString()), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => short.Parse(_value.ToString()), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => byte.Parse(_value.ToString()), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => char.Parse(_value.ToString()), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => double.Parse(_value.ToString()), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => float.Parse(_value.ToString()), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => DateTime.Parse(_value.ToString()), defaultValue))
+            if (value.CoerceType(targetType, out var parsed, (_, _value) => bool.Parse(Convert.ToString(_value)), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => decimal.Parse(Convert.ToString(_value)), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => long.Parse(Convert.ToString(_value)), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => int.Parse(Convert.ToString(_value)), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => short.Parse(Convert.ToString(_value)), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => byte.Parse(Convert.ToString(_value)), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => char.Parse(Convert.ToString(_value)), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => double.Parse(Convert.ToString(_value)), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => float.Parse(Convert.ToString(_value)), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => DateTime.Parse(Convert.ToString(_value)), defaultValue))
             {
                 return parsed;
             }

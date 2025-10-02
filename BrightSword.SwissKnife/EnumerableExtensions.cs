@@ -10,7 +10,23 @@ namespace BrightSword.SwissKnife
             => filter == null ? !@this.Any() : !@this.Any(filter);
 
         public static bool AllUnique<T>(this IEnumerable<T> @this)
-            => @this.All(new HashSet<T>().Add);
+        {
+            if (@this == null)
+            {
+                return true;
+            }
+
+            var seen = new HashSet<T>();
+            foreach (var item in @this)
+            {
+                if (!seen.Add(item))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
 
         public static bool AllUniqueSorted<T>(this IList<T> @this)
         {
