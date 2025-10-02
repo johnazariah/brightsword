@@ -3,17 +3,27 @@ name: CI - Pack and optional publish
 on:
   push:
     branches: [ main ]
-    tags: [ 'v*' ]
-  workflow_dispatch: {}
+    tags: [ 'v*', 'swissknife-v*', 'feber-v*' ]
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish action: publish-swissknife or publish-feber (blank for no publish)'
+        required: false
+        default: ''
 
 env:
   ARTIFACT_DIR: ./artifacts
+  NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
 
 jobs:
   pack-swissknife:
     runs-on: ubuntu-latest
     outputs:
-      package-version: ${{ steps.set-version.outputs.package-version }}
+      bumped_versions: ${{ steps.export_bumped_versions.outputs.bumped_versions }}
+      SwissKnifeVersion: ${{ steps.parse_bumped.outputs.SwissKnifeVersion }}
+      FeberVersion: ${{ steps.parse_bumped.outputs.FeberVersion }}
+    # Run on normal pushes or when explicitly dispatched to publish swissknife
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.publish == 'publish-swissknife' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,16 +36,53 @@ jobs:
       - name: Restore
         run: dotnet restore BrightSword.sln
 
+      - name: Show bumped_versions from previous job (if any)
+        run: |
+          echo "bumped_versions from pack-swissknife: ${{ needs['pack-swissknife'].outputs.bumped_versions }}"
+          echo "SwissKnifeVersion: ${{ needs['pack-swissknife'].outputs.SwissKnifeVersion }}"
+          echo "FeberVersion: ${{ needs['pack-swissknife'].outputs.FeberVersion }}"
+
       - name: Build
         run: dotnet build BrightSword.sln -c Release --no-restore
 
-      - name: Pack SwissKnife
+      - name: Run PublishSwissknife target (MSBuild)
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          DO_COMMIT: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.publish == 'publish-swissknife') || startsWith(github.ref, 'refs/tags/swissknife-v') }}
         run: |
-          mkdir -p $ARTIFACT_DIR
-          PACKAGE_VERSION="${GITHUB_RUN_NUMBER}.0"
-          dotnet pack BrightSword.SwissKnife/BrightSword.SwissKnife.csproj -c Release -o $ARTIFACT_DIR /p:PackageId=BrightSword.SwissKnife /p:PackageVersion=$PACKAGE_VERSION
-          echo "package-version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
-        id: set-version
+          TAG=""
+          if [[ "$GITHUB_REF" =~ ^refs/tags/swissknife-v ]]; then
+            TAG=${GITHUB_REF#refs/tags/swissknife-v}
+          fi
+          echo "Invoking msbuild PublishSwissknife (VersionFromTag=$TAG)"
+          dotnet msbuild build.proj -t:PublishSwissknife -p:DoCommit=$DO_COMMIT -p:NUGET_API_KEY=$NUGET_API_KEY -p:GitRefName=$GITHUB_REF_NAME -p:VersionFromTag=$TAG
+
+      - name: Export bumped_versions.json to step output
+        id: export_bumped_versions
+        if: always()
+        run: |
+          if [ -f bumped_versions.json ]; then
+            echo "bumped_versions<<EOF" >> $GITHUB_OUTPUT
+            cat bumped_versions.json >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "bumped_versions={}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Parse bumped_versions and expose version fields
+        id: parse_bumped
+        if: always()
+        run: |
+          # produce SwissKnifeVersion and FeberVersion outputs (empty if not present)
+          if [ -f bumped_versions.json ]; then
+            SK=$(jq -r '.["BrightSword.SwissKnife"] // empty' bumped_versions.json)
+            FB=$(jq -r '.["BrightSword.Feber"] // empty' bumped_versions.json)
+          else
+            SK=
+            FB=
+          fi
+          echo "SwissKnifeVersion=$SK" >> $GITHUB_OUTPUT
+          echo "FeberVersion=$FB" >> $GITHUB_OUTPUT
 
       - name: Upload NuGet artifact
         uses: actions/upload-artifact@v4
@@ -46,6 +93,10 @@ jobs:
   pack-feber:
     runs-on: ubuntu-latest
     needs: pack-swissknife
+    outputs:
+      bumped_versions: ${{ steps.export_bumped_versions.outputs.bumped_versions }}
+    # Run on normal pushes, or when dispatch publishes feber or swissknife (swissknife publishes feber transitively)
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.publish == 'publish-feber' || github.event.inputs.publish == 'publish-swissknife' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -55,30 +106,35 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Download swissknife artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: swissknife-nugets
-          path: ./localfeed
-
-      - name: Add local feed
-        run: |
-          dotnet nuget add source ./localfeed -n local-feed || true
-
-      - name: Add PackageReference for local SwissKnife package
-        run: |
-          # Backup csproj
-          cp BrightSword.Feber/BrightSword.Feber.csproj BrightSword.Feber/BrightSword.Feber.csproj.bak
-          # Append a PackageReference ItemGroup before the closing </Project>
-          sed -i "s|</Project>|  <ItemGroup>\n    <PackageReference Include=\"BrightSword.SwissKnife\" Version=\"${{ needs.pack-swissknife.outputs.package-version }}\" />\n  </ItemGroup>\n</Project>|" BrightSword.Feber/BrightSword.Feber.csproj
+      # NOTE: We intentionally do NOT add a PackageReference to the Feber csproj here.
+      # Both projects are packed independently so each produces its own NuGet package.
 
       - name: Restore
         run: dotnet restore BrightSword.sln
 
-      - name: Pack Feber
+      - name: Run PublishFeber target (MSBuild)
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          DO_COMMIT: ${{ (github.event_name == 'workflow_dispatch' && (github.event.inputs.publish == 'publish-feber' || github.event.inputs.publish == 'publish-swissknife')) || startsWith(github.ref, 'refs/tags/feber-v') || startsWith(github.ref, 'refs/tags/swissknife-v') }}
         run: |
-          mkdir -p $ARTIFACT_DIR
-          dotnet pack BrightSword.Feber/BrightSword.Feber.csproj -c Release -o $ARTIFACT_DIR /p:PackageId=BrightSword.Feber /p:PackageVersion=${{ needs.pack-swissknife.outputs.package-version }}
+          TAG=""
+          if [[ "$GITHUB_REF" =~ ^refs/tags/feber-v ]]; then
+            TAG=${GITHUB_REF#refs/tags/feber-v}
+          fi
+          echo "Invoking msbuild PublishFeber (VersionFromTag=$TAG)"
+          dotnet msbuild build.proj -t:PublishFeber -p:DoCommit=$DO_COMMIT -p:NUGET_API_KEY=$NUGET_API_KEY -p:GitRefName=$GITHUB_REF_NAME -p:VersionFromTag=$TAG
+
+      - name: Export bumped_versions.json to step output
+        id: export_bumped_versions
+        if: always()
+        run: |
+          if [ -f bumped_versions.json ]; then
+            echo "bumped_versions<<EOF" >> $GITHUB_OUTPUT
+            cat bumped_versions.json >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "bumped_versions={}" >> $GITHUB_OUTPUT
+          fi
 
       - name: Upload Feber NuGet artifact
         uses: actions/upload-artifact@v4
@@ -86,9 +142,14 @@ jobs:
           name: feber-nugets
           path: ${{ env.ARTIFACT_DIR }}
 
-      - name: Optional: Publish packages to NuGet.org
-        if: ${{ needs.pack-swissknife.outputs.package-version != '' && secrets.NUGET_API_KEY }}
+      - name: "Optional: Publish packages to NuGet.org"
         run: |
-          for nupkg in $ARTIFACT_DIR/*.nupkg; do
-            dotnet nuget push "$nupkg" -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json || true
-          done
+          if [ -n "$(ls $ARTIFACT_DIR/*.nupkg 2>/dev/null)" ] && [ -n "$NUGET_API_KEY" ]; then
+            echo "Publishing packages to NuGet.org"
+            for nupkg in $ARTIFACT_DIR/*.nupkg; do
+              echo "Pushing $nupkg"
+              dotnet nuget push "$nupkg" -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json || echo "Push failed for $nupkg"
+            done
+          else
+            echo "Skipping NuGet publish - no nupkg artifacts or NUGET_API_KEY missing"
+          fi
