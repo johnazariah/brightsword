@@ -1,19 +1,30 @@
 # EnumerableExtensions
 
 Purpose
-- A collection of extension methods for IEnumerable<T> to simplify common operations.
 
-Key APIs
-- ForEach<T>(this IEnumerable<T> source, Action<T> action)
-- IsNullOrEmpty<T>(this IEnumerable<T> source)
-- Partition<T>(this IEnumerable<T> source, int size)
+Collection helper extensions to simplify common iteration and chunking patterns.
 
-Usage
+Public API (signatures)
+
+- void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+- bool IsNullOrEmpty<T>(this IEnumerable<T> source)
+- IEnumerable<IEnumerable<T>> Partition<T>(this IEnumerable<T> source, int size)
+
+Examples
+
 ```csharp
+// ForEach
 items.ForEach(x => Console.WriteLine(x));
-if (list.IsNullOrEmpty()) ...
-foreach(var chunk in items.Partition(100)) { ... }
+
+// Null/empty check
+if (list.IsNullOrEmpty()) return;
+
+// Partition into chunks of 100
+foreach (var chunk in items.Partition(100)) {
+	ProcessChunk(chunk);
+}
 ```
 
-Notes
-- Methods are implemented with defensive checks for null and aim to be allocation-light.
+Remarks
+
+These helpers perform null checks and are intended for readability. `Partition` yields lazy subsequences and avoids buffering the entire collection where possible.

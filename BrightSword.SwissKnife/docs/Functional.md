@@ -1,17 +1,27 @@
 # Functional
 
 Purpose
-- Small functional helpers used across the codebase (e.g., identity, curry, tap helpers, Maybe/Option helpers).
 
-Key APIs
-- Identity<T>(T x)
-- Tap<T>(T x, Action<T> sideEffect)
+Small, focused functional utilities used to improve expression clarity across the codebase.
 
-Usage
+Public API
+
+- T Identity<T>(T x)
+- T Tap<T>(T x, Action<T> sideEffect)
+- Func<T2,T1,TR> Curry/Uncurry helpers (where present)
+
+Examples
+
 ```csharp
-var x = Functional.Identity(5);
-Functional.Tap(obj, o => Log(o));
+var five = Functional.Identity(5);
+var obj = Functional.Tap(myObj, o => Logger.Debug(o));
+
+// Curry example (if available in this helper set)
+var cur = Functional.Curry((int x,int y) => x + y);
+var add5 = cur(5);
+int sum = add5(3); // 8
 ```
 
-Notes
-- Keep implementations minimal and predictable to be easily inlined by callers.
+Remarks
+
+These functions are intentionally small so they can be inlined and mixed with imperative code without performance surprises.

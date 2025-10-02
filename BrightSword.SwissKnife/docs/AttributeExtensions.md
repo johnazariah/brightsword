@@ -1,19 +1,25 @@
 # AttributeExtensions
 
 Purpose
-- Provides helper extension methods for working with attributes on types, members and parameters.
 
-Key APIs
-- GetCustomAttribute<T>(this MemberInfo member, bool inherit = true): returns a single attribute or null.
-- GetCustomAttributes<T>(this MemberInfo member, bool inherit = true): returns all attributes of type T.
+Helpers to simplify retrieving custom attributes via reflection. These extensions are null-safe and provide convenient generic overloads.
 
-Usage
+Public API (examples)
+
+- T? GetCustomAttribute<T>(this MemberInfo member, bool inherit = true)
+- IEnumerable<T> GetCustomAttributes<T>(this MemberInfo member, bool inherit = true)
+
+Examples
+
 ```csharp
-var attr = typeof(MyClass).GetCustomAttribute<MyAttribute>();
-foreach(var a in typeof(MyClass).GetCustomAttributes<MyAttribute>()) {
-  // use a
-}
+// Get a single attribute from a type
+var attrib = typeof(MyClass).GetCustomAttribute<MyAttribute>();
+
+// Get all matching attributes from a member
+var attrs = typeof(MyClass).GetCustomAttributes<MyAttribute>(inherit: false);
+foreach (var a in attrs) Console.WriteLine(a.SomeProperty);
 ```
 
-Notes
-- These helpers are thin, null-safe wrappers around System.Reflection and are intended to improve readability.
+Remarks
+
+These are convenience wrappers over System.Reflection that reduce casting/boilerplate when working with attributes. They return empty sequences or null where appropriate to keep call sites simple.
