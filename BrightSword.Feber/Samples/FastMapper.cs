@@ -76,7 +76,7 @@ namespace BrightSword.Feber.Samples
               ParameterExpression rightInstanceParameterExpression)
             {
                 var field = typeof(T).GetField($"_{property.Name[..1].ToLower(System.Globalization.CultureInfo.CurrentCulture)}{property.Name[1..]}", BindingFlags.Instance | BindingFlags.NonPublic);
-                Debug.Assert(field != null);
+                Debug.Assert(field is not null);
                 return Expression.Assign(Expression.Field(leftInstanceParameterExpression, field), rightInstanceParameterExpression.GetDynamicPropertyAccessorExpression<T>(property));
             }
         }

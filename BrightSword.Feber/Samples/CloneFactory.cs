@@ -42,7 +42,7 @@ namespace BrightSword.Feber.Samples
             {
                 var property1 = MatchProperty(destinationProperties, property);
                 var property2 = MatchProperty(sourceProperties, property);
-                return property1 is null || property1.GetSetMethod() == null || property2 is null || property2.GetGetMethod() == null
+                return property1 is null || property1.GetSetMethod() is null || property2 is null || property2.GetGetMethod() is null
                     ? Expression.Default(typeof(void))
                     : Expression.Assign(Expression.Property(leftInstanceParameterExpression, property1), Expression.Property(rightInstanceParameterExpression, property2));
             }
