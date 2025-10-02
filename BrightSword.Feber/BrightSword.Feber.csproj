@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--Project was exported from assembly: C:\Users\johnaz\Downloads\brightsword.feber.1.0.16\lib\net40\BrightSword.Feber.dll-->
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{511362B8-329B-43D5-8BEB-5065893867DB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>BrightSword.Feber</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <ApplicationVersion>1.0.16.0</ApplicationVersion>
+    <FileAlignment>512</FileAlignment>
+    <RootNamespace>BrightSword.Feber</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BrightSword.SwissKnife" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Core\OperationBuilderBase`1.cs" />
+    <Compile Include="Core\UnaryOperationBuilderBase`2.cs" />
+    <Compile Include="Core\ActionBuilder`2.cs" />
+    <Compile Include="Core\BinaryOperationBuilderBase`3.cs" />
+    <Compile Include="Core\ActionBuilder`3.cs" />
+    <Compile Include="Core\BinaryFunctionBuilderBase`4.cs" />
+    <Compile Include="Core\UnaryFunctionBuilderBase`3.cs" />
+    <Compile Include="Core\FunctionBuilder`3.cs" />
+    <Compile Include="Core\FunctionBuilder`4.cs" />
+    <Compile Include="Core\DynamicExpressionUtilities.cs" />
+    <Compile Include="Samples\FastComparer.cs" />
+    <Compile Include="Samples\FastComparer`1.cs" />
+    <Compile Include="Samples\CloneFactory.cs" />
+    <Compile Include="Samples\CloneFactory`3.cs" />
+    <Compile Include="Samples\PrettyPrinter.cs" />
+    <Compile Include="Samples\PrettyPrinter`1.cs" />
+    <Compile Include="Samples\FastMapper.cs" />
+    <Compile Include="Samples\FastMapper`1.cs" />
+    <Compile Include="Samples\SimpleSerializer.cs" />
+    <Compile Include="Samples\SimpleSerializer`1.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
