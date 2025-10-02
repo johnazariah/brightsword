@@ -29,3 +29,14 @@ Publishing and versions
 
 Notes for contributors
 - Feber composes Expression trees; take care when changing API shapes — the library compiles delegates at runtime and subtle changes can affect consumers.
+
+Documentation
+
+This library includes per-class documentation in the `docs/` folder. Key topics:
+
+- ActionBuilder — compiles and caches Action delegates (`docs/ActionBuilder.md`)
+- FunctionBuilder — compiles and caches Func delegates (`docs/FunctionBuilder.md`)
+- DynamicExpressionUtilities — expression-tree helpers (`docs/DynamicExpressionUtilities.md`)
+- OperationBuilders — small expression fragment builders (`docs/OperationBuilders.md`)
+
+Read each file in `BrightSword.Feber/docs/` for detailed usage and notes about implementation details.
