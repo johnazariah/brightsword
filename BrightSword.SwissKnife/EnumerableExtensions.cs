@@ -11,7 +11,7 @@ namespace BrightSword.SwissKnife
 
         public static bool AllUnique<T>(this IEnumerable<T> @this)
         {
-            if (@this == null)
+            if (@this is null)
             {
                 return true;
             }
