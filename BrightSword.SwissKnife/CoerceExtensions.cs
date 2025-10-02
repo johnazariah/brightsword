@@ -8,56 +8,52 @@ public static class CoerceExtensions
     {
         if (value is string && targetType == typeof(string))
             return value;
+
         if (targetType == typeof(bool))
         {
-            string str = value.ToString();
+            var str = value.ToString();
             if (string.IsNullOrEmpty(str))
-                return (object)false;
+                return false;
             if (str.Equals("y", StringComparison.OrdinalIgnoreCase))
-                return (object)true;
+                return true;
             if (str.Equals("n", StringComparison.OrdinalIgnoreCase))
-                return (object)false;
+                return false;
             throw new ArgumentException("Boolean should be either 'y' or 'n'");
         }
+
         if (targetType.IsEnum)
         {
-            object returnValue;
-            if (value.CoerceType(targetType, out returnValue, (Func<Type, bool>)(_ => true), (Func<Type, object, object>)((_type, _value) => Enum.Parse(_type, _value.ToString(), true)), defaultValue))
+            if (value.CoerceType(targetType, out var returnValue, _ => true, (_type, _value) => Enum.Parse(_type, _value.ToString(), true), defaultValue))
                 return returnValue;
             throw new InvalidCastException($"Cannot cast {value} to {targetType}");
         }
-        object returnValue1;
-        if (value.CoerceType<bool>(targetType, out returnValue1, (Func<Type, object, bool>)((_, _value) => bool.Parse(_value.ToString())), defaultValue) || value.CoerceType<Decimal>(targetType, out returnValue1, (Func<Type, object, Decimal>)((_, _value) => Decimal.Parse(_value.ToString())), defaultValue) || value.CoerceType<long>(targetType, out returnValue1, (Func<Type, object, long>)((_, _value) => long.Parse(_value.ToString())), defaultValue) || value.CoerceType<int>(targetType, out returnValue1, (Func<Type, object, int>)((_, _value) => int.Parse(_value.ToString())), defaultValue) || value.CoerceType<short>(targetType, out returnValue1, (Func<Type, object, short>)((_, _value) => short.Parse(_value.ToString())), defaultValue) || value.CoerceType<byte>(targetType, out returnValue1, (Func<Type, object, byte>)((_, _value) => byte.Parse(_value.ToString())), defaultValue) || value.CoerceType<char>(targetType, out returnValue1, (Func<Type, object, char>)((_, _value) => char.Parse(_value.ToString())), defaultValue) || value.CoerceType<double>(targetType, out returnValue1, (Func<Type, object, double>)((_, _value) => double.Parse(_value.ToString())), defaultValue) || value.CoerceType<float>(targetType, out returnValue1, (Func<Type, object, float>)((_, _value) => float.Parse(_value.ToString())), defaultValue))
-            return returnValue1;
-        if (value.CoerceType<DateTime>(targetType, out returnValue1, (Func<Type, object, DateTime>)((_, _value) => DateTime.Parse(_value.ToString())), defaultValue))
-            return returnValue1;
+
+        if (value.CoerceType<bool>(targetType, out var parsed, (_, _value) => bool.Parse(_value.ToString()), defaultValue) ||
+            value.CoerceType<decimal>(targetType, out parsed, (_, _value) => decimal.Parse(_value.ToString()), defaultValue) ||
+            value.CoerceType<long>(targetType, out parsed, (_, _value) => long.Parse(_value.ToString()), defaultValue) ||
+            value.CoerceType<int>(targetType, out parsed, (_, _value) => int.Parse(_value.ToString()), defaultValue) ||
+            value.CoerceType<short>(targetType, out parsed, (_, _value) => short.Parse(_value.ToString()), defaultValue) ||
+            value.CoerceType<byte>(targetType, out parsed, (_, _value) => byte.Parse(_value.ToString()), defaultValue) ||
+            value.CoerceType<char>(targetType, out parsed, (_, _value) => char.Parse(_value.ToString()), defaultValue) ||
+            value.CoerceType<double>(targetType, out parsed, (_, _value) => double.Parse(_value.ToString()), defaultValue) ||
+            value.CoerceType<float>(targetType, out parsed, (_, _value) => float.Parse(_value.ToString()), defaultValue) ||
+            value.CoerceType<DateTime>(targetType, out parsed, (_, _value) => DateTime.Parse(_value.ToString()), defaultValue))
+            return parsed;
+
         try
         {
             return Convert.ChangeType(value, targetType);
         }
-        catch (Exception)
+        catch
         {
             return value;
         }
     }
 
-    public static bool CoerceType<T>(
-      this object value,
-      Type targetType,
-      out object returnValue,
-      Func<Type, object, T> parseFunc,
-      object defaultValue)
-    {
-        return value.CoerceType(targetType, out returnValue, (Func<Type, bool>)(_ => _.IsAssignableFrom(typeof(T))), (Func<Type, object, object>)((_type, _value) => (object)parseFunc(_type, _value)), defaultValue);
-    }
+    public static bool CoerceType<T>(this object value, Type targetType, out object returnValue, Func<Type, object, T> parseFunc, object defaultValue)
+        => value.CoerceType(targetType, out returnValue, _ => _.IsAssignableFrom(typeof(T)), (_type, _value) => (object)parseFunc(_type, _value), defaultValue);
 
-    public static bool CoerceType(
-      this object value,
-      Type targetType,
-      out object returnValue,
-      Func<Type, bool> checkFunc,
-      Func<Type, object, object> parseFunc,
-      object defaultValue)
+    public static bool CoerceType(this object value, Type targetType, out object returnValue, Func<Type, bool> checkFunc, Func<Type, object, object> parseFunc, object defaultValue)
     {
         try
         {
@@ -67,17 +63,19 @@ public static class CoerceExtensions
                 return true;
             }
         }
-        catch (Exception)
+        catch
         {
             if (defaultValue != null && defaultValue.GetType().IsAssignableFrom(targetType))
             {
                 returnValue = defaultValue;
                 return true;
             }
-            returnValue = targetType.IsValueType ? Activator.CreateInstance(targetType) : (object)null;
+
+            returnValue = targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
             return true;
         }
-        returnValue = (object)null;
+
+        returnValue = null;
         return false;
     }
 }

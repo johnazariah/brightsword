@@ -11,124 +11,125 @@ public static class SequentialGuid
     private static short _c;
     private static long _forwardCounter;
     private static long _reverseCounter = DateTime.MaxValue.Ticks;
-    private static readonly SemaphoreSlim _lock = new SemaphoreSlim(1);
+    private static readonly SemaphoreSlim _lock = new(1);
 
     private static void ResetForwardCounter()
     {
-        SequentialGuid._lock.Wait();
+        _lock.Wait();
         try
         {
-            SequentialGuid._forwardCounter = Math.Max(DateTime.Now.Ticks, SequentialGuid._forwardCounter) + 1L;
+            _forwardCounter = Math.Max(DateTime.Now.Ticks, _forwardCounter) + 1;
         }
         finally
         {
-            SequentialGuid._lock.Release();
+            _lock.Release();
         }
     }
 
     private static void ResetReverseCounter()
     {
-        SequentialGuid._lock.Wait();
+        _lock.Wait();
         try
         {
-            DateTime dateTime = DateTime.MaxValue;
-            long ticks1 = dateTime.Ticks;
-            dateTime = DateTime.Now;
-            long ticks2 = dateTime.Ticks;
-            SequentialGuid._reverseCounter = Math.Min(ticks1 - ticks2, SequentialGuid._reverseCounter) - 1L;
+            var ticks1 = DateTime.MaxValue.Ticks;
+            var ticks2 = DateTime.Now.Ticks;
+            _reverseCounter = Math.Min(ticks1 - ticks2, _reverseCounter) - 1;
         }
         finally
         {
-            SequentialGuid._lock.Release();
+            _lock.Release();
         }
     }
 
     private static void ResetCounters(object arg = null)
     {
-        SequentialGuid.ResetForwardCounter();
-        SequentialGuid.ResetReverseCounter();
+        ResetForwardCounter();
+        ResetReverseCounter();
     }
 
     static SequentialGuid()
     {
-        SequentialGuid.InitializeFromSettings();
-        Timer timer = new Timer(new TimerCallback(SequentialGuid.ResetCounters), (object)null, 0, 1000);
-        SequentialGuid.ResetForwardCounter();
-        SequentialGuid.ResetReverseCounter();
+        InitializeFromSettings();
+        _ = new Timer(_ => ResetCounters(), null, 0, 1000);
+        ResetForwardCounter();
+        ResetReverseCounter();
     }
 
     public static Guid NewSequentialGuid(int a = -1, short b = -1, short c = -1)
     {
-        SequentialGuid._lock.Wait();
+        _lock.Wait();
         try
         {
-            Interlocked.Increment(ref SequentialGuid._forwardCounter);
-            return new Guid(a == -1 ? SequentialGuid._a : a, b == (short)-1 ? SequentialGuid._b : b, c == (short)-1 ? SequentialGuid._c : c, SequentialGuid._forwardCounter.GetReversedBytes());
+            Interlocked.Increment(ref _forwardCounter);
+            return new Guid(a == -1 ? _a : a, b == -1 ? _b : b, c == -1 ? _c : c, _forwardCounter.GetReversedBytes());
         }
         finally
         {
-            SequentialGuid._lock.Release();
+            _lock.Release();
         }
     }
 
     public static Guid NewReverseSequentialGuid(int a = -1, short b = -1, short c = -1)
     {
-        SequentialGuid._lock.Wait();
+        _lock.Wait();
         try
         {
-            Interlocked.Decrement(ref SequentialGuid._reverseCounter);
-            return new Guid(a == -1 ? SequentialGuid._a : a, b == (short)-1 ? SequentialGuid._b : b, c == (short)-1 ? SequentialGuid._c : c, SequentialGuid._reverseCounter.GetReversedBytes());
+            Interlocked.Decrement(ref _reverseCounter);
+            return new Guid(a == -1 ? _a : a, b == -1 ? _b : b, c == -1 ? _c : c, _reverseCounter.GetReversedBytes());
         }
         finally
         {
-            SequentialGuid._lock.Release();
+            _lock.Release();
         }
     }
 
     private static void SaveSettings()
     {
-        Settings.Default.Realm_UniqueID = (uint)SequentialGuid._a;
-        Settings.Default.Server_UniqueID = (ushort)SequentialGuid._b;
-        Settings.Default.Application_UniqueID = (ushort)SequentialGuid._c;
+        Settings.Default.Realm_UniqueID = (uint)_a;
+        Settings.Default.Server_UniqueID = (ushort)_b;
+        Settings.Default.Application_UniqueID = (ushort)_c;
         Settings.Default.Save();
     }
 
     private static void InitializeFromSettings()
     {
-        SequentialGuid._lock.Wait();
+        _lock.Wait();
         try
         {
-            Random random = new Random();
-            SequentialGuid._a = (int)Settings.Default.Realm_UniqueID;
-            while (SequentialGuid._a == 0)
-                SequentialGuid._a = random.Next();
-            SequentialGuid._b = (short)Settings.Default.Server_UniqueID;
-            while (SequentialGuid._b == (short)0)
-                SequentialGuid._b = (short)random.Next((int)short.MaxValue);
-            SequentialGuid._c = (short)Settings.Default.Application_UniqueID;
-            while (SequentialGuid._c == (short)0)
-                SequentialGuid._c = (short)random.Next((int)short.MaxValue);
-            SequentialGuid.SaveSettings();
+            var random = new Random();
+            _a = (int)Settings.Default.Realm_UniqueID;
+            while (_a == 0)
+                _a = random.Next();
+
+            _b = (short)Settings.Default.Server_UniqueID;
+            while (_b == 0)
+                _b = (short)random.Next(short.MaxValue);
+
+            _c = (short)Settings.Default.Application_UniqueID;
+            while (_c == 0)
+                _c = (short)random.Next(short.MaxValue);
+
+            SaveSettings();
         }
         finally
         {
-            SequentialGuid._lock.Release();
+            _lock.Release();
         }
     }
 
     public static void Initialize(uint a, ushort b, ushort c)
     {
-        SequentialGuid._lock.Wait();
+        _lock.Wait();
         try
         {
-            SequentialGuid._a = (int)a;
-            SequentialGuid._b = (short)b;
-            SequentialGuid._c = (short)c;
-            SequentialGuid.SaveSettings();
+            _a = (int)a;
+            _b = (short)b;
+            _c = (short)c;
+            SaveSettings();
         }
         finally
         {
-            SequentialGuid._lock.Release();
+            _lock.Release();
         }
     }
 }

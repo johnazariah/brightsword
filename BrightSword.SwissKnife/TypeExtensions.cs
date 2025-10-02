@@ -9,58 +9,49 @@ public static class TypeExtensions
 {
     private const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public;
 
-    public static string Name(this Type _this)
+    public static string Name(this Type @this)
     {
-        if (!_this.IsGenericType)
-            return _this.Name;
-        Type genericTypeDefinition = _this.GetGenericTypeDefinition();
-        return $"{genericTypeDefinition.Name.Substring(0, genericTypeDefinition.Name.IndexOf('`'))}<{((IEnumerable<Type>)_this.GetGenericArguments()).Aggregate<Type, string>(string.Empty, (Func<string, Type, string>)((_res, _curr) => string.IsNullOrEmpty(_res) ? _curr.Name() : $"{_res}, {_curr.Name()}"))}>";
+        if (!@this.IsGenericType)
+            return @this.Name;
+
+        var genericTypeDefinition = @this.GetGenericTypeDefinition();
+        var baseName = genericTypeDefinition.Name.Substring(0, genericTypeDefinition.Name.IndexOf('`'));
+        var args = string.Join(", ", @this.GetGenericArguments().Select(a => a.Name()));
+        return $"{baseName}<{args}>";
     }
 
-    public static IEnumerable<PropertyInfo> GetAllProperties(
-      this Type _this,
-      BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)
+    public static IEnumerable<PropertyInfo> GetAllProperties(this Type @this, BindingFlags bindingFlags = DefaultBindingFlags)
+        => @this.IsInterface ? @this.GetInterfaceProperties(bindingFlags, new List<Type>()) : @this.GetClassProperties(bindingFlags);
+
+    private static IEnumerable<PropertyInfo> GetClassProperties(this Type @this, BindingFlags bindingFlags)
     {
-        return _this.IsInterface ? _this.GetInterfaceProperties(bindingFlags, (IList<Type>)new List<Type>()) : _this.GetClassProperties(bindingFlags);
+        if (@this.IsInterface)
+            yield break;
+
+        bindingFlags &= ~BindingFlags.DeclaredOnly;
+        foreach (var property in @this.GetProperties(bindingFlags))
+            yield return property;
     }
 
-    private static IEnumerable<PropertyInfo> GetClassProperties(
-      this Type _this,
-      BindingFlags bindingFlags)
+    private static IEnumerable<PropertyInfo> GetInterfaceProperties(this Type @this, BindingFlags bindingFlags, IList<Type> processedInterfaces)
     {
-        if (!_this.IsInterface)
-        {
-            bindingFlags &= ~BindingFlags.DeclaredOnly;
-            foreach (PropertyInfo property in _this.GetProperties(bindingFlags))
-                yield return property;
-        }
+        if (!@this.IsInterface)
+            yield break;
+
+        bindingFlags |= BindingFlags.DeclaredOnly;
+        processedInterfaces ??= new List<Type>();
+        if (processedInterfaces.Contains(@this))
+            yield break;
+
+        foreach (var property in @this.GetProperties(bindingFlags))
+            yield return property;
+
+        foreach (var pi in @this.GetInterfaces().SelectMany(i => i.GetInterfaceProperties(bindingFlags, processedInterfaces)))
+            yield return pi;
+
+        processedInterfaces.Add(@this);
     }
 
-    private static IEnumerable<PropertyInfo> GetInterfaceProperties(
-      this Type _this,
-      BindingFlags bindingFlags,
-      IList<Type> processedInterfaces)
-    {
-        if (_this.IsInterface)
-        {
-            bindingFlags |= BindingFlags.DeclaredOnly;
-            processedInterfaces = processedInterfaces ?? (IList<Type>)new List<Type>();
-            if (!processedInterfaces.Contains(_this))
-            {
-                foreach (PropertyInfo property in _this.GetProperties(bindingFlags))
-                    yield return property;
-                foreach (PropertyInfo _pi in ((IEnumerable<Type>)_this.GetInterfaces()).SelectMany<Type, PropertyInfo>((Func<Type, IEnumerable<PropertyInfo>>)(_ => _.GetInterfaceProperties(bindingFlags, processedInterfaces))))
-                    yield return _pi;
-                processedInterfaces.Add(_this);
-            }
-        }
-    }
-
-    public static PropertyInfo GetProperty(
-      this Type _this,
-      string propertyName,
-      bool walkInterfaceInheritanceHierarchy)
-    {
-        return walkInterfaceInheritanceHierarchy ? _this.GetAllProperties().FirstOrDefault<PropertyInfo>((Func<PropertyInfo, bool>)(_pi => _pi.Name == propertyName)) : _this.GetProperty(propertyName);
-    }
+    public static PropertyInfo GetProperty(this Type @this, string propertyName, bool walkInterfaceInheritanceHierarchy)
+        => walkInterfaceInheritanceHierarchy ? @this.GetAllProperties().FirstOrDefault(_pi => _pi.Name == propertyName) : @this.GetProperty(propertyName);
 }

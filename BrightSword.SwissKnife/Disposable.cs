@@ -9,16 +9,11 @@ public class Disposable<T> : IDisposable
 
     public Disposable(T instance, Action<T> dispose)
     {
-        this._instance = instance;
-        this._dispose = dispose;
+        _instance = instance;
+        _dispose = dispose;
     }
 
-    public T Instance => this._instance;
+    public T Instance => _instance;
 
-    public void Dispose()
-    {
-        if (this._dispose == null)
-            return;
-        this._dispose(this._instance);
-    }
+    public void Dispose() => _dispose?.Invoke(_instance);
 }

@@ -7,11 +7,12 @@ public static class ObjectDescriber
 {
     private static string GetName<TFunc>(Expression<TFunc> e)
     {
-        if (e.Body is MemberExpression body1)
-            return body1.Member.Name;
-        if (e.Body is MethodCallExpression body2)
-            return body2.Method.Name;
-        throw new NotSupportedException("Cannot operate on given expression: " + (object)e.Body);
+        return e.Body switch
+        {
+            MemberExpression m => m.Member.Name,
+            MethodCallExpression m => m.Method.Name,
+            _ => throw new NotSupportedException("Cannot operate on given expression: " + e.Body)
+        };
     }
 
     public static string GetName(Expression<Action> e) => ObjectDescriber.GetName<Action>(e);
