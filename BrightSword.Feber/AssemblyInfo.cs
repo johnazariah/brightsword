@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("BrightSword Technologies Pte Ltd, Singapore")]
-[assembly: Extension]
 [assembly: AssemblyTitle("BrightSword.Feber")]
 [assembly: AssemblyDescription("Get your reflection code Fast and Feberish!")]
 [assembly: AssemblyTrademark("Feber")]

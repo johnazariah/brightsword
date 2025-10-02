@@ -25,7 +25,7 @@ public abstract class OperationBuilderBase<TProto>
   {
     get
     {
-      return TypeMemberDiscoverer.GetAllProperties(typeof (TProto), BindingFlags.Instance | BindingFlags.Public).Where<PropertyInfo>((Func<PropertyInfo, bool>) (_propertyInfo => this.PropertyFilter(_propertyInfo)));
+      return typeof (TProto).GetAllProperties(BindingFlags.Instance | BindingFlags.Public).Where<PropertyInfo>((Func<PropertyInfo, bool>) (_propertyInfo => this.PropertyFilter(_propertyInfo)));
     }
   }
 

@@ -14,7 +14,7 @@ public static class MonadExtensions
   public static TResult Maybe<T, TResult>(
     this T _this,
     Func<T, TResult> func,
-    TResult defaultResult = null)
+    TResult defaultResult = default(TResult))
     where T : class
   {
     return (object) _this == null ? defaultResult : func(_this);
@@ -31,7 +31,7 @@ public static class MonadExtensions
     this T _this,
     Func<T, bool> predicate,
     Func<T, TResult> func,
-    TResult defaultResult = null)
+    TResult defaultResult = default(TResult))
     where T : class
   {
     return _this.Maybe<T, TResult>((Func<T, TResult>) (_ => predicate(_) ? func(_) : defaultResult), defaultResult);
@@ -51,7 +51,7 @@ public static class MonadExtensions
     this T _this,
     Func<T, bool> predicate,
     Func<T, TResult> func,
-    TResult defaultResult = null)
+    TResult defaultResult = default(TResult))
     where T : class
   {
     return _this.Maybe<T, TResult>((Func<T, TResult>) (_ => !predicate(_) ? func(_) : defaultResult), defaultResult);

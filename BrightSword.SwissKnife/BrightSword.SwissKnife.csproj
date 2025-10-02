@@ -1,59 +1,17 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <!--Project was exported from assembly: C:\Users\johnaz\Downloads\brightsword.swissknife.1.0.9\lib\net40\BrightSword.SwissKnife.dll-->
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B19928D0-7F6F-4BCF-A590-2C382CCD4765}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>BrightSword.SwissKnife</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
-    <ApplicationVersion>1.0.9.0</ApplicationVersion>
-    <FileAlignment>512</FileAlignment>
     <RootNamespace>BrightSword.SwissKnife</RootNamespace>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <AssemblyVersion>1.0.9.0</AssemblyVersion>
+    <FileVersion>1.0.9.0</FileVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="BitTwiddlerExtensions.cs" />
-    <Compile Include="CoerceExtensions.cs" />
-    <Compile Include="AttributeExtensions.cs" />
-    <Compile Include="ConcurrentDictionary`3.cs" />
-    <Compile Include="Disposable`1.cs" />
-    <Compile Include="SequentialGuid.cs" />
-    <Compile Include="EnumerableExtensions.cs" />
-    <Compile Include="Functional.cs" />
-    <Compile Include="MonadExtensions.cs" />
-    <Compile Include="ObjectDescriber.cs" />
-    <Compile Include="StringExtensions.cs" />
-    <Compile Include="TypeExtensions.cs" />
-    <Compile Include="Validator.cs" />
-    <Compile Include="Properties\Settings.cs" />
-    <Compile Include="AssemblyInfo.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

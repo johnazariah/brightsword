@@ -28,8 +28,8 @@ public static class CloneFactory<TProto, TSource, TDestination> where TDestinati
 
   private class CloneFactoryBuilder : ActionBuilder<TProto, TDestination, TSource>
   {
-    private static readonly IEnumerable<PropertyInfo> sourceProperties = TypeMemberDiscoverer.GetAllProperties(typeof (TSource), BindingFlags.Instance | BindingFlags.Public);
-    private static readonly IEnumerable<PropertyInfo> destinationProperties = TypeMemberDiscoverer.GetAllProperties(typeof (TDestination), BindingFlags.Instance | BindingFlags.Public);
+    private static readonly IEnumerable<PropertyInfo> sourceProperties = typeof (TSource).GetAllProperties(BindingFlags.Instance | BindingFlags.Public);
+    private static readonly IEnumerable<PropertyInfo> destinationProperties = typeof (TDestination).GetAllProperties(BindingFlags.Instance | BindingFlags.Public);
 
     protected override Expression PropertyExpression(
       PropertyInfo property,

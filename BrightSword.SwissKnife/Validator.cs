@@ -20,7 +20,7 @@ public static class Validator
   public static void Check<TException>(this bool condition, string message = null) where TException : Exception, new()
   {
     if (!condition)
-      throw (object) new TException();
+      throw new TException();
   }
 
   public static void Check(this Func<bool> predicate, string message = null)
@@ -32,6 +32,6 @@ public static class Validator
   public static void Check<TException>(this Func<bool> predicate, string message = null) where TException : Exception, new()
   {
     if (!predicate())
-      throw (object) new TException();
+      throw new TException();
   }
 }

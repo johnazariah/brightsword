@@ -27,7 +27,7 @@ public static class AttributeExtensions
   public static TResult GetCustomAttributeValue<TAttribute, TResult>(
     this Type _this,
     Func<TAttribute, TResult> selector,
-    TResult defaultValue = null,
+    TResult defaultValue = default(TResult),
     BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
     where TAttribute : Attribute
   {
@@ -37,7 +37,7 @@ public static class AttributeExtensions
   public static TResult GetCustomAttributeValue<TAttribute, TResult>(
     this MemberInfo _this,
     Func<TAttribute, TResult> selector,
-    TResult defaultValue = null,
+    TResult defaultValue = default(TResult),
     BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
     where TAttribute : Attribute
   {
