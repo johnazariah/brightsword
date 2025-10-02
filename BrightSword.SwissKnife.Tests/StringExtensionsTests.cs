@@ -9,8 +9,8 @@ namespace BrightSword.SwissKnife.Tests
 {
     public class StringExtensionsTests
     {
-        private static readonly string[] CamelCaseExampleExpected = new[] { "Camel", "Case", "Example" };
-        private static readonly string[] XMLHttpRequestExpected = new[] { "XML", "Http", "Request" };
+    private static readonly string[] CamelCaseExampleExpected = new string[] { "Camel", "Case", "Example" };
+    private static readonly string[] XMLHttpRequestExpected = new string[] { "XML", "Http", "Request" };
 
         public static TheoryData<string, string[]> SplitCamelCaseData() => new TheoryData<string, string[]>
         {

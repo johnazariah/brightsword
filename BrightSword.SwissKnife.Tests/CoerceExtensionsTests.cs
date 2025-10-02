@@ -42,7 +42,7 @@ namespace BrightSword.SwissKnife.Tests
         [Property]
         public static void Coerce_IntRoundtrip(int x)
         {
-            var s = x.ToString();
+            var s = x.ToString(System.Globalization.CultureInfo.InvariantCulture);
             var o = ((object)s).CoerceType(typeof(int), null);
             Assert.Equal(x, o);
         }

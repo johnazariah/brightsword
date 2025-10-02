@@ -11,8 +11,8 @@ namespace BrightSword.SwissKnife.Tests
         [Fact]
         public void Maybe_ReturnsDefaultForNull()
         {
-            string s = null;
-            Assert.Equal(-1, s.Maybe(str => str.Length, -1));
+            string? s = null;
+            Assert.Equal(-1, s.Maybe(str => str!.Length, -1));
         }
 
         [Fact]
@@ -43,8 +43,9 @@ namespace BrightSword.SwissKnife.Tests
         }
 
         [Property]
-        public static void Maybe_ReturnsDefaultForNull_Property()
+        public static void Maybe_ReturnsDefaultForNull_Property(NonNull<string> _)
         {
+            // This property ensures Maybe for null returns default; use a NonNull parameter to satisfy FsCheck's type generation
             string s = null;
             Assert.Equal(-1, s.Maybe(str => str.Length, -1));
         }

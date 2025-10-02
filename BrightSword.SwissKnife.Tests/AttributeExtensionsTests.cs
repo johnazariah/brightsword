@@ -6,7 +6,8 @@ namespace BrightSword.SwissKnife.Tests
 {
     public class AttributeExtensionsTests
     {
-        private class SampleAttr : System.Attribute { public string Name { get; } public SampleAttr(string name) { Name = name; } }
+    [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    private class SampleAttr : System.Attribute { public string Name { get; } public SampleAttr(string name) { Name = name; } }
 
         [SampleAttr("Cls")]
         private class C
