@@ -27,7 +27,7 @@ namespace BrightSword.Feber.Samples
               ParameterExpression instanceParameterExpression)
             {
                 var memberExpression = Expression.Property(instanceParameterExpression, property);
-                return property.PropertyType == typeof(string) ? Expression.Call(typeof(Console), "WriteLine", (Type[])null, Expression.Constant("\t{0} : {1}", typeof(string)), Expression.Constant(property.Name, typeof(string)), memberExpression) : Expression.Call(typeof(Console), "WriteLine", (Type[])null, Expression.Constant("\t{0} : {1}", typeof(string)), Expression.Constant(property.Name, typeof(string)), Expression.Call(typeof(Convert), "ToString", (Type[])null, memberExpression));
+                return property.PropertyType == typeof(string) ? Expression.Call(typeof(Console), "WriteLine", Type.EmptyTypes, Expression.Constant("\t{0} : {1}", typeof(string)), Expression.Constant(property.Name, typeof(string)), memberExpression) : Expression.Call(typeof(Console), "WriteLine", Type.EmptyTypes, Expression.Constant("\t{0} : {1}", typeof(string)), Expression.Constant(property.Name, typeof(string)), Expression.Call(typeof(Convert), "ToString", Type.EmptyTypes, memberExpression));
             }
         }
     }

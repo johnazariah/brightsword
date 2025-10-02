@@ -33,13 +33,13 @@ namespace BrightSword.Feber.Samples
               Expression instanceParameterExpression)
             {
                 return property.PropertyType != typeof(DateTime)
-                    ? Expression.Call(Expression.Property(instanceParameterExpression, property), "ToString", (Type[])null)
-                    : Expression.Call(Expression.Property(instanceParameterExpression, property), "ToString", (Type[])null, Expression.Constant("O"));
+                    ? Expression.Call(Expression.Property(instanceParameterExpression, property), "ToString", Type.EmptyTypes)
+                    : Expression.Call(Expression.Property(instanceParameterExpression, property), "ToString", Type.EmptyTypes, Expression.Constant("O"));
             }
 
             protected override Expression PropertyExpression(
-              PropertyInfo property,
-              ParameterExpression instanceParameterExpression) => Expression.Call(typeof(string), "Format", (Type[])null, Expression.Constant("{0}:{1},", typeof(string)), Expression.Constant(property.Name, typeof(string)), GetToStringExpression(property, instanceParameterExpression));
+                PropertyInfo property,
+                ParameterExpression instanceParameterExpression) => Expression.Call(typeof(string), "Format", Type.EmptyTypes, Expression.Constant("{0}:{1},", typeof(string)), Expression.Constant(property.Name, typeof(string)), GetToStringExpression(property, instanceParameterExpression));
         }
     }
 #pragma warning restore CA1000
