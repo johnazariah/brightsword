@@ -1,6 +1,8 @@
 using System;
 using BrightSword.SwissKnife;
 using Xunit;
+using FsCheck;
+using FsCheck.Xunit;
 
 namespace BrightSword.SwissKnife.Tests
 {
@@ -38,6 +40,13 @@ namespace BrightSword.SwissKnife.Tests
             var executed = false;
             s.Unless(_ => _.Length > 3, _ => executed = true);
             Assert.True(executed);
+        }
+
+        [Property]
+        public static void Maybe_ReturnsDefaultForNull_Property()
+        {
+            string s = null;
+            Assert.Equal(-1, s.Maybe(str => str.Length, -1));
         }
     }
 }

@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using BrightSword.SwissKnife;
 using Xunit;
+using FsCheck;
+using FsCheck.Xunit;
 
 namespace BrightSword.SwissKnife.Tests
 {
@@ -39,6 +42,13 @@ namespace BrightSword.SwissKnife.Tests
         {
             var items = new List<int> { 1, 2, 3 };
             Assert.Equal(2, items.LastButOne());
+        }
+
+        [Property]
+        public static void EnumerableAllUniqueRoundtrip(int[] items)
+        {
+            var expected = items.Distinct().Count() == items.Length;
+            Assert.Equal(expected, items.AllUnique());
         }
     }
 }

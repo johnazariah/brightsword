@@ -1,6 +1,8 @@
 using System;
 using BrightSword.SwissKnife;
 using Xunit;
+using FsCheck;
+using FsCheck.Xunit;
 
 namespace BrightSword.SwissKnife.Tests
 {
@@ -35,6 +37,14 @@ namespace BrightSword.SwissKnife.Tests
             var orig = new object();
             var r = orig.CoerceType(typeof(DateTime), orig);
             Assert.Equal(orig, r);
+        }
+
+        [Property]
+        public static void Coerce_IntRoundtrip(int x)
+        {
+            var s = x.ToString();
+            var o = ((object)s).CoerceType(typeof(int), null);
+            Assert.Equal(x, o);
         }
     }
 }

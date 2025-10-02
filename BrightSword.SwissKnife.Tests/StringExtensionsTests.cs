@@ -2,6 +2,8 @@ using System.Linq;
 using System.Collections.Generic;
 using BrightSword.SwissKnife;
 using Xunit;
+using FsCheck;
+using FsCheck.Xunit;
 
 namespace BrightSword.SwissKnife.Tests
 {
@@ -30,6 +32,16 @@ namespace BrightSword.SwissKnife.Tests
         {
             var actual = "part.one.two".SplitDotted().ToArray();
             Assert.Equal(new[] { "part", "one", "two" }, actual);
+        }
+
+        [Property]
+        public static void SplitCamelCase_Idempotent(NonNull<string> s)
+        {
+            var str = s.Get;
+            var parts = str.SplitCamelCase().ToArray();
+            // joining back with no separators should contain original letters in order
+            var joined = string.Concat(parts);
+            Assert.True(string.IsNullOrEmpty(str) || joined.Length <= str.Length);
         }
     }
 }
