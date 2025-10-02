@@ -60,49 +60,72 @@ namespace BrightSword.Feber.Samples
 
         public static void MapToBackingFields(object source, T destination) => _dynamicToStaticBackingFieldsMapper.Action(destination, source);
 
+        /// <summary>
+        /// Maps from a dynamic source (object) to a dynamic destination (object) using runtime binder expressions.
+        /// </summary>
+        /// <remarks>
+        /// Demonstrates <see cref="DynamicExpressionUtilities.GetDynamicPropertyAccessorExpression{T}"/> and
+        /// <see cref="DynamicExpressionUtilities.GetDynamicPropertyMutatorExpression{T}"/> to read/write properties dynamically in expression trees.
+        /// </remarks>
         private sealed class DynamicToDynamicMapperBuilder : ActionBuilder<T, object, object>
         {
             protected override Expression PropertyExpression(
-              PropertyInfo property,
-              ParameterExpression leftInstanceParameterExpression,
-              ParameterExpression rightInstanceParameterExpression) => rightInstanceParameterExpression.GetDynamicPropertyMutatorExpression<T>(property, leftInstanceParameterExpression.GetDynamicPropertyAccessorExpression<T>(property));
+                PropertyInfo propertyInfo,
+                ParameterExpression leftInstanceParameter,
+                ParameterExpression rightInstanceParameter) => rightInstanceParameter.GetDynamicPropertyMutatorExpression<T>(propertyInfo, leftInstanceParameter.GetDynamicPropertyAccessorExpression<T>(propertyInfo));
         }
 
+        /// <summary>
+        /// Maps from a dynamic source to static destination backing fields (private fields) when properties are implemented with backing fields.
+        /// </summary>
+        /// <remarks>
+        /// Shows how to locate a backing field conventionally named _propertyName and assign the dynamic value to that field.
+        /// Useful if the destination exposes read-only properties backed by private fields.
+        /// </remarks>
         private sealed class DynamicToStaticBackingFieldsMapperBuilder : ActionBuilder<T, T, object>
         {
             protected override Expression PropertyExpression(
-              PropertyInfo property,
-              ParameterExpression leftInstanceParameterExpression,
-              ParameterExpression rightInstanceParameterExpression)
+                PropertyInfo propertyInfo,
+                ParameterExpression leftInstanceParameter,
+                ParameterExpression rightInstanceParameter)
             {
-                var field = typeof(T).GetField($"_{property.Name[..1].ToLower(System.Globalization.CultureInfo.CurrentCulture)}{property.Name[1..]}", BindingFlags.Instance | BindingFlags.NonPublic);
+                var field = typeof(T).GetField($"_{propertyInfo.Name[..1].ToLower(System.Globalization.CultureInfo.CurrentCulture)}{propertyInfo.Name[1..]}", BindingFlags.Instance | BindingFlags.NonPublic);
                 Debug.Assert(field is not null);
-                return Expression.Assign(Expression.Field(leftInstanceParameterExpression, field), rightInstanceParameterExpression.GetDynamicPropertyAccessorExpression<T>(property));
+                return Expression.Assign(Expression.Field(leftInstanceParameter, field), rightInstanceParameter.GetDynamicPropertyAccessorExpression<T>(propertyInfo));
             }
         }
 
+        /// <summary>
+        /// Maps dynamic source properties into static destination properties.
+        /// </summary>
         private sealed class DynamicToStaticMapperBuilder : ActionBuilder<T, T, object>
         {
             protected override Expression PropertyExpression(
-              PropertyInfo property,
-              ParameterExpression leftInstanceParameterExpression,
-              ParameterExpression rightInstanceParameterExpression) => Expression.Assign(Expression.Property(leftInstanceParameterExpression, property), rightInstanceParameterExpression.GetDynamicPropertyAccessorExpression<T>(property));
+                PropertyInfo propertyInfo,
+                ParameterExpression leftInstanceParameter,
+                ParameterExpression rightInstanceParameter) => Expression.Assign(Expression.Property(leftInstanceParameter, propertyInfo), rightInstanceParameter.GetDynamicPropertyAccessorExpression<T>(propertyInfo));
         }
 
+        /// <summary>
+        /// Maps static source properties into a dynamic destination by emitting dynamic mutator calls.
+        /// </summary>
         private sealed class StaticToDynamicMapperBuilder : ActionBuilder<T, object, T>
         {
             protected override Expression PropertyExpression(
-              PropertyInfo property,
-              ParameterExpression leftInstanceParameterExpression,
-              ParameterExpression rightInstanceParameterExpression) => leftInstanceParameterExpression.GetDynamicPropertyMutatorExpression<T>(property, Expression.Property(rightInstanceParameterExpression, property));
+                PropertyInfo propertyInfo,
+                ParameterExpression leftInstanceParameter,
+                ParameterExpression rightInstanceParameter) => leftInstanceParameter.GetDynamicPropertyMutatorExpression<T>(propertyInfo, Expression.Property(rightInstanceParameter, propertyInfo));
         }
 
+        /// <summary>
+        /// Simple static-to-static mapper: generates assignments between matching properties.
+        /// </summary>
         private sealed class StaticToStaticMapperBuilder : ActionBuilder<T, T, T>
         {
             protected override Expression PropertyExpression(
-              PropertyInfo property,
-              ParameterExpression leftInstanceParameterExpression,
-              ParameterExpression rightInstanceParameterExpression) => Expression.Assign(Expression.Property(leftInstanceParameterExpression, property), Expression.Property(rightInstanceParameterExpression, property));
+                PropertyInfo propertyInfo,
+                ParameterExpression leftInstanceParameter,
+                ParameterExpression rightInstanceParameter) => Expression.Assign(Expression.Property(leftInstanceParameter, propertyInfo), Expression.Property(rightInstanceParameter, propertyInfo));
         }
     }
 #pragma warning restore CA1000

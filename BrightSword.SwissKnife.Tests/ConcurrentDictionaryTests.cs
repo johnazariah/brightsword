@@ -1,9 +1,3 @@
-using System;
-using System.Linq;
-using Xunit;
-using FsCheck;
-using FsCheck.Xunit;
-
 namespace BrightSword.SwissKnife.Tests
 {
     public class ConcurrentDictionaryTests

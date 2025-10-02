@@ -43,3 +43,32 @@ This library includes per-class documentation in the `docs/` folder. Key topics:
 See `BrightSword.Feber/docs/` for the full per-class documentation and copyable examples.
 
 Read each file in `BrightSword.Feber/docs/` for detailed usage and notes about implementation details.
+
+Warm-up and Lazy<T> patterns
+
+- Warm-up helper: `BrightSword.Feber.BuilderWarmup.Warmup(IEnumerable<Action>)` can be used at application startup to force builder compilation ahead of first request.
+
+- Lazy<T> pattern: if you prefer thread-safe lazy initialization, create a Lazy-wrapped compiled delegate and return `_lazy.Value` from `Action`/`Function` properties. The repo includes a sample `BrightSword.Feber.Samples.LazyActionBuilderExample<TProto,TInstance>` demonstrating this approach.
+
+Example (warm-up at startup)
+```csharp
+var warmups = new Action[] {
+	() => new BrightSword.Feber.Samples.LazyActionBuilderExample<MyProto, MyProto>().Action(default!)
+};
+BrightSword.Feber.BuilderWarmup.Warmup(warmups);
+```
+
+Example (Lazy<T> pattern)
+```csharp
+private readonly Lazy<Action<TInstance>> _lazyAction = new Lazy<Action<TInstance>>(() => BuildAction(), isThreadSafe: true);
+public Action<TInstance> Action => _lazyAction.Value;
+```
+
+Try the sample app
+
+Run the small console app that demonstrates the lazy-compiled action which prints property names/values:
+
+```powershell
+dotnet run --project .\BrightSword.Feber.SamplesApp\BrightSword.Feber.SamplesApp.csproj
+```
+

@@ -1,3 +1,27 @@
+# BrightSword — quick runtime note
+
+Short summary
+- The Feber builders (ActionBuilder / FunctionBuilder and their OperationBuilder bases) compose LINQ Expression fragments for each property and then compile a delegate from the composed expression block.
+
+Performance characteristics
+- Building the expression blocks is relatively expensive: it involves reflection (scanning properties), creating Expression nodes, and JIT/compiling the resulting lambda. This cost is paid once when the builder composes and compiles the delegate.
+- To avoid repeating that cost, builders cache the compiled delegate (for example a private field populated with `_action ??= BuildAction()` or `_function ??= BuildFunction()`). After the first build, running the compiled delegate is very fast — comparable to a hand-written method call.
+
+Practical guidance
+- Expect a one-time setup/compile cost at first use; measure in your scenario and consider warming (call the Action/Function once at app startup) if low-latency first requests are important.
+- If compilation cost is a concern in multi-threaded server environments, consider initializing the delegate at startup or replace the simple null-coalescing cache with a thread-safe Lazy<T> or explicit synchronization to avoid duplicate compilation work.
+- Avoid creating new ParameterExpression instances in overrides. Use the supplied `InstanceParameterExpression`, `LeftInstanceParameterExpression` and `RightInstanceParameterExpression` properties so that the compiled lambda parameter identity matches expressions in the body; mismatched parameter identity causes runtime compilation errors.
+
+Testing and maintainability
+- Prefer stable, introspective tests that validate `FilteredProperties` and `OperationExpressions` content rather than attempting to compile large composed blocks in tests. If you must compile the block in tests, obtain the exact ParameterExpression instance used by the builder.
+
+Customization points
+- Override `BuildAction()` / `BuildFunction()` to change compilation or caching strategy (for example to use different compilation options or to emit an interpreted delegate).
+- Consider exposing a customizable field-discovery or mapping strategy if you rely on convention-based behaviors (backing-field lookup, naming conventions).
+
+Where to look next
+- Package-level docs and per-sample pages live under `BrightSword.Feber/docs/` and `BrightSword.SwissKnife/docs/`.
+- See `BrightSword.Feber/docs/FunctionBuilder.md` and `BrightSword.Feber.Tests/NullCheckBuilderTests.cs` for concrete examples (NullChecker) and tests.
 # BrightSword — build & publishing
 
 This repository uses an MSBuild orchestration file (`build.proj`) to bump versions, pack projects, and optionally publish NuGet packages.

@@ -1,8 +1,4 @@
-using System;
 using System.Globalization;
-using Xunit;
-using FsCheck;
-using FsCheck.Xunit;
 
 namespace BrightSword.SwissKnife.Tests
 {
@@ -42,7 +38,7 @@ namespace BrightSword.SwissKnife.Tests
         [Property]
         public static void CoerceIntRoundtrip(int x)
         {
-            var s = x.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            var s = x.ToString(CultureInfo.InvariantCulture);
             var o = s.CoerceType(typeof(int), null);
             Assert.Equal(x, o);
         }

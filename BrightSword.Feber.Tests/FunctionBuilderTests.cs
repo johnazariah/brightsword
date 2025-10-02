@@ -9,8 +9,8 @@ namespace BrightSword.Feber.Tests
         private sealed class SumBuilder : FunctionBuilder<Proto, Proto, int>
         {
             protected override int Seed => 0;
-            protected override Func<Expression, Expression, Expression> Conjunction => (l, r) => Expression.Add(l, r);
-            protected override Expression PropertyExpression(System.Reflection.PropertyInfo property, ParameterExpression instanceParameterExpression) =>
+            protected override Func<Expression, Expression, Expression> Conjunction => Expression.Add;
+            protected override Expression PropertyExpression(PropertyInfo property, ParameterExpression instanceParameterExpression) =>
                 Expression.Convert(Expression.Property(instanceParameterExpression, property), typeof(int));
         }
 
@@ -46,11 +46,11 @@ namespace BrightSword.Feber.Tests
 
         private sealed class ProtoPair { public int X { get; set; } public int Y { get; set; } }
 
-    private sealed class BinarySumBuilder : FunctionBuilder<ProtoPair, ProtoPair, ProtoPair, int>
+        private sealed class BinarySumBuilder : FunctionBuilder<ProtoPair, ProtoPair, ProtoPair, int>
         {
             protected override int Seed => 0;
-            protected override System.Func<System.Linq.Expressions.Expression, System.Linq.Expressions.Expression, System.Linq.Expressions.Expression> Conjunction => (l, r) => Expression.Add(l, r);
-            protected override System.Linq.Expressions.Expression PropertyExpression(System.Reflection.PropertyInfo property, System.Linq.Expressions.ParameterExpression leftParam, System.Linq.Expressions.ParameterExpression rightParam)
+            protected override Func<Expression, Expression, Expression> Conjunction => Expression.Add;
+            protected override Expression PropertyExpression(PropertyInfo property, ParameterExpression leftParam, ParameterExpression rightParam)
             {
                 var leftExpr = Expression.Convert(Expression.Property(leftParam, property), typeof(int));
                 var rightExpr = Expression.Convert(Expression.Property(rightParam, property), typeof(int));
@@ -66,7 +66,7 @@ namespace BrightSword.Feber.Tests
             var left = new ProtoPair { X = lx, Y = ly };
             var right = new ProtoPair { X = rx, Y = ry };
             // expected: (left.X + right.X) + (left.Y + right.Y)
-            var expected = (left.X + right.X) + (left.Y + right.Y);
+            var expected = left.X + right.X + left.Y + right.Y;
             Assert.Equal(expected, f(left, right));
         }
 

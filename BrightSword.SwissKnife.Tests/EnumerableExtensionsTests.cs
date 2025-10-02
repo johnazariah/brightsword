@@ -6,7 +6,7 @@ namespace BrightSword.SwissKnife.Tests
         public void NoneWithNullCollectionThrowsArgumentNullException()
         {
             IEnumerable<int> items = null!;
-            Assert.Throws<ArgumentNullException>(() => items.None());
+            _ = Assert.Throws<ArgumentNullException>(() => items.None());
         }
 
         [Fact]

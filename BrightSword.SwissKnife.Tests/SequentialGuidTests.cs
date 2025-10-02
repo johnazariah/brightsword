@@ -6,14 +6,14 @@ namespace BrightSword.SwissKnife.Tests
         public void NewSequentialGuidReturnsGuid()
         {
             var g = SequentialGuid.NewSequentialGuid();
-            Assert.IsType<Guid>(g);
+            _ = Assert.IsType<Guid>(g);
         }
 
         [Fact]
         public void NewReverseSequentialGuidReturnsGuid()
         {
             var g = SequentialGuid.NewReverseSequentialGuid();
-            Assert.IsType<Guid>(g);
+            _ = Assert.IsType<Guid>(g);
         }
 
         [Fact]

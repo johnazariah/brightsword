@@ -7,7 +7,7 @@ namespace BrightSword.SwissKnife.Tests
 
         private static readonly string[] EmptyStringArray = [];
 
-        public static TheoryData<string, string[]> SplitCamelCaseData() => new TheoryData<string, string[]>
+        public static TheoryData<string, string[]> SplitCamelCaseData() => new()
         {
             { "CamelCaseExample", CamelCaseExampleExpected },
             { "XMLHttpRequest", XMLHttpRequestExpected },

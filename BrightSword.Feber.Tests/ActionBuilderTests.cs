@@ -8,8 +8,8 @@ namespace BrightSword.Feber.Tests
 
         private sealed class SumActionBuilder : ActionBuilder<Proto, Proto>
         {
-            protected override Expression PropertyExpression(System.Reflection.PropertyInfo property, ParameterExpression instanceParameterExpression) =>
-                Expression.Call(typeof(Console).GetMethod("WriteLine", [typeof(int)])!, Expression.Convert(Expression.Property(instanceParameterExpression, property), typeof(int)));
+            protected override Expression PropertyExpression(PropertyInfo propertyInfo, ParameterExpression instanceParameter) =>
+                Expression.Call(typeof(Console).GetMethod("WriteLine", [typeof(int)])!, Expression.Convert(Expression.Property(instanceParameter, propertyInfo), typeof(int)));
         }
 
         [Fact]
@@ -28,16 +28,16 @@ namespace BrightSword.Feber.Tests
             Assert.NotNull(a);
         }
 
-        private static readonly System.Collections.Generic.List<int> _record = new();
+        private static readonly System.Collections.Generic.List<int> _record = [];
 
         private sealed class RecordingActionBuilder : ActionBuilder<Proto, Proto>
         {
-            protected override System.Linq.Expressions.Expression PropertyExpression(System.Reflection.PropertyInfo property, System.Linq.Expressions.ParameterExpression instanceParameterExpression)
+            protected override Expression PropertyExpression(PropertyInfo propertyInfo, ParameterExpression instanceParameter)
             {
                 // build an expression that adds the property value to a static list via a helper method
-                var addMethod = typeof(ActionBuilderTests).GetMethod(nameof(Record), System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic)!;
-                var propExpr = System.Linq.Expressions.Expression.Convert(System.Linq.Expressions.Expression.Property(instanceParameterExpression, property), typeof(int));
-                return System.Linq.Expressions.Expression.Call(addMethod, propExpr);
+                var addMethod = typeof(ActionBuilderTests).GetMethod(nameof(Record), BindingFlags.Static | BindingFlags.NonPublic)!;
+                var propExpr = Expression.Convert(Expression.Property(instanceParameter, propertyInfo), typeof(int));
+                return Expression.Call(addMethod, propExpr);
             }
         }
 

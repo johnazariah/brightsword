@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace BrightSword.Feber.Tests
 {
@@ -33,7 +32,7 @@ namespace BrightSword.Feber.Tests
         public static void OperationExpressionsMatchesFilteredPropertiesCount()
         {
             var b = new ConcreteBuilder();
-            var exprs = b.GetType().GetProperty("OperationExpressions", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            var exprs = b.GetType().GetProperty("OperationExpressions", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public);
             // rely on the public API: OperationExpressions enumerates filtered properties
             Assert.Equal(b.FilteredProperties.Count(), b.FilteredProperties.Select(p => p).Count());
         }
