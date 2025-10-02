@@ -27,5 +27,34 @@ namespace BrightSword.Feber.Tests
             var a = b.Action;
             Assert.NotNull(a);
         }
+
+        private static readonly System.Collections.Generic.List<int> _record = new();
+
+        private sealed class RecordingActionBuilder : ActionBuilder<Proto, Proto>
+        {
+            protected override System.Linq.Expressions.Expression PropertyExpression(System.Reflection.PropertyInfo property, System.Linq.Expressions.ParameterExpression instanceParameterExpression)
+            {
+                // build an expression that adds the property value to a static list via a helper method
+                var addMethod = typeof(ActionBuilderTests).GetMethod(nameof(Record), System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic)!;
+                var propExpr = System.Linq.Expressions.Expression.Convert(System.Linq.Expressions.Expression.Property(instanceParameterExpression, property), typeof(int));
+                return System.Linq.Expressions.Expression.Call(addMethod, propExpr);
+            }
+        }
+
+        private static void Record(int v) => _record.Add(v);
+
+        [Property]
+        public static void ActionRecordsPropertyValues(int x, int y)
+        {
+            _record.Clear();
+            var b = new RecordingActionBuilder();
+            var a = b.Action;
+            var p = new Proto { X = x, Y = y };
+            a(p);
+            // two properties expected
+            Assert.Equal(2, _record.Count);
+            Assert.Contains(x, _record);
+            Assert.Contains(y, _record);
+        }
     }
 }

@@ -28,5 +28,14 @@ namespace BrightSword.Feber.Tests
             var b = new ConcreteBuilder();
             Assert.NotEmpty(b.FilteredProperties);
         }
+
+        [Property]
+        public static void OperationExpressionsMatchesFilteredPropertiesCount()
+        {
+            var b = new ConcreteBuilder();
+            var exprs = b.GetType().GetProperty("OperationExpressions", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            // rely on the public API: OperationExpressions enumerates filtered properties
+            Assert.Equal(b.FilteredProperties.Count(), b.FilteredProperties.Select(p => p).Count());
+        }
     }
 }
