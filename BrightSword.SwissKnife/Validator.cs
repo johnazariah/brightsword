@@ -16,6 +16,7 @@ namespace BrightSword.SwissKnife
 #pragma warning disable RCS1163 // Unused parameter
         public static void Check<TException>(this bool condition, string message = null) where TException : Exception, new()
         {
+            _ = message;
             if (!condition)
             {
                 throw new TException();
@@ -34,6 +35,7 @@ namespace BrightSword.SwissKnife
 #pragma warning disable RCS1163 // Unused parameter
         public static void Check<TException>(this Func<bool> predicate, string message = null) where TException : Exception, new()
         {
+            _ = message;
             if (!predicate())
             {
                 throw new TException();

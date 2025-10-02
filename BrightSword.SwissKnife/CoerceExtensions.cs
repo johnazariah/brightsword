@@ -25,20 +25,23 @@ namespace BrightSword.SwissKnife
                 {
                     return true;
                 }
-
-                if (lower == "n")
+                else if (lower == "n")
                 {
-                    return false;
+                    return (object)false;
                 }
-
-                throw new ArgumentException("Boolean should be either 'y' or 'n'");
+                else
+                {
+                    throw new ArgumentException("Boolean should be either 'y' or 'n'");
+                }
             }
 
             if (targetType.IsEnum)
             {
-                return value.CoerceType(targetType, out var returnValue, _ => true, (_type, _value) => Enum.Parse(_type, Convert.ToString(_value, CultureInfo.InvariantCulture), true), defaultValue)
-                    ? returnValue
-                    : throw new InvalidCastException($"Cannot cast {value} to {targetType}");
+                if (value.CoerceType(targetType, out var returnValue, _ => true, (_type, _value) => Enum.Parse(_type, Convert.ToString(_value, CultureInfo.InvariantCulture), true), defaultValue))
+                {
+                    return returnValue;
+                }
+                throw new InvalidCastException($"Cannot cast {value} to {targetType}");
             }
 
             if (value.CoerceType(targetType, out var parsed, (_, _value) => bool.Parse(Convert.ToString(_value, CultureInfo.InvariantCulture)), defaultValue) ||
