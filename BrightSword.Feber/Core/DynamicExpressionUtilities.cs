@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-#nullable disable
 namespace BrightSword.Feber.Core;
 
 public static class DynamicExpressionUtilities

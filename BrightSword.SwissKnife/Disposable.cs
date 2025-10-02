@@ -1,6 +1,5 @@
 using System;
 
-#nullable disable
 namespace BrightSword.SwissKnife;
 
 public class Disposable<T> : IDisposable

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 
-#nullable disable
 namespace BrightSword.SwissKnife;
 
 public static class Functional

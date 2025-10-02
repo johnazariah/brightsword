@@ -2,7 +2,6 @@ using BrightSword.SwissKnife.Properties;
 using System;
 using System.Threading;
 
-#nullable disable
 namespace BrightSword.SwissKnife;
 
 public static class SequentialGuid

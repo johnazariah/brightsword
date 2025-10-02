@@ -1,6 +1,5 @@
 using System.Collections.Concurrent;
 
-#nullable disable
 namespace BrightSword.SwissKnife;
 
 public class ConcurrentDictionary<TKey1, TKey2, TValue> : 

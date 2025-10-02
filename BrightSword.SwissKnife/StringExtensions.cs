@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-#nullable disable
 namespace BrightSword.SwissKnife;
 
 public static class StringExtensions

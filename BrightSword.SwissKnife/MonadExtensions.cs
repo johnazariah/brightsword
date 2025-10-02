@@ -1,6 +1,5 @@
 ﻿using System;
 
-#nullable disable
 namespace BrightSword.SwissKnife;
 
 public static class MonadExtensions

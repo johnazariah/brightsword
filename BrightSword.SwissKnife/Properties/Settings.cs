@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-#nullable disable
 namespace BrightSword.SwissKnife.Properties;
 
 [GeneratedCode("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
