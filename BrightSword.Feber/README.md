@@ -38,5 +38,8 @@ This library includes per-class documentation in the `docs/` folder. Key topics:
 - FunctionBuilder — compiles and caches Func delegates (`docs/FunctionBuilder.md`)
 - DynamicExpressionUtilities — expression-tree helpers (`docs/DynamicExpressionUtilities.md`)
 - OperationBuilders — small expression fragment builders (`docs/OperationBuilders.md`)
+- OperationBuilders — small expression fragment builders (`docs/OperationBuilders.md`)
+
+See `BrightSword.Feber/docs/` for the full per-class documentation and copyable examples.
 
 Read each file in `BrightSword.Feber/docs/` for detailed usage and notes about implementation details.
