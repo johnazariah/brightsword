@@ -11,7 +11,7 @@ namespace BrightSword.SwissKnife
         private static short _c;
         private static long _forwardCounter;
         private static long _reverseCounter = DateTime.MaxValue.Ticks;
-    private static readonly SemaphoreSlim _lock = new(1);
+    private static readonly SemaphoreSlim _lock = new SemaphoreSlim(1);
 
         private static void ResetForwardCounter()
         {
