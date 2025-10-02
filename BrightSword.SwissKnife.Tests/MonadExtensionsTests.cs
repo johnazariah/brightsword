@@ -1,44 +1,38 @@
-using System;
-using BrightSword.SwissKnife;
-using Xunit;
-using FsCheck;
-using FsCheck.Xunit;
-
 namespace BrightSword.SwissKnife.Tests
 {
     public class MonadExtensionsTests
     {
         [Fact]
-    public void MaybeReturnsDefaultForNull()
+        public void MaybeReturnsDefaultForNull()
         {
             string? s = null;
             Assert.Equal(-1, s.Maybe(str => str!.Length, -1));
         }
 
         [Fact]
-    public void MaybeActionInvokedWhenNotNull()
+        public void MaybeActionInvokedWhenNotNull()
         {
-            string s = "hi";
+            var s = "hi";
             var called = false;
-            s.Maybe(_ => called = true);
+            _ = s.Maybe(_ => called = true);
             Assert.True(called);
         }
 
         [Fact]
-    public void WhenActionExecutesOnPredicate()
+        public void WhenActionExecutesOnPredicate()
         {
-            string s = "hello";
+            var s = "hello";
             var executed = false;
-            s.When(_ => _.Length > 3, _ => executed = true);
+            _ = s.When(_ => _.Length > 3, _ => executed = true);
             Assert.True(executed);
         }
 
         [Fact]
-    public void UnlessActionExecutesWhenPredicateFalse()
+        public void UnlessActionExecutesWhenPredicateFalse()
         {
-            string s = "ok";
+            var s = "ok";
             var executed = false;
-            s.Unless(_ => _.Length > 3, _ => executed = true);
+            _ = s.Unless(_ => _.Length > 3, _ => executed = true);
             Assert.True(executed);
         }
 

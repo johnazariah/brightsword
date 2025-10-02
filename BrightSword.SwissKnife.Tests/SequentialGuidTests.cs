@@ -1,7 +1,3 @@
-using System;
-using BrightSword.SwissKnife;
-using Xunit;
-
 namespace BrightSword.SwissKnife.Tests
 {
     public class SequentialGuidTests

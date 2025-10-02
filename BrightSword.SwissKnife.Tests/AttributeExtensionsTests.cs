@@ -1,29 +1,30 @@
+using System;
 using System.Reflection;
-using BrightSword.SwissKnife;
 using Xunit;
+using FsCheck;
+using FsCheck.Xunit;
 
 namespace BrightSword.SwissKnife.Tests
 {
     public class AttributeExtensionsTests
     {
-    [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
-    private sealed class SampleAttr : System.Attribute
-    {
-        public string Name { get; }
-        public SampleAttr(string name) { Name = name; }
-    }
+        [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+        private sealed class SampleAttr(string name) : Attribute
+        {
+            public string Name { get; } = name;
+        }
 
         [SampleAttr("Cls")]
         private sealed class C
         {
             [SampleAttr("Mth")]
-            #pragma warning disable CA1822 // Method does not access instance data - kept instance for reflection-based attribute lookup
+#pragma warning disable CA1822 // Method does not access instance data - kept instance for reflection-based attribute lookup
             public void M() { }
-            #pragma warning restore CA1822
+#pragma warning restore CA1822
         }
 
         [Fact]
-    public void GetCustomAttributeOnTypeWorks()
+        public void GetCustomAttributeOnTypeWorks()
         {
             var attr = typeof(C).GetCustomAttribute<SampleAttr>();
             Assert.NotNull(attr);
@@ -31,7 +32,7 @@ namespace BrightSword.SwissKnife.Tests
         }
 
         [Fact]
-    public void GetCustomAttributeOnMemberWorks()
+        public void GetCustomAttributeOnMemberWorks()
         {
             var mi = typeof(C).GetMethod("M", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             var attr = mi.GetCustomAttribute<SampleAttr>();
@@ -40,7 +41,7 @@ namespace BrightSword.SwissKnife.Tests
         }
 
         [Fact]
-    public void GetCustomAttributeValueWorks()
+        public void GetCustomAttributeValueWorks()
         {
             var name = typeof(C).GetCustomAttributeValue<SampleAttr, string>(a => a.Name, "def");
             Assert.Equal("Cls", name);

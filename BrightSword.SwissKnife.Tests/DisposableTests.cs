@@ -1,5 +1,4 @@
 using System;
-using BrightSword.SwissKnife;
 using Xunit;
 using FsCheck;
 using FsCheck.Xunit;

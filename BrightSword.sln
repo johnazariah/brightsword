@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrightSword.SwissKnife", "B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrightSword.SwissKnife.Tests", "BrightSword.SwissKnife.Tests\BrightSword.SwissKnife.Tests.csproj", "{D95580E7-FCD3-425E-B35E-C5EF9795D489}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrightSword.Feber.Tests", "BrightSword.Feber.Tests\BrightSword.Feber.Tests.csproj", "{81CC9A2C-C2FF-4024-AA47-E7613EB98124}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{D95580E7-FCD3-425E-B35E-C5EF9795D489}.Release|x64.Build.0 = Release|Any CPU
 		{D95580E7-FCD3-425E-B35E-C5EF9795D489}.Release|x86.ActiveCfg = Release|Any CPU
 		{D95580E7-FCD3-425E-B35E-C5EF9795D489}.Release|x86.Build.0 = Release|Any CPU
+		{81CC9A2C-C2FF-4024-AA47-E7613EB98124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81CC9A2C-C2FF-4024-AA47-E7613EB98124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81CC9A2C-C2FF-4024-AA47-E7613EB98124}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{81CC9A2C-C2FF-4024-AA47-E7613EB98124}.Debug|x64.Build.0 = Debug|Any CPU
+		{81CC9A2C-C2FF-4024-AA47-E7613EB98124}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{81CC9A2C-C2FF-4024-AA47-E7613EB98124}.Debug|x86.Build.0 = Debug|Any CPU
+		{81CC9A2C-C2FF-4024-AA47-E7613EB98124}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81CC9A2C-C2FF-4024-AA47-E7613EB98124}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81CC9A2C-C2FF-4024-AA47-E7613EB98124}.Release|x64.ActiveCfg = Release|Any CPU
+		{81CC9A2C-C2FF-4024-AA47-E7613EB98124}.Release|x64.Build.0 = Release|Any CPU
+		{81CC9A2C-C2FF-4024-AA47-E7613EB98124}.Release|x86.ActiveCfg = Release|Any CPU
+		{81CC9A2C-C2FF-4024-AA47-E7613EB98124}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

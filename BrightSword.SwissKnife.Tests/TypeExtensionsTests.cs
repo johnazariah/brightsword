@@ -1,11 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using BrightSword.SwissKnife;
-using Xunit;
-using FsCheck;
-using FsCheck.Xunit;
-
 namespace BrightSword.SwissKnife.Tests
 {
     public interface I1 { int A { get; } }
@@ -28,7 +20,7 @@ namespace BrightSword.SwissKnife.Tests
             Assert.Contains("B", props);
         }
 
-        private static readonly Type[] SampleTypes = new[] { typeof(int), typeof(string), typeof(List<string>), typeof(object) };
+        private static readonly Type[] SampleTypes = [typeof(int), typeof(string), typeof(List<string>), typeof(object)];
 
         [Property]
         public static void NameIdempotent(int idx)

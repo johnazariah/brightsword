@@ -1,5 +1,5 @@
-using System.Collections.Concurrent;
-using BrightSword.SwissKnife;
+using System;
+using System.Linq;
 using Xunit;
 using FsCheck;
 using FsCheck.Xunit;
@@ -9,7 +9,7 @@ namespace BrightSword.SwissKnife.Tests
     public class ConcurrentDictionaryTests
     {
         [Fact]
-    public void IndexerSetGetWorks()
+        public void IndexerSetGetWorks()
         {
             var cd = new ConcurrentDictionary<string, string, int>();
             cd["a", "b"] = 42;

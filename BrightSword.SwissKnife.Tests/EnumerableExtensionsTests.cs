@@ -1,10 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
-using BrightSword.SwissKnife;
-using Xunit;
-using FsCheck;
-using FsCheck.Xunit;
-
 namespace BrightSword.SwissKnife.Tests
 {
     public class EnumerableExtensionsTests
@@ -13,7 +6,7 @@ namespace BrightSword.SwissKnife.Tests
         public void NoneWithNullCollectionThrowsArgumentNullException()
         {
             IEnumerable<int> items = null!;
-            Assert.Throws<System.ArgumentNullException>(() => items.None());
+            Assert.Throws<ArgumentNullException>(() => items.None());
         }
 
         [Fact]

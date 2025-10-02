@@ -1,18 +1,11 @@
-using System.Linq;
-using System.Collections.Generic;
-using BrightSword.SwissKnife;
-using Xunit;
-using FsCheck;
-using FsCheck.Xunit;
-
 namespace BrightSword.SwissKnife.Tests
 {
     public class StringExtensionsTests
     {
-        private static readonly string[] CamelCaseExampleExpected = new[] { "Camel", "Case", "Example" };
-        private static readonly string[] XMLHttpRequestExpected = new[] { "XML", "Http", "Request" };
+        private static readonly string[] CamelCaseExampleExpected = ["Camel", "Case", "Example"];
+        private static readonly string[] XMLHttpRequestExpected = ["XML", "Http", "Request"];
 
-        private static readonly string[] EmptyStringArray = System.Array.Empty<string>();
+        private static readonly string[] EmptyStringArray = [];
 
         public static TheoryData<string, string[]> SplitCamelCaseData() => new TheoryData<string, string[]>
         {
@@ -21,7 +14,7 @@ namespace BrightSword.SwissKnife.Tests
             { string.Empty, EmptyStringArray }
         };
 
-        private static readonly string[] PartOneTwo = new[] { "part", "one", "two" };
+        private static readonly string[] PartOneTwo = ["part", "one", "two"];
 
         [Theory]
         [MemberData(nameof(SplitCamelCaseData))]
