@@ -1,37 +1,45 @@
 # OperationBuilders
 
-Purpose
+## Purpose
 
-Operation builders are the low-level primitives used by the Feber library to generate per-property Expression fragments. Higher-level builders (ActionBuilder/FunctionBuilder) consume `OperationExpressions` and compile complete delegates.
+Operation builders are the low-level primitives in Feber for generating per-property `Expression` fragments. They provide the foundation for higher-level builders like `ActionBuilder` and `FunctionBuilder`, which consume `OperationExpressions` to compile complete delegates.
 
-Core types & behaviors
-- `OperationBuilderBase<TProto>`
-	- Scans `typeof(TProto)` for public instance properties using `GetAllProperties` (SwissKnife helper).
-	- Exposes `FilteredProperties` and `OperationExpressions` which map properties to Expressions via `BuildPropertyExpression`.
+## Why Use This Approach?
 
-- `UnaryOperationBuilderBase<TProto, TInstance>`
-	- Exposes a stable `InstanceParameterExpression` (static field) so that compiled lambdas reuse the same ParameterExpression instance.
-	- Implementors override `PropertyExpression(PropertyInfo, ParameterExpression)` to return a per-property Expression referencing the provided `instanceParameter`.
+This builder pattern is designed to **improve runtime performance** and **developer productivity** for repeated property-based operations. By automating the generation of property-based logic, you eliminate repetitive boilerplate code and avoid the overhead of reflection and manual expression construction on every invocation. The trade-off is a small upfront cost for building and caching the operation, which is quickly amortized when the operation is used many times.
 
-- `BinaryOperationBuilderBase<TProto, TLeftInstance, TRightInstance>`
-	- Supplies `LeftInstanceParameterExpression` and `RightInstanceParameterExpression` and expects implementors to override `PropertyExpression(PropertyInfo, ParameterExpression, ParameterExpression)`.
+- **Performance:** Compiled delegates execute much faster than repeated reflection or dynamic code generation.
+- **Scalability:** The cost of building the operation is paid only once per type; subsequent invocations are as fast as a direct delegate call.
+- **Developer Productivity:** This approach **reduces code-bloat and improves developer productivity** by removing repetitive property-handling logic from your codebase. Instead, you automate the generation of these operations, making your codebase cleaner, easier to maintain, and less error-prone.
 
-Worked example: null-check builder (complete)
+## Architectural Role
+- Scans prototype types for public instance properties using SwissKnife helpers.
+- Exposes `FilteredProperties` and `OperationExpressions` for property-based expression generation.
+- Supplies stable `ParameterExpression` instances for lambda compilation.
+- Used as the base for custom builders that need fine-grained control over property expression generation.
+
+## Core Types & Behaviors
+- `OperationBuilderBase<TProto>`: Scans properties, exposes `FilteredProperties` and `OperationExpressions`, and expects implementors to override `BuildPropertyExpression`.
+- `UnaryOperationBuilderBase<TProto, TInstance>`: Supplies a stable `InstanceParameterExpression` and expects implementors to override `PropertyExpression(PropertyInfo, ParameterExpression)`.
+- `BinaryOperationBuilderBase<TProto, TLeftInstance, TRightInstance>`: Supplies `LeftInstanceParameterExpression` and `RightInstanceParameterExpression` and expects implementors to override `PropertyExpression(PropertyInfo, ParameterExpression, ParameterExpression)`.
+
+## Usage Example: Null-Check Builder
 ```csharp
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using BrightSword.Feber.Core;
 
 public sealed class NullCheckBuilder<T> : UnaryOperationBuilderBase<T, T>
 {
-		protected override Expression PropertyExpression(PropertyInfo propertyInfo, ParameterExpression instanceParameter)
-		{
-				var propertyAccess = Expression.Property(instanceParameter, propertyInfo);
-				var nullConstant = Expression.Constant(null, propertyInfo.PropertyType);
-				return Expression.Equal(propertyAccess, nullConstant);
-		}
+    protected override Expression PropertyExpression(PropertyInfo propertyInfo, ParameterExpression instanceParameter)
+    {
+        var propertyAccess = Expression.Property(instanceParameter, propertyInfo);
+        var nullConstant = Expression.Constant(null, propertyInfo.PropertyType);
+        return Expression.Equal(propertyAccess, nullConstant);
+    }
 
-		public Expression BuildAll() => Expression.Block(OperationExpressions);
+    public Expression BuildAll() => Expression.Block(OperationExpressions);
 }
 
 // Usage
@@ -39,13 +47,18 @@ public sealed class NullCheckBuilder<T> : UnaryOperationBuilderBase<T, T>
 // var block = builder.BuildAll();
 // var lam = Expression.Lambda<Action<MyType>>(block, builder.InstanceParameterExpression);
 // var action = lam.Compile();
+```
 
-Testing guidance and pitfalls
-- ParameterExpression identity: The expression compiler requires that the ParameterExpression referenced in the body matches the lambda parameter instance. Use the provided `InstanceParameterExpression` / `LeftInstanceParameterExpression` / `RightInstanceParameterExpression` instead of creating new parameters inside overrides.
-- Avoid sharing ParameterExpression instances across independent builder instances unless intended; the base classes supply static fields for common cases to keep things simple.
-- If tests need to compile the final block, obtain the same ParameterExpression instance used by the builder (via the protected property) or compile per-property lambdas rather than the full block.
+## Best Practices
+- **ParameterExpression identity:** Always use the builder's provided parameter expressions. Do not create new ones inside overrides.
+- **Property scanning:** Use SwissKnife's `GetAllProperties` for robust property discovery.
+- **Delegate composition:** Higher-level builders (ActionBuilder/FunctionBuilder) consume `OperationExpressions` to compile delegates.
 
-Cross-links
-- See `ActionBuilder.md` for examples that compose `OperationExpressions` into side-effecting `Action` delegates.
-- See `FunctionBuilder.md` for examples that fold `OperationExpressions` into aggregate `Func` results.
+## Customization
+- Override `BuildPropertyExpression` or the more specialized property expression methods in unary/binary builders for custom logic.
+- Use the protected properties for parameter expressions to ensure correct lambda compilation.
+
+## See Also
+- [ActionBuilder.md](ActionBuilder.md) — for composing side-effecting delegates.
+- [FunctionBuilder.md](FunctionBuilder.md) — for folding/aggregation patterns.
 

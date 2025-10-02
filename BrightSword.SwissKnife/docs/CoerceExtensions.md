@@ -1,20 +1,29 @@
 # CoerceExtensions
 
-Purpose
-- Helpers to coerce or convert values between types with sensible fallbacks and safe parsing semantics.
+## Purpose
+Provides extension methods for type coercion and conversion with fallback/default handling. These helpers simplify safe type conversion, including enums and primitives, with custom parsing logic.
 
-Key APIs
-- CoerceTo<T>(this object obj, T defaultValue = default) — attempt to convert and return default on failure.
-- ToIntSafe(this string s, int fallback)
+## When to Use
+- When you need to safely convert values between types, with sensible fallbacks and safe parsing semantics.
+- When you want to avoid exceptions on parse errors and return fallback values instead.
 
-Usage
+## How to Use
+Use these methods to coerce or convert values between types, specifying default values for failure cases.
+
+## Key APIs
+- <code>CoerceType(this object value, Type targetType, object defaultValue)</code>: Attempts to coerce an object to the specified target type, using default value if conversion fails.
+- <code>CoerceType<T>(this object value, Type targetType, out object returnValue, Func<Type, object, T> parseFunc, object defaultValue)</code>: Attempts to coerce an object to the specified target type using a custom parse function.
+- <code>CoerceType(this object value, Type targetType, out object returnValue, Func<Type, bool> checkFunc, Func<Type, object, object> parseFunc, object defaultValue)</code>: Attempts to coerce an object to the specified target type using custom check and parse functions.
+
+## Examples
 ```csharp
-int x = someObj.CoerceTo<int>(0);
-int parsed = "123".ToIntSafe(0);
+object val = "42";
+int result = (int)val.CoerceType(typeof(int), 0); // 42
+object val2 = "true";
+bool success = val2.CoerceType<bool>(typeof(bool), out var result2, (_, v) => bool.Parse(v.ToString()), false);
+object val3 = "42";
+bool success2 = val3.CoerceType(typeof(int), out var result3, t => t == typeof(int), (t, v) => int.Parse(v.ToString()), 0);
 ```
 
-Notes
-- These extensions simplify defensive parsing and conversion; they do not throw on parse errors and return fallback values instead.
-
-Implementation notes
-- Prefer TryParse patterns and culture-invariant parsing where appropriate.
+## Remarks
+These extensions simplify defensive parsing and conversion. They do not throw on parse errors and return fallback values instead. Prefer TryParse patterns and culture-invariant parsing where appropriate.

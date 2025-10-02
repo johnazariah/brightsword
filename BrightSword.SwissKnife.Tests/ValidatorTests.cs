@@ -3,15 +3,35 @@ namespace BrightSword.SwissKnife.Tests
     public class ValidatorTests
     {
         [Fact]
-        public void CheckBoolThrowsOnFalse() => Assert.Throws<Exception>(() => false.Check("bad"));
+        public void CheckBoolThrowsOnFalse()
+        {
+#pragma warning disable CS0618
+            Assert.Throws<Exception>(() => false.Check("bad"));
+#pragma warning restore CS0618
+        }
 
         [Fact]
-        public void CheckBoolTExceptionWorks() => Assert.Throws<InvalidOperationException>(() => false.Check<InvalidOperationException>("bad"));
+        public void CheckBoolTExceptionWorks()
+        {
+#pragma warning disable CS0618
+            Assert.Throws<InvalidOperationException>(() => false.Check<InvalidOperationException>("bad"));
+#pragma warning restore CS0618
+        }
 
         [Fact]
-        public void CheckFuncThrowsOnFalse() => Assert.Throws<Exception>(() => new Func<bool>(() => false).Check("bad"));
+        public void CheckFuncThrowsOnFalse()
+        {
+#pragma warning disable CS0618
+            Assert.Throws<Exception>(() => new Func<bool>(() => false).Check("bad"));
+#pragma warning restore CS0618
+        }
 
         [Fact]
-        public void CheckFuncTExceptionWorks() => Assert.Throws<InvalidOperationException>(() => new Func<bool>(() => false).Check<InvalidOperationException>("bad"));
+        public void CheckFuncTExceptionWorks()
+        {
+#pragma warning disable CS0618
+            Assert.Throws<InvalidOperationException>(() => new Func<bool>(() => false).Check<InvalidOperationException>("bad"));
+#pragma warning restore CS0618
+        }
     }
 }

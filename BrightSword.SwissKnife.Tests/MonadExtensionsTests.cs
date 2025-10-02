@@ -5,8 +5,10 @@ namespace BrightSword.SwissKnife.Tests
         [Fact]
         public void MaybeReturnsDefaultForNull()
         {
+#pragma warning disable CS0618
             string? s = null;
             Assert.Equal(-1, s.Maybe(str => str!.Length, -1));
+#pragma warning restore CS0618
         }
 
         [Fact]
@@ -14,7 +16,9 @@ namespace BrightSword.SwissKnife.Tests
         {
             var s = "hi";
             var called = false;
+#pragma warning disable CS0618
             _ = s.Maybe(_ => called = true);
+#pragma warning restore CS0618
             Assert.True(called);
         }
 
@@ -23,7 +27,9 @@ namespace BrightSword.SwissKnife.Tests
         {
             var s = "hello";
             var executed = false;
+#pragma warning disable CS0618
             _ = s.When(_ => _.Length > 3, _ => executed = true);
+#pragma warning restore CS0618
             Assert.True(executed);
         }
 
@@ -32,16 +38,19 @@ namespace BrightSword.SwissKnife.Tests
         {
             var s = "ok";
             var executed = false;
+#pragma warning disable CS0618
             _ = s.Unless(_ => _.Length > 3, _ => executed = true);
+#pragma warning restore CS0618
             Assert.True(executed);
         }
 
         [Property]
         public static void MaybeReturnsDefaultForNullProperty(NonNull<string> _)
         {
-            // This property ensures Maybe for null returns default; use a NonNull parameter to satisfy FsCheck's type generation
+#pragma warning disable CS0618
             string? s = null;
             Assert.Equal(-1, s.Maybe(str => str!.Length, -1));
+#pragma warning restore CS0618
         }
     }
 }

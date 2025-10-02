@@ -5,15 +5,19 @@ namespace BrightSword.SwissKnife.Tests
         [Fact]
         public void NoneWithNullCollectionThrowsArgumentNullException()
         {
+#pragma warning disable CS0618
             IEnumerable<int> items = null!;
             _ = Assert.Throws<ArgumentNullException>(() => items.None());
+#pragma warning restore CS0618
         }
 
         [Fact]
         public void NoneWithEmptyCollectionReturnsTrue()
         {
+#pragma warning disable CS0618
             var items = new List<int>();
             Assert.True(items.None());
+#pragma warning restore CS0618
         }
 
         [Fact]

@@ -4,51 +4,35 @@ using System.Linq.Expressions;
 namespace BrightSword.Feber.Core
 {
     /// <summary>
-    /// Represents an abstract builder for creating unary operations that act on instances of <typeparamref name="TInstance"/>.
-    /// Provides functionality to build and cache an <see cref="Action{TInstance}"/> delegate based on operation expressions.
+    /// Base class for building unary actions that perform operations on each property of an object.
     /// </summary>
-    /// <typeparam name="TProto">The prototype type used in the operation builder.</typeparam>
-    /// <typeparam name="TInstance">The instance type on which the action operates.</typeparam>
-    /// <usage>
-    /// 1. Derive from this class and override <see cref="PropertyExpression"/> to return an expression that acts on each of the properties in <typeparamref name="TProto"/>.
-    /// 2. Access the <see cref="Action"/> property to get the compiled action.
-    /// 3. Call this action with an instance of <typeparamref name="TInstance"/>.
-    ///
-    /// You can wrap all of these steps nicely so that you can then surface an extension method that performs the action as an extension method on <typeparamref name="TInstance"/> as in the example.
-    /// </usage>
+    /// <typeparam name="TProto">Prototype type whose properties will be scanned.</typeparam>
+    /// <typeparam name="TInstance">Instance type passed to the produced action.</typeparam>
+    /// <remarks>
+    /// <para>
+    /// Use <see cref="ActionBuilder{TProto, TInstance}"/> to generate an <c>Action&lt;TInstance&gt;</c>
+    /// that performs a side effect (such as printing, copying, or validating) for each property.
+    /// </para>
+    /// </remarks>
     /// <example>
-    /// This example shows how to use an <see cref="ActionBuilder{TProto, TInstance}"/> to build an expression that pretty-prints all the properties of type <typeparamref name="TProto"/> in an object of (possibly derived) type <typeparamref name="TInstance"/>
-    ///
     /// <code>
-    ///    public static class PrettyPrinter
-    ///    {
-    ///        private static class PrettyPrinterImpl<TProto>
-    ///        {
-    ///            private static readonly PrettyPrinterBuilder _builder = new();
-    ///
-    ///            private sealed class PrettyPrinterBuilder : ActionBuilder<TProto, TProto>
-    ///            {
-    ///                protected override Expression PropertyExpression(
-    ///                    PropertyInfo propertyInfo,
-    ///                    ParameterExpression instanceParameter)
-    ///                {
-    ///                    var memberExpression = Expression.Property(instanceParameter, propertyInfo);
-    ///                    Expression stringExpression = propertyInfo.PropertyType == typeof(string)
-    ///                        ? memberExpression
-    ///                        : Expression.Call(typeof(Convert), "ToString", Type.EmptyTypes, memberExpression);
-    ///                    return Expression.Call(typeof(Console), "WriteLine", Type.EmptyTypes, Expression.Constant("\t{0} : {1}", typeof(string)), Expression.Constant(propertyInfo.Name, typeof(string)), stringExpression);
-    ///                }
-    ///            }
-    ///
-    ///            public static void Print(TProto instance) => _builder.Action(instance);
-    ///        }
-    ///
-    ///        public static void Print<T>(this T This) => PrettyPrinterImpl<T>.Print(This);
-    ///    }
+    /// // Example: Pretty-print all properties of an object.
+    /// public sealed class PrettyPrinterBuilder<TProto> : ActionBuilder<TProto, TProto>
+    /// {
+    ///     protected override Expression PropertyExpression(PropertyInfo propertyInfo, ParameterExpression instanceParameter)
+    ///     {
+    ///         var member = Expression.Property(instanceParameter, propertyInfo);
+    ///         var toString = Expression.Call(member, typeof(object).GetMethod("ToString"));
+    ///         return Expression.Call(
+    ///             typeof(Console).GetMethod("WriteLine", new[] { typeof(string) }),
+    ///             Expression.Call(typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) }),
+    ///                 Expression.Constant(propertyInfo.Name + ": "), toString));
+    ///     }
+    /// }
+    /// var printer = new PrettyPrinterBuilder<MyProto>().Action;
+    /// printer(myProtoInstance); // Prints all properties
     /// </code>
-    ///
     /// </example>
-    ///
     public abstract class ActionBuilder<TProto, TInstance> : UnaryOperationBuilderBase<TProto, TInstance>
     {
         private Action<TInstance> _action;
@@ -76,6 +60,34 @@ namespace BrightSword.Feber.Core
         protected virtual Action<TInstance> BuildAction() => Expression.Lambda<Action<TInstance>>(Expression.Block(OperationExpressions), InstanceParameterExpression).Compile();
     }
 
+    /// <summary>
+    /// Base class for building binary actions that perform operations on each property of two objects.
+    /// </summary>
+    /// <typeparam name="TProto">Prototype type whose properties will be scanned.</typeparam>
+    /// <typeparam name="TLeftInstance">Type of the left instance parameter.</typeparam>
+    /// <typeparam name="TRightInstance">Type of the right instance parameter.</typeparam>
+    /// <remarks>
+    /// <para>
+    /// Use <see cref="ActionBuilder{TProto, TLeftInstance, TRightInstance}"/> to generate an <c>Action&lt;TLeftInstance, TRightInstance&gt;</c>
+    /// that performs a side effect for each property pair (such as copying, merging, or comparing).
+    /// </para>
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// // Example: Copy matching properties from source to target.
+    /// public sealed class CopierBuilder<TProto> : ActionBuilder<TProto, TProto, TProto>
+    /// {
+    ///     protected override Expression PropertyExpression(PropertyInfo propertyInfo, ParameterExpression target, ParameterExpression source)
+    ///     {
+    ///         var sourceProp = Expression.Property(source, propertyInfo);
+    ///         var targetProp = Expression.Property(target, propertyInfo);
+    ///         return Expression.Assign(targetProp, sourceProp);
+    ///     }
+    /// }
+    /// var copier = new CopierBuilder<MyProto>().Action;
+    /// copier(targetInstance, sourceInstance); // Copies properties
+    /// </code>
+    /// </example>
     public abstract class ActionBuilder<TProto, TLeftInstance, TRightInstance> :
         BinaryOperationBuilderBase<TProto, TLeftInstance, TRightInstance>
     {

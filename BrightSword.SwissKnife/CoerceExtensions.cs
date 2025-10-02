@@ -3,8 +3,28 @@ using System.Globalization;
 
 namespace BrightSword.SwissKnife
 {
+    /// <summary>
+    /// Provides extension methods for type coercion and conversion with fallback/default handling.
+    /// </summary>
+    /// <remarks>
+    /// These helpers simplify safe type conversion, including enums and primitives, with custom parsing logic.
+    /// </remarks>
     public static class CoerceExtensions
     {
+        /// <summary>
+        /// Attempts to coerce an object to the specified target type, using default value if conversion fails.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        /// <param name="targetType">The target type.</param>
+        /// <param name="defaultValue">The value to use if conversion fails.</param>
+        /// <returns>The converted value, or <paramref name="defaultValue"/> if conversion fails.</returns>
+        /// <example>
+        /// <code>
+        /// object val = "42";
+        /// int result = (int)val.CoerceType(typeof(int), 0); // 42
+        /// </code>
+        /// </example>
+        [Obsolete("Use built-in Convert.ChangeType, TryParse, or pattern matching in modern C#. CoerceType is superseded by language features.")]
         public static object CoerceType(this object value, Type targetType, object defaultValue)
         {
             if (value is string && targetType == typeof(string))
@@ -55,9 +75,43 @@ namespace BrightSword.SwissKnife
             }
         }
 
+        /// <summary>
+        /// Attempts to coerce an object to the specified target type using a custom parse function.
+        /// </summary>
+        /// <typeparam name="T">The type to parse to.</typeparam>
+        /// <param name="value">The value to convert.</param>
+        /// <param name="targetType">The target type.</param>
+        /// <param name="returnValue">The parsed value if successful.</param>
+        /// <param name="parseFunc">Custom parse function.</param>
+        /// <param name="defaultValue">The value to use if conversion fails.</param>
+        /// <returns>True if conversion succeeded, false otherwise.</returns>
+        /// <example>
+        /// <code>
+        /// object val = "true";
+        /// bool success = val.CoerceType<bool>(typeof(bool), out var result, (_, v) => bool.Parse(v.ToString()), false);
+        /// </code>
+        /// </example>
+        [Obsolete("Use built-in Convert.ChangeType, TryParse, or pattern matching in modern C#. CoerceType is superseded by language features.")]
         public static bool CoerceType<T>(this object value, Type targetType, out object returnValue, Func<Type, object, T> parseFunc, object defaultValue)
             => value.CoerceType(targetType, out returnValue, _ => _.IsAssignableFrom(typeof(T)), (_type, _value) => parseFunc(_type, _value), defaultValue);
 
+        /// <summary>
+        /// Attempts to coerce an object to the specified target type using custom check and parse functions.
+        /// </summary>
+        /// <param name="value">The value to convert.</param>
+        /// <param name="targetType">The target type.</param>
+        /// <param name="returnValue">The parsed value if successful.</param>
+        /// <param name="checkFunc">Function to check if the type is supported.</param>
+        /// <param name="parseFunc">Custom parse function.</param>
+        /// <param name="defaultValue">The value to use if conversion fails.</param>
+        /// <returns>True if conversion succeeded, false otherwise.</returns>
+        /// <example>
+        /// <code>
+        /// object val = "42";
+        /// bool success = val.CoerceType(typeof(int), out var result, t => t == typeof(int), (t, v) => int.Parse(v.ToString()), 0);
+        /// </code>
+        /// </example>
+        [Obsolete("Use built-in Convert.ChangeType, TryParse, or pattern matching in modern C#. CoerceType is superseded by language features.")]
         public static bool CoerceType(this object value, Type targetType, out object returnValue, Func<Type, bool> checkFunc, Func<Type, object, object> parseFunc, object defaultValue)
         {
             try
