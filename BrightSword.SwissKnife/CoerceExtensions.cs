@@ -20,12 +20,13 @@ namespace BrightSword.SwissKnife
                     return false;
                 }
 
-                if (str.Equals("y", StringComparison.OrdinalIgnoreCase))
+                var lower = str.ToLowerInvariant();
+                if (lower == "y")
                 {
                     return true;
                 }
 
-                if (str.Equals("n", StringComparison.OrdinalIgnoreCase))
+                if (lower == "n")
                 {
                     return false;
                 }
