@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace BrightSword.SwissKnife
 {
@@ -13,7 +14,7 @@ namespace BrightSword.SwissKnife
 
             if (targetType == typeof(bool))
             {
-                var str = Convert.ToString(value);
+                var str = Convert.ToString(value, CultureInfo.InvariantCulture);
                 if (string.IsNullOrEmpty(str))
                 {
                     return false;
@@ -31,21 +32,21 @@ namespace BrightSword.SwissKnife
 
             if (targetType.IsEnum)
             {
-                return value.CoerceType(targetType, out var returnValue, _ => true, (_type, _value) => Enum.Parse(_type, Convert.ToString(_value), true), defaultValue)
+                return value.CoerceType(targetType, out var returnValue, _ => true, (_type, _value) => Enum.Parse(_type, Convert.ToString(_value, CultureInfo.InvariantCulture), true), defaultValue)
                     ? returnValue
                     : throw new InvalidCastException($"Cannot cast {value} to {targetType}");
             }
 
-            if (value.CoerceType(targetType, out var parsed, (_, _value) => bool.Parse(Convert.ToString(_value)), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => decimal.Parse(Convert.ToString(_value)), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => long.Parse(Convert.ToString(_value)), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => int.Parse(Convert.ToString(_value)), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => short.Parse(Convert.ToString(_value)), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => byte.Parse(Convert.ToString(_value)), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => char.Parse(Convert.ToString(_value)), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => double.Parse(Convert.ToString(_value)), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => float.Parse(Convert.ToString(_value)), defaultValue) ||
-                value.CoerceType(targetType, out parsed, (_, _value) => DateTime.Parse(Convert.ToString(_value)), defaultValue))
+            if (value.CoerceType(targetType, out var parsed, (_, _value) => bool.Parse(Convert.ToString(_value, CultureInfo.InvariantCulture)), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => decimal.Parse(Convert.ToString(_value, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => long.Parse(Convert.ToString(_value, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => int.Parse(Convert.ToString(_value, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => short.Parse(Convert.ToString(_value, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => byte.Parse(Convert.ToString(_value, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => char.Parse(Convert.ToString(_value, CultureInfo.InvariantCulture)), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => double.Parse(Convert.ToString(_value, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => float.Parse(Convert.ToString(_value, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture), defaultValue) ||
+                value.CoerceType(targetType, out parsed, (_, _value) => DateTime.Parse(Convert.ToString(_value, CultureInfo.InvariantCulture), CultureInfo.InvariantCulture), defaultValue))
             {
                 return parsed;
             }
