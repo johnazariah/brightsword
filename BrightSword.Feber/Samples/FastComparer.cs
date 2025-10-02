@@ -1,4 +1,5 @@
 namespace BrightSword.Feber.Samples;
+
 using BrightSword.Feber.Core;
 using System;
 using System.Linq.Expressions;
@@ -6,35 +7,35 @@ using System.Reflection;
 
 public static class FastComparer
 {
-  public static bool AllPropertiesAreEqualWith<T>(this T _this, T other)
-  {
-    return FastComparer<T>.AllPropertiesAreEqual(_this, other);
-  }
+    public static bool AllPropertiesAreEqualWith<T>(this T _this, T other)
+    {
+        return FastComparer<T>.AllPropertiesAreEqual(_this, other);
+    }
 }
 public static class FastComparer<T>
 {
-  private static readonly FastComparer<T>.FastComparerBuilder _builder = new FastComparer<T>.FastComparerBuilder();
+    private static readonly FastComparer<T>.FastComparerBuilder _builder = new FastComparer<T>.FastComparerBuilder();
 
-  public static bool AllPropertiesAreEqual(T left, T right)
-  {
-    return FastComparer<T>._builder.Function(left, right);
-  }
-
-  private class FastComparerBuilder : FunctionBuilder<T, T, T, bool>
-  {
-    protected override bool Seed => true;
-
-    protected override Func<Expression, Expression, Expression> Conjunction
+    public static bool AllPropertiesAreEqual(T left, T right)
     {
-      get => new Func<Expression, Expression, Expression>(Expression.AndAlso);
+        return FastComparer<T>._builder.Function(left, right);
     }
 
-    protected override Expression PropertyExpression(
-      PropertyInfo property,
-      ParameterExpression leftInstanceParameterExpression,
-      ParameterExpression rightInstanceParameterExpression)
+    private class FastComparerBuilder : FunctionBuilder<T, T, T, bool>
     {
-      return (Expression)Expression.Equal((Expression)Expression.Property((Expression)leftInstanceParameterExpression, property), (Expression)Expression.Property((Expression)rightInstanceParameterExpression, property));
+        protected override bool Seed => true;
+
+        protected override Func<Expression, Expression, Expression> Conjunction
+        {
+            get => new Func<Expression, Expression, Expression>(Expression.AndAlso);
+        }
+
+        protected override Expression PropertyExpression(
+          PropertyInfo property,
+          ParameterExpression leftInstanceParameterExpression,
+          ParameterExpression rightInstanceParameterExpression)
+        {
+            return (Expression)Expression.Equal((Expression)Expression.Property((Expression)leftInstanceParameterExpression, property), (Expression)Expression.Property((Expression)rightInstanceParameterExpression, property));
+        }
     }
-  }
 }

@@ -2,12 +2,12 @@ using System.Collections.Concurrent;
 
 namespace BrightSword.SwissKnife;
 
-public class ConcurrentDictionary<TKey1, TKey2, TValue> : 
+public class ConcurrentDictionary<TKey1, TKey2, TValue> :
   ConcurrentDictionary<TKey1, ConcurrentDictionary<TKey2, TValue>>
 {
-  public TValue this[TKey1 key1, TKey2 key2]
-  {
-    get => this[key1][key2];
-    set => this.GetOrAdd(key1, new ConcurrentDictionary<TKey2, TValue>()).GetOrAdd(key2, value);
-  }
+    public TValue this[TKey1 key1, TKey2 key2]
+    {
+        get => this[key1][key2];
+        set => this.GetOrAdd(key1, new ConcurrentDictionary<TKey2, TValue>()).GetOrAdd(key2, value);
+    }
 }

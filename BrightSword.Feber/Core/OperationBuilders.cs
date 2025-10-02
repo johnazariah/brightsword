@@ -9,80 +9,80 @@ namespace BrightSword.Feber.Core;
 
 public abstract class OperationBuilderBase<TProto>
 {
-  protected virtual Func<PropertyInfo, bool> PropertyFilter
-  {
-    get => (Func<PropertyInfo, bool>) (_ => true);
-  }
-
-  public virtual IEnumerable<PropertyInfo> FilteredProperties
-  {
-    get
+    protected virtual Func<PropertyInfo, bool> PropertyFilter
     {
-      return typeof (TProto).GetAllProperties(BindingFlags.Instance | BindingFlags.Public).Where<PropertyInfo>((Func<PropertyInfo, bool>) (_propertyInfo => this.PropertyFilter(_propertyInfo)));
+        get => (Func<PropertyInfo, bool>)(_ => true);
     }
-  }
 
-  protected virtual IEnumerable<Expression> OperationExpressions
-  {
-    get
+    public virtual IEnumerable<PropertyInfo> FilteredProperties
     {
-      return this.FilteredProperties.Select<PropertyInfo, Expression>(new Func<PropertyInfo, Expression>(this.BuildPropertyExpression));
+        get
+        {
+            return typeof(TProto).GetAllProperties(BindingFlags.Instance | BindingFlags.Public).Where<PropertyInfo>((Func<PropertyInfo, bool>)(_propertyInfo => this.PropertyFilter(_propertyInfo)));
+        }
     }
-  }
 
-  protected abstract Expression BuildPropertyExpression(PropertyInfo propertyInfo);
+    protected virtual IEnumerable<Expression> OperationExpressions
+    {
+        get
+        {
+            return this.FilteredProperties.Select<PropertyInfo, Expression>(new Func<PropertyInfo, Expression>(this.BuildPropertyExpression));
+        }
+    }
+
+    protected abstract Expression BuildPropertyExpression(PropertyInfo propertyInfo);
 }
 
 public abstract class UnaryOperationBuilderBase<TProto, TInstance> : OperationBuilderBase<TProto>
 {
-  private static readonly ParameterExpression _parameterExpression = Expression.Parameter(typeof (TInstance), "_instance");
+    private static readonly ParameterExpression _parameterExpression = Expression.Parameter(typeof(TInstance), "_instance");
 
-  protected virtual ParameterExpression InstanceParameterExpression
-  {
-    get => UnaryOperationBuilderBase<TProto, TInstance>._parameterExpression;
-  }
+    protected virtual ParameterExpression InstanceParameterExpression
+    {
+        get => UnaryOperationBuilderBase<TProto, TInstance>._parameterExpression;
+    }
 
-  protected override Expression BuildPropertyExpression(PropertyInfo propertyInfo)
-  {
-    return this.PropertyExpression(propertyInfo, this.InstanceParameterExpression);
-  }
+    protected override Expression BuildPropertyExpression(PropertyInfo propertyInfo)
+    {
+        return this.PropertyExpression(propertyInfo, this.InstanceParameterExpression);
+    }
 
-  protected abstract Expression PropertyExpression(
-    PropertyInfo property,
-    ParameterExpression instanceParameterExpression);
+    protected abstract Expression PropertyExpression(
+      PropertyInfo property,
+      ParameterExpression instanceParameterExpression);
 }
 
 public abstract class BinaryOperationBuilderBase<TProto, TLeftInstance, TRightInstance> :
   OperationBuilderBase<TProto>
 {
-  private static readonly ParameterExpression _leftParameterExpression = Expression.Parameter(typeof(TLeftInstance), "_left");
-  private static readonly ParameterExpression _rightParameterExpression = Expression.Parameter(typeof(TRightInstance), "_right");
+    private static readonly ParameterExpression _leftParameterExpression = Expression.Parameter(typeof(TLeftInstance), "_left");
+    private static readonly ParameterExpression _rightParameterExpression = Expression.Parameter(typeof(TRightInstance), "_right");
 
-  protected virtual ParameterExpression LeftInstanceParameterExpression
-  {
-    get
+    protected virtual ParameterExpression LeftInstanceParameterExpression
     {
-      return BinaryOperationBuilderBase<TProto, TLeftInstance, TRightInstance>._leftParameterExpression;
+        get
+        {
+            return BinaryOperationBuilderBase<TProto, TLeftInstance, TRightInstance>._leftParameterExpression;
+        }
     }
-  }
 
-  protected virtual ParameterExpression RightInstanceParameterExpression
-  {
-    get
+    protected virtual ParameterExpression RightInstanceParameterExpression
     {
-      return BinaryOperationBuilderBase<TProto, TLeftInstance, TRightInstance>._rightParameterExpression;
+        get
+        {
+            return BinaryOperationBuilderBase<TProto, TLeftInstance, TRightInstance>._rightParameterExpression;
+        }
     }
-  }
 
-  protected override Expression BuildPropertyExpression(PropertyInfo propertyInfo)
-  {
-    return this.PropertyExpression(propertyInfo, this.LeftInstanceParameterExpression, this.RightInstanceParameterExpression);
-  }
+    protected override Expression BuildPropertyExpression(PropertyInfo propertyInfo)
+    {
+        return this.PropertyExpression(propertyInfo, this.LeftInstanceParameterExpression, this.RightInstanceParameterExpression);
+    }
 
-  protected abstract Expression PropertyExpression(
-    PropertyInfo property,
-    ParameterExpression leftInstanceParameterExpression,
-    ParameterExpression rightInstanceParameterExpression);
+    protected abstract Expression PropertyExpression(
+      PropertyInfo property,
+      ParameterExpression leftInstanceParameterExpression,
+      ParameterExpression rightInstanceParameterExpression);
 }
 
 
