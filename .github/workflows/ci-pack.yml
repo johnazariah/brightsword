@@ -1,0 +1,94 @@
+name: CI - Pack and optional publish
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  workflow_dispatch: {}
+
+env:
+  ARTIFACT_DIR: ./artifacts
+
+jobs:
+  pack-swissknife:
+    runs-on: ubuntu-latest
+    outputs:
+      package-version: ${{ steps.set-version.outputs.package-version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore BrightSword.sln
+
+      - name: Build
+        run: dotnet build BrightSword.sln -c Release --no-restore
+
+      - name: Pack SwissKnife
+        run: |
+          mkdir -p $ARTIFACT_DIR
+          PACKAGE_VERSION="${GITHUB_RUN_NUMBER}.0"
+          dotnet pack BrightSword.SwissKnife/BrightSword.SwissKnife.csproj -c Release -o $ARTIFACT_DIR /p:PackageId=BrightSword.SwissKnife /p:PackageVersion=$PACKAGE_VERSION
+          echo "package-version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
+        id: set-version
+
+      - name: Upload NuGet artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: swissknife-nugets
+          path: ${{ env.ARTIFACT_DIR }}
+
+  pack-feber:
+    runs-on: ubuntu-latest
+    needs: pack-swissknife
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Download swissknife artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: swissknife-nugets
+          path: ./localfeed
+
+      - name: Add local feed
+        run: |
+          dotnet nuget add source ./localfeed -n local-feed || true
+
+      - name: Add PackageReference for local SwissKnife package
+        run: |
+          # Backup csproj
+          cp BrightSword.Feber/BrightSword.Feber.csproj BrightSword.Feber/BrightSword.Feber.csproj.bak
+          # Append a PackageReference ItemGroup before the closing </Project>
+          sed -i "s|</Project>|  <ItemGroup>\n    <PackageReference Include=\"BrightSword.SwissKnife\" Version=\"${{ needs.pack-swissknife.outputs.package-version }}\" />\n  </ItemGroup>\n</Project>|" BrightSword.Feber/BrightSword.Feber.csproj
+
+      - name: Restore
+        run: dotnet restore BrightSword.sln
+
+      - name: Pack Feber
+        run: |
+          mkdir -p $ARTIFACT_DIR
+          dotnet pack BrightSword.Feber/BrightSword.Feber.csproj -c Release -o $ARTIFACT_DIR /p:PackageId=BrightSword.Feber /p:PackageVersion=${{ needs.pack-swissknife.outputs.package-version }}
+
+      - name: Upload Feber NuGet artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: feber-nugets
+          path: ${{ env.ARTIFACT_DIR }}
+
+      - name: Optional: Publish packages to NuGet.org
+        if: ${{ needs.pack-swissknife.outputs.package-version != '' && secrets.NUGET_API_KEY }}
+        run: |
+          for nupkg in $ARTIFACT_DIR/*.nupkg; do
+            dotnet nuget push "$nupkg" -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json || true
+          done
