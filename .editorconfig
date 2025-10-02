@@ -1,0 +1,33 @@
+# top-most EditorConfig file
+root = true
+
+[*.{cs,csproj,sln}]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.cs]
+indent_style = space
+indent_size = 4
+dotnet_sort_system_directives_first = true
+
+# Prefer var when the type is apparent
+csharp_style_var_when_type_is_apparent = true:suggestion
+# Prefer var for built-in types (int, string, etc.)
+csharp_style_var_for_built_in_types = true:suggestion
+# Prefer var elsewhere when not ambiguous
+csharp_style_var_elsewhere = true:suggestion
+
+# Expression-bodied members when concise
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+csharp_style_expression_bodied_properties = when_on_single_line:suggestion
+csharp_style_expression_bodied_constructors = when_on_single_line:suggestion
+
+# Prefer simplified null-check/default expressions
+csharp_prefer_simple_default_expression = true:suggestion
+
+# Analyzer severities (start conservative: suggestion -> warning as you iterate)
+dotnet_analyzer_diagnostic.severity = suggestion
+
+# File-specific overrides can be added below as needed

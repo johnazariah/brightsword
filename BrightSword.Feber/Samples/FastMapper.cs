@@ -1,9 +1,9 @@
 namespace BrightSword.Feber.Samples;
 
-using BrightSword.Feber.Core;
 using System.Diagnostics;
 using System.Linq.Expressions;
 using System.Reflection;
+using BrightSword.Feber.Core;
 public static class FastMapper
 {
     public static T MapStaticToStatic<T>(this T _this, T source)

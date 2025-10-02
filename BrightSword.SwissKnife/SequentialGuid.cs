@@ -1,6 +1,6 @@
-using BrightSword.SwissKnife.Properties;
 using System;
 using System.Threading;
+using BrightSword.SwissKnife.Properties;
 
 namespace BrightSword.SwissKnife;
 

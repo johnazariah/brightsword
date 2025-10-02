@@ -1,12 +1,12 @@
 namespace BrightSword.Feber.Samples;
 
-using BrightSword.Feber.Core;
-using BrightSword.SwissKnife;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using BrightSword.Feber.Core;
+using BrightSword.SwissKnife;
 
 public static class CloneFactory
 {

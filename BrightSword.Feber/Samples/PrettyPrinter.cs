@@ -1,9 +1,9 @@
 namespace BrightSword.Feber.Samples;
 
-using BrightSword.Feber.Core;
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using BrightSword.Feber.Core;
 
 public static class PrettyPrinter
 {
