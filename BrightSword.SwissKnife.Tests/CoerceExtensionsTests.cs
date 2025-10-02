@@ -11,28 +11,28 @@ namespace BrightSword.SwissKnife.Tests
         private enum TestEnum { Alpha, Beta }
 
         [Fact]
-        public void CoerceBool_YN_Works()
+    public void CoerceBoolYNWorks()
         {
             Assert.True(((object)"y").CoerceType(typeof(bool), null) is bool b && b);
             Assert.False(((object)"n").CoerceType(typeof(bool), null) is bool b2 && b2);
         }
 
         [Fact]
-        public void CoerceNumber_Works()
+    public void CoerceNumberWorks()
         {
             var i = ((object)"123").CoerceType(typeof(int), null);
             Assert.Equal(123, i);
         }
 
         [Fact]
-        public void CoerceEnum_Works()
+    public void CoerceEnumWorks()
         {
             var e = ((object)"Beta").CoerceType(typeof(TestEnum), null);
             Assert.Equal(TestEnum.Beta, e);
         }
 
         [Fact]
-        public void Coerce_Invalid_ReturnsOriginal()
+    public void CoerceInvalidReturnsOriginal()
         {
             var orig = new object();
             var r = orig.CoerceType(typeof(DateTime), orig);
@@ -40,7 +40,7 @@ namespace BrightSword.SwissKnife.Tests
         }
 
         [Property]
-        public static void Coerce_IntRoundtrip(int x)
+        public static void CoerceIntRoundtrip(int x)
         {
             var s = x.ToString(System.Globalization.CultureInfo.InvariantCulture);
             var o = ((object)s).CoerceType(typeof(int), null);

@@ -7,25 +7,25 @@ namespace BrightSword.SwissKnife.Tests
     public class ValidatorTests
     {
         [Fact]
-        public void CheckBool_ThrowsOnFalse()
+    public void CheckBoolThrowsOnFalse()
         {
             Assert.Throws<Exception>(() => false.Check("bad"));
         }
 
         [Fact]
-        public void CheckBool_TException_Works()
+    public void CheckBoolTExceptionWorks()
         {
             Assert.Throws<InvalidOperationException>(() => false.Check<InvalidOperationException>("bad"));
         }
 
         [Fact]
-        public void CheckFunc_ThrowsOnFalse()
+    public void CheckFuncThrowsOnFalse()
         {
             Assert.Throws<Exception>(() => new Func<bool>(() => false).Check("bad"));
         }
 
         [Fact]
-        public void CheckFunc_TException_Works()
+    public void CheckFuncTExceptionWorks()
         {
             Assert.Throws<InvalidOperationException>(() => new Func<bool>(() => false).Check<InvalidOperationException>("bad"));
         }

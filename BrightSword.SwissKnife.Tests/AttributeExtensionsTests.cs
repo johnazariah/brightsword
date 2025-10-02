@@ -23,7 +23,7 @@ namespace BrightSword.SwissKnife.Tests
         }
 
         [Fact]
-        public void GetCustomAttributeOnType_Works()
+    public void GetCustomAttributeOnTypeWorks()
         {
             var attr = typeof(C).GetCustomAttribute<SampleAttr>();
             Assert.NotNull(attr);
@@ -31,7 +31,7 @@ namespace BrightSword.SwissKnife.Tests
         }
 
         [Fact]
-        public void GetCustomAttributeOnMember_Works()
+    public void GetCustomAttributeOnMemberWorks()
         {
             var mi = typeof(C).GetMethod("M", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             var attr = mi.GetCustomAttribute<SampleAttr>();
@@ -40,7 +40,7 @@ namespace BrightSword.SwissKnife.Tests
         }
 
         [Fact]
-        public void GetCustomAttributeValue_Works()
+    public void GetCustomAttributeValueWorks()
         {
             var name = typeof(C).GetCustomAttributeValue<SampleAttr, string>(a => a.Name, "def");
             Assert.Equal("Cls", name);

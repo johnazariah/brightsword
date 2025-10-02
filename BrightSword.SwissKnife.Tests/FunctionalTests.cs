@@ -9,21 +9,21 @@ namespace BrightSword.SwissKnife.Tests
     public class FunctionalTests
     {
         [Fact]
-        public void Y_Factorial_Works()
+    public void YFactorialWorks()
         {
             var fact = Functional.Y<int, long>(self => n => n <= 1 ? 1 : n * self(n - 1));
             Assert.Equal(120, fact(5));
         }
 
         [Fact]
-        public void MemoizeFix_Fib_Works()
+    public void MemoizeFixFibWorks()
         {
             var fib = Functional.MemoizeFix<int, int>(self => n => n <= 1 ? n : self(n - 1) + self(n - 2));
             Assert.Equal(55, fib(10));
         }
 
         [Property]
-        public static void Y_Composition_Idempotent(NonNegativeInt n)
+        public static void YCompositionIdempotent(NonNegativeInt n)
         {
             var fact = Functional.Y<int, long>(self => i => i <= 1 ? 1 : i * self(i - 1));
             var v = n.Get;

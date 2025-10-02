@@ -9,14 +9,14 @@ namespace BrightSword.SwissKnife.Tests
     public class MonadExtensionsTests
     {
         [Fact]
-        public void Maybe_ReturnsDefaultForNull()
+    public void MaybeReturnsDefaultForNull()
         {
             string? s = null;
             Assert.Equal(-1, s.Maybe(str => str!.Length, -1));
         }
 
         [Fact]
-        public void Maybe_Action_InvokedWhenNotNull()
+    public void MaybeActionInvokedWhenNotNull()
         {
             string s = "hi";
             var called = false;
@@ -25,7 +25,7 @@ namespace BrightSword.SwissKnife.Tests
         }
 
         [Fact]
-        public void When_Action_ExecutesOnPredicate()
+    public void WhenActionExecutesOnPredicate()
         {
             string s = "hello";
             var executed = false;
@@ -34,7 +34,7 @@ namespace BrightSword.SwissKnife.Tests
         }
 
         [Fact]
-        public void Unless_Action_ExecutesWhenPredicateFalse()
+    public void UnlessActionExecutesWhenPredicateFalse()
         {
             string s = "ok";
             var executed = false;
@@ -43,7 +43,7 @@ namespace BrightSword.SwissKnife.Tests
         }
 
         [Property]
-        public static void Maybe_ReturnsDefaultForNull_Property(NonNull<string> _)
+        public static void MaybeReturnsDefaultForNullProperty(NonNull<string> _)
         {
             // This property ensures Maybe for null returns default; use a NonNull parameter to satisfy FsCheck's type generation
             string? s = null;

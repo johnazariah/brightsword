@@ -25,7 +25,7 @@ namespace BrightSword.SwissKnife.Tests
         }
 
         [Property]
-        public static void Disposable_DisposeInvokes(int x)
+        public static void DisposableDisposeInvokes(int x)
         {
             var disposed = false;
             var d = new Disposable<int>(x, _ => disposed = true);

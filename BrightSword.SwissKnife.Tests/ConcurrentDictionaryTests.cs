@@ -9,7 +9,7 @@ namespace BrightSword.SwissKnife.Tests
     public class ConcurrentDictionaryTests
     {
         [Fact]
-        public void Indexer_SetGet_Works()
+    public void IndexerSetGetWorks()
         {
             var cd = new ConcurrentDictionary<string, string, int>();
             cd["a", "b"] = 42;
@@ -17,7 +17,7 @@ namespace BrightSword.SwissKnife.Tests
         }
 
         [Property]
-        public static void Indexer_SetGet_Roundtrip(NonNull<string> a, NonNull<string> b, int v)
+        public static void IndexerSetGetRoundtrip(NonNull<string> a, NonNull<string> b, int v)
         {
             var cd = new ConcurrentDictionary<string, string, int>();
             cd[a.Get, b.Get] = v;

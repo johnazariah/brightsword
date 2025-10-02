@@ -9,14 +9,14 @@ namespace BrightSword.SwissKnife.Tests
     private sealed class C { public int Prop { get; set; } public static void Method() { } }
 
         [Fact]
-        public void GetName_MemberExpression_Works()
+    public void GetNameMemberExpressionWorks()
         {
             var name = ObjectDescriber.GetName<C, int>(c => c.Prop);
             Assert.Equal("Prop", name);
         }
 
         [Fact]
-        public void GetName_MethodCall_Works()
+    public void GetNameMethodCallWorks()
         {
             var name = ObjectDescriber.GetName(() => C.Method());
             Assert.Equal("Method", name);

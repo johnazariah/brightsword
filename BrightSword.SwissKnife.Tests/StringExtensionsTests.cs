@@ -39,7 +39,7 @@ namespace BrightSword.SwissKnife.Tests
         }
 
         [Property]
-        public static void SplitCamelCase_Idempotent(NonNull<string> s)
+        public static void SplitCamelCaseIdempotent(NonNull<string> s)
         {
             var str = s.Get;
             var parts = str.SplitCamelCase().ToArray();

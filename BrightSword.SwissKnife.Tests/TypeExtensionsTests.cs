@@ -31,7 +31,7 @@ namespace BrightSword.SwissKnife.Tests
         private static readonly Type[] SampleTypes = new[] { typeof(int), typeof(string), typeof(List<string>), typeof(object) };
 
         [Property]
-        public static void Name_Idempotent(int idx)
+        public static void NameIdempotent(int idx)
         {
             var t = SampleTypes[Math.Abs(idx) % SampleTypes.Length];
             var name = t.Name();
