@@ -42,6 +42,33 @@ namespace BrightSword.SwissKnife
         }
 
         public static T LastButOne<T>(this IEnumerable<T> @this)
-            => @this == null ? default : @this.Reverse().Skip(1).FirstOrDefault();
+        {
+            if (@this == null)
+            {
+                return default;
+            }
+
+            if (@this is IList<T> list)
+            {
+                if (list.Count < 2)
+                {
+                    return default;
+                }
+
+                return list[list.Count - 2];
+            }
+
+            T prev = default;
+            T last = default;
+            var hasPrev = false;
+            foreach (var item in @this)
+            {
+                prev = last;
+                last = item;
+                hasPrev = true;
+            }
+
+            return hasPrev ? prev : default;
+        }
     }
 }

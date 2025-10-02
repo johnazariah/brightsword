@@ -41,13 +41,21 @@ namespace BrightSword.SwissKnife
 
         private static string GetNextSegment(this string @this, ref int iStart, ref int iEnd, out bool endOfString, bool respectSpace = true, bool respectCamelCase = true, bool respectPunctuation = true, params char[] separators)
         {
-            endOfString = iEnd == @this.Length;
+            // Ensure indices are within bounds
+            if (iStart >= @this.Length)
+            {
+                endOfString = true;
+                return string.Empty;
+            }
+
+            endOfString = iEnd >= @this.Length;
+
             if (respectSpace)
             {
-                while (char.IsWhiteSpace(@this[iStart]))
+                while (iStart < @this.Length && char.IsWhiteSpace(@this[iStart]))
                 {
                     iEnd = ++iStart;
-                    if (iStart == @this.Length)
+                    if (iStart >= @this.Length)
                     {
                         endOfString = true;
                         break;
@@ -55,10 +63,10 @@ namespace BrightSword.SwissKnife
                 }
             }
 
-            if (respectPunctuation && @this[iStart].IsRecognizedPunctuationMark(separators))
+            if (respectPunctuation && iStart < @this.Length && @this[iStart].IsRecognizedPunctuationMark(separators))
             {
                 ++iStart;
-                if (iStart == @this.Length)
+                if (iStart >= @this.Length)
                 {
                     endOfString = true;
                     goto label_14;
@@ -67,11 +75,11 @@ namespace BrightSword.SwissKnife
             }
 
         label_14:
-            while (!endOfString && (!respectSpace || !char.IsWhiteSpace(@this[iEnd])) && (!respectPunctuation || !@this[iEnd].IsRecognizedPunctuationMark(separators)))
+            while (!endOfString && iEnd < @this.Length && (!respectSpace || !char.IsWhiteSpace(@this[iEnd])) && (!respectPunctuation || !@this[iEnd].IsRecognizedPunctuationMark(separators)))
             {
-                if (respectCamelCase && char.IsUpper(@this[iEnd]))
+                if (respectCamelCase && iEnd < @this.Length && char.IsUpper(@this[iEnd]))
                 {
-                    if (char.IsUpper(@this[iEnd - 1]))
+                    if (iEnd - 1 >= 0 && char.IsUpper(@this[iEnd - 1]))
                     {
                         var index = iEnd + 1;
                         if (index < @this.Length && !char.IsUpper(@this[index]) && !char.IsWhiteSpace(@this[index]) && !@this[index].IsRecognizedPunctuationMark(separators))
@@ -86,7 +94,7 @@ namespace BrightSword.SwissKnife
                 }
 
                 ++iEnd;
-                endOfString = iEnd == @this.Length;
+                endOfString = iEnd >= @this.Length;
             }
 
             return @this[iStart..iEnd];
