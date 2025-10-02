@@ -13,5 +13,9 @@
     <ProjectReference Include="..\BrightSword.SwissKnife\BrightSword.SwissKnife.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Roslynator.Analyzers" Version="4.0.0" PrivateAssets="all" />
+  </ItemGroup>
+
 
 </Project>

@@ -1,33 +1,50 @@
 using System;
 
-namespace BrightSword.SwissKnife;
-
-public static class MonadExtensions
+namespace BrightSword.SwissKnife
 {
-    public static TResult Maybe<T, TResult>(
-      this T _this,
-      Func<T, TResult> func,
-      TResult defaultResult = default(TResult))
-      where T : class
+    public static class MonadExtensions
     {
-        return _this == null ? defaultResult : func(_this);
+        public static TResult Maybe<T, TResult>(
+          this T This,
+          Func<T, TResult> func,
+          TResult defaultResult = default)
+          where T : class => This == null ? defaultResult : func(This);
+
+        public static T Maybe<T>(this T This, Action<T> action) where T : class
+        {
+            if (This != null)
+            {
+                action(This);
+            }
+            return This;
+        }
+
+        public static TResult When<T, TResult>(this T This, Func<T, bool> predicate, Func<T, TResult> func, TResult defaultResult = default) where T : class
+            => This.Maybe(_ => predicate(_) ? func(_) : defaultResult, defaultResult);
+
+        public static T When<T>(this T This, Func<T, bool> predicate, Action<T> action) where T : class
+            => This.Maybe(_ =>
+            {
+                if (predicate(_))
+                {
+                    action(_);
+                }
+
+                return _;
+            });
+
+        public static TResult Unless<T, TResult>(this T This, Func<T, bool> predicate, Func<T, TResult> func, TResult defaultResult = default) where T : class
+            => This.Maybe(_ => !predicate(_) ? func(_) : defaultResult, defaultResult);
+
+        public static T Unless<T>(this T This, Func<T, bool> predicate, Action<T> action) where T : class
+            => This.Maybe(_ =>
+            {
+                if (!predicate(_))
+                {
+                    action(_);
+                }
+
+                return _;
+            });
     }
-
-    public static T Maybe<T>(this T _this, Action<T> action) where T : class
-    {
-        if (_this != null) action(_this);
-        return _this;
-    }
-
-    public static TResult When<T, TResult>(this T _this, Func<T, bool> predicate, Func<T, TResult> func, TResult defaultResult = default(TResult)) where T : class
-        => _this.Maybe(_ => predicate(_) ? func(_) : defaultResult, defaultResult);
-
-    public static T When<T>(this T _this, Func<T, bool> predicate, Action<T> action) where T : class
-        => _this.Maybe(_ => { if (predicate(_)) action(_); return _; });
-
-    public static TResult Unless<T, TResult>(this T _this, Func<T, bool> predicate, Func<T, TResult> func, TResult defaultResult = default(TResult)) where T : class
-        => _this.Maybe(_ => !predicate(_) ? func(_) : defaultResult, defaultResult);
-
-    public static T Unless<T>(this T _this, Func<T, bool> predicate, Action<T> action) where T : class
-        => _this.Maybe(_ => { if (!predicate(_)) action(_); return _; });
 }

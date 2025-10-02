@@ -14,5 +14,9 @@
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Roslynator.Analyzers" Version="4.0.0" PrivateAssets="all" />
+  </ItemGroup>
+
 
 </Project>

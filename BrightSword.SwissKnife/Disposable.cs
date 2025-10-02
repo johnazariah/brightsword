@@ -1,19 +1,17 @@
 using System;
 
-namespace BrightSword.SwissKnife;
-
-public class Disposable<T> : IDisposable
+namespace BrightSword.SwissKnife
 {
-    private readonly Action<T> _dispose;
-    private readonly T _instance;
-
-    public Disposable(T instance, Action<T> dispose)
+    public class Disposable<T>(T instance, Action<T> dispose) : IDisposable
     {
-        _instance = instance;
-        _dispose = dispose;
+        private readonly Action<T> _dispose = dispose;
+
+        public T Instance { get; } = instance;
+
+        public void Dispose()
+        {
+            _dispose?.Invoke(Instance);
+            GC.SuppressFinalize(this);
+        }
     }
-
-    public T Instance => _instance;
-
-    public void Dispose() => _dispose?.Invoke(_instance);
 }

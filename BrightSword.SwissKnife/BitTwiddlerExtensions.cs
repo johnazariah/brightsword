@@ -1,29 +1,24 @@
-namespace BrightSword.SwissKnife;
-
-public static class BitTwiddlerExtensions
+namespace BrightSword.SwissKnife
 {
-    private static unsafe byte[] GetReversedBytesFor64BitValue(byte* rgb)
+    public static class BitTwiddlerExtensions
     {
-        return new byte[8]
+        private static unsafe byte[] GetReversedBytesFor64BitValue(byte* rgb)
         {
-      rgb[7],
-      rgb[6],
-      rgb[5],
-      rgb[4],
-      rgb[3],
-      rgb[2],
-      rgb[1],
-      *rgb
-        };
-    }
+            return
+            [
+          rgb[7],
+          rgb[6],
+          rgb[5],
+          rgb[4],
+          rgb[3],
+          rgb[2],
+          rgb[1],
+          *rgb
+            ];
+        }
 
-    public static unsafe byte[] GetReversedBytes(this ulong _this)
-    {
-        return BitTwiddlerExtensions.GetReversedBytesFor64BitValue((byte*)&_this);
-    }
+        public static unsafe byte[] GetReversedBytes(this ulong This) => GetReversedBytesFor64BitValue((byte*)&This);
 
-    public static unsafe byte[] GetReversedBytes(this long _this)
-    {
-        return BitTwiddlerExtensions.GetReversedBytesFor64BitValue((byte*)&_this);
+        public static unsafe byte[] GetReversedBytes(this long This) => GetReversedBytesFor64BitValue((byte*)&This);
     }
 }

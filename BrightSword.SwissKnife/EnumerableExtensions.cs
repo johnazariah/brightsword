@@ -2,27 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BrightSword.SwissKnife;
-
-public static class EnumerableExtensions
+namespace BrightSword.SwissKnife
 {
-    public static bool None<T>(this IEnumerable<T> @this, Func<T, bool> filter = null)
-        => filter == null ? !@this.Any() : !@this.Any(filter);
-
-    public static bool AllUnique<T>(this IEnumerable<T> @this)
-        => @this.All(new HashSet<T>().Add);
-
-    public static bool AllUniqueSorted<T>(this IList<T> @this)
+    public static class EnumerableExtensions
     {
-        for (var i = 1; i < @this.Count; ++i)
+        public static bool None<T>(this IEnumerable<T> @this, Func<T, bool> filter = null)
+            => filter == null ? !@this.Any() : !@this.Any(filter);
+
+        public static bool AllUnique<T>(this IEnumerable<T> @this)
+            => @this.All(new HashSet<T>().Add);
+
+        public static bool AllUniqueSorted<T>(this IList<T> @this)
         {
-            if (@this[i - 1].Equals(@this[i]))
-                return false;
+            for (var i = 1; i < @this.Count; ++i)
+            {
+                if (@this[i - 1].Equals(@this[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
-        return true;
+        public static T LastButOne<T>(this IEnumerable<T> @this)
+            => @this == null ? default : @this.Reverse().Skip(1).FirstOrDefault();
     }
-
-    public static T LastButOne<T>(this IEnumerable<T> @this)
-        => @this == null ? default : @this.Reverse().Skip(1).FirstOrDefault();
 }

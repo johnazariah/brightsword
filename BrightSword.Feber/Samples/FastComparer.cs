@@ -1,41 +1,31 @@
-namespace BrightSword.Feber.Samples;
 
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
 using BrightSword.Feber.Core;
 
-public static class FastComparer
+namespace BrightSword.Feber.Samples
 {
-    public static bool AllPropertiesAreEqualWith<T>(this T _this, T other)
+    public static class FastComparer
     {
-        return FastComparer<T>.AllPropertiesAreEqual(_this, other);
+        public static bool AllPropertiesAreEqualWith<T>(this T This, T other) => FastComparer<T>.AllPropertiesAreEqual(This, other);
     }
-}
-public static class FastComparer<T>
-{
-    private static readonly FastComparer<T>.FastComparerBuilder _builder = new FastComparer<T>.FastComparerBuilder();
-
-    public static bool AllPropertiesAreEqual(T left, T right)
+    public static class FastComparer<T>
     {
-        return FastComparer<T>._builder.Function(left, right);
-    }
+        private static readonly FastComparerBuilder _builder = new FastComparerBuilder();
 
-    private class FastComparerBuilder : FunctionBuilder<T, T, T, bool>
-    {
-        protected override bool Seed => true;
+        public static bool AllPropertiesAreEqual(T left, T right) => _builder.Function(left, right);
 
-        protected override Func<Expression, Expression, Expression> Conjunction
+        private sealed class FastComparerBuilder : FunctionBuilder<T, T, T, bool>
         {
-            get => new Func<Expression, Expression, Expression>(Expression.AndAlso);
-        }
+            protected override bool Seed => true;
 
-        protected override Expression PropertyExpression(
-          PropertyInfo property,
-          ParameterExpression leftInstanceParameterExpression,
-          ParameterExpression rightInstanceParameterExpression)
-        {
-            return (Expression)Expression.Equal((Expression)Expression.Property((Expression)leftInstanceParameterExpression, property), (Expression)Expression.Property((Expression)rightInstanceParameterExpression, property));
+            protected override Func<Expression, Expression, Expression> Conjunction => new Func<Expression, Expression, Expression>(Expression.AndAlso);
+
+            protected override Expression PropertyExpression(
+              PropertyInfo property,
+              ParameterExpression leftInstanceParameterExpression,
+              ParameterExpression rightInstanceParameterExpression) => Expression.Equal(Expression.Property(leftInstanceParameterExpression, property), Expression.Property(rightInstanceParameterExpression, property));
         }
     }
 }

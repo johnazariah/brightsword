@@ -1,56 +1,46 @@
-namespace BrightSword.Feber.Samples;
 
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
 using BrightSword.Feber.Core;
 
-public static class SimpleSerializer
+namespace BrightSword.Feber.Samples
 {
-    public static string Serialize<T>(this T _this) => SimpleSerializer<T>.Serialize(_this);
-}
-
-public static class SimpleSerializer<T>
-{
-    private static readonly SimpleSerializer<T>.SimpleSerializerBuilder _builder = new SimpleSerializer<T>.SimpleSerializerBuilder();
-
-    public static string Serialize(T instance)
+    public static class SimpleSerializer
     {
-        return $"{{{SimpleSerializer<T>._builder.Function(instance)}}}";
+        public static string Serialize<T>(this T This) => SimpleSerializer<T>.Serialize(This);
     }
 
-    private class SimpleSerializerBuilder : FunctionBuilder<T, T, string>
+    public static class SimpleSerializer<T>
     {
-        private static readonly MethodInfo _concat = typeof(string).GetMethod("Concat", new Type[2]
-        {
-      typeof (string),
-      typeof (string)
-        });
+        private static readonly SimpleSerializerBuilder _builder = new SimpleSerializerBuilder();
 
-        protected override string Seed => string.Empty;
+        public static string Serialize(T instance) => $"{{{_builder.Function(instance)}}}";
 
-        protected override Func<Expression, Expression, Expression> Conjunction
+        private sealed class SimpleSerializerBuilder : FunctionBuilder<T, T, string>
         {
-            get
+            private static readonly MethodInfo _concat = typeof(string).GetMethod("Concat",
+            [
+          typeof (string),
+          typeof (string)
+            ]);
+
+            protected override string Seed => string.Empty;
+
+            protected override Func<Expression, Expression, Expression> Conjunction => (_l, _r) => Expression.Call(_concat, _l, _r);
+
+            private static MethodCallExpression GetToStringExpression(
+              PropertyInfo property,
+              Expression instanceParameterExpression)
             {
-                return (Func<Expression, Expression, Expression>)((_l, _r) => (Expression)Expression.Call(SimpleSerializer<T>.SimpleSerializerBuilder._concat, _l, _r));
+                return property.PropertyType != typeof(DateTime)
+                    ? Expression.Call(Expression.Property(instanceParameterExpression, property), "ToString", (Type[])null)
+                    : Expression.Call(Expression.Property(instanceParameterExpression, property), "ToString", (Type[])null, Expression.Constant("O"));
             }
-        }
 
-        private static MethodCallExpression GetToStringExpression(
-          PropertyInfo property,
-          Expression instanceParameterExpression)
-        {
-            if (!(property.PropertyType == typeof(DateTime)))
-                return Expression.Call((Expression)Expression.Property(instanceParameterExpression, property), "ToString", (Type[])null);
-            return Expression.Call((Expression)Expression.Property(instanceParameterExpression, property), "ToString", (Type[])null, (Expression)Expression.Constant((object)"O"));
-        }
-
-        protected override Expression PropertyExpression(
-          PropertyInfo property,
-          ParameterExpression instanceParameterExpression)
-        {
-            return (Expression)Expression.Call(typeof(string), "Format", (Type[])null, (Expression)Expression.Constant((object)"{0}:{1},", typeof(string)), (Expression)Expression.Constant((object)property.Name, typeof(string)), (Expression)SimpleSerializer<T>.SimpleSerializerBuilder.GetToStringExpression(property, (Expression)instanceParameterExpression));
+            protected override Expression PropertyExpression(
+              PropertyInfo property,
+              ParameterExpression instanceParameterExpression) => Expression.Call(typeof(string), "Format", (Type[])null, Expression.Constant("{0}:{1},", typeof(string)), Expression.Constant(property.Name, typeof(string)), GetToStringExpression(property, instanceParameterExpression));
         }
     }
 }

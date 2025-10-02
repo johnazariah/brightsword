@@ -27,7 +27,14 @@ csharp_style_expression_bodied_constructors = when_on_single_line:suggestion
 # Prefer simplified null-check/default expressions
 csharp_prefer_simple_default_expression = true:suggestion
 
-# Analyzer severities (start conservative: suggestion -> warning as you iterate)
-dotnet_analyzer_diagnostic.severity = suggestion
+# Analyzer severities (raise to warning to surface diagnostics during this scan)
+dotnet_analyzer_diagnostic.severity = warning
 
 # File-specific overrides can be added below as needed
+
+# (temporarily allow Roslynator rules to run with configured defaults)
+
+# Roslynator configuration defaults (conservative choices)
+roslynator_object_creation_type_style = explicit
+roslynator_accessibility_modifiers = always
+roslynator_enum_has_flag_style = attribute
