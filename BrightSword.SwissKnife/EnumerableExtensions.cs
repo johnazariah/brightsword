@@ -7,7 +7,7 @@ namespace BrightSword.SwissKnife
     public static class EnumerableExtensions
     {
         public static bool None<T>(this IEnumerable<T> @this, Func<T, bool> filter = null)
-            => filter == null ? !@this.Any() : !@this.Any(filter);
+            => filter is null ? !@this.Any() : !@this.Any(filter);
 
         public static bool AllUnique<T>(this IEnumerable<T> @this)
         {
@@ -43,7 +43,7 @@ namespace BrightSword.SwissKnife
 
         public static T LastButOne<T>(this IEnumerable<T> @this)
         {
-            if (@this == null)
+            if (@this is null)
             {
                 return default;
             }

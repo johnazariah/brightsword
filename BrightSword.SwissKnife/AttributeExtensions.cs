@@ -23,7 +23,7 @@ namespace BrightSword.SwissKnife
         {
             _ = flags;
             var attr = @this.GetCustomAttributes(typeof(TAttribute), true).OfType<TAttribute>().FirstOrDefault();
-            return attr == null ? defaultValue : selector(attr);
+            return attr is null ? defaultValue : selector(attr);
         }
 
         public static TResult GetCustomAttributeValue<TAttribute, TResult>(this MemberInfo @this, Func<TAttribute, TResult> selector, TResult defaultValue = default, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
@@ -31,7 +31,7 @@ namespace BrightSword.SwissKnife
         {
             _ = flags;
             var attr = @this.GetCustomAttributes(typeof(TAttribute), true).OfType<TAttribute>().FirstOrDefault();
-            return attr == null ? defaultValue : selector(attr);
+            return attr is null ? defaultValue : selector(attr);
         }
     }
 }

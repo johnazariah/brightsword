@@ -12,7 +12,7 @@ namespace BrightSword.SwissKnife
 
         public static T Maybe<T>(this T This, Action<T> action) where T : class
         {
-            if (This != null)
+            if (This is not null)
             {
                 action(This);
             }
