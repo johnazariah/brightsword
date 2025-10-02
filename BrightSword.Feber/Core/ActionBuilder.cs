@@ -1,34 +1,30 @@
+using System;
 using System.Linq.Expressions;
 
 namespace BrightSword.Feber.Core;
 
 public abstract class ActionBuilder<TProto, TInstance> : UnaryOperationBuilderBase<TProto, TInstance>
 {
-  private System.Action<TInstance> _action;
+    private Action<TInstance> _action;
 
-  public virtual System.Action<TInstance> Action
-  {
-    get => this._action ?? (this._action = this.BuildAction());
-  }
+    public virtual Action<TInstance> Action => _action ??= BuildAction();
 
-  private System.Action<TInstance> BuildAction()
-  {
-    return Expression.Lambda<System.Action<TInstance>>((Expression) Expression.Block(this.OperationExpressions), this.InstanceParameterExpression).Compile();
-  }
+    // Allow overrides in derived builders if they want to customise the generated delegate
+    protected virtual Action<TInstance> BuildAction()
+    {
+        return Expression.Lambda<Action<TInstance>>(Expression.Block(OperationExpressions), InstanceParameterExpression).Compile();
+    }
 }
 
-public abstract class ActionBuilder<TProto, TLeftInstance, TRightInstance> : 
-  BinaryOperationBuilderBase<TProto, TLeftInstance, TRightInstance>
+public abstract class ActionBuilder<TProto, TLeftInstance, TRightInstance> :
+    BinaryOperationBuilderBase<TProto, TLeftInstance, TRightInstance>
 {
-  private System.Action<TLeftInstance, TRightInstance> _action;
+    private Action<TLeftInstance, TRightInstance> _action;
 
-  public virtual System.Action<TLeftInstance, TRightInstance> Action
-  {
-    get => this._action ?? (this._action = this.BuildAction());
-  }
+    public virtual Action<TLeftInstance, TRightInstance> Action => _action ??= BuildAction();
 
-  protected virtual System.Action<TLeftInstance, TRightInstance> BuildAction()
-  {
-    return Expression.Lambda<System.Action<TLeftInstance, TRightInstance>>((Expression) Expression.Block(this.OperationExpressions), this.LeftInstanceParameterExpression, this.RightInstanceParameterExpression).Compile();
-  }
+    protected virtual Action<TLeftInstance, TRightInstance> BuildAction()
+    {
+        return Expression.Lambda<Action<TLeftInstance, TRightInstance>>(Expression.Block(OperationExpressions), LeftInstanceParameterExpression, RightInstanceParameterExpression).Compile();
+    }
 }
