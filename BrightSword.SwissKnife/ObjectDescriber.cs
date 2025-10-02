@@ -1,9 +1,3 @@
-﻿// Decompiled with JetBrains decompiler
-// Type: BrightSword.SwissKnife.ObjectDescriber
-// Assembly: BrightSword.SwissKnife, Version=1.0.9.0, Culture=neutral, PublicKeyToken=null
-// MVID: CD8E9696-E577-443F-8EA9-5929CF204282
-// Assembly location: C:\Users\johnaz\Downloads\brightsword.swissknife.1.0.9\lib\net40\BrightSword.SwissKnife.dll
-
 using System;
 using System.Linq.Expressions;
 

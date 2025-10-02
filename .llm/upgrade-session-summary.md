@@ -204,11 +204,32 @@ Updated dependency relationship:
 ## Next Steps (Optional)
 
 ### Potential Future Improvements
-1. **Warning Cleanup:** Address unused variable warnings in CoerceExtensions.cs
+1. ~~**Warning Cleanup:** Address unused variable warnings in CoerceExtensions.cs~~
 2. **Nullable Reference Types:** Consider enabling nullable reference types
 3. **Modern C# Features:** Leverage new C# language features where appropriate
 4. **Performance Optimization:** Review for .NET 10 specific optimizations
 5. **Unit Testing:** Verify all functionality works correctly with new runtime
+
+## Additional Cleanup Performed
+
+### Decompiler Comment Removal
+**Date:** October 2, 2025 (Later in session)
+
+Successfully removed JetBrains decompiler-generated comment blocks from all source files:
+
+**Files Processed:** 33 C# source files
+**Comments Removed:** 5-line header blocks containing:
+- `// Decompiled with JetBrains decompiler`
+- `// Type: [TypeName]`
+- `// Assembly: [AssemblyInfo]` 
+- `// MVID: [GUID]`
+- `// Assembly location: [Path]`
+
+**Affected Projects:**
+- **BrightSword.SwissKnife:** 13 files cleaned
+- **BrightSword.Feber:** 20 files cleaned
+
+**Result:** All source files now have clean headers without decompiler artifacts, improving code readability and professionalism.
 
 ## Notes
 
