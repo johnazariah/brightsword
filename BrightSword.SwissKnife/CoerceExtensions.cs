@@ -53,7 +53,7 @@ namespace BrightSword.SwissKnife
 
             try
             {
-                return Convert.ChangeType(value, targetType);
+                return Convert.ChangeType(value, targetType, CultureInfo.InvariantCulture);
             }
             catch
             {
