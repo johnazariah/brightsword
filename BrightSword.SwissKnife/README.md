@@ -32,12 +32,9 @@ Notes
 
 Documentation
 
-This library includes API documentation in the `docs/` folder. Key topics:
-
-- AttributeExtensions — helpers for reflection-based attribute access (`docs/AttributeExtensions.md`)
-- EnumerableExtensions — helpers for collections (`docs/EnumerableExtensions.md`)
-- Functional — small functional utilities (`docs/Functional.md`)
-- StringExtensions — string helper methods (`docs/StringExtensions.md`)
-- TypeExtensions — reflection helpers (`docs/TypeExtensions.md`)
+ - TypeExtensions — reflection helpers (`docs/TypeExtensions.md`)
+ - Validator — argument/parameter guard helpers (`docs/Validator.md`)
+ 
+ To see more implementation notes and usage examples, open the files in `BrightSword.SwissKnife/docs/`.
 
 Read each file in `BrightSword.SwissKnife/docs/` for per-class details, usage examples and notes.
