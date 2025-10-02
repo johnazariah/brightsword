@@ -11,10 +11,12 @@ namespace BrightSword.Feber.Samples
         public static void Print<T>(this T This) => PrettyPrinter<T>.Print(This);
     }
 
-    #pragma warning disable CA1000 // Allow static members on generic sample types
+#pragma warning disable CA1000 // Allow static members on generic sample types
     public static class PrettyPrinter<TProto>
     {
-        private static readonly PrettyPrinterBuilder _builder = new PrettyPrinterBuilder();
+#pragma warning disable RCS1250 // allow target-typed new() in samples
+        private static readonly PrettyPrinterBuilder _builder = new();
+#pragma warning restore RCS1250
 
         public static void Print(TProto instance) => _builder.Action(instance);
 
@@ -29,5 +31,5 @@ namespace BrightSword.Feber.Samples
             }
         }
     }
-    #pragma warning restore CA1000
+#pragma warning restore CA1000
 }

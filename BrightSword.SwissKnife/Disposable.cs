@@ -2,21 +2,15 @@ using System;
 
 namespace BrightSword.SwissKnife
 {
-    public sealed class Disposable<T> : IDisposable
+    public sealed class Disposable<T>(T instance, Action<T> dispose) : IDisposable
     {
-        private readonly Action<T> _dispose;
+        private readonly Action<T> _dispose = dispose ?? (_ => { });
 
-        public T Instance { get; }
-
-        public Disposable(T instance, Action<T> dispose)
-        {
-            Instance = instance;
-            _dispose = dispose ?? (_ => { });
-        }
+        public T Instance { get; } = instance;
 
         public void Dispose()
         {
-            _dispose?.Invoke(Instance);
+            _dispose(Instance);
             GC.SuppressFinalize(this);
         }
     }

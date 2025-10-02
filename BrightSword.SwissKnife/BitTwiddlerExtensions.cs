@@ -6,14 +6,14 @@ namespace BrightSword.SwissKnife
         {
             return
             [
-          rgb[7],
-          rgb[6],
-          rgb[5],
-          rgb[4],
-          rgb[3],
-          rgb[2],
-          rgb[1],
-          *rgb
+                rgb[7],
+                rgb[6],
+                rgb[5],
+                rgb[4],
+                rgb[3],
+                rgb[2],
+                rgb[1],
+                *rgb
             ];
         }
 

@@ -50,12 +50,7 @@ namespace BrightSword.SwissKnife
 
             if (@this is IList<T> list)
             {
-                if (list.Count < 2)
-                {
-                    return default;
-                }
-
-                return list[list.Count - 2];
+                return list.Count < 2 ? default : list[list.Count - 2];
             }
 
             T prev = default;

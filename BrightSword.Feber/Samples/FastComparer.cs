@@ -10,10 +10,12 @@ namespace BrightSword.Feber.Samples
     {
         public static bool AllPropertiesAreEqualWith<T>(this T This, T other) => FastComparer<T>.AllPropertiesAreEqual(This, other);
     }
-    #pragma warning disable CA1000 // Allow static members on generic sample types
+#pragma warning disable CA1000 // Allow static members on generic sample types
     public static class FastComparer<T>
     {
-        private static readonly FastComparerBuilder _builder = new FastComparerBuilder();
+#pragma warning disable RCS1250 // allow target-typed new() in samples
+        private static readonly FastComparerBuilder _builder = new();
+#pragma warning restore RCS1250
 
         public static bool AllPropertiesAreEqual(T left, T right) => _builder.Function(left, right);
 
@@ -21,7 +23,7 @@ namespace BrightSword.Feber.Samples
         {
             protected override bool Seed => true;
 
-            protected override Func<Expression, Expression, Expression> Conjunction => new Func<Expression, Expression, Expression>(Expression.AndAlso);
+            protected override Func<Expression, Expression, Expression> Conjunction => Expression.AndAlso;
 
             protected override Expression PropertyExpression(
               PropertyInfo property,
@@ -29,5 +31,5 @@ namespace BrightSword.Feber.Samples
               ParameterExpression rightInstanceParameterExpression) => Expression.Equal(Expression.Property(leftInstanceParameterExpression, property), Expression.Property(rightInstanceParameterExpression, property));
         }
     }
-    #pragma warning restore CA1000
+#pragma warning restore CA1000
 }

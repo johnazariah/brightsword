@@ -5,10 +5,10 @@ namespace BrightSword.SwissKnife
     public static class MonadExtensions
     {
         public static TResult Maybe<T, TResult>(
-          this T This,
-          Func<T, TResult> func,
-          TResult defaultResult = default)
-          where T : class => This == null ? defaultResult : func(This);
+            this T This,
+            Func<T, TResult> func,
+            TResult defaultResult = default)
+            where T : class => This is null ? defaultResult : func(This);
 
         public static T Maybe<T>(this T This, Action<T> action) where T : class
         {

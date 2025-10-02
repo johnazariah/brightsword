@@ -18,7 +18,7 @@ namespace BrightSword.Feber.Core
         protected abstract Func<Expression, Expression, Expression> Conjunction { get; }
     }
 
-    #pragma warning disable CA1716 // Keep member name 'Function' for compatibility
+#pragma warning disable CA1716 // Keep member name 'Function' for compatibility
     public abstract class FunctionBuilder<TProto, TInstance, TResult> : UnaryFunctionBuilderBase<TProto, TInstance, TResult>
     {
         private Func<TInstance, TResult> _function;
@@ -32,9 +32,9 @@ namespace BrightSword.Feber.Core
             return Expression.Lambda<Func<TInstance, TResult>>(body, InstanceParameterExpression).Compile();
         }
     }
-    #pragma warning restore CA1716
+#pragma warning restore CA1716
 
-    #pragma warning disable CA1716 // Keep member name 'Function' for compatibility
+#pragma warning disable CA1716 // Keep member name 'Function' for compatibility
     public abstract class FunctionBuilder<TProto, TLeftInstance, TRightInstance, TResult> : BinaryFunctionBuilderBase<TProto, TLeftInstance, TRightInstance, TResult>
     {
         private Func<TLeftInstance, TRightInstance, TResult> _function;
@@ -48,5 +48,5 @@ namespace BrightSword.Feber.Core
             return Expression.Lambda<Func<TLeftInstance, TRightInstance, TResult>>(body, LeftInstanceParameterExpression, RightInstanceParameterExpression).Compile();
         }
     }
-    #pragma warning restore CA1716
+#pragma warning restore CA1716
 }

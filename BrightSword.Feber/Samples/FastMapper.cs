@@ -39,14 +39,16 @@ namespace BrightSword.Feber.Samples
         }
     }
 
-    #pragma warning disable CA1000 // Allow static members on generic sample types
+#pragma warning disable CA1000 // Allow static members on generic sample types
     public static class FastMapper<T>
     {
-        private static readonly StaticToStaticMapperBuilder _staticToStaticMapper = new StaticToStaticMapperBuilder();
-        private static readonly DynamicToDynamicMapperBuilder _dynamicToDynamicMapper = new DynamicToDynamicMapperBuilder();
-        private static readonly StaticToDynamicMapperBuilder _staticToDynamicMapper = new StaticToDynamicMapperBuilder();
-        private static readonly DynamicToStaticMapperBuilder _dynamicToStaticMapper = new DynamicToStaticMapperBuilder();
-        private static readonly DynamicToStaticBackingFieldsMapperBuilder _dynamicToStaticBackingFieldsMapper = new DynamicToStaticBackingFieldsMapperBuilder();
+#pragma warning disable RCS1250 // Allow target-typed new() in samples
+        private static readonly StaticToStaticMapperBuilder _staticToStaticMapper = new();
+        private static readonly DynamicToDynamicMapperBuilder _dynamicToDynamicMapper = new();
+        private static readonly StaticToDynamicMapperBuilder _staticToDynamicMapper = new();
+        private static readonly DynamicToStaticMapperBuilder _dynamicToStaticMapper = new();
+        private static readonly DynamicToStaticBackingFieldsMapperBuilder _dynamicToStaticBackingFieldsMapper = new();
+#pragma warning restore RCS1250
 
         public static void MapDynamicToDynamic(object source, object destination) => _dynamicToDynamicMapper.Action(destination, source);
 
@@ -103,5 +105,5 @@ namespace BrightSword.Feber.Samples
               ParameterExpression rightInstanceParameterExpression) => Expression.Assign(Expression.Property(leftInstanceParameterExpression, property), Expression.Property(rightInstanceParameterExpression, property));
         }
     }
-    #pragma warning restore CA1000
+#pragma warning restore CA1000
 }

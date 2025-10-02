@@ -8,7 +8,11 @@ namespace BrightSword.SwissKnife
         public TValue this[TKey1 key1, TKey2 key2]
         {
             get => this[key1][key2];
-            set => GetOrAdd(key1, new ConcurrentDictionary<TKey2, TValue>()).GetOrAdd(key2, value);
+            set
+            {
+                var inner = GetOrAdd(key1, new ConcurrentDictionary<TKey2, TValue>());
+                inner[key2] = value;
+            }
         }
     }
 }

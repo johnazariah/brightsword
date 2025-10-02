@@ -7,7 +7,7 @@ namespace BrightSword.SwissKnife
     {
         public static Func<TArgument, TResult> Y<TArgument, TResult>(Func<Func<TArgument, TResult>, Func<TArgument, TResult>> func)
         {
-            Func<TArgument, TResult> funcFixed = null!;
+            Func<TArgument, TResult> funcFixed = null;
             funcFixed = func(x => funcFixed(x));
             return funcFixed;
         }
@@ -27,7 +27,7 @@ namespace BrightSword.SwissKnife
 
         public static Func<TArgument, TResult> MemoizeFix<TArgument, TResult>(Func<Func<TArgument, TResult>, Func<TArgument, TResult>> func)
         {
-            Func<TArgument, TResult> funcMemoized = null!;
+            Func<TArgument, TResult> funcMemoized = null;
             funcMemoized = func(x => funcMemoized(x));
             return funcMemoized.Memoize();
         }
@@ -40,7 +40,7 @@ namespace BrightSword.SwissKnife
 
         public static Func<TArg1, TArg2, TResult> MemoizeFix<TArg1, TArg2, TResult>(Func<Func<TArg1, TArg2, TResult>, Func<TArg1, TArg2, TResult>> func)
         {
-            Func<TArg1, TArg2, TResult> funcMemoized = null!;
+            Func<TArg1, TArg2, TResult> funcMemoized = null;
             funcMemoized = func((a1, a2) => funcMemoized(a1, a2));
             return funcMemoized.Memoize();
         }
@@ -53,7 +53,7 @@ namespace BrightSword.SwissKnife
 
         public static Func<TArg1, TArg2, TArg3, TResult> MemoizeFix<TArg1, TArg2, TArg3, TResult>(Func<Func<TArg1, TArg2, TArg3, TResult>, Func<TArg1, TArg2, TArg3, TResult>> func)
         {
-            Func<TArg1, TArg2, TArg3, TResult> funcMemoized = null!;
+            Func<TArg1, TArg2, TArg3, TResult> funcMemoized = null;
             funcMemoized = func((a1, a2, a3) => funcMemoized(a1, a2, a3));
             return funcMemoized.Memoize();
         }

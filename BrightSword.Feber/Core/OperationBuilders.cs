@@ -7,7 +7,7 @@ using BrightSword.SwissKnife;
 
 namespace BrightSword.Feber.Core
 {
-    #pragma warning disable CA1716 // Keep parameter/member names for compatibility with existing API
+#pragma warning disable CA1716 // Keep parameter/member names for compatibility with existing API
     public abstract class OperationBuilderBase<TProto>
     {
         protected virtual Func<PropertyInfo, bool> PropertyFilter => _ => true;
@@ -45,5 +45,5 @@ namespace BrightSword.Feber.Core
 
         protected abstract Expression PropertyExpression(PropertyInfo property, ParameterExpression leftInstanceParameterExpression, ParameterExpression rightInstanceParameterExpression);
     }
-    #pragma warning restore CA1716
+#pragma warning restore CA1716
 }

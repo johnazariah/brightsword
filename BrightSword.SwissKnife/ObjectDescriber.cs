@@ -11,7 +11,7 @@ namespace BrightSword.SwissKnife
             {
                 MemberExpression m => m.Member.Name,
                 MethodCallExpression m => m.Method.Name,
-                _ => throw new NotSupportedException("Cannot operate on given expression: " + e.Body)
+                _ => throw new NotSupportedException($"Cannot operate on given expression: {e.Body}")
             };
         }
 

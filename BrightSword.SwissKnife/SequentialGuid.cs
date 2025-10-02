@@ -11,7 +11,16 @@ namespace BrightSword.SwissKnife
         private static short _c;
         private static long _forwardCounter;
         private static long _reverseCounter = DateTime.MaxValue.Ticks;
-    private static readonly SemaphoreSlim _lock = new SemaphoreSlim(1);
+#pragma warning disable RCS1250 // allow target-typed new() for readability
+        private static readonly SemaphoreSlim _lock = new(1);
+#pragma warning restore RCS1250
+
+        /// <summary>
+        /// Keep a reference to the timer so it isn't garbage-collected; we don't need to read it elsewhere.
+        /// </summary>
+#pragma warning disable IDE0052 // intentionally keep timer reference as a GC keep-alive
+        private static readonly Timer _timer;
+#pragma warning restore IDE0052
 
         private static void ResetForwardCounter()
         {
@@ -50,7 +59,7 @@ namespace BrightSword.SwissKnife
         static SequentialGuid()
         {
             InitializeFromSettings();
-            _ = new Timer(_ => ResetCounters(), null, 0, 1000);
+            _timer = new Timer(_ => ResetCounters(), null, 0, 1000);
             ResetForwardCounter();
             ResetReverseCounter();
         }
@@ -60,8 +69,9 @@ namespace BrightSword.SwissKnife
             _lock.Wait();
             try
             {
-                _ = Interlocked.Increment(ref _forwardCounter);
-                return new Guid(a == -1 ? _a : a, b == -1 ? _b : b, c == -1 ? _c : c, _forwardCounter.GetReversedBytes());
+                _forwardCounter++;
+                var value = _forwardCounter;
+                return new Guid(a == -1 ? _a : a, b == -1 ? _b : b, c == -1 ? _c : c, value.GetReversedBytes());
             }
             finally
             {
@@ -74,8 +84,9 @@ namespace BrightSword.SwissKnife
             _lock.Wait();
             try
             {
-                _ = Interlocked.Decrement(ref _reverseCounter);
-                return new Guid(a == -1 ? _a : a, b == -1 ? _b : b, c == -1 ? _c : c, _reverseCounter.GetReversedBytes());
+                _reverseCounter--;
+                var value = _reverseCounter;
+                return new Guid(a == -1 ? _a : a, b == -1 ? _b : b, c == -1 ? _c : c, value.GetReversedBytes());
             }
             finally
             {

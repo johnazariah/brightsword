@@ -16,10 +16,12 @@ namespace BrightSword.Feber.Samples
         public static TDestination Clone<TSource, TDestination, TBase>(this TSource source) where TDestination : new() => CloneFactory<TBase, TSource, TDestination>.Clone(source);
     }
 
-    #pragma warning disable CA1000 // Allow static members on generic sample types
+#pragma warning disable CA1000 // Allow static members on generic sample types
     public static class CloneFactory<TProto, TSource, TDestination> where TDestination : new()
     {
-        private static readonly CloneFactoryBuilder builder = new CloneFactoryBuilder();
+#pragma warning disable RCS1250 // allow target-typed new() in samples
+        private static readonly CloneFactoryBuilder builder = new();
+#pragma warning restore RCS1250
 
         public static TDestination Clone(TSource source)
         {
@@ -40,18 +42,9 @@ namespace BrightSword.Feber.Samples
             {
                 var property1 = MatchProperty(destinationProperties, property);
                 var property2 = MatchProperty(sourceProperties, property);
-                if (property1 == null || property1.GetSetMethod() == null)
-                {
-                    return Expression.Default(typeof(void));
-                }
-                else if (property2 == null || property2.GetGetMethod() == null)
-                {
-                    return Expression.Default(typeof(void));
-                }
-                else
-                {
-                    return Expression.Assign(Expression.Property(leftInstanceParameterExpression, property1), Expression.Property(rightInstanceParameterExpression, property2));
-                }
+                return property1 == null || property1.GetSetMethod() == null || property2 == null || property2.GetGetMethod() == null
+                    ? Expression.Default(typeof(void))
+                    : Expression.Assign(Expression.Property(leftInstanceParameterExpression, property1), Expression.Property(rightInstanceParameterExpression, property2));
             }
 
             private static PropertyInfo MatchProperty(
@@ -59,5 +52,5 @@ namespace BrightSword.Feber.Samples
               PropertyInfo property) => properties.FirstOrDefault(_ => _.Name.Equals(property.Name, System.StringComparison.Ordinal) && _.PropertyType == property.PropertyType);
         }
     }
-    #pragma warning restore CA1000
+#pragma warning restore CA1000
 }

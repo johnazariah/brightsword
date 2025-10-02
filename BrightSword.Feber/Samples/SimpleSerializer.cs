@@ -11,16 +11,18 @@ namespace BrightSword.Feber.Samples
         public static string Serialize<T>(this T This) => SimpleSerializer<T>.Serialize(This);
     }
 
-  #pragma warning disable CA1000 // Allow static members on generic sample types
-  public static class SimpleSerializer<T>
-  {
-    private static readonly SimpleSerializerBuilder _builder = new SimpleSerializerBuilder();
+#pragma warning disable CA1000 // Allow static members on generic sample types
+    public static class SimpleSerializer<T>
+    {
+#pragma warning disable RCS1250 // allow target-typed new() in samples
+        private static readonly SimpleSerializerBuilder _builder = new();
+#pragma warning restore RCS1250
 
-    public static string Serialize(T instance) => $"{{{_builder.Function(instance)}}}";
+        public static string Serialize(T instance) => $"{{{_builder.Function(instance)}}}";
 
         private sealed class SimpleSerializerBuilder : FunctionBuilder<T, T, string>
         {
-            private static readonly MethodInfo _concat = typeof(string).GetMethod("Concat", new Type[] { typeof(string), typeof(string) });
+            private static readonly MethodInfo _concat = typeof(string).GetMethod("Concat", [typeof(string), typeof(string)]);
 
             protected override string Seed => string.Empty;
 
@@ -38,7 +40,7 @@ namespace BrightSword.Feber.Samples
             protected override Expression PropertyExpression(
               PropertyInfo property,
               ParameterExpression instanceParameterExpression) => Expression.Call(typeof(string), "Format", (Type[])null, Expression.Constant("{0}:{1},", typeof(string)), Expression.Constant(property.Name, typeof(string)), GetToStringExpression(property, instanceParameterExpression));
+        }
     }
-  }
-  #pragma warning restore CA1000
+#pragma warning restore CA1000
 }
