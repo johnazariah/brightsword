@@ -39,6 +39,7 @@ namespace BrightSword.Feber.Samples
         }
     }
 
+    #pragma warning disable CA1000 // Allow static members on generic sample types
     public static class FastMapper<T>
     {
         private static readonly StaticToStaticMapperBuilder _staticToStaticMapper = new StaticToStaticMapperBuilder();
@@ -102,4 +103,5 @@ namespace BrightSword.Feber.Samples
               ParameterExpression rightInstanceParameterExpression) => Expression.Assign(Expression.Property(leftInstanceParameterExpression, property), Expression.Property(rightInstanceParameterExpression, property));
         }
     }
+    #pragma warning restore CA1000
 }

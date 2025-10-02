@@ -16,6 +16,7 @@ namespace BrightSword.Feber.Samples
         public static TDestination Clone<TSource, TDestination, TBase>(this TSource source) where TDestination : new() => CloneFactory<TBase, TSource, TDestination>.Clone(source);
     }
 
+    #pragma warning disable CA1000 // Allow static members on generic sample types
     public static class CloneFactory<TProto, TSource, TDestination> where TDestination : new()
     {
         private static readonly CloneFactoryBuilder builder = new CloneFactoryBuilder();
@@ -58,4 +59,5 @@ namespace BrightSword.Feber.Samples
               PropertyInfo property) => properties.FirstOrDefault(_ => _.Name.Equals(property.Name, System.StringComparison.Ordinal) && _.PropertyType == property.PropertyType);
         }
     }
+    #pragma warning restore CA1000
 }
