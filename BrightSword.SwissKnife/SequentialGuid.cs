@@ -22,7 +22,7 @@ namespace BrightSword.SwissKnife
             }
             finally
             {
-                _lock.Release();
+                _ = _lock.Release();
             }
         }
 
@@ -37,7 +37,7 @@ namespace BrightSword.SwissKnife
             }
             finally
             {
-                _lock.Release();
+                _ = _lock.Release();
             }
         }
 
@@ -65,7 +65,7 @@ namespace BrightSword.SwissKnife
             }
             finally
             {
-                _lock.Release();
+                _ = _lock.Release();
             }
         }
 

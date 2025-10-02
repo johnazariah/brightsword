@@ -25,9 +25,12 @@ namespace BrightSword.SwissKnife
                     return true;
                 }
 
-                return str.Equals("n", StringComparison.OrdinalIgnoreCase)
-                    ? (object)false
-                    : throw new ArgumentException("Boolean should be either 'y' or 'n'");
+                if (str.Equals("n", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+
+                throw new ArgumentException("Boolean should be either 'y' or 'n'");
             }
 
             if (targetType.IsEnum)
