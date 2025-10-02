@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrightSword.Feber", "BrightSword.Feber\BrightSword.Feber.csproj", "{AAE74844-DC61-FA99-763B-46E6B168C568}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrightSword.SwissKnife", "BrightSword.SwissKnife\BrightSword.SwissKnife.csproj", "{0500F369-DC96-D52A-083F-15FE792732A1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AAE74844-DC61-FA99-763B-46E6B168C568}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAE74844-DC61-FA99-763B-46E6B168C568}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAE74844-DC61-FA99-763B-46E6B168C568}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAE74844-DC61-FA99-763B-46E6B168C568}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0500F369-DC96-D52A-083F-15FE792732A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0500F369-DC96-D52A-083F-15FE792732A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0500F369-DC96-D52A-083F-15FE792732A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0500F369-DC96-D52A-083F-15FE792732A1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CEC2ECEB-C5E1-4FA7-9DA7-01F417F3CA73}
+	EndGlobalSection
+EndGlobal
