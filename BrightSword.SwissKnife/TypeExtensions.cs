@@ -23,7 +23,7 @@ namespace BrightSword.SwissKnife
         }
 
         public static IEnumerable<PropertyInfo> GetAllProperties(this Type @this, BindingFlags bindingFlags = DefaultBindingFlags)
-            => @this.IsInterface ? @this.GetInterfaceProperties(bindingFlags, []) : @this.GetClassProperties(bindingFlags);
+            => @this.IsInterface ? @this.GetInterfaceProperties(bindingFlags, new List<Type>()) : @this.GetClassProperties(bindingFlags);
 
         private static IEnumerable<PropertyInfo> GetClassProperties(this Type @this, BindingFlags bindingFlags)
         {
@@ -47,7 +47,7 @@ namespace BrightSword.SwissKnife
             }
 
             bindingFlags |= BindingFlags.DeclaredOnly;
-            processedInterfaces ??= [];
+            processedInterfaces ??= new List<Type>();
             if (processedInterfaces.Contains(@this))
             {
                 yield break;
