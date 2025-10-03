@@ -14,10 +14,6 @@
     <ProjectReference Include="..\BrightSword.SwissKnife\BrightSword.SwissKnife.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <!-- Glob all source files, exclude bin/obj to avoid accidental inclusions -->
-    <Compile Include="**\*.cs" Exclude="bin\**;obj\**" />
-    <None Include="packages.config" />
-  </ItemGroup>
+  <!-- Use SDK implicit Compile items; no explicit Compile or packages.config entries to avoid duplicates -->
 
 </Project>

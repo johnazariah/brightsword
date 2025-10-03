@@ -5,7 +5,7 @@ using BrightSword.Squid;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Rhino.Mocks;
+using Moq;
 
 using Tests.BrightSword.Squid.core;
 
@@ -68,7 +68,7 @@ namespace Tests.BrightSword.Squid
                  i < count;
                  i++)
             {
-                MockRepository.GenerateStub<INonGenericInterfaceWithGenericProperties>();
+                new Mock<INonGenericInterfaceWithGenericProperties>().Object;
             }
 
             sw.Stop();
