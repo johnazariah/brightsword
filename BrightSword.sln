@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.0.11018.127 d18.0
+VisualStudioVersion = 18.0.11018.127
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrightSword.Feber", "BrightSword.Feber\BrightSword.Feber.csproj", "{AAE74844-DC61-FA99-763B-46E6B168C568}"
 EndProject
@@ -12,6 +12,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrightSword.Feber.Tests", "BrightSword.Feber.Tests\BrightSword.Feber.Tests.csproj", "{81CC9A2C-C2FF-4024-AA47-E7613EB98124}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrightSword.Feber.SamplesApp", "BrightSword.Feber.SamplesApp\BrightSword.Feber.SamplesApp.csproj", "{3B4D2E1A-6D5A-4B8F-A8B4-9C2A8F0F0A12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrightSword.Squid", "BrightSword.Squid\BrightSword.Squid.csproj", "{3106C813-44D1-4A1F-A47D-87C78AE6E725}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrightSword.Squid.Tests", "BrightSword.Squid.Tests\BrightSword.Squid.Tests.csproj", "{0B1A3FA0-3763-46E8-A533-B843EEC41625}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +87,30 @@ Global
 		{3B4D2E1A-6D5A-4B8F-A8B4-9C2A8F0F0A12}.Release|x64.Build.0 = Release|Any CPU
 		{3B4D2E1A-6D5A-4B8F-A8B4-9C2A8F0F0A12}.Release|x86.ActiveCfg = Release|Any CPU
 		{3B4D2E1A-6D5A-4B8F-A8B4-9C2A8F0F0A12}.Release|x86.Build.0 = Release|Any CPU
+		{3106C813-44D1-4A1F-A47D-87C78AE6E725}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3106C813-44D1-4A1F-A47D-87C78AE6E725}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3106C813-44D1-4A1F-A47D-87C78AE6E725}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3106C813-44D1-4A1F-A47D-87C78AE6E725}.Debug|x64.Build.0 = Debug|Any CPU
+		{3106C813-44D1-4A1F-A47D-87C78AE6E725}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3106C813-44D1-4A1F-A47D-87C78AE6E725}.Debug|x86.Build.0 = Debug|Any CPU
+		{3106C813-44D1-4A1F-A47D-87C78AE6E725}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3106C813-44D1-4A1F-A47D-87C78AE6E725}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3106C813-44D1-4A1F-A47D-87C78AE6E725}.Release|x64.ActiveCfg = Release|Any CPU
+		{3106C813-44D1-4A1F-A47D-87C78AE6E725}.Release|x64.Build.0 = Release|Any CPU
+		{3106C813-44D1-4A1F-A47D-87C78AE6E725}.Release|x86.ActiveCfg = Release|Any CPU
+		{3106C813-44D1-4A1F-A47D-87C78AE6E725}.Release|x86.Build.0 = Release|Any CPU
+		{0B1A3FA0-3763-46E8-A533-B843EEC41625}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B1A3FA0-3763-46E8-A533-B843EEC41625}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B1A3FA0-3763-46E8-A533-B843EEC41625}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0B1A3FA0-3763-46E8-A533-B843EEC41625}.Debug|x64.Build.0 = Debug|Any CPU
+		{0B1A3FA0-3763-46E8-A533-B843EEC41625}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0B1A3FA0-3763-46E8-A533-B843EEC41625}.Debug|x86.Build.0 = Debug|Any CPU
+		{0B1A3FA0-3763-46E8-A533-B843EEC41625}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B1A3FA0-3763-46E8-A533-B843EEC41625}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B1A3FA0-3763-46E8-A533-B843EEC41625}.Release|x64.ActiveCfg = Release|Any CPU
+		{0B1A3FA0-3763-46E8-A533-B843EEC41625}.Release|x64.Build.0 = Release|Any CPU
+		{0B1A3FA0-3763-46E8-A533-B843EEC41625}.Release|x86.ActiveCfg = Release|Any CPU
+		{0B1A3FA0-3763-46E8-A533-B843EEC41625}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
