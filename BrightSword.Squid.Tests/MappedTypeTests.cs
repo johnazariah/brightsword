@@ -56,22 +56,16 @@ namespace Tests.BrightSword.Squid
         {
             private const decimal C_VALUE = 25;
 
-            public decimal Value
-            {
-                get { return C_VALUE; }
-            }
+            public decimal Value => C_VALUE;
         }
 
         private static class MappedTypeDynamic<T>
             where T : class
         {
-            private static readonly BasicDataTransferObjectTypeCreator<T> _simpleTypeDynamicInfo = new BasicDataTransferObjectTypeCreator<T>(MapIFooToFoo,
+            private static readonly BasicDataTransferObjectTypeCreator<T> _simpleTypeDynamicInfo = new(MapIFooToFoo,
                                                                                                                                              MapIBarToLocalBar);
 
-            public static T NewInstance()
-            {
-                return _simpleTypeDynamicInfo.CreateInstance();
-            }
+            public static T NewInstance() => _simpleTypeDynamicInfo.CreateInstance();
 
             private static Type MapIFooToFoo(Type arg)
             {

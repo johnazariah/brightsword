@@ -1,11 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using BrightSword.Squid;
 using BrightSword.Squid.TypeCreators;
-using BrightSword.SwissKnife;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tests.BrightSword.Squid.core;
 using INotifyPropertyChanged = BrightSword.Squid.API.INotifyPropertyChanged;
@@ -13,6 +8,15 @@ using INotifyPropertyChanging = BrightSword.Squid.API.INotifyPropertyChanging;
 
 namespace Tests.BrightSword.Squid
 {
+    /// <summary>
+    /// Tests for property change notification behavior. These validate both
+    /// the control scenarios (hand-written base classes raising events) and
+    /// generated types that inherit from base types which implement the
+    /// notification contracts.
+    ///
+    /// The tests ensure that OnPropertyChanging is called before mutation and
+    /// that OnPropertyChanged is called after mutation with the expected values.
+    /// </summary>
     [TestClass]
     public class ChangeNotificationTests
     {
@@ -217,6 +221,10 @@ namespace Tests.BrightSword.Squid
             _instance.Name = "newName";
         }
 
+        /// <summary>
+        /// Base class used by control tests to raise PropertyChanged events. The generated
+        /// types may derive from classes like this to provide notification semantics.
+        /// </summary>
         public class CommonBaseTypeWithPropertyChanged : INotifyPropertyChanged
         {
             public void OnPropertyChanged(string propertyName,
@@ -235,6 +243,10 @@ namespace Tests.BrightSword.Squid
             public event PropertyChangedEventHandler ObjectPropertyChanged;
         }
 
+        /// <summary>
+        /// Base class used by control tests to raise PropertyChanging events. The generated
+        /// types may derive from classes like this to provide notification semantics.
+        /// </summary>
         public class CommonBaseTypeWithPropertyChanging : INotifyPropertyChanging
         {
             public bool OnPropertyChanging(string propertyName,
@@ -256,6 +268,11 @@ namespace Tests.BrightSword.Squid
             public event PropertyChangingEventHandler ObjectPropertyChanging;
         }
 
+        /// <summary>
+        /// Base class used in tests which supports both PropertyChanging and PropertyChanged.
+        /// This models a common pattern where a generated type derives from a single base
+        /// providing both pre- and post-change notifications.
+        /// </summary>
         public class CommonBaseTypeWithPropertyChangingAndPropertyChanged : INotifyPropertyChanged,
                                                                             INotifyPropertyChanging
         {
@@ -297,19 +314,16 @@ namespace Tests.BrightSword.Squid
         internal sealed class FilbertWithPropertyChanged : CommonBaseTypeWithPropertyChanged,
                                 IFilbert
         {
-            private int _id;
-            private string _name;
-
             public string Name
             {
-                get { return _name; }
+                get;
                 set
                 {
-                    var currentValue = _name;
-                    _name = value;
+                    var currentValue = field;
+                    field = value;
 
                     OnPropertyChanged(nameof(IFilbert.Name),
-                                      typeof(String),
+                                      typeof(string),
                                       currentValue,
                                       value);
                 }
@@ -317,11 +331,11 @@ namespace Tests.BrightSword.Squid
 
             public int Id
             {
-                get { return _id; }
+                get;
                 set
                 {
-                    var currentValue = _id;
-                    _id = value;
+                    var currentValue = field;
+                    field = value;
                     OnPropertyChanged(nameof(IFilbert.Id),
                                       typeof(int),
                                       currentValue,
@@ -333,32 +347,29 @@ namespace Tests.BrightSword.Squid
         internal sealed class FilbertWithPropertyChanging : CommonBaseTypeWithPropertyChanging,
                                  IFilbert
         {
-            private int _id;
-            private string _name;
-
             public string Name
             {
-                get { return _name; }
+                get;
                 set
                 {
-                    OnPropertyChanging(nameof(IFilbert.Name),
-                                       typeof(String),
-                                       _name,
+                    _ = OnPropertyChanging(nameof(IFilbert.Name),
+                                       typeof(string),
+                                       field,
                                        value);
-                    _name = value;
+                    field = value;
                 }
             }
 
             public int Id
             {
-                get { return _id; }
+                get;
                 set
                 {
-                    OnPropertyChanging(nameof(IFilbert.Id),
+                    _ = OnPropertyChanging(nameof(IFilbert.Id),
                                        typeof(int),
-                                       _id,
+                                       field,
                                        value);
-                    _id = value;
+                    field = value;
                 }
             }
         }
@@ -366,22 +377,19 @@ namespace Tests.BrightSword.Squid
         internal sealed class FilbertWithPropertyChangingAndPropertyChanged : CommonBaseTypeWithPropertyChangingAndPropertyChanged,
                                            IFilbert
         {
-            private int _id;
-            private string _name;
-
             public string Name
             {
-                get { return _name; }
+                get;
                 set
                 {
-                    OnPropertyChanging(nameof(IFilbert.Name),
-                                       typeof(String),
-                                       _name,
+                    _ = OnPropertyChanging(nameof(IFilbert.Name),
+                                       typeof(string),
+                                       field,
                                        value);
-                    var currentValue = _name;
-                    _name = value;
+                    var currentValue = field;
+                    field = value;
                     OnPropertyChanged(nameof(IFilbert.Name),
-                                      typeof(String),
+                                      typeof(string),
                                       currentValue,
                                       value);
                 }
@@ -389,15 +397,15 @@ namespace Tests.BrightSword.Squid
 
             public int Id
             {
-                get { return _id; }
+                get;
                 set
                 {
-                    OnPropertyChanging(nameof(IFilbert.Id),
+                    _ = OnPropertyChanging(nameof(IFilbert.Id),
                                        typeof(int),
-                                       _id,
+                                       field,
                                        value);
-                    var currentValue = _id;
-                    _id = value;
+                    var currentValue = field;
+                    field = value;
                     OnPropertyChanged(nameof(IFilbert.Id),
                                       typeof(int),
                                       currentValue,
@@ -409,20 +417,14 @@ namespace Tests.BrightSword.Squid
         private sealed class PropertyChangedTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
                 where T : class
         {
-            public override Type BaseType
-            {
-                get { return typeof(CommonBaseTypeWithPropertyChanged); }
-            }
+            public override Type BaseType => typeof(CommonBaseTypeWithPropertyChanged);
         }
 
         private sealed class PropertyChangingTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
                 where T : class
 
         {
-            public override Type BaseType
-            {
-                get { return typeof(CommonBaseTypeWithPropertyChanging); }
-            }
+            public override Type BaseType => typeof(CommonBaseTypeWithPropertyChanging);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Tests.BrightSword.Squid
     [TestClass]
     public class InitializationCheckedDynamicTests
     {
-        private readonly BasicDataTransferObjectTypeCreator<IProjection> _simpleDTOTypeCreator = new BasicDataTransferObjectTypeCreator<IProjection>(_ => typeof(IFoo).IsAssignableFrom(_)
+        private readonly BasicDataTransferObjectTypeCreator<IProjection> _simpleDTOTypeCreator = new(_ => typeof(IFoo).IsAssignableFrom(_)
                                                                                                                                                               ? typeof(Foo)
                                                                                                                                                               : null);
 
@@ -30,7 +30,7 @@ namespace Tests.BrightSword.Squid
         public void ShouldNotBeAbleToSetAndGetMappedImmutablePropertyViaDLR()
         {
             dynamic instance = _simpleDTOTypeCreator.CreateInstance();
-            ExceptionHelper.ExpectException<RuntimeBinderException>(() => { instance.Foo = new Foo(); });
+            _ = ExceptionHelper.ExpectException<RuntimeBinderException>(() => { instance.Foo = new Foo(); });
         }
 
         [TestMethod]
@@ -39,7 +39,7 @@ namespace Tests.BrightSword.Squid
 #pragma warning disable 168
             // ReSharper disable UnusedVariable
             var instance = InitializationCheckedDynamic<IProjection>.NewInstance();
-            ExceptionHelper.ExpectException<MethodAccessException>(() => { var foo = instance.Id; });
+            _ = ExceptionHelper.ExpectException<MethodAccessException>(() => { var foo = instance.Id; });
             // ReSharper restore UnusedVariable
 #pragma warning restore 168
         }
@@ -47,17 +47,14 @@ namespace Tests.BrightSword.Squid
         private static class InitializationCheckedDynamic<T>
             where T : class
         {
-            private static readonly BasicDataTransferObjectTypeCreator<T> typeCreator = new BasicDataTransferObjectTypeCreator<T>(_ => typeof(IFoo).IsAssignableFrom(_)
+            private static readonly BasicDataTransferObjectTypeCreator<T> typeCreator = new(_ => typeof(IFoo).IsAssignableFrom(_)
                                                                                                                                            ? typeof(Foo)
                                                                                                                                            : null)
             {
                 TrackReadonlyPropertyInitialized = true,
             };
 
-            public static T NewInstance()
-            {
-                return typeCreator.CreateInstance();
-            }
+            public static T NewInstance() => typeCreator.CreateInstance();
         }
     }
 }

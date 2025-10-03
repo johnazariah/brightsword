@@ -1,11 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 using BrightSword.Squid.Test;
-
-using INotifyPropertyChanged = BrightSword.Squid.API.INotifyPropertyChanged;
-using INotifyPropertyChanging = BrightSword.Squid.API.INotifyPropertyChanging;
 
 namespace Tests.BrightSword.Squid.core
 {
@@ -14,7 +9,7 @@ namespace Tests.BrightSword.Squid.core
     {
         public NonGenericInterfaceWithGenericProperties()
         {
-            Things = new List<INonGenericInterfaceWithNonGenericProperties>();
+            Things = [];
             //SelfProperty = new NonGenericInterfaceWithGenericProperties();
         }
 

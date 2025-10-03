@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
 using BrightSword.Squid.API;
 
@@ -16,30 +15,18 @@ namespace BrightSword.Squid.Test
         {
             IsNew = true;
 
-            _changedProperties = new Dictionary<string, object>();
+            _changedProperties = [];
         }
 
-        public bool IsPropertyChanged(string propertyName)
-        {
-            return _changedProperties.ContainsKey(propertyName);
-        }
+        public bool IsPropertyChanged(string propertyName) => _changedProperties.ContainsKey(propertyName);
 
-        public object GetOriginalValue(string propertyName)
-        {
-            return _changedProperties.TryGetValue(propertyName, out var result) ? result : null;
-        }
+        public object GetOriginalValue(string propertyName) => _changedProperties.TryGetValue(propertyName, out var result) ? result : null;
 
         public bool IsNew { get; internal set; }
 
-        public bool IsChanged
-        {
-            get => _changedProperties.Count != 0;
-        }
+        public bool IsChanged => _changedProperties.Count != 0;
 
-        public bool OnPropertyChanging(string propertyName,
-                                               Type propertyType,
-                                               object currentValue,
-                                               object newValue)
+        public bool OnPropertyChanging(string propertyName, Type propertyType, object currentValue, object newValue)
         {
             if (ReferenceEquals(currentValue, newValue) || Equals(currentValue, newValue))
             {
@@ -50,7 +37,7 @@ namespace BrightSword.Squid.Test
             {
                 if (EqualityComparer<object>.Default.Equals(existing, newValue))
                 {
-                    _changedProperties.Remove(propertyName);
+                    _ = _changedProperties.Remove(propertyName);
                 }
             }
             else

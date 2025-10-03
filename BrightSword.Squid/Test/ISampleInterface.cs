@@ -18,16 +18,11 @@ namespace BrightSword.Squid.Test
 
         void VoidMethodNoArgs();
 
-        int IntMethodWithArgs(int a,
-                              int b);
+        int IntMethodWithArgs(int a, int b);
 
-        int IntMethodWithArgs(int a,
-                              int b,
-                              int c);
+        int IntMethodWithArgs(int a, int b, int c);
 
-        char ParamsMethod(int a,
-                          int b,
-                          params string[] foo);
+        char ParamsMethod(int a, int b, params string[] foo);
 
         Guid MethodWithRefParameters(ref string a);
 

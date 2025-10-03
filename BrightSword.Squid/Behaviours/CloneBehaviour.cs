@@ -5,6 +5,26 @@ using System.Reflection.Emit;
 
 namespace BrightSword.Squid.Behaviours
 {
+    /// <summary>
+    /// Behaviour that injects clone semantics into emitted types.
+    /// When applied the generated type will be decorated with <see cref="SerializableAttribute"/>
+    /// and will expose a public <c>Clone</c> method that returns a deep copy of the object.
+    /// </summary>
+    /// <remarks>
+    /// The clone implementation emitted by this behaviour delegates to <see cref="FallbackClone"/>
+    /// which performs a reflection-based deep clone capable of handling arrays, lists and dictionaries.
+    /// The fallback avoids dependencies on BinaryFormatter and is intended to provide a portable
+    /// deep-copy mechanism for emitted types.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// // When a BasicDataTransferObjectTypeCreator is configured to include the CloneBehaviour
+    /// // (this is automatic when an interface implements ICloneable) the generated type has a Clone method:
+    /// var creator = new BasicDataTransferObjectTypeCreator<IMyCloneableDto>();
+    /// var obj = creator.CreateInstance();
+    /// var clone = (IMyCloneableDto)obj.Clone();
+    /// </code>
+    /// </example>
     public class CloneBehaviour : IBehaviour
     {
         public virtual IEnumerable<Func<TypeBuilder, TypeBuilder>> Operations
@@ -51,7 +71,10 @@ namespace BrightSword.Squid.Behaviours
 
         private static object InternalClone(object obj, Dictionary<object, object> visited)
         {
-            if (obj == null) return null;
+            if (obj == null)
+            {
+                return null;
+            }
 
             var type = obj.GetType();
 
@@ -73,7 +96,7 @@ namespace BrightSword.Squid.Behaviours
                 var elementType = type.GetElementType() ?? typeof(object);
                 var clone = Array.CreateInstance(elementType, arr.Length);
                 visited[obj] = clone;
-                for (int i = 0; i < arr.Length; i++)
+                for (var i = 0; i < arr.Length; i++)
                 {
                     clone.SetValue(InternalClone(arr.GetValue(i), visited), i);
                 }
@@ -125,14 +148,14 @@ namespace BrightSword.Squid.Behaviours
                 var cloneList = (System.Collections.IList)clone;
                 foreach (var item in list)
                 {
-                    cloneList.Add(InternalClone(item, visited));
+                    _ = cloneList.Add(InternalClone(item, visited));
                 }
 
                 return cloneList;
             }
 
             // Fallback: create instance and copy fields
-            object result = null;
+            object result;
             // First try a normal public constructor
             try
             {
@@ -156,12 +179,8 @@ namespace BrightSword.Squid.Behaviours
                 }
             }
 
-            if (result == null)
-            {
-                throw new InvalidOperationException($"Unable to create instance of type {type.FullName} for cloning.");
-            }
-
-            visited[obj] = result;
+            visited[obj] = result
+                           ?? throw new InvalidOperationException($"Unable to create instance of type {type.FullName} for cloning.");
 
             var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             foreach (var field in fields)

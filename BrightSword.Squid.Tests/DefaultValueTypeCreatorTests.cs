@@ -15,7 +15,7 @@ namespace Tests.BrightSword.Squid
     [TestClass]
     public class DefaultValueTypeCreatorTests
     {
-        private static readonly int[] _sampleItems = new[] { 1, 2, 3 };
+        private static readonly int[] _sampleItems = [1, 2, 3];
         [TestMethod]
         public void TestPropertyWithDefaultValueIsNoticed()
         {
@@ -87,18 +87,9 @@ namespace Tests.BrightSword.Squid
 
         private sealed class PayRunFilter : IPayRunFilter
         {
-            private readonly PayrollEmploymentStatus _employmentStatus = PayrollEmploymentStatus.All;
-            private readonly PayrollEmploymentStatus _employmentStatusFullTime = PayrollEmploymentStatus.FullTime;
+            public PayrollEmploymentStatus EmploymentStatusAll { get; } = PayrollEmploymentStatus.All;
 
-            public PayrollEmploymentStatus EmploymentStatusAll
-            {
-                get { return _employmentStatus; }
-            }
-
-            public PayrollEmploymentStatus EmploymentStatusFullTime
-            {
-                get { return _employmentStatusFullTime; }
-            }
+            public PayrollEmploymentStatus EmploymentStatusFullTime { get; } = PayrollEmploymentStatus.FullTime;
         }
 
         [TestMethod]
@@ -111,7 +102,7 @@ namespace Tests.BrightSword.Squid
         private sealed class DefaultValueTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
                 where T : class
         {
-            public readonly ConcurrentDictionary<PropertyInfo, object> _propertiesWithDefaultValues = new ConcurrentDictionary<PropertyInfo, object>();
+            public readonly ConcurrentDictionary<PropertyInfo, object> _propertiesWithDefaultValues = new();
 
             protected override TypeBuilder AddProperty(TypeBuilder typeBuilder,
                                                        PropertyInfo propertyInfo)

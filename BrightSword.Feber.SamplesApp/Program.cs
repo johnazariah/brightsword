@@ -1,4 +1,3 @@
-using System;
 using BrightSword.Feber.Samples;
 
 namespace BrightSword.Feber.SamplesApp

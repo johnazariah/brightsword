@@ -49,8 +49,8 @@ namespace Tests.BrightSword.Squid.core
     {
         int Foo { get; set; }
 
-        String Name { get; set; }
-        Decimal Amount { get; set; }
+        string Name { get; set; }
+        decimal Amount { get; set; }
     }
 
     public interface IInterfaceWithGenericMethods
@@ -68,13 +68,13 @@ namespace Tests.BrightSword.Squid.core
 
     public interface INonGenericInterfaceWithGenericProperties
     {
-        String Name { get; set; }
+        string Name { get; set; }
         ICollection<INonGenericInterfaceWithNonGenericProperties> Things { get; }
     }
 
     public interface IInterfaceWithReadonlyScalarProperty
     {
-        Decimal AmountValue { get; }
+        decimal AmountValue { get; }
     }
 
     public interface IInterfaceWithAVoidMethodNoArgs

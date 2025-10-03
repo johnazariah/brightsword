@@ -6,11 +6,20 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.BrightSword.Squid
 {
+    /// <summary>
+    /// Unit tests that validate the naming conventions produced by the
+    /// BasicDataTransferObjectTypeCreator for interface and class names
+    /// when working with generic type parameters.
+    /// </summary>
     [TestClass]
     public class DynamicTypeCreatorTests
     {
-        private readonly TestTypeCreator<IEnumerable<int>> _typeCreatorForIEnumerableOfInt = new TestTypeCreator<IEnumerable<int>>();
+        private readonly TestTypeCreator<IEnumerable<int>> _typeCreatorForIEnumerableOfInt = new();
 
+        /// <summary>
+        /// The creator should expose a printable interface name for diagnostic purposes
+        /// that includes the generic argument types.
+        /// </summary>
         [TestMethod]
         public void TestInterfaceName()
         {
@@ -18,6 +27,10 @@ namespace Tests.BrightSword.Squid
                             _typeCreatorForIEnumerableOfInt.InterfaceName);
         }
 
+        /// <summary>
+        /// The computed class name for the generated concrete type should strip the leading 'I'
+        /// and show generic arguments in the same printable format.
+        /// </summary>
         [TestMethod]
         public void TestClassName()
         {
@@ -28,15 +41,9 @@ namespace Tests.BrightSword.Squid
         private sealed class TestTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
                 where T : class
         {
-            public new string InterfaceName
-            {
-                get { return base.InterfaceName; }
-            }
+            public new string InterfaceName => base.InterfaceName;
 
-            public new string ClassName
-            {
-                get { return base.ClassName; }
-            }
+            public new string ClassName => base.ClassName;
         }
     }
 }

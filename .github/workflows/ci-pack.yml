@@ -3,11 +3,11 @@ name: CI - Pack and optional publish
 on:
   push:
     branches: [ main ]
-    tags: [ 'v*', 'swissknife-v*', 'feber-v*' ]
+    tags: [ 'v*', 'swissknife-v*', 'feber-v*', 'crucible-v*', 'squid-v*' ]
   workflow_dispatch:
     inputs:
       publish:
-        description: 'Publish action: publish-swissknife or publish-feber (blank for no publish)'
+        description: 'Publish action: publish-swissknife, publish-feber, publish-crucible, publish-squid (blank for no publish)'
         required: false
         default: ''
 
@@ -42,8 +42,6 @@ jobs:
           echo "SwissKnifeVersion: ${{ needs['pack_swissknife'].outputs.SwissKnifeVersion }}"
           echo "FeberVersion: ${{ needs['pack_swissknife'].outputs.FeberVersion }}"
 
-      # (removed local debug step) show/consumption of bumped_versions is done in downstream jobs
-
       - name: Build
         run: dotnet build BrightSword.sln -c Release --no-restore
 
@@ -59,10 +57,6 @@ jobs:
           fi
           echo "Invoking msbuild PublishSwissknife (VersionFromTag=$TAG)"
           dotnet msbuild build.proj -t:PublishSwissknife -p:DoCommit=$DO_COMMIT -p:NUGET_API_KEY=$NUGET_API_KEY -p:GitRefName=$GITHUB_REF_NAME -p:VersionFromTag=$TAG
-
-      # bumped_versions and per-package outputs are written directly by tools/bump_versions.py
-      # into the step's GITHUB_OUTPUT file when running inside GitHub Actions. The msbuild
-      # step above has id=publish_swissknife_step so its outputs are available as job outputs.
 
       - name: Upload NuGet artifact
         uses: actions/upload-artifact@v4
@@ -105,8 +99,6 @@ jobs:
           echo "Invoking msbuild PublishFeber (VersionFromTag=$TAG)"
           dotnet msbuild build.proj -t:PublishFeber -p:DoCommit=$DO_COMMIT -p:NUGET_API_KEY=$NUGET_API_KEY -p:GitRefName=$GITHUB_REF_NAME -p:VersionFromTag=$TAG
 
-      # bumped_versions are written by tools/bump_versions.py into this step's GITHUB_OUTPUT
-
       - name: Upload Feber NuGet artifact
         uses: actions/upload-artifact@v4
         with:
@@ -125,9 +117,109 @@ jobs:
             echo "Skipping NuGet publish - no nupkg artifacts or NUGET_API_KEY missing"
           fi
 
-  smoke_sample:
+  pack-crucible:
     runs-on: ubuntu-latest
     needs: pack-feber
+    outputs:
+      bumped_versions: ${{ steps.publish_crucible_step.outputs.bumped_versions }}
+    # Run on normal pushes, or when explicitly dispatched to publish crucible
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.publish == 'publish-crucible' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore BrightSword.sln
+
+      - name: Run PublishCrucible target (MSBuild)
+        id: publish_crucible_step
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          DO_COMMIT: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.publish == 'publish-crucible') || startsWith(github.ref, 'refs/tags/crucible-v') }}
+        run: |
+          TAG=""
+          if [[ "$GITHUB_REF" =~ ^refs/tags/crucible-v ]]; then
+            TAG=${GITHUB_REF#refs/tags/crucible-v}
+          fi
+          echo "Invoking msbuild PublishCrucible (VersionFromTag=$TAG)"
+          dotnet msbuild build.proj -t:PublishCrucible -p:DoCommit=$DO_COMMIT -p:NUGET_API_KEY=$NUGET_API_KEY -p:GitRefName=$GITHUB_REF_NAME -p:VersionFromTag=$TAG
+
+      - name: Upload Crucible NuGet artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: crucible-nugets
+          path: ${{ env.ARTIFACT_DIR }}
+
+      - name: "Optional: Publish Crucible packages to NuGet.org"
+        run: |
+          if [ -n "$(ls $ARTIFACT_DIR/*.nupkg 2>/dev/null)" ] && [ -n "$NUGET_API_KEY" ]; then
+            echo "Publishing packages to NuGet.org"
+            for nupkg in $ARTIFACT_DIR/*.nupkg; do
+              echo "Pushing $nupkg"
+              dotnet nuget push "$nupkg" -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json || echo "Push failed for $nupkg"
+            done
+          else
+            echo "Skipping NuGet publish - no nupkg artifacts or NUGET_API_KEY missing"
+          fi
+
+  pack-squid:
+    runs-on: ubuntu-latest
+    needs: pack-crucible
+    outputs:
+      bumped_versions: ${{ steps.publish_squid_step.outputs.bumped_versions }}
+    # Run on normal pushes, or when explicitly dispatched to publish squid
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.publish == 'publish-squid' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore BrightSword.sln
+
+      - name: Run PublishSquid target (MSBuild)
+        id: publish_squid_step
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          DO_COMMIT: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.publish == 'publish-squid') || startsWith(github.ref, 'refs/tags/squid-v') }}
+        run: |
+          TAG=""
+          if [[ "$GITHUB_REF" =~ ^refs/tags/squid-v ]]; then
+            TAG=${GITHUB_REF#refs/tags/squid-v}
+          fi
+          echo "Invoking msbuild PublishSquid (VersionFromTag=$TAG)"
+          dotnet msbuild build.proj -t:PublishSquid -p:DoCommit=$DO_COMMIT -p:NUGET_API_KEY=$NUGET_API_KEY -p:GitRefName=$GITHUB_REF_NAME -p:VersionFromTag=$TAG
+
+      - name: Upload Squid NuGet artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: squid-nugets
+          path: ${{ env.ARTIFACT_DIR }}
+
+      - name: "Optional: Publish Squid packages to NuGet.org"
+        run: |
+          if [ -n "$(ls $ARTIFACT_DIR/*.nupkg 2>/dev/null)" ] && [ -n "$NUGET_API_KEY" ]; then
+            echo "Publishing packages to NuGet.org"
+            for nupkg in $ARTIFACT_DIR/*.nupkg; do
+              echo "Pushing $nupkg"
+              dotnet nuget push "$nupkg" -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json || echo "Push failed for $nupkg"
+            done
+          else
+            echo "Skipping NuGet publish - no nupkg artifacts or NUGET_API_KEY missing"
+          fi
+
+  smoke_sample:
+    runs-on: ubuntu-latest
+    needs: pack-squid
     if: ${{ github.event_name != 'pull_request' }}
     steps:
       - name: Checkout

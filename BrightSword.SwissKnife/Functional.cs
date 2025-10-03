@@ -98,18 +98,18 @@ namespace BrightSword.SwissKnife
             return funcMemoized.Memoize();
         }
 
-            /// <summary>
-            /// Private helper for tracing the invocation of a function. Emits a Trace message on invocation.
-            /// </summary>
-            /// <typeparam name="TArgument">The argument type.</typeparam>
-            /// <typeparam name="TResult">The result type.</typeparam>
-            /// <param name="func">The function to trace.</param>
-            private static Func<TArgument, TResult> Trace<TArgument, TResult>(this Func<TArgument, TResult> func)
-                    => x =>
-                    {
-                            System.Diagnostics.Trace.WriteLine($"{func}({x}) called");
-                            return func(x);
-                    };
+        /// <summary>
+        /// Private helper for tracing the invocation of a function. Emits a Trace message on invocation.
+        /// </summary>
+        /// <typeparam name="TArgument">The argument type.</typeparam>
+        /// <typeparam name="TResult">The result type.</typeparam>
+        /// <param name="func">The function to trace.</param>
+        private static Func<TArgument, TResult> Trace<TArgument, TResult>(this Func<TArgument, TResult> func)
+                => x =>
+                {
+                    System.Diagnostics.Trace.WriteLine($"{func}({x}) called");
+                    return func(x);
+                };
 
         private static Func<TArgument, TResult> Memoize<TArgument, TResult>(this Func<TArgument, TResult> func)
         {

@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.Reflection;
 using System.Reflection.Emit;
 
 namespace BrightSword.Squid

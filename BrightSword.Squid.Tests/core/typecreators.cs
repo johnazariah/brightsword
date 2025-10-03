@@ -15,16 +15,10 @@ namespace Tests.BrightSword.Squid.core
 
         public override string ClassName
         {
-            get
-            {
-                return string.Format(System.Globalization.CultureInfo.InvariantCulture, "Types.{0}.ChangeTrackedAttributed",
-                                     typeof(T).Name);
-            }
+            get => string.Format(System.Globalization.CultureInfo.InvariantCulture, "Types.{0}.ChangeTrackedAttributed",
+                                   typeof(T).Name);
         }
 
-        public override Type BaseType
-        {
-            get { return typeof(PropertyChangingNotificationSink); }
-        }
+        public override Type BaseType => typeof(PropertyChangingNotificationSink);
     }
 }

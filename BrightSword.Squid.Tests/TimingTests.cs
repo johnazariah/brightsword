@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using BrightSword.Squid;
-using BrightSword.Squid.TypeCreators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Tests.BrightSword.Squid.core;
@@ -116,7 +113,7 @@ namespace Tests.BrightSword.Squid
             {
                 // Prefer generic activator where possible; use non-generic reflection result where appropriate
                 var ctorType = typeof(NonGenericInterfaceWithGenericProperties);
-                Activator.CreateInstance(ctorType);
+                _ = Activator.CreateInstance(ctorType);
             }
 
             sw.Stop();
@@ -135,7 +132,7 @@ namespace Tests.BrightSword.Squid
                  i < count;
                  i++)
             {
-                nonGenericInterfaceWithGenericPropertiesFunc();
+                _ = nonGenericInterfaceWithGenericPropertiesFunc();
             }
 
             sw.Stop();
@@ -153,7 +150,7 @@ namespace Tests.BrightSword.Squid
                  i++)
             {
                 // Prefer the generic overload when possible; keep existing behavior but use generic to satisfy analyzer
-                System.Activator.CreateInstance<NonGenericInterfaceWithGenericProperties>();
+                _ = System.Activator.CreateInstance<NonGenericInterfaceWithGenericProperties>();
             }
 
             sw.Stop();

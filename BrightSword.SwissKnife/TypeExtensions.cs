@@ -14,10 +14,10 @@ namespace BrightSword.SwissKnife
     {
         private const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public;
 
-    /// <summary>
-    /// Friendly printable name similar to the original project's intent.
-    /// </summary>
-    public static string PrintableName(this Type @this)
+        /// <summary>
+        /// Friendly printable name similar to the original project's intent.
+        /// </summary>
+        public static string PrintableName(this Type @this)
         {
             ArgumentNullException.ThrowIfNull(@this);
 
@@ -35,16 +35,16 @@ namespace BrightSword.SwissKnife
             return $"{baseName}<{args}>";
         }
 
-    /// <summary>
-    /// Backwards-compatible Name() extension used by tests and older code.
-    /// </summary>
-    public static string Name(this Type @this) => PrintableName(@this);
+        /// <summary>
+        /// Backwards-compatible Name() extension used by tests and older code.
+        /// </summary>
+        public static string Name(this Type @this) => PrintableName(@this);
 
-    /// <summary>
-    /// Heuristic used by the Squid project to convert interface type names to a concrete class-like name.
-    /// Example: IMyInterface -> MyInterface; IList&lt;T&gt; -> List&lt;T&gt;.
-    /// </summary>
-    public static string RenameToConcreteType(this Type @this)
+        /// <summary>
+        /// Heuristic used by the Squid project to convert interface type names to a concrete class-like name.
+        /// Example: IMyInterface -> MyInterface; IList&lt;T&gt; -> List&lt;T&gt;.
+        /// </summary>
+        public static string RenameToConcreteType(this Type @this)
         {
             ArgumentNullException.ThrowIfNull(@this);
 
@@ -58,10 +58,10 @@ namespace BrightSword.SwissKnife
             return name;
         }
 
-    /// <summary>
-    /// Return all properties including inherited interface properties and base class properties.
-    /// </summary>
-    public static IEnumerable<PropertyInfo> GetAllProperties(this Type @this, BindingFlags bindingFlags = DefaultBindingFlags)
+        /// <summary>
+        /// Return all properties including inherited interface properties and base class properties.
+        /// </summary>
+        public static IEnumerable<PropertyInfo> GetAllProperties(this Type @this, BindingFlags bindingFlags = DefaultBindingFlags)
         {
             ArgumentNullException.ThrowIfNull(@this);
 
@@ -89,10 +89,10 @@ namespace BrightSword.SwissKnife
             }
         }
 
-    /// <summary>
-    /// Methods and events helpers used by Squid.
-    /// </summary>
-    public static IEnumerable<MethodInfo> GetAllMethods(this Type @this, BindingFlags bindingFlags = DefaultBindingFlags)
+        /// <summary>
+        /// Methods and events helpers used by Squid.
+        /// </summary>
+        public static IEnumerable<MethodInfo> GetAllMethods(this Type @this, BindingFlags bindingFlags = DefaultBindingFlags)
         {
             ArgumentNullException.ThrowIfNull(@this);
 

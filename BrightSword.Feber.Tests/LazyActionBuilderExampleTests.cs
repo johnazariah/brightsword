@@ -1,6 +1,4 @@
-using System;
 using BrightSword.Feber.Samples;
-using Xunit;
 
 namespace BrightSword.Feber.Tests
 {

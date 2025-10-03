@@ -175,36 +175,33 @@ namespace Tests.BrightSword.Squid
 #endif
 
         [TestMethod]
-        public void TestIllegalDefaultValueShouldThrow()
-        {
-            ExceptionHelper.ExpectException<NotSupportedException>(() => new BasicDataTransferObjectTypeCreator<IInterfaceWithNonSupportedDefaultValue>().CreateInstance());
-        }
+        public void TestIllegalDefaultValueShouldThrow() => ExceptionHelper.ExpectException<NotSupportedException>(() => new BasicDataTransferObjectTypeCreator<IInterfaceWithNonSupportedDefaultValue>().CreateInstance());
 
         public static class Constants
         {
-            public const Byte ByteConstant = 129;
-            public const Char CharConstant = ';';
-            public const Decimal DecimalConstant = -112.125M;
-            public const Double DoubleConstant = 3.1415926D;
-            public const Single SingleConstant = 6.022E23F;
-            public const Int16 Int16Constant = 32223;
-            public const Int32 Int32Constant = -1288490000;
-            public const Int64 Int64Constant = 9223372036854775807;
-            public const UInt16 UInt16Constant = 65535;
-            public const UInt32 UInt32Constant = 1288490000U;
-            public const UInt64 UInt64Constant = 18446744073709551615UL;
-            public const String StringConstant = "e^iπ + 1 = 0";
+            public const byte ByteConstant = 129;
+            public const char CharConstant = ';';
+            public const decimal DecimalConstant = -112.125M;
+            public const double DoubleConstant = 3.1415926D;
+            public const float SingleConstant = 6.022E23F;
+            public const short Int16Constant = 32223;
+            public const int Int32Constant = -1288490000;
+            public const long Int64Constant = 9223372036854775807;
+            public const ushort UInt16Constant = 65535;
+            public const uint UInt32Constant = 1288490000U;
+            public const ulong UInt64Constant = 18446744073709551615UL;
+            public const string StringConstant = "e^iπ + 1 = 0";
             public const SeekOrigin EnumConstant = SeekOrigin.End;
             public static readonly Type TypeConstant = typeof(ISerializable);
 
             public static readonly string[] StringArrayConstant =
-            {
+            [
                 "This",
                 "is",
                 "a",
                 "string",
                 "array"
-            };
+            ];
         }
 
         public interface IInterfaceWithNonSupportedDefaultValue
@@ -217,55 +214,55 @@ namespace Tests.BrightSword.Squid
         {
 #if BOOLEAN
             [DefaultValue(true)]
-            Boolean TrueBooleanProperty { get; set; }
+            bool TrueBooleanProperty { get; set; }
 
             [DefaultValue(false)]
-            Boolean FalseBooleanProperty { get; set; }
+            bool FalseBooleanProperty { get; set; }
 #endif
 
 #if BYTE
             [DefaultValue((byte)129)]
-            Byte ByteProperty { get; set; }
+            byte ByteProperty { get; set; }
 #endif
 
 #if CHAR
             [DefaultValue(';')]
-            Char CharProperty { get; set; }
+            char CharProperty { get; set; }
 #endif
 
 #if DOUBLE
             [DefaultValue(3.1415926D)]
-            Double DoubleProperty { get; set; }
+            double DoubleProperty { get; set; }
 #endif
 
 #if DECIMAL
             [DefaultValue(typeof(decimal), "-112.125")]
-            Decimal DecimalProperty { get; set; }
+            decimal DecimalProperty { get; set; }
 #endif
 
 #if SINGLE
             [DefaultValue(6.022E23F)]
-            Single SingleProperty { get; set; }
+            float SingleProperty { get; set; }
 #endif
 
 #if INT16
             [DefaultValue((short)32223)]
-            Int16 Int16Property { get; set; }
+            short Int16Property { get; set; }
 #endif
 
 #if INT32
             [DefaultValue(-1288490000)]
-            Int32 Int32Property { get; set; }
+            int Int32Property { get; set; }
 #endif
 
 #if INT64
             [DefaultValue(9223372036854775807)]
-            Int64 Int64Property { get; set; }
+            long Int64Property { get; set; }
 #endif
 
 #if STRING
             [DefaultValue("e^iπ + 1 = 0")]
-            String StringProperty { get; set; }
+            string StringProperty { get; set; }
 #endif
 
 #if TYPE
@@ -287,139 +284,68 @@ namespace Tests.BrightSword.Squid
                               "string",
                               "array"
                           })]
-            String[] ArrayProperty { get; set; }
+            string[] ArrayProperty { get; set; }
 #endif
         }
 
         // ReSharper disable once UnusedMember.Local
         private sealed class InterfaceWithDefaultValue : IInterfaceWithDefaultValue
         {
-            private string[] _arrayProperty;
-            private byte _byteProperty;
-            private char _charProperty;
-            private decimal _decimalProperty;
-            private double _doubleProperty;
-            private SeekOrigin _enumProperty;
-            private bool _falseBooleanProperty;
-            private short _int16Property;
-            private int _int32Property;
-            private long _int64Property;
-            private float _singleProperty;
-            private string _stringProperty;
-            private bool _trueBooleanProperty;
-            private Type _typeProperty;
-
             public InterfaceWithDefaultValue()
             {
-                _trueBooleanProperty = true;
-                _byteProperty = 129;
-                _charProperty = ';';
-                _doubleProperty = 3.1415926D;
-                _decimalProperty = 112.125M;
-                _int16Property = 32223;
-                _int32Property = -1288490000;
-                _int64Property = 9223372036854775807;
+                TrueBooleanProperty = true;
+                ByteProperty = 129;
+                CharProperty = ';';
+                DoubleProperty = 3.1415926D;
+                DecimalProperty = 112.125M;
+                Int16Property = 32223;
+                Int32Property = -1288490000;
+                Int64Property = 9223372036854775807;
                 //_uint16Property = 65535;
                 //_uint32Property = 1288490000U;
                 //_uint64Property = 18446744073709551615UL;
-                _stringProperty = "e^iπ + 1 = 0";
-                _typeProperty = typeof(ISerializable);
-                _enumProperty = SeekOrigin.End;
-                _arrayProperty = new[]
-                                 {
+                StringProperty = "e^iπ + 1 = 0";
+                TypeProperty = typeof(ISerializable);
+                EnumProperty = SeekOrigin.End;
+                ArrayProperty =
+                                 [
                                      "This",
                                      "is",
                                      "a",
                                      "string",
                                      "array"
-                                 };
+                                 ];
             }
 
             // ReSharper disable ConvertToAutoProperty
 
-            public Type TypeProperty
-            {
-                get { return _typeProperty; }
-                set { _typeProperty = value; }
-            }
+            public Type TypeProperty { get; set; }
 
-            public SeekOrigin EnumProperty
-            {
-                get { return _enumProperty; }
-                set { _enumProperty = value; }
-            }
+            public SeekOrigin EnumProperty { get; set; }
 
-            public string[] ArrayProperty
-            {
-                get { return _arrayProperty; }
-                set { _arrayProperty = value; }
-            }
+            public string[] ArrayProperty { get; set; }
 
-            public char CharProperty
-            {
-                get { return _charProperty; }
-                set { _charProperty = value; }
-            }
+            public char CharProperty { get; set; }
 
-            public string StringProperty
-            {
-                get { return _stringProperty; }
-                set { _stringProperty = value; }
-            }
+            public string StringProperty { get; set; }
 
-            public bool TrueBooleanProperty
-            {
-                get { return _trueBooleanProperty; }
-                set { _trueBooleanProperty = value; }
-            }
+            public bool TrueBooleanProperty { get; set; }
 
-            public bool FalseBooleanProperty
-            {
-                get { return _falseBooleanProperty; }
-                set { _falseBooleanProperty = value; }
-            }
+            public bool FalseBooleanProperty { get; set; }
 
-            public byte ByteProperty
-            {
-                get { return _byteProperty; }
-                set { _byteProperty = value; }
-            }
+            public byte ByteProperty { get; set; }
 
-            public Single SingleProperty
-            {
-                get { return _singleProperty; }
-                set { _singleProperty = value; }
-            }
+            public float SingleProperty { get; set; }
 
-            public double DoubleProperty
-            {
-                get { return _doubleProperty; }
-                set { _doubleProperty = value; }
-            }
+            public double DoubleProperty { get; set; }
 
-            public Decimal DecimalProperty
-            {
-                get { return _decimalProperty; }
-                set { _decimalProperty = value; }
-            }
+            public decimal DecimalProperty { get; set; }
 
-            public short Int16Property
-            {
-                get { return _int16Property; }
-                set { _int16Property = value; }
-            }
+            public short Int16Property { get; set; }
 
-            public int Int32Property
-            {
-                get { return _int32Property; }
-                set { _int32Property = value; }
-            }
+            public int Int32Property { get; set; }
 
-            public long Int64Property
-            {
-                get { return _int64Property; }
-                set { _int64Property = value; }
-            }
+            public long Int64Property { get; set; }
 
             // ReSharper restore ConvertToAutoProperty
         }

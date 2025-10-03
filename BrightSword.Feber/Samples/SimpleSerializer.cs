@@ -41,7 +41,7 @@ namespace BrightSword.Feber.Samples
         /// </remarks>
         private sealed class SimpleSerializerBuilder : FunctionBuilder<T, T, string>
         {
-            private static readonly MethodInfo _concat = typeof(string).GetMethod("Concat", new[] { typeof(string), typeof(string) });
+            private static readonly MethodInfo _concat = typeof(string).GetMethod("Concat", [typeof(string), typeof(string)]);
 
             protected override string Seed => string.Empty;
 

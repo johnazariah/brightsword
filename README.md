@@ -122,3 +122,22 @@ Troubleshooting
 - If `CommitBumped` push fails, convert the flow to open a PR with bumped files instead of pushing directly (I can implement that change on request).
 
 Want me to open a PR with these docs updates or add a small `build.ps1` wrapper for Windows contributors? Say which and I'll do it next.
+
+## Run samples and tests
+
+This repository targets .NET 10. Use the SDK pinned in `global.json`.
+
+Run the Squid sample
+1. Build the sample project:
+   - `dotnet build BrightSword.Squid.Samples/BrightSword.Squid.Squid.Samples.csproj`
+2. Run the sample:
+   - `dotnet run --project BrightSword.Squid.Samples/BrightSword.Squid.Squid.Samples.csproj`
+
+Run tests
+- To run all tests in the solution:
+  - `dotnet test BrightSword.sln`
+- To run only the Squid tests project:
+  - `dotnet test BrightSword.Squid.Tests/BrightSword.Squid.Tests.csproj`
+
+Notes
+- Some tests and samples rely on runtime type emission (`Reflection.Emit`). Use the SDK/runtime pinned in `global.json` for consistent behavior.

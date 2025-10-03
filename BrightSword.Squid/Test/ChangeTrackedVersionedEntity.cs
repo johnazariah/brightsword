@@ -5,226 +5,139 @@ using System.Diagnostics.CodeAnalysis;
 namespace BrightSword.Squid.Test
 {
     [ExcludeFromCodeCoverage]
-    public class ChangeTrackedVersionedEntity : PropertyChangingNotificationSink,
-                                                ISampleInterface
+    public class ChangeTrackedVersionedEntity : PropertyChangingNotificationSink, ISampleInterface
     {
-        private readonly IList<decimal> _baseAmounts;
-        private readonly IDictionary<ISampleInterface, byte[]> _blobsByName;
-        private readonly IList<int> _ids;
-        private bool _boolValue;
-        private byte _byteValue;
-        private DateTime _dateTimeValue;
         private string _hiddenProperty;
-        private int _integerValue;
-        private long _longValue;
-        private decimal _mutableValue;
-        private short _shortValue;
-        private string _stringValue;
 
         public ChangeTrackedVersionedEntity()
         {
-            _baseAmounts = new List<decimal>();
-            _blobsByName = new Dictionary<ISampleInterface, byte[]>();
-            _ids = new List<int>();
+            BaseAmounts = [];
+            BlobsByName = new Dictionary<ISampleInterface, byte[]>();
+            Ids = [];
         }
 
         public int IntegerValue
         {
-            get { return _integerValue; }
+            get;
             set
             {
-                if (OnPropertyChanging(nameof(IntegerValue),
-                                               typeof(int),
-                                               _integerValue,
-                                               value))
+                if (OnPropertyChanging(nameof(IntegerValue), typeof(int), field, value))
                 {
-                    _integerValue = value;
+                    field = value;
                 }
             }
         }
 
         public long LongValue
         {
-            get { return _longValue; }
+            get;
             set
             {
-                if (OnPropertyChanging(nameof(LongValue),
-                                               typeof(int),
-                                               _longValue,
-                                               value))
+                if (OnPropertyChanging(nameof(LongValue), typeof(long), field, value))
                 {
-                    _longValue = value;
+                    field = value;
                 }
             }
         }
 
         public short ShortValue
         {
-            get { return _shortValue; }
+            get;
             set
             {
-                if (OnPropertyChanging(nameof(ShortValue),
-                                               typeof(int),
-                                               _shortValue,
-                                               value))
+                if (OnPropertyChanging(nameof(ShortValue), typeof(short), field, value))
                 {
-                    _shortValue = value;
+                    field = value;
                 }
             }
         }
 
         public byte ByteValue
         {
-            get { return _byteValue; }
+            get;
             set
             {
-                if (OnPropertyChanging(nameof(ByteValue),
-                                               typeof(int),
-                                               _byteValue,
-                                               value))
+                if (OnPropertyChanging(nameof(ByteValue), typeof(byte), field, value))
                 {
-                    _byteValue = value;
+                    field = value;
                 }
             }
         }
 
         public bool BoolValue
         {
-            get { return _boolValue; }
+            get;
             set
             {
-                if (OnPropertyChanging(nameof(BoolValue),
-                                               typeof(int),
-                                               _boolValue,
-                                               value))
+                if (OnPropertyChanging(nameof(BoolValue), typeof(bool), field, value))
                 {
-                    _boolValue = value;
+                    field = value;
                 }
             }
         }
 
         public DateTime DateTimeValue
         {
-            get { return _dateTimeValue; }
+            get;
             set
             {
-                if (OnPropertyChanging(nameof(DateTimeValue),
-                                               typeof(int),
-                                               _dateTimeValue,
-                                               value))
+                if (OnPropertyChanging(nameof(DateTimeValue), typeof(DateTime), field, value))
                 {
-                    _dateTimeValue = value;
+                    field = value;
                 }
             }
         }
 
         public string StringValue
         {
-            get { return _stringValue; }
+            get;
             set
             {
-                if (OnPropertyChanging(nameof(StringValue),
-                                               typeof(int),
-                                               _stringValue,
-                                               value))
+                if (OnPropertyChanging(nameof(StringValue), typeof(string), field, value))
                 {
-                    _stringValue = value;
+                    field = value;
                 }
             }
         }
 
-        public IList<decimal> BaseAmounts
-        {
-            get { return _baseAmounts; }
-        }
+        public IList<decimal> BaseAmounts { get; }
+        public IDictionary<ISampleInterface, byte[]> BlobsByName { get; }
+        public IList<int> Ids { get; }
 
-        public IDictionary<ISampleInterface, byte[]> BlobsByName
-        {
-            get { return _blobsByName; }
-        }
-
-        public string ReadonlyName
-        {
-            get { throw new NotSupportedException(); }
-        }
-
-        public IList<int> Ids
-        {
-            get { return _ids; }
-        }
+        public string ReadonlyName => throw new NotSupportedException();
 
         public decimal MutableValue
         {
-            get { return _mutableValue; }
+            get;
             set
             {
-                if (OnPropertyChanging(nameof(MutableValue),
-                                               typeof(decimal),
-                                               _mutableValue,
-                                               value))
+                if (OnPropertyChanging(nameof(MutableValue), typeof(decimal), field, value))
                 {
-                    _mutableValue = value;
+                    field = value;
                 }
-                _mutableValue = value;
             }
         }
 
         string IBaseInterface.HiddenProperty
         {
-            get { return _hiddenProperty; }
+            get => _hiddenProperty;
             set
             {
-                _hiddenProperty = value;
-                if (OnPropertyChanging(nameof(IBaseInterface.HiddenProperty),
-                                               typeof(string),
-                                               _mutableValue,
-                                               value))
+                if (OnPropertyChanging(nameof(IBaseInterface.HiddenProperty), typeof(string), _hiddenProperty, value))
                 {
                     _hiddenProperty = value;
                 }
-                _hiddenProperty = value;
             }
         }
 
-        decimal ISampleInterface.HiddenProperty
-        {
-            get { throw new NotImplementedException(); }
-        }
+        decimal ISampleInterface.HiddenProperty => throw new NotImplementedException();
 
-        public void VoidMethodNoArgs()
-        {
-            throw new NotImplementedException();
-        }
-
-        public int IntMethodWithArgs(int a,
-                                     int b)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int IntMethodWithArgs(int a,
-                                     int b,
-                                     int c)
-        {
-            throw new NotImplementedException();
-        }
-
-        public char ParamsMethod(int a,
-                                 int b,
-                                 params string[] foo)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Guid MethodWithRefParameters(ref string a)
-        {
-            throw new NotImplementedException();
-        }
-
-        public char[] ArrayMethodWithOutParameters(out string a)
-        {
-            throw new NotImplementedException();
-        }
+        public void VoidMethodNoArgs() => throw new NotImplementedException();
+        public int IntMethodWithArgs(int a, int b) => throw new NotImplementedException();
+        public int IntMethodWithArgs(int a, int b, int c) => throw new NotImplementedException();
+        public char ParamsMethod(int a, int b, params string[] foo) => throw new NotImplementedException();
+        public Guid MethodWithRefParameters(ref string a) => throw new NotImplementedException();
+        public char[] ArrayMethodWithOutParameters(out string a) => throw new NotImplementedException();
 
         public event EventHandler Event;
     }

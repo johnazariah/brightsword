@@ -10,8 +10,8 @@ namespace BrightSword.Feber.Core
         private static readonly CSharpArgumentInfo _thisArgument = CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null);
         private static readonly CSharpArgumentInfo _valueArgument = CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.UseCompileTimeType | CSharpArgumentInfoFlags.Constant, null);
         // Reuse argument info arrays to avoid repeated allocations (CA1861)
-        private static readonly CSharpArgumentInfo[] _getMemberArgs = new[] { _thisArgument };
-        private static readonly CSharpArgumentInfo[] _setMemberArgs = new[] { _thisArgument, _valueArgument };
+        private static readonly CSharpArgumentInfo[] _getMemberArgs = [_thisArgument];
+        private static readonly CSharpArgumentInfo[] _setMemberArgs = [_thisArgument, _valueArgument];
 
         /// <summary>
         /// Builds an expression that reads a dynamic property (by <see cref="PropertyInfo"/>) from the provided <see cref="ParameterExpression"/>.

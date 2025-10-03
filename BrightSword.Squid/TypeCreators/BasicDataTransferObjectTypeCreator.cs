@@ -3,19 +3,17 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Globalization;
-
 using BrightSword.Feber.Samples;
 using BrightSword.Squid.API;
 using BrightSword.Squid.Behaviours;
 using BrightSword.SwissKnife;
-
 using INotifyPropertyChanged = BrightSword.Squid.API.INotifyPropertyChanged;
 using INotifyPropertyChanging = BrightSword.Squid.API.INotifyPropertyChanging;
 
@@ -25,15 +23,40 @@ namespace BrightSword.Squid.TypeCreators
     // These names are intentionally preserved to avoid large API/behavioral changes
     // in the reflection/emit code. We'll revisit these individually if we choose
     // to do an API-breaking rename later.
+    /// <summary>
+    /// Produces runtime-generated DTO-like implementations for interface types.
+    /// Instances created by this class can implement interfaces, inject facet interfaces,
+    /// and include behaviors such as clone support or change-tracking.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This type uses Reflection.Emit to build a concrete class at runtime that implements
+    /// the requested interface <typeparamref name="T"/>. The generated class can be
+    /// customized by overriding protected members such as <see cref="ClassOperations"/>, 
+    /// <see cref="PropertyOperations"/>, and by supplying facet interfaces via the
+    /// <see cref="FacetInterfaces"/> property.
+    /// </para>
+    /// <para>
+    /// The generator also supports a small set of behaviours (see <see cref="SpecialBehaviours"/>)
+    /// which can add methods, attributes, or other modifications to the emitted type.
+    /// </para>
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// // Create a simple implementation for an interface and get a new instance
+    /// var creator = new BasicDataTransferObjectTypeCreator<IMyDto>();
+    /// var instance = creator.CreateInstance();
+    /// // The instance is assignable to the interface
+    /// Debug.Assert(instance is IMyDto);
+    /// </code>
+    /// </example>
     public class BasicDataTransferObjectTypeCreator<T> : ITypeCreator<T>
         where T : class
     {
         protected const MethodAttributes PropertyHiddenMethodAttributes = MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig | MethodAttributes.Final | MethodAttributes.NewSlot | MethodAttributes.SpecialName;
 
         private readonly List<Func<Type, Type>> _typeMaps;
-
         private string _assemblyName;
-
         private IDictionary<PropertyInfo, PropertyBackingFieldMap> _backingFieldPropertyMap;
         private Type _baseType;
         private string _className;
@@ -41,30 +64,31 @@ namespace BrightSword.Squid.TypeCreators
         private FieldValueSetInstructionHelper _fieldValueSetInstructionHelper;
         private Func<T> _instanceFactory;
         private string _interfaceName;
-        private Type[] _interfacesWithSpecialBehaviours;
         private bool _saveAssemblyToDisk;
-        private IEnumerable<KeyValuePair<Type, IBehaviour>> _specialBehaviours;
+        private readonly IEnumerable<KeyValuePair<Type, IBehaviour>> _specialBehaviours;
         private bool _trackReadonlyPropertyInitialized;
         private Type _type;
         // Cached Type[] arrays used for reflection GetMethod calls to avoid repeated allocations (CA1861)
-    private static readonly Type[] OnPropertyChangingArgTypes = { typeof(string), typeof(Type), typeof(object), typeof(object) };
-    private static readonly Type[] GetTypeFromHandleArgTypes = { typeof(RuntimeTypeHandle) };
+        private static readonly Type[] OnPropertyChangingArgTypes = new[] { typeof(string), typeof(Type), typeof(object), typeof(object) };
+        private static readonly Type[] GetTypeFromHandleArgTypes = new[] { typeof(RuntimeTypeHandle) };
 
+        private Type[] _interfacesWithSpecialBehaviours;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BasicDataTransferObjectTypeCreator{T}"/> class
+        /// with default mapping and behaviour registration.
+        /// </summary>
         protected BasicDataTransferObjectTypeCreator()
         {
             _saveAssemblyToDisk = true;
 
             _trackReadonlyPropertyInitialized = false;
 
-            _interfaceName = typeof(T).IsInterface
-                                 ? typeof(T).PrintableName()
-                                 : String.Empty;
+            _interfaceName = typeof(T).IsInterface ? typeof(T).PrintableName() : string.Empty;
 
             _className = typeof(T).RenameToConcreteType();
 
-            _baseType = typeof(T).IsClass
-                            ? typeof(T)
-                            : typeof(Object);
+            _baseType = typeof(T).IsClass ? typeof(T) : typeof(object);
 
             _assemblyName = $"Dynamic.{GetType().GetNonGenericPartOfClassName()}.{_interfaceName}";
 
@@ -73,23 +97,22 @@ namespace BrightSword.Squid.TypeCreators
             _fieldValueSetInstructionHelper = new FieldValueSetInstructionHelper();
 
             _specialBehaviours = new[]
-                                 {
-                                     new KeyValuePair<Type, IBehaviour>(typeof(ICloneable), new CloneBehaviour())
-                                 };
+            {
+                new KeyValuePair<Type, IBehaviour>(typeof(ICloneable), new CloneBehaviour())
+            };
 
             _typeMaps = new List<Func<Type, Type>>
-                        {
-                            _ => _.MapGenericTypeIfPossible(typeof (Dictionary<,>),
-                                                            typeof (IDictionary<,>)),
-                            _ => _.MapGenericTypeIfPossible(typeof (HashSet<>),
-                                                            typeof (ISet<>)),
-                            _ => _.MapGenericTypeIfPossible(typeof (List<>),
-                                                            typeof (IList<>),
-                                                            typeof (ICollection<>),
-                                                            typeof (IEnumerable<>))
-                        };
+            {
+                t => t.MapGenericTypeIfPossible(typeof(Dictionary<,>), typeof(IDictionary<,>)),
+                t => t.MapGenericTypeIfPossible(typeof(HashSet<>), typeof(ISet<>)),
+                t => t.MapGenericTypeIfPossible(typeof(List<>), typeof(IList<>), typeof(ICollection<>), typeof(IEnumerable<>))
+            };
         }
 
+        /// <summary>
+        /// Initializes a new instance and appends user-supplied type mappers.
+        /// </summary>
+        /// <param name="userSuppliedTypeMaps">Optional type mapping functions to be used when deciding backing types.</param>
         public BasicDataTransferObjectTypeCreator(params Func<Type, Type>[] userSuppliedTypeMaps)
             : this()
         {
@@ -99,84 +122,101 @@ namespace BrightSword.Squid.TypeCreators
             }
         }
 
-        #region Configurable Properties
-
+        /// <summary>
+        /// When true, generated types include support to track initialization of read-only properties.
+        /// </summary>
         public virtual bool TrackReadonlyPropertyInitialized
         {
             get => _trackReadonlyPropertyInitialized;
             set => _trackReadonlyPropertyInitialized = value;
         }
 
+        /// <summary>
+        /// When true, assemblies may be persisted to disk by overrides of <see cref="PersistAssembly"/>.
+        /// </summary>
         public virtual bool SaveAssemblyToDisk
         {
             get => _saveAssemblyToDisk;
             set => _saveAssemblyToDisk = value;
         }
 
+        /// <summary>
+        /// Gets or sets the logical name used for the dynamic assembly used during emission.
+        /// </summary>
         public virtual string AssemblyName
         {
             get => _assemblyName;
             set => _assemblyName = value;
         }
 
+        /// <summary>
+        /// The printable interface name used for diagnostics and assembly naming.
+        /// </summary>
         public virtual string InterfaceName
         {
             get => _interfaceName;
             set => _interfaceName = value;
         }
 
+        /// <summary>
+        /// The generated class name to use when emitting the concrete type.
+        /// </summary>
         public virtual string ClassName
         {
             get => _className;
             set => _className = value;
         }
 
+        /// <summary>
+        /// The base type the emitted type will inherit from.
+        /// </summary>
         public virtual Type BaseType
         {
             get => _baseType;
             set => _baseType = value;
         }
 
+        /// <summary>
+        /// Additional facet interfaces to implement on the emitted type.
+        /// </summary>
         public virtual IEnumerable<Type> FacetInterfaces
         {
             get => _facetInterfaces;
             set => _facetInterfaces = value;
         }
 
+        /// <summary>
+        /// Helper used to generate IL instructions for setting field default values.
+        /// </summary>
         public virtual FieldValueSetInstructionHelper FieldValueSetInstructionHelper
         {
             get => _fieldValueSetInstructionHelper;
             set => _fieldValueSetInstructionHelper = value;
         }
 
+        /// <summary>
+        /// Special behaviours registered by the type creator (mapping behaviour key to behaviour instance).
+        /// </summary>
         public virtual IEnumerable<KeyValuePair<Type, IBehaviour>> SpecialBehaviours => _specialBehaviours;
 
-        #endregion
-
-        #region Overridable Properties
-
-    protected virtual IEnumerable<Func<Type, Type>> TypeMaps => _typeMaps;
+        protected virtual IEnumerable<Func<Type, Type>> TypeMaps => _typeMaps;
 
         protected virtual IDictionary<PropertyInfo, PropertyBackingFieldMap> BackingFieldProperties
         {
-            get
-            {
-                return _backingFieldPropertyMap ??= (from _propertyInfo in typeof(T).GetAllNonExcludedProperties()
-                                                                                let isReadonlyProperty = !_propertyInfo.CanWrite && _propertyInfo.GetSetMethod() == null
-                                                                                let mappedType = GetMappedType(_propertyInfo)
-                                                                                let backingFieldType = isReadonlyProperty
-                                                                                                           ? mappedType ?? _propertyInfo.PropertyType
-                                                                                                           : _propertyInfo.PropertyType
-                                                                                select new PropertyBackingFieldMap
-                                                                                {
-                                                                                    IsReadOnly = isReadonlyProperty,
-                                                                                    MappedType = mappedType,
-                                                                                    PropertyInfo = _propertyInfo,
-                                                                                    BackingFieldType = backingFieldType,
-                                                                                    BackingField = null
-                                                                                }).ToDictionary(_ => _.PropertyInfo,
-                                                                                                       _ => _);
-            }
+            get => _backingFieldPropertyMap ??= (from _propertyInfo in typeof(T).GetAllNonExcludedProperties()
+                                                 let isReadonlyProperty = !_propertyInfo.CanWrite && _propertyInfo.GetSetMethod() == null
+                                                 let mappedType = GetMappedType(_propertyInfo)
+                                                 let backingFieldType = isReadonlyProperty
+                                                                            ? mappedType ?? _propertyInfo.PropertyType
+                                                                            : _propertyInfo.PropertyType
+                                                 select new PropertyBackingFieldMap
+                                                 {
+                                                     IsReadOnly = isReadonlyProperty,
+                                                     MappedType = mappedType,
+                                                     PropertyInfo = _propertyInfo,
+                                                     BackingFieldType = backingFieldType,
+                                                     BackingField = null
+                                                 }).ToDictionary(_ => _.PropertyInfo, _ => _);
         }
 
         protected virtual IEnumerable<Func<PropertyBuilder, PropertyInfo, PropertyBuilder>> PropertyOperations
@@ -198,8 +238,7 @@ namespace BrightSword.Squid.TypeCreators
         {
             get
             {
-                yield return (builder,
-                              info) => builder.AddCustomAttribute<NonSerializedAttribute>();
+                yield return (builder, info) => builder.AddCustomAttribute<NonSerializedAttribute>();
             }
         }
 
@@ -249,17 +288,8 @@ namespace BrightSword.Squid.TypeCreators
         }
 
         protected virtual string GetBackingFieldName(PropertyInfo propertyInfo) => $"_{propertyInfo.Name.ToLowerInvariant()}";
-
-        #endregion
-
-        protected Type[] InterfacesWithSpecialBehaviours
-        {
-            get
-            {
-                return _interfacesWithSpecialBehaviours ??= SpecialBehaviours.Select(_ => _.Key)
-                                                                                                                .ToArray();
-            }
-        }
+        
+        protected Type[] InterfacesWithSpecialBehaviours => _interfacesWithSpecialBehaviours ??= SpecialBehaviours.Select(kvp => kvp.Key).ToArray();
 
         protected Type GetMappedType(PropertyInfo propertyInfo)
         {
@@ -270,25 +300,14 @@ namespace BrightSword.Squid.TypeCreators
             return mappedTypes.FirstOrDefault(_ => _ != null);
         }
 
-        #region ClassOperations
-
-        protected virtual TypeBuilder AddNonDefaultConstructors(TypeBuilder typeBuilder)
-        {
-            return typeBuilder;
-        }
-
-        #region Default Constructor
+        protected virtual TypeBuilder AddNonDefaultConstructors(TypeBuilder typeBuilder) => typeBuilder;
 
         protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsCallBaseClassConstructor
         {
             get
             {
                 yield return _ => _.Emit(OpCodes.Ldarg_0);
-                yield return _ => _.Emit(OpCodes.Call,
-                                         BaseType.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                                                                 null,
-                                                                 Type.EmptyTypes,
-                                                                 null));
+                yield return _ => _.Emit(OpCodes.Call, BaseType.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, Type.EmptyTypes, null));
             }
         }
 
@@ -344,18 +363,19 @@ namespace BrightSword.Squid.TypeCreators
                     return null;
                 }
 
-                var instructions = from property in typeof(T).GetAllProperties()
-                                   let defaultValueAttribute = property.GetCustomAttribute<DefaultValueAttribute>()
-                                   where defaultValueAttribute != null
-                                   let defaultValue = ResolveDefaultValue(property, defaultValueAttribute)
-                                   from instruction in FieldValueSetInstructionHelper.GenerateCodeToSetFieldValue(BackingFieldProperties[property].BackingField,
-                                                                                                                  defaultValue)
-                                   select instruction;
-
-                return instructions;
+                return
+                    from property in typeof(T).GetAllProperties()
+                    let defaultValueAttribute = property.GetCustomAttribute<DefaultValueAttribute>()
+                    where defaultValueAttribute != null
+                    let defaultValue = ResolveDefaultValue(property, defaultValueAttribute)
+                    from instruction in FieldValueSetInstructionHelper.GenerateCodeToSetFieldValue(BackingFieldProperties[property].BackingField, defaultValue)
+                    select instruction;
             }
         }
 
+        /// <summary>
+        /// Allows subclasses to inject arbitrary IL construction instructions into the default constructor.
+        /// </summary>
         protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsAddCustomConstructionInstructions
         {
             get
@@ -375,11 +395,7 @@ namespace BrightSword.Squid.TypeCreators
 
                 yield return _ => _.Emit(OpCodes.Ldarg_0);
                 yield return _ => _.Emit(OpCodes.Newobj,
-                                         typeof(HashSet<>).MakeGenericType(typeof(String))
-                                                           .GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                                                                           null,
-                                                                           Type.EmptyTypes,
-                                                                           null));
+                                         typeof(HashSet<string>).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, Type.EmptyTypes, null));
                 yield return _ => _.Emit(OpCodes.Stfld,
                                          InitializePropertyField);
             }
@@ -395,10 +411,7 @@ namespace BrightSword.Squid.TypeCreators
 
                     yield return _ => _.Emit(OpCodes.Ldarg_0);
                     yield return _ => _.Emit(OpCodes.Newobj,
-                                             _readonlyProperty.MappedType.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                                                                                         null,
-                                                                                         Type.EmptyTypes,
-                                                                                         null));
+                                             _readonlyProperty.MappedType.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, Type.EmptyTypes, null));
 
                     yield return _ => _.Emit(OpCodes.Stfld,
                                              _readonlyProperty.BackingField);
@@ -434,7 +447,8 @@ namespace BrightSword.Squid.TypeCreators
                 instruction(gen);
             }
 
-            foreach (var instruction in DefaultConstructorInstructionsAddCustomConstructionInstructions)
+            foreach (var instruction in DefaultConstructorInstructionsAddCustomConstructionInstructions
+            )
             {
                 instruction(gen);
             }
@@ -444,10 +458,6 @@ namespace BrightSword.Squid.TypeCreators
 
             return typeBuilder;
         }
-
-        #endregion
-
-        #region Fields
 
         protected virtual TypeBuilder AddFields(TypeBuilder typeBuilder)
         {
@@ -462,10 +472,6 @@ namespace BrightSword.Squid.TypeCreators
 
             return typeBuilder;
         }
-
-        #endregion
-
-        #region Events
 
         protected virtual TypeBuilder AddEvents(TypeBuilder typeBuilder)
         {
@@ -524,7 +530,7 @@ namespace BrightSword.Squid.TypeCreators
                                                             FieldInfo backingFieldInfo,
                                                             EventOperation operation)
         {
-            var attachOrDetachMethodName = string.Format(System.Globalization.CultureInfo.InvariantCulture,
+            var attachOrDetachMethodName = string.Format(CultureInfo.InvariantCulture,
                                                              operation == EventOperation.Attach
                                                                  ? "add_{0}"
                                                                  : "remove_{0}",
@@ -539,7 +545,7 @@ namespace BrightSword.Squid.TypeCreators
             methodBuilder.SetReturnType(typeof(void));
             methodBuilder.SetParameters(eventInfo.EventHandlerType);
 
-            methodBuilder.DefineParameter(1,
+            _ = methodBuilder.DefineParameter(1,
                                           ParameterAttributes.None,
                                           "value");
 
@@ -554,10 +560,10 @@ namespace BrightSword.Squid.TypeCreators
 
             var gen = methodBuilder.GetILGenerator();
 
-            gen.DeclareLocal(eventInfo.EventHandlerType);
-            gen.DeclareLocal(eventInfo.EventHandlerType);
-            gen.DeclareLocal(eventInfo.EventHandlerType);
-            gen.DeclareLocal(typeof(Boolean));
+            _ = gen.DeclareLocal(eventInfo.EventHandlerType);
+            _ = gen.DeclareLocal(eventInfo.EventHandlerType);
+            _ = gen.DeclareLocal(eventInfo.EventHandlerType);
+            _ = gen.DeclareLocal(typeof(bool));
 
             // Preparing labels
             var label7 = gen.DefineLabel();
@@ -576,11 +582,7 @@ namespace BrightSword.Squid.TypeCreators
                      typeof(Delegate).GetMethod(attachOrDetachDelegateName,
                                                  BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                                                  null,
-                                                 new[]
-                                                 {
-                                                     typeof (Delegate),
-                                                     typeof (Delegate)
-                                                 },
+                                                 new[] { typeof(Delegate), typeof(Delegate) },
                                                  null));
             gen.Emit(OpCodes.Castclass,
                      eventInfo.EventHandlerType);
@@ -613,10 +615,11 @@ namespace BrightSword.Squid.TypeCreators
             Detach
         }
 
-        #endregion
-
-        #region Properties
-
+        /// <summary>
+        /// Adds properties declared on the interface to the emitted type.
+        /// </summary>
+        /// <param name="typeBuilder">The active <see cref="TypeBuilder"/>.</param>
+        /// <returns>The modified <see cref="TypeBuilder"/>.</returns>
         protected virtual TypeBuilder AddProperties(TypeBuilder typeBuilder)
         {
             var props = typeof(T).GetAllNonExcludedProperties(InterfacesWithSpecialBehaviours).Where(PropertyFilter);
@@ -629,11 +632,20 @@ namespace BrightSword.Squid.TypeCreators
             return tb;
         }
 
-        protected virtual bool PropertyFilter(PropertyInfo propertyInfo)
-        {
-            return true;
-        }
+        /// <summary>
+        /// Filter invoked for each property discovered on the interface. Subclasses may override
+        /// to exclude specific properties from emission.
+        /// </summary>
+        /// <param name="propertyInfo">The property being considered.</param>
+        /// <returns>True to emit the property; false to skip it.</returns>
+        protected virtual bool PropertyFilter(PropertyInfo propertyInfo) => true;
 
+        /// <summary>
+        /// Adds a single property (get/set accessors) to the emitted type.
+        /// </summary>
+        /// <param name="typeBuilder">The active <see cref="TypeBuilder"/>.</param>
+        /// <param name="propertyInfo">The property metadata to implement.</param>
+        /// <returns>The modified <see cref="TypeBuilder"/>.</returns>
         protected virtual TypeBuilder AddProperty(TypeBuilder typeBuilder,
                                                   PropertyInfo propertyInfo)
         {
@@ -659,11 +671,18 @@ namespace BrightSword.Squid.TypeCreators
             return typeBuilder;
         }
 
+        /// <summary>
+        /// Adds the getter accessor method for a property, wiring up overrides when the
+        /// interface declares a specific method implementation requirement.
+        /// </summary>
+        /// <param name="typeBuilder">The active <see cref="TypeBuilder"/>.</param>
+        /// <param name="propertyBuilder">The property builder.</param>
+        /// <param name="propertyInfo">The property metadata.</param>
         protected virtual void AddPropertyAccessor(TypeBuilder typeBuilder,
                                                    PropertyBuilder propertyBuilder,
                                                    PropertyInfo propertyInfo)
         {
-            var methodBuilder = typeBuilder.DefineMethod(string.Format(System.Globalization.CultureInfo.InvariantCulture, "get_{0}",
+            var methodBuilder = typeBuilder.DefineMethod(string.Format(CultureInfo.InvariantCulture, "get_{0}",
                                                                        propertyInfo.Name),
                                                          PropertyHiddenMethodAttributes);
 
@@ -682,6 +701,13 @@ namespace BrightSword.Squid.TypeCreators
             }
         }
 
+        /// <summary>
+        /// Emits IL for a property getter, choosing tracked or normal accessor generation
+        /// based on the property's backing configuration.
+        /// </summary>
+        /// <param name="typeBuilder">The active <see cref="TypeBuilder"/>.</param>
+        /// <param name="methodBuilder">The getter <see cref="MethodBuilder"/>.</param>
+        /// <param name="propertyInfo">The property metadata.</param>
         protected virtual void GenerateCodeForAccessor(TypeBuilder typeBuilder,
                                                        MethodBuilder methodBuilder,
                                                        PropertyInfo propertyInfo)
@@ -703,6 +729,9 @@ namespace BrightSword.Squid.TypeCreators
             }
         }
 
+        /// <summary>
+        /// Emits a simple getter that loads and returns the backing field value.
+        /// </summary>
         protected virtual void GenerateCodeForNormalAccessor(TypeBuilder typeBuilder,
                                                              MethodBuilder methodBuilder,
                                                              PropertyInfo propertyInfo)
@@ -718,13 +747,18 @@ namespace BrightSword.Squid.TypeCreators
             gen.Emit(OpCodes.Ret);
         }
 
+        /// <summary>
+        /// Emits a getter that verifies the property has been initialized before returning
+        /// its value; throws <see cref="MethodAccessException"/> when the initialization
+        /// check fails.
+        /// </summary>
         protected virtual void GenerateCodeForTrackedAccessor(TypeBuilder typeBuilder,
                                                               MethodBuilder methodBuilder,
                                                               PropertyInfo propertyInfo)
         {
             var gen = methodBuilder.GetILGenerator();
-            gen.DeclareLocal(typeof(Int32));
-            gen.DeclareLocal(typeof(Boolean));
+            _ = gen.DeclareLocal(typeof(int));
+            _ = gen.DeclareLocal(typeof(bool));
 
             var getAndReturnValue = gen.DefineLabel();
             var exit = gen.DefineLabel();
@@ -745,10 +779,7 @@ namespace BrightSword.Squid.TypeCreators
             gen.Emit(OpCodes.Newobj,
                      typeof(MethodAccessException).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                                                                    null,
-                                                                   new[]
-                                                                   {
-                                                                       typeof (String)
-                                                                   },
+                                                                   new[] { typeof(string) },
                                                                    null));
             gen.Emit(OpCodes.Throw);
             gen.MarkLabel(getAndReturnValue);
@@ -763,6 +794,10 @@ namespace BrightSword.Squid.TypeCreators
             gen.Emit(OpCodes.Ret);
         }
 
+        /// <summary>
+        /// Adds the setter accessor for a property when the interface declares one.
+        /// Read-only mapped properties are skipped.
+        /// </summary>
         protected virtual void AddPropertyMutator(TypeBuilder typeBuilder,
                                                   PropertyBuilder propertyBuilder,
                                                   PropertyInfo propertyInfo)
@@ -774,15 +809,12 @@ namespace BrightSword.Squid.TypeCreators
                 return;
             }
 
-            var methodBuilder = typeBuilder.DefineMethod(string.Format(System.Globalization.CultureInfo.InvariantCulture, "set_{0}",
+            var methodBuilder = typeBuilder.DefineMethod(string.Format(CultureInfo.InvariantCulture, "set_{0}",
                                                                        propertyInfo.Name),
                                                          PropertyHiddenMethodAttributes,
                                                          null,
-                                                         new[]
-                                                         {
-                                                             propertyInfo.PropertyType
-                                                         });
-            methodBuilder.DefineParameter(1,
+                                                         new[] { propertyInfo.PropertyType });
+            _ = methodBuilder.DefineParameter(1,
                                           ParameterAttributes.None,
                                           "value");
 
@@ -799,6 +831,10 @@ namespace BrightSword.Squid.TypeCreators
             }
         }
 
+        /// <summary>
+        /// Chooses and emits the appropriate mutator implementation depending on read-only status
+        /// and whether change notifications are required.
+        /// </summary>
         protected virtual void GenerateCodeForMutator(TypeBuilder typeBuilder,
                                                       MethodBuilder methodBuilder,
                                                       PropertyInfo propertyInfo)
@@ -810,13 +846,11 @@ namespace BrightSword.Squid.TypeCreators
 
             Debug.Assert(!backingFieldProperty.IsReadOnly || backingFieldProperty.MappedType == null);
 
-            Action<TypeBuilder, MethodBuilder, PropertyInfo> changedTrackedMethodGenerator = (_typeBuilder,
-                                                                                              _methodBuilder,
-                                                                                              _propertyBuilder) => GenerateCodeForChangeTrackedMutator(_typeBuilder,
-                                                                                                                                                       _methodBuilder,
-                                                                                                                                                       _propertyBuilder,
-                                                                                                                                                       propertyChangingNotificationRequired,
-                                                                                                                                                       propertyChangedNotificationRequired);
+            void changedTrackedMethodGenerator(TypeBuilder _typeBuilder, MethodBuilder _methodBuilder, PropertyInfo _propertyBuilder)
+            {
+                GenerateCodeForChangeTrackedMutator(_typeBuilder, _methodBuilder, _propertyBuilder, propertyChangingNotificationRequired, propertyChangedNotificationRequired);
+            }
+
             var mutatorGenerator = backingFieldProperty.IsReadOnly
                                        ? (TrackReadonlyPropertyInitialized
                                               ? (Action<TypeBuilder, MethodBuilder, PropertyInfo>)GenerateCodeForTrackedMutator
@@ -825,11 +859,12 @@ namespace BrightSword.Squid.TypeCreators
                                              ? changedTrackedMethodGenerator
                                              : GenerateCodeForNormalMutator;
 
-            mutatorGenerator(typeBuilder,
-                             methodBuilder,
-                             propertyInfo);
+            mutatorGenerator(typeBuilder, methodBuilder, propertyInfo);
         }
 
+        /// <summary>
+        /// Emits a straightforward setter that assigns the incoming value to the backing field.
+        /// </summary>
         protected virtual void GenerateCodeForNormalMutator(TypeBuilder typeBuilder,
                                                             MethodBuilder methodBuilder,
                                                             PropertyInfo propertyInfo)
@@ -843,6 +878,9 @@ namespace BrightSword.Squid.TypeCreators
             gen.Emit(OpCodes.Ret);
         }
 
+        /// <summary>
+        /// Emits a tracked setter which records initialization for read-only properties when enabled.
+        /// </summary>
         protected virtual void GenerateCodeForTrackedMutator(TypeBuilder typeBuilder,
                                                              MethodBuilder methodBuilder,
                                                              PropertyInfo propertyInfo)
@@ -867,6 +905,10 @@ namespace BrightSword.Squid.TypeCreators
             gen.Emit(OpCodes.Ret);
         }
 
+        /// <summary>
+        /// Emits a setter that supports OnPropertyChanging and OnPropertyChanged semantics
+        /// by invoking the corresponding methods on the base type when applicable.
+        /// </summary>
         protected virtual void GenerateCodeForChangeTrackedMutator(TypeBuilder typeBuilder,
                                                                    MethodBuilder methodBuilder,
                                                                    PropertyInfo propertyInfo,
@@ -883,12 +925,12 @@ namespace BrightSword.Squid.TypeCreators
 
             if (propertyChangedNotificationRequired)
             {
-                gen.DeclareLocal(propertyInfo.PropertyType);
+                _ = gen.DeclareLocal(propertyInfo.PropertyType);
             }
 
             if (propertyChangingNotificationRequired)
             {
-                gen.DeclareLocal(typeof(Boolean));
+                _ = gen.DeclareLocal(typeof(bool));
             }
 
             var loadCurrentValueOpCode = OpCodes.Nop;
@@ -1051,10 +1093,12 @@ namespace BrightSword.Squid.TypeCreators
             gen.Emit(OpCodes.Ret);
         }
 
-        #endregion
-
-        #region Methods
-
+        /// <summary>
+        /// Adds methods declared on the interface to the emitted type. Non-special-name methods are implemented
+        /// with a default body that throws <see cref="NotImplementedException"/> unless overridden.
+        /// </summary>
+        /// <param name="typeBuilder">The active <see cref="TypeBuilder"/>.</param>
+        /// <returns>The modified <see cref="TypeBuilder"/>.</returns>
         protected virtual TypeBuilder AddMethods(TypeBuilder typeBuilder)
         {
             return typeof(T).GetAllNonExcludedMethods(InterfacesWithSpecialBehaviours)
@@ -1064,11 +1108,22 @@ namespace BrightSword.Squid.TypeCreators
                                         AddMethod);
         }
 
-        protected virtual bool MethodFilter(MethodInfo methodInfo)
-        {
-            return true;
-        }
+        /// <summary>
+        /// Filter invoked for each method discovered on the interface. Subclasses may override
+        /// to exclude or transform methods prior to emission.
+        /// </summary>
+        /// <param name="methodInfo">Method metadata being considered.</param>
+        /// <returns>True to emit the method; false to skip it.</returns>
+        protected virtual bool MethodFilter(MethodInfo methodInfo) => true;
 
+        /// <summary>
+        /// Adds a single method implementation to the emitted type. Generic method parameters
+        /// are created on the emitted method and constraints are applied to keep parity with the
+        /// interface declaration. The default body raises <see cref="NotImplementedException"/>.
+        /// </summary>
+        /// <param name="typeBuilder">The active <see cref="TypeBuilder"/>.</param>
+        /// <param name="methodInfo">Metadata describing the method to implement.</param>
+        /// <returns>The modified <see cref="TypeBuilder"/>.</returns>
         protected virtual TypeBuilder AddMethod(TypeBuilder typeBuilder,
                                                 MethodInfo methodInfo)
         {
@@ -1079,8 +1134,7 @@ namespace BrightSword.Squid.TypeCreators
             {
                 var genericArguments = methodInfo.GetGenericArguments();
 
-                var genericTypeParameterBuilders = methodBuilder.DefineGenericParameters(genericArguments.Select(_ => _.Name)
-                                                                                                         .ToArray());
+                var genericTypeParameterBuilders = methodBuilder.DefineGenericParameters(genericArguments.Select(_ => _.Name).ToArray());
 
                 foreach (var typeParameter in genericTypeParameterBuilders)
                 {
@@ -1090,8 +1144,7 @@ namespace BrightSword.Squid.TypeCreators
                     var parameterConstraints = genericArgument.GetGenericParameterConstraints();
 
                     var baseTypeConstraint = parameterConstraints.FirstOrDefault(_ => _.IsClass);
-                    var interfaceConstraints = parameterConstraints.Where(_ => _.IsInterface)
-                                                                   .ToArray();
+                    var interfaceConstraints = parameterConstraints.Where(_ => _.IsInterface).ToArray();
 
                     if (baseTypeConstraint != null)
                     {
@@ -1104,9 +1157,7 @@ namespace BrightSword.Squid.TypeCreators
 
             methodBuilder.SetReturnType(methodInfo.ReturnType);
 
-            methodBuilder.SetParameters(methodInfo.GetParameters()
-                                                  .Select(_ => _.ParameterType)
-                                                  .ToArray());
+            methodBuilder.SetParameters(methodInfo.GetParameters().Select(p => p.ParameterType).ToArray());
 
             foreach (var param in methodInfo.GetParameters()
                                             .OrderBy(_ => _.Position))
@@ -1119,20 +1170,11 @@ namespace BrightSword.Squid.TypeCreators
 
                 if (param.IsOut)
                 {
-                    _p.SetCustomAttribute(new CustomAttributeBuilder(typeof(OutAttribute).GetConstructor(parameterBindingFlags,
-                                                                                                          null,
-                                                                                                          Type.EmptyTypes,
-                                                                                                          null),
-                                                                     []));
+                    _p.SetCustomAttribute(new CustomAttributeBuilder(typeof(OutAttribute).GetConstructor(parameterBindingFlags, null, Type.EmptyTypes, null), Array.Empty<object>()));
                 }
-                else if (param.IsDefined(typeof(ParamArrayAttribute),
-                                         false))
+                else if (param.IsDefined(typeof(ParamArrayAttribute), false))
                 {
-                    _p.SetCustomAttribute(new CustomAttributeBuilder(typeof(ParamArrayAttribute).GetConstructor(parameterBindingFlags,
-                                                                                                                 null,
-                                                                                                                 Type.EmptyTypes,
-                                                                                                                 null),
-                                                                     []));
+                    _p.SetCustomAttribute(new CustomAttributeBuilder(typeof(ParamArrayAttribute).GetConstructor(parameterBindingFlags, null, Type.EmptyTypes, null), Array.Empty<object>()));
                 }
             }
 
@@ -1140,13 +1182,17 @@ namespace BrightSword.Squid.TypeCreators
 
             foreach (var op in MethodOperations)
             {
-                methodBuilder = op(methodBuilder,
-                                    methodInfo);
+                methodBuilder = op(methodBuilder, methodInfo);
             }
 
             return typeBuilder;
         }
 
+        /// <summary>
+        /// Default method body generator that throws <see cref="NotImplementedException"/>.
+        /// Subclasses can override to provide custom method bodies.
+        /// </summary>
+        /// <param name="methodBuilder">The method builder for the method body to generate.</param>
         protected virtual void GenerateMethodBody(MethodBuilder methodBuilder)
         {
             var gen = methodBuilder.GetILGenerator();
@@ -1154,50 +1200,55 @@ namespace BrightSword.Squid.TypeCreators
             // Writing body
             gen.Emit(OpCodes.Nop);
             gen.Emit(OpCodes.Newobj,
-                     typeof(NotImplementedException).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                                                                     null,
-                                                                     Type.EmptyTypes,
-                                                                     null));
+                     typeof(NotImplementedException).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, Type.EmptyTypes, null));
             gen.Emit(OpCodes.Throw);
         }
 
-        #endregion
-
-        #region TrackReadonlyPropertyInitialization
-
+        /// <summary>
+        /// Field used by the emitted type to store the set of initialized read-only properties.
+        /// This is populated by <see cref="AddInitializePropertyTrackingSupport"/> when enabled.
+        /// </summary>
         protected FieldBuilder InitializePropertyField { get; private set; }
 
+        /// <summary>
+        /// Method builder reference for the emitted InitializePropertyValue method.
+        /// </summary>
         protected MethodBuilder InitializePropertyValueMethod { get; private set; }
 
+        /// <summary>
+        /// Method builder reference for the emitted IsPropertyValueInitialized method.
+        /// </summary>
         protected MethodBuilder IsPropertyValueInitializedMethod { get; private set; }
 
+        /// <summary>
+        /// Adds support to the emitted type to track initialization of read-only properties.
+        /// This will create a backing HashSet and helper methods used by tracked accessors/mutators.
+        /// </summary>
+        /// <param name="typeBuilder">The active <see cref="TypeBuilder"/>.</param>
+        /// <returns>The modified <see cref="TypeBuilder"/>.</returns>
         protected TypeBuilder AddInitializePropertyTrackingSupport(TypeBuilder typeBuilder)
         {
             Debug.Assert(TrackReadonlyPropertyInitialized);
 
             InitializePropertyField = BuildField_InitializedProperties(typeBuilder);
-
-            InitializePropertyValueMethod = BuildMethodInitializePropertyValue(typeBuilder,
-                                                                               InitializePropertyField);
-
-            IsPropertyValueInitializedMethod = BuildMethodIsPropertyValueInitialized(typeBuilder,
-                                                                                     InitializePropertyField);
+            InitializePropertyValueMethod = BuildMethodInitializePropertyValue(typeBuilder, InitializePropertyField);
+            IsPropertyValueInitializedMethod = BuildMethodIsPropertyValueInitialized(typeBuilder, InitializePropertyField);
 
             return typeBuilder;
         }
 
+        /// <summary>
+        /// Builds the helper method that marks a property as initialized at runtime.
+        /// </summary>
         private static MethodBuilder BuildMethodInitializePropertyValue(TypeBuilder type,
                                                                         FieldInfo initializedPropertiesField)
         {
             var method = type.DefineMethod("InitializePropertyValue",
                                            MethodAttributes.Family | MethodAttributes.HideBySig,
                                            typeof(void),
-                                           new[]
-                                           {
-                                               typeof (string)
-                                           });
+                                           new[] { typeof(string) });
 
-            method.DefineParameter(1,
+            _ = method.DefineParameter(1,
                                    ParameterAttributes.None,
                                    "propertyName");
 
@@ -1209,36 +1260,25 @@ namespace BrightSword.Squid.TypeCreators
                      initializedPropertiesField);
             gen.Emit(OpCodes.Ldarg_1);
             gen.Emit(OpCodes.Callvirt,
-                     typeof(HashSet<>).MakeGenericType(typeof(string))
-                                       .GetMethod("Add",
-                                                  BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                                                  null,
-                                                  new[]
-                                                  {
-                                                      typeof (string)
-                                                  },
-                                                  null));
+                     typeof(HashSet<string>).GetMethod("Add", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new[] { typeof(string) }, null));
             gen.Emit(OpCodes.Pop);
             gen.Emit(OpCodes.Ret);
             return method;
         }
 
+        /// <summary>
+        /// Builds the helper method that checks whether a property has been marked initialized.
+        /// </summary>
         private static MethodBuilder BuildMethodIsPropertyValueInitialized(TypeBuilder type,
                                                                            FieldInfo initializedPropertiesField)
         {
             var method = type.DefineMethod("IsPropertyValueInitialized",
                                            MethodAttributes.Family | MethodAttributes.HideBySig,
-                                           typeof(Boolean),
-                                           new[]
-                                           {
-                                               typeof (String)
-                                           });
-            method.DefineParameter(1,
-                                   ParameterAttributes.None,
-                                   "propertyName");
+                                           typeof(bool),
+                                           new[] { typeof(string) });
+            _ = method.DefineParameter(1, ParameterAttributes.None, "propertyName");
             var gen = method.GetILGenerator();
-
-            gen.DeclareLocal(typeof(Boolean));
+            _ = gen.DeclareLocal(typeof(bool));
 
             var label16 = gen.DefineLabel();
 
@@ -1248,15 +1288,8 @@ namespace BrightSword.Squid.TypeCreators
                      initializedPropertiesField);
             gen.Emit(OpCodes.Ldarg_1);
             gen.Emit(OpCodes.Callvirt,
-                     typeof(HashSet<>).MakeGenericType(typeof(String))
-                                       .GetMethod("Contains",
-                                                  BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                                                  null,
-                                                  new[]
-                                                  {
-                                                      typeof (string)
-                                                  },
-                                                  null));
+                     typeof(HashSet<string>)
+                        .GetMethod("Contains", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new[] { typeof(string) }, null));
             gen.Emit(OpCodes.Stloc_0);
             gen.Emit(OpCodes.Br_S,
                      label16);
@@ -1267,34 +1300,37 @@ namespace BrightSword.Squid.TypeCreators
             return method;
         }
 
-        private static FieldBuilder BuildField_InitializedProperties(TypeBuilder type)
-        {
-            return type.DefineField("_initializedProperties",
-                                    typeof(HashSet<>).MakeGenericType(typeof(String)),
-                                    FieldAttributes.Private);
-        }
+        /// <summary>
+        /// Builds the private field used to store initialized property names.
+        /// </summary>
+        private static FieldBuilder BuildField_InitializedProperties(TypeBuilder type) => type.DefineField("_initializedProperties", typeof(HashSet<string>), FieldAttributes.Private);
 
-        #endregion
-
-        #endregion
-
-        #region Instance Creation
-
+        /// <summary>
+        /// Caches and returns a factory delegate that constructs instances of the emitted type.
+        /// </summary>
         protected virtual Func<T> InstanceFactory => _instanceFactory ??= BuildInstanceFactory();
 
+        /// <summary>
+        /// Creates a new instance of <typeparamref name="T"/>. When <paramref name="source"/> is supplied the method maps dynamic values into the created instance using <see cref="FastMapper{T}"/>.
+        /// </summary>
+        /// <param name="source">Optional dynamic source object to map values from.</param>
+        /// <returns>A new instance of the generated or concrete type.</returns>
         public virtual T CreateInstance(dynamic source = null)
         {
             var result = InstanceFactory();
 
             if (source != null)
             {
-                FastMapper<T>.MapDynamicToStatic(source,
-                                                 result);
+                FastMapper<T>.MapDynamicToStatic(source, result);
             }
 
             return result;
         }
 
+        /// <summary>
+        /// Builds a simple compiled lambda factory that invokes the parameterless constructor of the generated type.
+        /// </summary>
+        /// <returns>A delegate that constructs instances of <typeparamref name="T"/>.</returns>
         protected virtual Func<T> BuildInstanceFactory()
         {
             var ctor = Type.GetConstructor(Type.EmptyTypes);
@@ -1305,15 +1341,15 @@ namespace BrightSword.Squid.TypeCreators
             return (Func<T>)lambda.Compile();
         }
 
-        #endregion
+        /// <summary>
+        /// Lazily returns the runtime <see cref="Type"/> generated for <typeparamref name="T"/>. Accessing this will trigger type emission on first use.
+        /// </summary>
+        public virtual Type Type => _type ??= BuildType();
 
-        #region Type Creation
-
-        public virtual Type Type
-        {
-            get { return _type ??= BuildType(); }
-        }
-
+        /// <summary>
+        /// Builds and returns the concrete emitted <see cref="Type"/> for the interface <typeparamref name="T"/>.
+        /// If <typeparamref name="T"/> is already a class type the method returns <typeparamref name="T"/> unchanged.
+        /// </summary>
         protected virtual Type BuildType()
         {
             if (typeof(T).IsClass)
@@ -1339,25 +1375,30 @@ namespace BrightSword.Squid.TypeCreators
             }
         }
 
-        protected virtual ModuleBuilder GetModuleBuilder(AssemblyBuilder assemblyBuilder)
-        {
-            // In .NET Core / .NET 5+ the DefineDynamicModule overload that accepts a file name is available
-            // on the AssemblyBuilder returned by DefineDynamicAssembly when emitting to disk is supported.
-            return assemblyBuilder.DefineDynamicModule(AssemblyName);
-        }
+        /// <summary>
+        /// Obtains the module builder used for emission. Subclasses can override to influence module naming.
+        /// </summary>
+        /// <param name="assemblyBuilder">The assembly builder being used to emit types.</param>
+        /// <returns>A <see cref="ModuleBuilder"/> used to create types.</returns>
+        protected virtual ModuleBuilder GetModuleBuilder(AssemblyBuilder assemblyBuilder) => assemblyBuilder.DefineDynamicModule(AssemblyName);
 
-        protected virtual string GetAssemblyDllName()
-        {
-            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0}.dll",
-                                 AssemblyName);
-        }
+        /// <summary>
+        /// Returns a DLL filename for the dynamic assembly when persisted to disk.
+        /// </summary>
+        protected virtual string GetAssemblyDllName() => string.Format(CultureInfo.InvariantCulture, "{0}.dll", AssemblyName);
 
-        protected virtual AssemblyBuilder GetAssemblyBuilder(AssemblyName assemblyName)
-        {
-            // Use the modern API to define a dynamic assembly
-            return AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
-        }
+        /// <summary>
+        /// Creates the <see cref="AssemblyBuilder"/> used to host emitted types. Override to change assembly access or attributes.
+        /// </summary>
+        /// <param name="assemblyName">The logical assembly name to define.</param>
+        /// <returns>An <see cref="AssemblyBuilder"/> configured for runtime emission.</returns>
+        protected virtual AssemblyBuilder GetAssemblyBuilder(AssemblyName assemblyName) => AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
 
+        /// <summary>
+        /// Persist the generated assembly to disk. Default implementation is a no-op because not all runtimes support saving.
+        /// Subclasses can override to implement actual persistence when supported.
+        /// </summary>
+        /// <param name="assemblyBuilder">The assembly builder that was used to create the type.</param>
         [ExcludeFromCodeCoverage]
         protected virtual void PersistAssembly(AssemblyBuilder assemblyBuilder)
         {
@@ -1367,6 +1408,11 @@ namespace BrightSword.Squid.TypeCreators
             return;
         }
 
+        /// <summary>
+        /// Constructs the <see cref="TypeBuilder"/> for the emitted type and applies all configured behaviours, interfaces and class operations.
+        /// </summary>
+        /// <param name="moduleBuilder">The module builder used to define the type.</param>
+        /// <returns>The constructed <see cref="TypeBuilder"/> ready to call <c>CreateType()</c> on.</returns>
         protected virtual TypeBuilder BuildTypeBuilder(ModuleBuilder moduleBuilder)
         {
             var implementedInterfaces = ImplementedInterfaces.ToArray();
@@ -1376,10 +1422,7 @@ namespace BrightSword.Squid.TypeCreators
                                                        BaseType,
                                                        implementedInterfaces);
 
-            var applicableInterfaces = FacetInterfaces.Union(new[]
-                                                             {
-                                                                 typeof (T)
-                                                             });
+            var applicableInterfaces = FacetInterfaces.Union(new[] { typeof(T) });
 
             var behaviourOperations = from behaviour in SpecialBehaviours
                                       from _interface in applicableInterfaces
@@ -1387,25 +1430,34 @@ namespace BrightSword.Squid.TypeCreators
                                       from operation in behaviour.Value.Operations
                                       select operation;
 
-            typeBuilder = behaviourOperations.Aggregate(typeBuilder,
-                                                        (_typeBuilder,
-                                                         _function) => _function(_typeBuilder));
+            typeBuilder = behaviourOperations.Aggregate(typeBuilder, (_typeBuilder, _function) => _function(_typeBuilder));
 
-            return ClassOperations.Aggregate(typeBuilder,
-                                             (_typeBuilder,
-                                              _function) => _function(_typeBuilder));
+            return ClassOperations.Aggregate(typeBuilder, (_typeBuilder, _function) => _function(_typeBuilder));
         }
-
-        #endregion
     }
 
+    /// <summary>
+    /// Mapping information used internally by the type creator to associate a declared property with a backing field on the emitted type.
+    /// </summary>
+    /// <remarks>
+    /// Instances of this type track whether the property is read-only from the interface's perspective, the concrete backing field type used for storage, the optional mapped type for get-only mapped properties, and the runtime FieldBuilder that represents the field once the type is being emitted.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// // The type creator populates a dictionary keyed by PropertyInfo mapping to PropertyBackingFieldMap
+    /// var map = creator.BackingFieldProperties;
+    /// foreach (var kv in map)
+    /// {
+    ///     Console.WriteLine(kv.Key.Name + " -> " + kv.Value.BackingFieldType.Name);
+    /// }
+    /// </code>
+    /// </example>
     public class PropertyBackingFieldMap
     {
         public bool IsReadOnly { get; set; }
         public Type BackingFieldType { get; set; }
         public PropertyInfo PropertyInfo { get; set; }
         public Type MappedType { get; set; }
-        //public Func<TypeBuilder, FieldBuilder> BackingFieldGenerator { get; set; }
         public FieldBuilder BackingField { get; set; }
     }
 }
