@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
-using Microsoft.CSharp.RuntimeBinder;
+using System.ComponentModel;
+// Microsoft.CSharp.RuntimeBinder removed: use explicit type-based dispatch instead of dynamic
 
 namespace BrightSword.Squid.Behaviours
 {
@@ -15,7 +16,7 @@ namespace BrightSword.Squid.Behaviours
     public class FieldValueSetInstructionHelper
     {
         // Cached parameter type arrays to avoid repeated allocations (CA1861)
-        private static readonly Type[] GetTypeFromHandleArgTypes = new[] { typeof(RuntimeTypeHandle) };
+    private static readonly Type[] GetTypeFromHandleArgTypes = { typeof(RuntimeTypeHandle) };
         private static readonly MethodInfo GetTypeFromHandleMethod = typeof(Type).GetMethod(nameof(Type.GetTypeFromHandle), BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, null, GetTypeFromHandleArgTypes, null);
 
         /// <summary>
@@ -29,15 +30,120 @@ namespace BrightSword.Squid.Behaviours
                 ArgumentNullException.ThrowIfNull(field);
             }
 
-            try
+            // Handle nulls explicitly: reference types may accept null, value types do not here.
+            if (value == null)
             {
-                return GenerateCode(field,
-                                    (dynamic)value);
+                if (field.FieldType.IsValueType)
+                {
+                    throw new NotSupportedException($"Cannot set default value for {field.Name}");
+                }
+
+                return new[]
+                {
+                    (Action<ILGenerator>)(_ => _.Emit(OpCodes.Ldarg_0)),
+                    _ => _.Emit(OpCodes.Ldnull),
+                    _ => _.Emit(OpCodes.Stfld, field)
+                };
             }
-            catch (RuntimeBinderException)
+
+            var valueType = value.GetType();
+
+            if (value is bool b) { return GenerateCode(field, b); }
+            if (value is char c) { return GenerateCode(field, c); }
+            if (value is float f) { return GenerateCode(field, f); }
+            if (value is double d) { return GenerateCode(field, d); }
+            if (value is long l) { return GenerateCode(field, l); }
+            if (value is decimal m) { return GenerateCode(field, m); }
+            if (value is string s)
             {
+                if (field.FieldType == typeof(string))
+                {
+                    return GenerateCode(field, s);
+                }
+
+                // Try using a TypeConverter to convert the string into the target field type.
+                var converter = TypeDescriptor.GetConverter(field.FieldType);
+                if (converter != null && converter.CanConvertFrom(typeof(string)))
+                {
+                    try
+                    {
+                        var converted = converter.ConvertFrom(null, CultureInfo.InvariantCulture, s);
+                        if (converted != null)
+                        {
+                            return GenerateCodeToSetFieldValue(field, converted);
+                        }
+                    }
+                    catch
+                    {
+                        // fall through to NotSupported
+                    }
+                }
+
                 throw new NotSupportedException($"Cannot set default value for {field.Name}");
             }
+            if (value is Type t) { return GenerateCode(field, t); }
+
+            if (valueType.IsEnum) { return GenerateCode(field, (Enum)value); }
+
+            // Numeric types that fit into Int64
+            if (value is sbyte || value is byte || value is short || value is ushort || value is int || value is uint)
+            {
+                try
+                {
+                    var asLong = Convert.ToInt64(value, CultureInfo.InvariantCulture);
+                    return GenerateCode(field, asLong);
+                }
+                catch (OverflowException)
+                {
+                    throw new NotSupportedException($"Cannot set default value for {field.Name}");
+                }
+            }
+
+            if (value is IList<int> ints)
+            {
+                return GenerateCode(field, ints);
+            }
+
+            if (value is IList<string> strings)
+            {
+                return GenerateCode(field, strings);
+            }
+
+            // Fallback: only try to convert for simple target types (numbers, enum, string, decimal, Type, arrays, IList<int>/IList<string>)
+            static bool IsSimpleTarget(Type t)
+            {
+                if (t.IsPrimitive || t.IsEnum) return true;
+                if (t == typeof(decimal) || t == typeof(string) || t == typeof(Type)) return true;
+                if (t.IsArray) return true;
+                if (typeof(IList<int>).IsAssignableFrom(t) || typeof(IList<string>).IsAssignableFrom(t)) return true;
+                return false;
+            }
+
+            if (IsSimpleTarget(field.FieldType))
+            {
+                try
+                {
+                    if (value is IConvertible)
+                    {
+                        var converted = Convert.ChangeType(value, field.FieldType, CultureInfo.InvariantCulture);
+                        if (converted != null && converted.GetType() != valueType)
+                        {
+                            return GenerateCodeToSetFieldValue(field, converted);
+                        }
+                    }
+                }
+                catch
+                {
+                    // Ignore conversion errors and fall through to NotSupported
+                }
+            }
+            else
+            {
+                // For complex target types we don't attempt conversions; preserve original "not supported" behavior.
+                throw new NotSupportedException($"Cannot set default value for {field.Name}");
+            }
+
+            throw new NotSupportedException($"Cannot set default value for {field.Name}");
         }
 
         protected virtual IEnumerable<Action<ILGenerator>> GenerateCode(FieldInfo field,
@@ -225,7 +331,7 @@ namespace BrightSword.Squid.Behaviours
         {
             return GenerateCodeForArray(value,
                                         field,
-                                        _item => new Action<ILGenerator>[] { _ => _.Emit(OpCodes.Ldc_I4, _item), _ => _.Emit(OpCodes.Stelem_I4) });
+                                        _item => new[] { (Action<ILGenerator>)(_ => _.Emit(OpCodes.Ldc_I4, _item)), _ => _.Emit(OpCodes.Stelem_I4) });
         }
 
         protected virtual IEnumerable<Action<ILGenerator>> GenerateCode(FieldInfo field,
@@ -233,7 +339,7 @@ namespace BrightSword.Squid.Behaviours
         {
             return GenerateCodeForArray(value,
                                         field,
-                                        _item => new Action<ILGenerator>[] { _ => _.Emit(OpCodes.Ldstr, _item), _ => _.Emit(OpCodes.Stelem_Ref) });
+                                        _item => new[] { (Action<ILGenerator>)(_ => _.Emit(OpCodes.Ldstr, _item)), _ => _.Emit(OpCodes.Stelem_Ref) });
         }
     }
 }

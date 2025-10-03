@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Globalization;
 
 using BrightSword.Feber.Samples;
 using BrightSword.Squid.API;
@@ -46,8 +47,8 @@ namespace BrightSword.Squid.TypeCreators
         private bool _trackReadonlyPropertyInitialized;
         private Type _type;
         // Cached Type[] arrays used for reflection GetMethod calls to avoid repeated allocations (CA1861)
-    private static readonly Type[] OnPropertyChangingArgTypes = new[] { typeof(string), typeof(Type), typeof(object), typeof(object) };
-    private static readonly Type[] GetTypeFromHandleArgTypes = new[] { typeof(RuntimeTypeHandle) };
+    private static readonly Type[] OnPropertyChangingArgTypes = { typeof(string), typeof(Type), typeof(object), typeof(object) };
+    private static readonly Type[] GetTypeFromHandleArgTypes = { typeof(RuntimeTypeHandle) };
 
         protected BasicDataTransferObjectTypeCreator()
         {
@@ -295,10 +296,58 @@ namespace BrightSword.Squid.TypeCreators
         {
             get
             {
+                object ResolveDefaultValue(PropertyInfo property, DefaultValueAttribute attribute)
+                {
+                    // If the attribute exposes a value directly, use it
+                    if (attribute.Value != null)
+                    {
+                        return attribute.Value;
+                    }
+
+                    // If no public Value is available, attempt to inspect the attribute constructor args
+                    // to support the (Type, string) constructor. If we can convert the string to the
+                    // target property type via a TypeConverter, return the converted value. Otherwise
+                    // treat this as an unsupported default and throw NotSupportedException so that
+                    // type creation fails (matching legacy behavior expected by the tests).
+                    var cad = CustomAttributeData.GetCustomAttributes(property).FirstOrDefault(a => a.AttributeType == typeof(DefaultValueAttribute));
+                    if (cad != null && cad.ConstructorArguments.Count == 2)
+                    {
+                        var ctorArg0 = cad.ConstructorArguments[0];
+                        var ctorArg1 = cad.ConstructorArguments[1];
+
+                        if (ctorArg0.ArgumentType == typeof(Type) && ctorArg1.ArgumentType == typeof(string))
+                        {
+                            var targetType = ctorArg0.Value as Type;
+                            var text = ctorArg1.Value as string;
+
+                            // Try converting the string to the property's mapped/backing type
+                            var propertyTargetType = BackingFieldProperties[property].BackingFieldType;
+                            var converter = TypeDescriptor.GetConverter(propertyTargetType);
+                            if (converter != null && converter.CanConvertFrom(typeof(string)))
+                            {
+                                try
+                                {
+                                    return converter.ConvertFrom(null, CultureInfo.InvariantCulture, text);
+                                }
+                                catch
+                                {
+                                    throw new NotSupportedException($"Cannot set default value for {property.Name}");
+                                }
+                            }
+
+                            // No suitable converter -> unsupported
+                            throw new NotSupportedException($"Cannot set default value for {property.Name}");
+                        }
+                    }
+
+                    // No public value and no convertible ctor-data -> treat as null
+                    return null;
+                }
+
                 var instructions = from property in typeof(T).GetAllProperties()
                                    let defaultValueAttribute = property.GetCustomAttribute<DefaultValueAttribute>()
                                    where defaultValueAttribute != null
-                                   let defaultValue = defaultValueAttribute.Value
+                                   let defaultValue = ResolveDefaultValue(property, defaultValueAttribute)
                                    from instruction in FieldValueSetInstructionHelper.GenerateCodeToSetFieldValue(BackingFieldProperties[property].BackingField,
                                                                                                                   defaultValue)
                                    select instruction;
