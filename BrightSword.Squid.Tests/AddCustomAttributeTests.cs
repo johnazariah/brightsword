@@ -18,14 +18,14 @@ namespace Tests.BrightSword.Squid
     public class AddCustomAttributeTests
     {
         [TestMethod]
-        public void Test_AttributesOnTypeAreSet()
+    public void TestAttributesOnTypeAreSet()
         {
             var type = new AttributeDecorator<IComprehensive>().Type;
             Assert.IsNotNull(type.GetCustomAttribute<TestAttribute>());
         }
 
         [TestMethod]
-        public void Test_AttributesOnPropertiesAreSet()
+    public void TestAttributesOnPropertiesAreSet()
         {
             var type = new AttributeDecorator<IComprehensive>().Type;
             foreach (var member in type.GetAllProperties())
@@ -36,7 +36,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_AttributesOnMethodsAreSet()
+    public void TestAttributesOnMethodsAreSet()
         {
             var type = new AttributeDecorator<IComprehensive>().Type;
             foreach (var member in type.GetAllMethods()
@@ -48,7 +48,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_AttributesOnEventsAreSet()
+    public void TestAttributesOnEventsAreSet()
         {
             var type = new AttributeDecorator<IComprehensive>().Type;
             foreach (var member in type.GetAllEvents())
@@ -58,7 +58,7 @@ namespace Tests.BrightSword.Squid
             }
         }
 
-        private class AttributeDecorator<T> : BasicDataTransferObjectTypeCreator<T>
+    private sealed class AttributeDecorator<T> : BasicDataTransferObjectTypeCreator<T>
             where T : class
         {
             protected override IEnumerable<Func<TypeBuilder, TypeBuilder>> CustomClassOperations

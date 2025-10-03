@@ -4,11 +4,15 @@ using System.Reflection;
 using System.Reflection.Emit;
 
 using Microsoft.CSharp.RuntimeBinder;
+using System.Globalization;
 
 namespace BrightSword.Squid.Behaviours
 {
     public class FieldValueSetInstructionHelper
     {
+    // Cached parameter type arrays to avoid repeated allocations (CA1861)
+    private static readonly Type[] GetTypeFromHandleArgTypes = new[] { typeof(RuntimeTypeHandle) };
+
         internal IEnumerable<Action<ILGenerator>> GenerateCodeToSetFieldValue(FieldInfo field,
                                                                               object value)
         {
@@ -19,7 +23,7 @@ namespace BrightSword.Squid.Behaviours
             }
             catch (RuntimeBinderException)
             {
-                throw new NotSupportedException(String.Format("Cannot set default value for {0}",
+                throw new NotSupportedException(string.Format(System.Globalization.CultureInfo.InvariantCulture, "Cannot set default value for {0}",
                                                               field.Name));
             }
         }
@@ -156,7 +160,8 @@ namespace BrightSword.Squid.Behaviours
             yield return _ => _.Emit(OpCodes.Ldarg_0);
 
             yield return GenerateCodeToWriteIntegralValue((long) Convert.ChangeType(value,
-                                                                                    typeof (long)));
+                                                                                    typeof (long),
+                                                                                    CultureInfo.InvariantCulture));
 
             yield return _ => _.Emit(OpCodes.Stfld,
                                      field);
@@ -172,10 +177,7 @@ namespace BrightSword.Squid.Behaviours
                                      typeof (Type).GetMethod("GetTypeFromHandle",
                                                              BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                                                              null,
-                                                             new[]
-                                                             {
-                                                                 typeof (RuntimeTypeHandle)
-                                                             },
+                                                             GetTypeFromHandleArgTypes,
                                                              null));
             yield return _ => _.Emit(OpCodes.Stfld,
                                      field);

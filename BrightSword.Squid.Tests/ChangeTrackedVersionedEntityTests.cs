@@ -12,7 +12,7 @@ namespace Tests.BrightSword.Squid
     public class ChangeTrackedPropertyTypeTests
     {
         [TestMethod]
-        public void Given_APropertyChangesOnAnObject_Then_TheChangedPropertiesDictionaryShouldRegisterThatChange()
+    public void GivenAPropertyChangesOnAnObjectThenTheChangedPropertiesDictionaryShouldRegisterThatChange()
         {
             var creator = new PropertyChangingNotificationSinkTypeCreator<INonGenericInterfaceWithNonGenericProperties>();
             var instance = creator.CreateInstance();
@@ -39,7 +39,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_DynamicChangeTrackedPropertyTypeIsPropertyChangingNotificationSink()
+    public void TestDynamicChangeTrackedPropertyTypeIsPropertyChangingNotificationSink()
         {
             var actual = Dynamic<IInterfaceExtendingAnother, PropertyChangingNotificationSinkTypeCreator<IInterfaceExtendingAnother>>.NewInstance();
 

@@ -13,7 +13,7 @@ namespace Tests.BrightSword.Squid
     public class FacetInjectionTests
     {
         [TestMethod]
-        public void Test_FacetsAreInjectedProperly()
+    public void TestFacetsAreInjectedProperly()
         {
             var actual = new FacetInjectingTypeCreator<INonGenericInterfaceWithNonGenericProperties>().CreateInstance();
 
@@ -24,7 +24,7 @@ namespace Tests.BrightSword.Squid
                                     typeof (IFacet));
         }
 
-        private class FacetInjectingTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
+    private sealed class FacetInjectingTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
             where T : class
         {
             public override IEnumerable<Type> FacetInterfaces

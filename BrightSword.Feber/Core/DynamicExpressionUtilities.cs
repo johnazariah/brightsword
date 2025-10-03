@@ -9,6 +9,9 @@ namespace BrightSword.Feber.Core
     {
         private static readonly CSharpArgumentInfo _thisArgument = CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.None, null);
         private static readonly CSharpArgumentInfo _valueArgument = CSharpArgumentInfo.Create(CSharpArgumentInfoFlags.UseCompileTimeType | CSharpArgumentInfoFlags.Constant, null);
+        // Reuse argument info arrays to avoid repeated allocations (CA1861)
+        private static readonly CSharpArgumentInfo[] _getMemberArgs = new[] { _thisArgument };
+        private static readonly CSharpArgumentInfo[] _setMemberArgs = new[] { _thisArgument, _valueArgument };
 
         /// <summary>
         /// Builds an expression that reads a dynamic property (by <see cref="PropertyInfo"/>) from the provided <see cref="ParameterExpression"/>.
@@ -39,7 +42,7 @@ namespace BrightSword.Feber.Core
         /// <returns>An <see cref="Expression"/> that reads the named dynamic property and converts it to the specified type.</returns>
         public static Expression GetDynamicPropertyAccessorExpression<T>(this ParameterExpression parameterExpression, string propertyName, Type propertyType)
         {
-            var callSiteBinder = Microsoft.CSharp.RuntimeBinder.Binder.GetMember(CSharpBinderFlags.InvokeSpecialName, propertyName, typeof(T), new[] { _thisArgument });
+            var callSiteBinder = Microsoft.CSharp.RuntimeBinder.Binder.GetMember(CSharpBinderFlags.InvokeSpecialName, propertyName, typeof(T), _getMemberArgs);
             var dyn = Expression.Dynamic(callSiteBinder, typeof(object), parameterExpression);
             return Expression.Convert(dyn, propertyType);
         }
@@ -65,7 +68,7 @@ namespace BrightSword.Feber.Core
         /// <returns>An <see cref="Expression"/> representing the dynamic set-member call.</returns>
         public static Expression GetDynamicPropertyMutatorExpression<T>(this ParameterExpression parameterExpression, string propertyName, Expression valueExpression)
         {
-            var callSiteBinder = Microsoft.CSharp.RuntimeBinder.Binder.SetMember(CSharpBinderFlags.InvokeSpecialName | CSharpBinderFlags.ResultDiscarded, propertyName, typeof(T), new[] { _thisArgument, _valueArgument });
+            var callSiteBinder = Microsoft.CSharp.RuntimeBinder.Binder.SetMember(CSharpBinderFlags.InvokeSpecialName | CSharpBinderFlags.ResultDiscarded, propertyName, typeof(T), _setMemberArgs);
             return Expression.Dynamic(callSiteBinder, typeof(object), parameterExpression, valueExpression);
         }
     }

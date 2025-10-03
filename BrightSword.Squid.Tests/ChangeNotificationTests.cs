@@ -1,14 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.ComponentModel;
 
+using BrightSword.Squid;
 using BrightSword.Squid.TypeCreators;
+using BrightSword.SwissKnife;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Tests.BrightSword.Squid.core;
-
 using INotifyPropertyChanged = BrightSword.Squid.API.INotifyPropertyChanged;
 using INotifyPropertyChanging = BrightSword.Squid.API.INotifyPropertyChanging;
+using Tests.BrightSword.Squid.core;
 
 namespace Tests.BrightSword.Squid
 {
@@ -16,7 +20,7 @@ namespace Tests.BrightSword.Squid
     public class ChangeNotificationTests
     {
         [TestMethod]
-        public void ControlTest_FilbertWithPropertyChanged_ShouldRaisePropertyChangedEvent()
+    public void ControlTestFilbertWithPropertyChangedShouldRaisePropertyChangedEvent()
         {
             var obj = new FilbertWithPropertyChanged
                       {
@@ -27,8 +31,8 @@ namespace Tests.BrightSword.Squid
             obj.ObjectPropertyChanged += (sender,
                                           args) =>
                                          {
-                                             Assert.AreEqual(args.PropertyName,
-                                                             "Name");
+                                                Assert.AreEqual(args.PropertyName,
+                                                                nameof(IFilbert.Name));
                                              Assert.AreEqual(((IFilbert) sender).Name,
                                                              "newName");
                                          };
@@ -37,7 +41,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void ControlTest_FilbertWithPropertyChanging_ShouldRaisePropertyChangingEvent()
+    public void ControlTestFilbertWithPropertyChangingShouldRaisePropertyChangingEvent()
         {
             var obj = new FilbertWithPropertyChanging
                       {
@@ -48,8 +52,8 @@ namespace Tests.BrightSword.Squid
             obj.ObjectPropertyChanging += (sender,
                                            args) =>
                                           {
-                                              Assert.AreEqual(args.PropertyName,
-                                                              "Name");
+                                                  Assert.AreEqual(args.PropertyName,
+                                                                  nameof(IFilbert.Name));
                                               Assert.AreEqual(((IFilbert) sender).Name,
                                                               "currentName");
                                           };
@@ -58,7 +62,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void ControlTest_FilbertWithPropertyChange_ShouldRaiseBoth()
+    public void ControlTestFilbertWithPropertyChangeShouldRaiseBoth()
         {
             var obj = new FilbertWithPropertyChangingAndPropertyChanged
                       {
@@ -83,14 +87,14 @@ namespace Tests.BrightSword.Squid
         {
             switch (args.PropertyName)
             {
-                case "Name":
+                    case nameof(IFilbert.Name):
                 {
                     Assert.AreEqual("newName",
                                     ((IFilbert) sender).Name);
                 }
                     break;
 
-                case "Id":
+                    case nameof(IFilbert.Id):
                 {
                     Assert.AreEqual(86,
                                     ((IFilbert) sender).Id);
@@ -108,14 +112,14 @@ namespace Tests.BrightSword.Squid
         {
             switch (args.PropertyName)
             {
-                case "Name":
+                    case nameof(IFilbert.Name):
                 {
                     Assert.AreEqual("currentName",
                                     ((IFilbert) sender).Name);
                 }
                     break;
 
-                case "Id":
+                    case nameof(IFilbert.Id):
                 {
                     Assert.AreEqual(42,
                                     ((IFilbert) sender).Id);
@@ -129,7 +133,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_FilbertWithPropertyChanged_ShouldRaisePropertyChangedEvent()
+    public void TestFilbertWithPropertyChangedShouldRaisePropertyChangedEvent()
         {
             var _instance = new PropertyChangedTypeCreator<IFilbert>().CreateInstance();
             _instance.Name = "currentName";
@@ -150,7 +154,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_FilbertWithPropertyChanging_ShouldRaisePropertyChangingEvent()
+    public void TestFilbertWithPropertyChangingShouldRaisePropertyChangingEvent()
         {
             var _instance = new PropertyChangingTypeCreator<IFilbert>().CreateInstance();
             _instance.Name = "currentName";
@@ -172,7 +176,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_FilbertWithPropertyChange_ShouldRaiseBoth()
+    public void TestFilbertWithPropertyChangeShouldRaiseBoth()
         {
             var typeCreator = new BasicDataTransferObjectTypeCreator<IFilbert>
                               {
@@ -198,8 +202,8 @@ namespace Tests.BrightSword.Squid
             _base.ObjectPropertyChanging += (sender,
                                              args) =>
                                             {
-                                                Assert.AreEqual(args.PropertyName,
-                                                                "Name");
+                                                    Assert.AreEqual(args.PropertyName,
+                                                                    nameof(IFilbert.Name));
                                                 Assert.AreEqual(((IFilbert) sender).Name,
                                                                 "currentName");
                                             };
@@ -207,8 +211,8 @@ namespace Tests.BrightSword.Squid
             _base.ObjectPropertyChanged += (sender,
                                             args) =>
                                            {
-                                               Assert.AreEqual(args.PropertyName,
-                                                               "Name");
+                                                   Assert.AreEqual(args.PropertyName,
+                                                                   nameof(IFilbert.Name));
                                                Assert.AreEqual(((IFilbert) sender).Name,
                                                                "newName");
                                            };
@@ -293,8 +297,8 @@ namespace Tests.BrightSword.Squid
             public event PropertyChangingEventHandler ObjectPropertyChanging;
         }
 
-        internal class FilbertWithPropertyChanged : CommonBaseTypeWithPropertyChanged,
-                                                    IFilbert
+    internal sealed class FilbertWithPropertyChanged : CommonBaseTypeWithPropertyChanged,
+                            IFilbert
         {
             private int _id;
             private string _name;
@@ -307,7 +311,7 @@ namespace Tests.BrightSword.Squid
                     var currentValue = _name;
                     _name = value;
 
-                    OnPropertyChanged("Name",
+                    OnPropertyChanged(nameof(IFilbert.Name),
                                       typeof (String),
                                       currentValue,
                                       value);
@@ -321,7 +325,7 @@ namespace Tests.BrightSword.Squid
                 {
                     var currentValue = _id;
                     _id = value;
-                    OnPropertyChanged("Id",
+                    OnPropertyChanged(nameof(IFilbert.Id),
                                       typeof (int),
                                       currentValue,
                                       value);
@@ -329,8 +333,8 @@ namespace Tests.BrightSword.Squid
             }
         }
 
-        internal class FilbertWithPropertyChanging : CommonBaseTypeWithPropertyChanging,
-                                                     IFilbert
+    internal sealed class FilbertWithPropertyChanging : CommonBaseTypeWithPropertyChanging,
+                             IFilbert
         {
             private int _id;
             private string _name;
@@ -340,7 +344,7 @@ namespace Tests.BrightSword.Squid
                 get { return _name; }
                 set
                 {
-                    OnPropertyChanging("Name",
+                    OnPropertyChanging(nameof(IFilbert.Name),
                                        typeof (String),
                                        _name,
                                        value);
@@ -353,7 +357,7 @@ namespace Tests.BrightSword.Squid
                 get { return _id; }
                 set
                 {
-                    OnPropertyChanging("Id",
+                    OnPropertyChanging(nameof(IFilbert.Id),
                                        typeof (int),
                                        _id,
                                        value);
@@ -362,8 +366,8 @@ namespace Tests.BrightSword.Squid
             }
         }
 
-        internal class FilbertWithPropertyChangingAndPropertyChanged : CommonBaseTypeWithPropertyChangingAndPropertyChanged,
-                                                                       IFilbert
+    internal sealed class FilbertWithPropertyChangingAndPropertyChanged : CommonBaseTypeWithPropertyChangingAndPropertyChanged,
+                                       IFilbert
         {
             private int _id;
             private string _name;
@@ -373,13 +377,13 @@ namespace Tests.BrightSword.Squid
                 get { return _name; }
                 set
                 {
-                    OnPropertyChanging("Name",
+                    OnPropertyChanging(nameof(IFilbert.Name),
                                        typeof (String),
                                        _name,
                                        value);
                     var currentValue = _name;
                     _name = value;
-                    OnPropertyChanged("Name",
+                    OnPropertyChanged(nameof(IFilbert.Name),
                                       typeof (String),
                                       currentValue,
                                       value);
@@ -391,13 +395,13 @@ namespace Tests.BrightSword.Squid
                 get { return _id; }
                 set
                 {
-                    OnPropertyChanging("Id",
+                    OnPropertyChanging(nameof(IFilbert.Id),
                                        typeof (int),
                                        _id,
                                        value);
                     var currentValue = _id;
                     _id = value;
-                    OnPropertyChanged("Id",
+                    OnPropertyChanged(nameof(IFilbert.Id),
                                       typeof (int),
                                       currentValue,
                                       value);
@@ -405,7 +409,7 @@ namespace Tests.BrightSword.Squid
             }
         }
 
-        private class PropertyChangedTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
+    private sealed class PropertyChangedTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
             where T : class
         {
             public override Type BaseType
@@ -414,7 +418,7 @@ namespace Tests.BrightSword.Squid
             }
         }
 
-        private class PropertyChangingTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
+    private sealed class PropertyChangingTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
             where T : class
 
         {

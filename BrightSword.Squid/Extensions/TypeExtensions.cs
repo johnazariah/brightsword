@@ -9,50 +9,50 @@ namespace BrightSword.Squid
 {
     public static class TypeExtensions
     {
-        public static string GetNonGenericPartOfClassName(this Type _this)
+        public static string GetNonGenericPartOfClassName(this Type self)
         {
-            var typeName = _this.RenameToConcreteType();
+            var typeName = self.RenameToConcreteType();
 
-            return _this.IsGenericType
+            return self.IsGenericType
                        ? typeName.Remove(typeName.IndexOf('<'))
                        : typeName;
         }
 
-        public static MethodInfo GetGenericMethodOnType(this Type _this,
+        public static MethodInfo GetGenericMethodOnType(this Type self,
                                                         string methodName,
                                                         params Type[] typeParameters)
         {
-            return _this.GetAllMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
+            return self.GetAllMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
                         .Single(_ => _.Name.Equals(methodName) && _.IsGenericMethod)
                         .MakeGenericMethod(typeParameters);
         }
 
-        public static IEnumerable<PropertyInfo> GetAllNonExcludedProperties(this Type _this,
+        public static IEnumerable<PropertyInfo> GetAllNonExcludedProperties(this Type self,
                                                                             params Type[] excludedTypes)
         {
-            return _this.GetAllNonExcludedMembers(_ => _.GetAllProperties(),
+            return self.GetAllNonExcludedMembers(_ => _.GetAllProperties(),
                                                   excludedTypes);
         }
 
-        public static IEnumerable<MethodInfo> GetAllNonExcludedMethods(this Type _this,
+        public static IEnumerable<MethodInfo> GetAllNonExcludedMethods(this Type self,
                                                                        params Type[] excludedTypes)
         {
-            return _this.GetAllNonExcludedMembers(_ => _.GetAllMethods(),
+            return self.GetAllNonExcludedMembers(_ => _.GetAllMethods(),
                                                   excludedTypes);
         }
 
-        public static IEnumerable<EventInfo> GetAllNonExcludedEvents(this Type _this,
+        public static IEnumerable<EventInfo> GetAllNonExcludedEvents(this Type self,
                                                                      params Type[] excludedTypes)
         {
-            return _this.GetAllNonExcludedMembers(_ => _.GetAllEvents(),
+            return self.GetAllNonExcludedMembers(_ => _.GetAllEvents(),
                                                   excludedTypes);
         }
 
-        private static IEnumerable<TMemberInfo> GetAllNonExcludedMembers<TMemberInfo>(this Type _this,
+        private static IEnumerable<TMemberInfo> GetAllNonExcludedMembers<TMemberInfo>(this Type self,
                                                                                       Func<Type, IEnumerable<TMemberInfo>> accessor,
                                                                                       IEnumerable<Type> excludedTypes) where TMemberInfo : MemberInfo
         {
-            return accessor(_this)
+            return accessor(self)
                 .Except(excludedTypes.SelectMany(accessor));
         }
     }

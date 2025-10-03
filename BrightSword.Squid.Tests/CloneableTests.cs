@@ -23,7 +23,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_ICloneableImplementation()
+    public void TestICloneableImplementation()
         {
             CloneableIsSupported(new BasicDataTransferObjectTypeCreator<IFoo>
                                  {
@@ -33,7 +33,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_NonCloneableInterfaceDoesNotHaveCloneMethod()
+    public void TestNonCloneableInterfaceDoesNotHaveCloneMethod()
         {
             dynamic instance = new BasicDataTransferObjectTypeCreator<INonCloneable>().CreateInstance();
 
@@ -41,7 +41,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_ImplementationSupportsCloneableIfTypeCreatorSpecifiesICloneableFacet()
+    public void TestImplementationSupportsCloneableIfTypeCreatorSpecifiesICloneableFacet()
         {
             var typeCreator = new BasicDataTransferObjectTypeCreator<INonCloneable>
                               {

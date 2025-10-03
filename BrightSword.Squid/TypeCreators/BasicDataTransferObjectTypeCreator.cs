@@ -20,10 +20,14 @@ using INotifyPropertyChanging = BrightSword.Squid.API.INotifyPropertyChanging;
 
 namespace BrightSword.Squid.TypeCreators
 {
+    // Suppress CA1707 for some legacy protected/private identifiers that use underscores.
+    // These names are intentionally preserved to avoid large API/behavioral changes
+    // in the reflection/emit code. We'll revisit these individually if we choose
+    // to do an API-breaking rename later.
     public class BasicDataTransferObjectTypeCreator<T> : ITypeCreator<T>
         where T : class
     {
-        protected const MethodAttributes C_PROPERTY_HIDDENMETHOD_ATTRIBUTES = MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig | MethodAttributes.Final | MethodAttributes.NewSlot | MethodAttributes.SpecialName;
+        protected const MethodAttributes PropertyHiddenMethodAttributes = MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig | MethodAttributes.Final | MethodAttributes.NewSlot | MethodAttributes.SpecialName;
 
         private readonly IList<Func<Type, Type>> _typeMaps;
 
@@ -41,6 +45,9 @@ namespace BrightSword.Squid.TypeCreators
         private IEnumerable<KeyValuePair<Type, IBehaviour>> _specialBehaviours;
         private bool _trackReadonlyPropertyInitialized;
         private Type _type;
+    // Cached Type[] arrays used for reflection GetMethod calls to avoid repeated allocations (CA1861)
+    private static readonly Type[] OnPropertyChangingArgTypes = new[] { typeof(String), typeof(Type), typeof(Object), typeof(Object) };
+    private static readonly Type[] GetTypeFromHandleArgTypes = new[] { typeof(RuntimeTypeHandle) };
 
         protected BasicDataTransferObjectTypeCreator()
         {
@@ -58,7 +65,7 @@ namespace BrightSword.Squid.TypeCreators
                             ? typeof (T)
                             : typeof (Object);
 
-            _assemblyName = String.Format("Dynamic.{0}.{1}",
+            _assemblyName = string.Format(System.Globalization.CultureInfo.InvariantCulture, "Dynamic.{0}.{1}",
                                           GetType().GetNonGenericPartOfClassName(),
                                           _interfaceName);
 
@@ -253,7 +260,7 @@ namespace BrightSword.Squid.TypeCreators
 
         protected virtual string GetBackingFieldName(PropertyInfo propertyInfo)
         {
-            return String.Format("_{0}",
+            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "_{0}",
                                  propertyInfo.Name.ToLowerInvariant());
         }
 
@@ -268,10 +275,10 @@ namespace BrightSword.Squid.TypeCreators
             }
         }
 
-        protected Type GetMappedType(PropertyInfo _propertyInfo)
+        protected Type GetMappedType(PropertyInfo propertyInfo)
         {
             var mappedTypes = from mapper in TypeMaps
-                              let mappedType = mapper(_propertyInfo.PropertyType)
+                              let mappedType = mapper(propertyInfo.PropertyType)
                               select mappedType;
 
             return mappedTypes.FirstOrDefault(_ => _ != null);
@@ -286,7 +293,7 @@ namespace BrightSword.Squid.TypeCreators
 
         #region Default Constructor
 
-        protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructions_CallBaseClassConstructor
+    protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsCallBaseClassConstructor
         {
             get
             {
@@ -294,13 +301,12 @@ namespace BrightSword.Squid.TypeCreators
                 yield return _ => _.Emit(OpCodes.Call,
                                          BaseType.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                                                                  null,
-                                                                 new Type[]
-                                                                 {},
+                                                                 Type.EmptyTypes,
                                                                  null));
             }
         }
 
-        protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructions_InitializeDefaultValueFromAttributes
+    protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsInitializeDefaultValueFromAttributes
         {
             get
             {
@@ -317,7 +323,7 @@ namespace BrightSword.Squid.TypeCreators
             }
         }
 
-        protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructions_AddCustomConstructionInstructions
+    protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsAddCustomConstructionInstructions
         {
             get
             {
@@ -325,7 +331,7 @@ namespace BrightSword.Squid.TypeCreators
             }
         }
 
-        protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructions_AddTrackReadonlyPropertyInitializedSupport
+    protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsAddTrackReadonlyPropertyInitializedSupport
         {
             get
             {
@@ -339,15 +345,14 @@ namespace BrightSword.Squid.TypeCreators
                                          typeof (HashSet<>).MakeGenericType(typeof (String))
                                                            .GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                                                                            null,
-                                                                           new Type[]
-                                                                           {},
+                                                                           Type.EmptyTypes,
                                                                            null));
                 yield return _ => _.Emit(OpCodes.Stfld,
                                          InitializePropertyField);
             }
         }
 
-        protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructions_InitializeMappedReadonlyProperties
+    protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsInitializeMappedReadonlyProperties
         {
             get
             {
@@ -359,8 +364,7 @@ namespace BrightSword.Squid.TypeCreators
                     yield return _ => _.Emit(OpCodes.Newobj,
                                              _readonlyProperty.MappedType.GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                                                                                          null,
-                                                                                         new Type[]
-                                                                                         {},
+                                                                                         Type.EmptyTypes,
                                                                                          null));
 
                     yield return _ => _.Emit(OpCodes.Stfld,
@@ -377,27 +381,27 @@ namespace BrightSword.Squid.TypeCreators
 
             var gen = constructorBuilder.GetILGenerator();
 
-            foreach (var instruction in DefaultConstructorInstructions_InitializeMappedReadonlyProperties)
+            foreach (var instruction in DefaultConstructorInstructionsInitializeMappedReadonlyProperties)
             {
                 instruction(gen);
             }
 
-            foreach (var instruction in DefaultConstructorInstructions_InitializeDefaultValueFromAttributes)
+            foreach (var instruction in DefaultConstructorInstructionsInitializeDefaultValueFromAttributes)
             {
                 instruction(gen);
             }
 
-            foreach (var instruction in DefaultConstructorInstructions_CallBaseClassConstructor)
+            foreach (var instruction in DefaultConstructorInstructionsCallBaseClassConstructor)
             {
                 instruction(gen);
             }
 
-            foreach (var instruction in DefaultConstructorInstructions_AddTrackReadonlyPropertyInitializedSupport)
+            foreach (var instruction in DefaultConstructorInstructionsAddTrackReadonlyPropertyInitializedSupport)
             {
                 instruction(gen);
             }
             
-            foreach (var instruction in DefaultConstructorInstructions_AddCustomConstructionInstructions)
+            foreach (var instruction in DefaultConstructorInstructionsAddCustomConstructionInstructions)
             {
                 instruction(gen);
             }
@@ -432,14 +436,18 @@ namespace BrightSword.Squid.TypeCreators
 
         protected virtual TypeBuilder AddEvents(TypeBuilder typeBuilder)
         {
-            return typeof (T).GetAllNonExcludedEvents(InterfacesWithSpecialBehaviours)
-                             .Aggregate(typeBuilder,
-                                        (_typeBuilder,
-                                         _eventInfo) => AddEvent(_typeBuilder,
-                                                                 _eventInfo,
-                                                                 _typeBuilder.DefineField(_eventInfo.Name,
-                                                                                          _eventInfo.EventHandlerType,
-                                                                                          FieldAttributes.Private)));
+            var events = typeof (T).GetAllNonExcludedEvents(InterfacesWithSpecialBehaviours);
+            var tb = typeBuilder;
+            foreach (var ev in events)
+            {
+                tb = AddEvent(tb,
+                              ev,
+                              tb.DefineField(ev.Name,
+                                             ev.EventHandlerType,
+                                             FieldAttributes.Private));
+            }
+
+            return tb;
         }
 
         protected virtual TypeBuilder AddEvent(TypeBuilder typeBuilder,
@@ -462,15 +470,17 @@ namespace BrightSword.Squid.TypeCreators
                                          backingFieldInfo,
                                          EventOperation.Detach);
 
-            EventOperations.Aggregate(eventBuilder,
-                                      (_eventBuilder,
-                                       _operation) => _operation(_eventBuilder,
-                                                                 eventInfo));
+            foreach (var op in EventOperations)
+            {
+                eventBuilder = op(eventBuilder,
+                                   eventInfo);
+            }
 
-            EventFieldOperations.Aggregate(backingFieldInfo,
-                                           (_fieldBuilder,
-                                            _operation) => _operation(_fieldBuilder,
-                                                                      backingFieldInfo));
+            foreach (var op in EventFieldOperations)
+            {
+                backingFieldInfo = op(backingFieldInfo,
+                                       backingFieldInfo);
+            }
 
             return typeBuilder;
         }
@@ -481,9 +491,10 @@ namespace BrightSword.Squid.TypeCreators
                                                             FieldInfo backingFieldInfo,
                                                             EventOperation operation)
         {
-            var attachOrDetachMethodName = String.Format(operation == EventOperation.Attach
-                                                             ? "add_{0}"
-                                                             : "remove_{0}",
+            var attachOrDetachMethodName = string.Format(System.Globalization.CultureInfo.InvariantCulture,
+                                                             operation == EventOperation.Attach
+                                                                 ? "add_{0}"
+                                                                 : "remove_{0}",
                                                          eventInfo.Name);
             var attachOrDetachDelegateName = operation == EventOperation.Attach
                                                  ? "Combine"
@@ -575,10 +586,14 @@ namespace BrightSword.Squid.TypeCreators
 
         protected virtual TypeBuilder AddProperties(TypeBuilder typeBuilder)
         {
-            return typeof (T).GetAllNonExcludedProperties(InterfacesWithSpecialBehaviours)
-                             .Where(PropertyFilter)
-                             .Aggregate(typeBuilder,
-                                        AddProperty);
+            var props = typeof (T).GetAllNonExcludedProperties(InterfacesWithSpecialBehaviours).Where(PropertyFilter);
+            var tb = typeBuilder;
+            foreach (var p in props)
+            {
+                tb = AddProperty(tb, p);
+            }
+
+            return tb;
         }
 
         protected virtual bool PropertyFilter(PropertyInfo propertyInfo)
@@ -602,10 +617,11 @@ namespace BrightSword.Squid.TypeCreators
                                propertyBuilder,
                                propertyInfo);
 
-            PropertyOperations.Aggregate(propertyBuilder,
-                                         (_propertyBuilder,
-                                          _operation) => _operation(_propertyBuilder,
-                                                                    propertyInfo));
+            foreach (var op in PropertyOperations)
+            {
+                propertyBuilder = op(propertyBuilder,
+                                     propertyInfo);
+            }
 
             return typeBuilder;
         }
@@ -614,9 +630,9 @@ namespace BrightSword.Squid.TypeCreators
                                                    PropertyBuilder propertyBuilder,
                                                    PropertyInfo propertyInfo)
         {
-            var methodBuilder = typeBuilder.DefineMethod(String.Format("get_{0}",
+            var methodBuilder = typeBuilder.DefineMethod(string.Format(System.Globalization.CultureInfo.InvariantCulture, "get_{0}",
                                                                        propertyInfo.Name),
-                                                         C_PROPERTY_HIDDENMETHOD_ATTRIBUTES);
+                                                         PropertyHiddenMethodAttributes);
 
             methodBuilder.SetReturnType(propertyInfo.PropertyType);
 
@@ -725,9 +741,9 @@ namespace BrightSword.Squid.TypeCreators
                 return;
             }
 
-            var methodBuilder = typeBuilder.DefineMethod(String.Format("set_{0}",
+            var methodBuilder = typeBuilder.DefineMethod(string.Format(System.Globalization.CultureInfo.InvariantCulture, "set_{0}",
                                                                        propertyInfo.Name),
-                                                         C_PROPERTY_HIDDENMETHOD_ATTRIBUTES,
+                                                         PropertyHiddenMethodAttributes,
                                                          null,
                                                          new[]
                                                          {
@@ -883,10 +899,7 @@ namespace BrightSword.Squid.TypeCreators
                          typeof (Type).GetMethod("GetTypeFromHandle",
                                                  BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                                                  null,
-                                                 new[]
-                                                 {
-                                                     typeof (RuntimeTypeHandle)
-                                                 },
+                                                 GetTypeFromHandleArgTypes,
                                                  null));
 
                 // this._fieldName
@@ -912,13 +925,7 @@ namespace BrightSword.Squid.TypeCreators
                          BaseType.GetMethod("OnPropertyChanging",
                                             BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                                             null,
-                                            new[]
-                                            {
-                                                typeof (String),
-                                                typeof (Type),
-                                                typeof (Object),
-                                                typeof (Object)
-                                            },
+                                            OnPropertyChangingArgTypes,
                                             null));
 
                 #endregion
@@ -974,10 +981,7 @@ namespace BrightSword.Squid.TypeCreators
                          typeof (Type).GetMethod("GetTypeFromHandle",
                                                  BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                                                  null,
-                                                 new[]
-                                                 {
-                                                     typeof (RuntimeTypeHandle)
-                                                 },
+                                                 GetTypeFromHandleArgTypes,
                                                  null));
 
                 // <old> value
@@ -1001,13 +1005,7 @@ namespace BrightSword.Squid.TypeCreators
                          BaseType.GetMethod("OnPropertyChanged",
                                             BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                                             null,
-                                            new[]
-                                            {
-                                                typeof (String),
-                                                typeof (Type),
-                                                typeof (Object),
-                                                typeof (Object)
-                                            },
+                                            OnPropertyChangingArgTypes,
                                             null));
 
                 #endregion
@@ -1090,31 +1088,28 @@ namespace BrightSword.Squid.TypeCreators
                 {
                     _p.SetCustomAttribute(new CustomAttributeBuilder(typeof (OutAttribute).GetConstructor(parameterBindingFlags,
                                                                                                           null,
-                                                                                                          new Type[]
-                                                                                                          {},
+                                                                                                          Type.EmptyTypes,
                                                                                                           null),
-                                                                     new object[]
-                                                                     {}));
+                                                                     Array.Empty<object>()));
                 }
                 else if (param.IsDefined(typeof (ParamArrayAttribute),
                                          false))
                 {
                     _p.SetCustomAttribute(new CustomAttributeBuilder(typeof (ParamArrayAttribute).GetConstructor(parameterBindingFlags,
                                                                                                                  null,
-                                                                                                                 new Type[]
-                                                                                                                 {},
+                                                                                                                 Type.EmptyTypes,
                                                                                                                  null),
-                                                                     new object[]
-                                                                     {}));
+                                                                     Array.Empty<object>()));
                 }
             }
 
             GenerateMethodBody(methodBuilder);
 
-            MethodOperations.Aggregate(methodBuilder,
-                                       (_methodBuilder,
-                                        _operation) => _operation(_methodBuilder,
-                                                                  methodInfo));
+            foreach (var op in MethodOperations)
+            {
+                methodBuilder = op(methodBuilder,
+                                    methodInfo);
+            }
 
             return typeBuilder;
         }
@@ -1128,8 +1123,7 @@ namespace BrightSword.Squid.TypeCreators
             gen.Emit(OpCodes.Newobj,
                      typeof (NotImplementedException).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                                                                      null,
-                                                                     new Type[]
-                                                                     {},
+                                                                     Type.EmptyTypes,
                                                                      null));
             gen.Emit(OpCodes.Throw);
         }
@@ -1324,7 +1318,7 @@ namespace BrightSword.Squid.TypeCreators
 
         protected virtual string GetAssemblyDllName()
         {
-            return String.Format("{0}.dll",
+            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0}.dll",
                                  AssemblyName);
         }
 

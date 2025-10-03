@@ -67,7 +67,7 @@ namespace BrightSword.Feber.Samples
         /// Demonstrates <see cref="DynamicExpressionUtilities.GetDynamicPropertyAccessorExpression{T}"/> and
         /// <see cref="DynamicExpressionUtilities.GetDynamicPropertyMutatorExpression{T}"/> to read/write properties dynamically in expression trees.
         /// </remarks>
-        private sealed class DynamicToDynamicMapperBuilder : ActionBuilder<T, object, object>
+    private sealed class DynamicToDynamicMapperBuilder : ActionBuilder<T, object, object>
         {
             protected override Expression PropertyExpression(
                 PropertyInfo propertyInfo,
@@ -82,7 +82,7 @@ namespace BrightSword.Feber.Samples
         /// Shows how to locate a backing field conventionally named _propertyName and assign the dynamic value to that field.
         /// Useful if the destination exposes read-only properties backed by private fields.
         /// </remarks>
-        private sealed class DynamicToStaticBackingFieldsMapperBuilder : ActionBuilder<T, T, object>
+    private sealed class DynamicToStaticBackingFieldsMapperBuilder : ActionBuilder<T, T, object>
         {
             protected override Expression PropertyExpression(
                 PropertyInfo propertyInfo,
@@ -98,7 +98,7 @@ namespace BrightSword.Feber.Samples
         /// <summary>
         /// Maps dynamic source properties into static destination properties.
         /// </summary>
-        private sealed class DynamicToStaticMapperBuilder : ActionBuilder<T, T, object>
+    private sealed class DynamicToStaticMapperBuilder : ActionBuilder<T, T, object>
         {
             protected override Expression PropertyExpression(
                 PropertyInfo propertyInfo,
@@ -109,7 +109,7 @@ namespace BrightSword.Feber.Samples
         /// <summary>
         /// Maps static source properties into a dynamic destination by emitting dynamic mutator calls.
         /// </summary>
-        private sealed class StaticToDynamicMapperBuilder : ActionBuilder<T, object, T>
+    private sealed class StaticToDynamicMapperBuilder : ActionBuilder<T, object, T>
         {
             protected override Expression PropertyExpression(
                 PropertyInfo propertyInfo,
@@ -120,7 +120,7 @@ namespace BrightSword.Feber.Samples
         /// <summary>
         /// Simple static-to-static mapper: generates assignments between matching properties.
         /// </summary>
-        private sealed class StaticToStaticMapperBuilder : ActionBuilder<T, T, T>
+    private sealed class StaticToStaticMapperBuilder : ActionBuilder<T, T, T>
         {
             protected override Expression PropertyExpression(
                 PropertyInfo propertyInfo,

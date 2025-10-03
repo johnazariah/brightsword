@@ -9,7 +9,7 @@ using INotifyPropertyChanging = BrightSword.Squid.API.INotifyPropertyChanging;
 
 namespace Tests.BrightSword.Squid.core
 {
-    internal class NonGenericInterfaceWithGenericProperties : ChangeTrackedVersionedEntity,
+    internal sealed class NonGenericInterfaceWithGenericProperties : ChangeTrackedVersionedEntity,
                                                               INonGenericInterfaceWithGenericProperties
     {
         public NonGenericInterfaceWithGenericProperties()
@@ -22,7 +22,7 @@ namespace Tests.BrightSword.Squid.core
         public ICollection<INonGenericInterfaceWithNonGenericProperties> Things { get; private set; }
     }
 
-    internal class NonGenericInterfaceWithNonGenericProperties : ChangeTrackedVersionedEntity,
+    internal sealed class NonGenericInterfaceWithNonGenericProperties : ChangeTrackedVersionedEntity,
                                                                  INonGenericInterfaceWithNonGenericProperties
     {
         public int Foo { get; set; }

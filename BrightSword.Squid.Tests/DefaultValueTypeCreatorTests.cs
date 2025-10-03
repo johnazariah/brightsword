@@ -15,8 +15,9 @@ namespace Tests.BrightSword.Squid
     [TestClass]
     public class DefaultValueTypeCreatorTests
     {
+        private static readonly int[] _sampleItems = new[] { 1, 2, 3 };
         [TestMethod]
-        public void Test_PropertyWithDefaultValueIsNoticed()
+    public void TestPropertyWithDefaultValueIsNoticed()
         {
             var creator = new DefaultValueTypeCreator<ITest>();
             var instance = creator.CreateInstance();
@@ -29,7 +30,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_DefaultValueIsSetWhenSpecified()
+    public void TestDefaultValueIsSetWhenSpecified()
         {
             var instance = new BasicDataTransferObjectTypeCreator<IBar>().CreateInstance();
 
@@ -42,20 +43,14 @@ namespace Tests.BrightSword.Squid
             Assert.AreEqual("Name",
                             instance.Name);
 
-            CollectionAssert.AreEqual(new[]
-                                      {
-                                          1,
-                                          2,
-                                          3
-                                      },
-                                      instance.Items);
+            CollectionAssert.AreEqual(_sampleItems, instance.Items);
 
             Assert.AreEqual(FieldAttributes.InitOnly,
                             instance.FieldAttributes);
         }
 
         [TestMethod]
-        public void Test_DefaultValueIsSetOnObjectCreatedWithDefaultConstructorWhenSpecified()
+    public void TestDefaultValueIsSetOnObjectCreatedWithDefaultConstructorWhenSpecified()
         {
             var instance = (IBar) Activator.CreateInstance(new BasicDataTransferObjectTypeCreator<IBar>().Type);
 
@@ -68,13 +63,7 @@ namespace Tests.BrightSword.Squid
             Assert.AreEqual("Name",
                             instance.Name);
 
-            CollectionAssert.AreEqual(new[]
-                                      {
-                                          1,
-                                          2,
-                                          3
-                                      },
-                                      instance.Items);
+            CollectionAssert.AreEqual(_sampleItems, instance.Items);
 
             Assert.AreEqual(FieldAttributes.InitOnly,
                             instance.FieldAttributes);
@@ -89,36 +78,36 @@ namespace Tests.BrightSword.Squid
         public interface IPayRunFilter
         {
             [DefaultValue(PayrollEmploymentStatus.All)]
-            PayrollEmploymentStatus EmploymentStatus_All { get; }
+            PayrollEmploymentStatus EmploymentStatusAll { get; }
 
             [DefaultValue(PayrollEmploymentStatus.FullTime)]
-            PayrollEmploymentStatus EmploymentStatus_FullTime { get; }
+            PayrollEmploymentStatus EmploymentStatusFullTime { get; }
 
         }
 
-        private class PayRunFilter : IPayRunFilter {
+    private sealed class PayRunFilter : IPayRunFilter {
             private readonly PayrollEmploymentStatus _employmentStatus = PayrollEmploymentStatus.All;
             private readonly PayrollEmploymentStatus _employmentStatusFullTime = PayrollEmploymentStatus.FullTime;
 
-            public PayrollEmploymentStatus EmploymentStatus_All
+            public PayrollEmploymentStatus EmploymentStatusAll
             {
                 get { return _employmentStatus; }
             }
 
-            public PayrollEmploymentStatus EmploymentStatus_FullTime
+            public PayrollEmploymentStatus EmploymentStatusFullTime
             {
                 get { return _employmentStatusFullTime; }
             }
         }
 
         [TestMethod]
-        public void Test_CreateInstance_WithDefaultEnumValueMinusOne_ShouldCreate()
+    public void TestCreateInstanceWithDefaultEnumValueMinusOneShouldCreate()
         {
             var instance = new BasicDataTransferObjectTypeCreator<IPayRunFilter>().CreateInstance();
             Assert.IsNotNull(instance);
         }
 
-        private class DefaultValueTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
+    private sealed class DefaultValueTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
             where T : class
         {
             public readonly ConcurrentDictionary<PropertyInfo, object> _propertiesWithDefaultValues = new ConcurrentDictionary<PropertyInfo, object>();

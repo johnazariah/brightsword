@@ -12,20 +12,20 @@ namespace Tests.BrightSword.Squid
         private readonly TestTypeCreator<IEnumerable<int>> _typeCreatorForIEnumerableOfInt = new TestTypeCreator<IEnumerable<int>>();
 
         [TestMethod]
-        public void Test_InterfaceName()
+    public void TestInterfaceName()
         {
             Assert.AreEqual("IEnumerable<Int32>",
                             _typeCreatorForIEnumerableOfInt.InterfaceName);
         }
 
         [TestMethod]
-        public void Test_ClassName()
+    public void TestClassName()
         {
             Assert.AreEqual("Enumerable<Int32>",
                             _typeCreatorForIEnumerableOfInt.ClassName);
         }
 
-        private class TestTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
+    private sealed class TestTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
             where T : class
         {
             public new string InterfaceName

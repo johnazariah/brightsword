@@ -23,7 +23,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_NonPrimitiveClassType()
+    public void TestNonPrimitiveClassType()
         {
             var actual = new BasicDataTransferObjectTypeCreator<Exception>().CreateInstance();
 
@@ -33,7 +33,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_InterfaceWithGenericMethods()
+    public void TestInterfaceWithGenericMethods()
         {
             var actual = new BasicDataTransferObjectTypeCreator<IInterfaceWithGenericMethods>().CreateInstance();
 
@@ -43,7 +43,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_NonGenericInterfaceType()
+    public void TestNonGenericInterfaceType()
         {
             var actual = new BasicDataTransferObjectTypeCreator<INonGenericInterfaceWithNonGenericProperties>().CreateInstance();
 
@@ -53,7 +53,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_DynamicIsObject()
+    public void TestDynamicIsObject()
         {
             var actual = new BasicDataTransferObjectTypeCreator<IInterfaceExtendingAnother>().CreateInstance();
 
@@ -67,7 +67,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_GetOnlyMappedPropertyShouldNotThrow()
+    public void TestGetOnlyMappedPropertyShouldNotThrow()
         {
             var actual = new BasicDataTransferObjectTypeCreator<INonGenericInterfaceWithGenericProperties>().CreateInstance();
             Assert.IsNotNull(actual);
@@ -80,7 +80,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_HiddenProperty()
+    public void TestHiddenProperty()
         {
             var actual = new BasicDataTransferObjectTypeCreator<IDerivedWithHiddenProperty>().CreateInstance();
 
@@ -90,7 +90,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_NewHiddenProperty()
+    public void TestNewHiddenProperty()
         {
             var actual = new BasicDataTransferObjectTypeCreator<IDerivedWithNewHiddenProperty>().CreateInstance();
 
@@ -100,7 +100,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_NonGenericInterfaceTypeImplementingAllProperties()
+    public void TestNonGenericInterfaceTypeImplementingAllProperties()
         {
             var actual = new BasicDataTransferObjectTypeCreator<INonGenericInterfaceWithNonGenericProperties>().CreateInstance();
             actual.Name = "I Love Pi";
@@ -113,7 +113,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_InterfaceTypeWithGenericPropertiesImplementingAllProperties()
+    public void TestInterfaceTypeWithGenericPropertiesImplementingAllProperties()
         {
             var actual = new BasicDataTransferObjectTypeCreator<INonGenericInterfaceWithGenericProperties>().CreateInstance();
             actual.Name = "I Love Pi";
@@ -130,20 +130,20 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_InterfaceWithAVoidMethodNoArgs()
+    public void TestInterfaceWithAVoidMethodNoArgs()
         {
             TestInterfaceWithMethod<IInterfaceWithAVoidMethodNoArgs>(_ => _.VoidMethodNoArgs());
         }
 
         [TestMethod]
-        public void Test_InterfaceWithAnIntMethodWithArgs()
+    public void TestInterfaceWithAnIntMethodWithArgs()
         {
             TestInterfaceWithMethod<IInterfaceWithAnIntMethodWithArgs>(_ => _.IntMethodWithArgs(1,
                                                                                                 1));
         }
 
         [TestMethod]
-        public void Test_InterfaceWithACharMethodWithParamsArg()
+    public void TestInterfaceWithACharMethodWithParamsArg()
         {
             TestInterfaceWithMethod<IInterfaceWithACharMethodWithParamsArg>(_ => _.ParamsMethod(1,
                                                                                                 2,
@@ -152,21 +152,21 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_InterfaceWithAGuidMethodWithRefArg()
+    public void TestInterfaceWithAGuidMethodWithRefArg()
         {
             var arg = "Hello World";
             TestInterfaceWithMethod<IInterfaceWithAGuidMethodWithRefArg>(_ => _.MethodWithRefParameters(ref arg));
         }
 
         [TestMethod]
-        public void Test_InterfaceWithAnArrayMethodWithOutArg()
+    public void TestInterfaceWithAnArrayMethodWithOutArg()
         {
             string arg;
             TestInterfaceWithMethod<IInterfaceWithAnArrayMethodWithOutArg>(_ => _.ArrayMethodWithOutParameters(out arg));
         }
 
         [TestMethod]
-        public void Test_InterfaceExtendingAnother()
+    public void TestInterfaceExtendingAnother()
         {
             TestInterfaceWithMethod<IInterfaceExtendingAnother>(_ => _.IntMethodWithArgs(1,
                                                                                          2));
@@ -177,7 +177,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_InterfaceHidingAMethod()
+    public void TestInterfaceHidingAMethod()
         {
             TestInterfaceWithMethod<IInterfaceHidingAMethod>(_ => _.IntMethodWithArgs(1,
                                                                                       2));
@@ -187,7 +187,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_InterfaceWithRemoteTypeProperty()
+    public void TestInterfaceWithRemoteTypeProperty()
         {
             var actual = new BasicDataTransferObjectTypeCreator<IInterfaceWithRemoteTypeProperty>().CreateInstance();
 
@@ -197,7 +197,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_InterfaceWithEvent()
+    public void TestInterfaceWithEvent()
         {
             var instance = new BasicDataTransferObjectTypeCreator<IInterfaceWithEvent>().CreateInstance();
             Assert.IsNotNull(instance);
@@ -221,7 +221,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_MultipleInheritanceWithCollisionWithSameType()
+    public void TestMultipleInheritanceWithCollisionWithSameType()
         {
             var instance = new BasicDataTransferObjectTypeCreator<IInterfaceWithMultipleInheritanceAndPropertyCollisions>().CreateInstance();
 
@@ -246,7 +246,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_MultipleInheritanceWithCollisionWithDifferentType()
+    public void TestMultipleInheritanceWithCollisionWithDifferentType()
         {
             var instance = new BasicDataTransferObjectTypeCreator<IInterfaceWithMultipleInheritanceAndPropertyCollisions>().CreateInstance();
 
@@ -271,7 +271,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_FacetsAreInjectedProperly()
+    public void TestFacetsAreInjectedProperly()
         {
             var actual = new BasicDataTransferObjectTypeCreator<INonGenericInterfaceWithNonGenericProperties>().CreateInstance();
 

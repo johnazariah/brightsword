@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text.Json;
 
 namespace BrightSword.Squid.Behaviours
 {
@@ -134,15 +132,33 @@ namespace BrightSword.Squid.Behaviours
             }
 
             // Fallback: create instance and copy fields
-            object result;
+            object? result = null;
+            // First try a normal public constructor
             try
             {
-                result = Activator.CreateInstance(type)!;
+                result = Activator.CreateInstance(type);
             }
             catch
             {
-                // Try to get an uninitialized object if no public ctor
-                result = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(type);
+                // If that fails, try to invoke a non-public constructor (safer than uninitialized objects)
+                try
+                {
+                    result = Activator.CreateInstance(type, nonPublic: true);
+                }
+                catch
+                {
+                    // As a last resort, create an uninitialized object. FormatterServices is marked obsolete for
+                    // formatter-based serialization scenarios, but GetUninitializedObject is still the pragmatic
+                    // fallback for types with no accessible constructors. Suppress the obsoletion warning locally.
+                    #pragma warning disable SYSLIB0050
+                    result = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(type);
+                    #pragma warning restore SYSLIB0050
+                }
+            }
+
+            if (result is null)
+            {
+                throw new InvalidOperationException($"Unable to create instance of type {type.FullName} for cloning.");
             }
 
             visited[obj] = result;

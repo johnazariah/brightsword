@@ -17,7 +17,7 @@ namespace Tests.BrightSword.Squid.core
         {
             get
             {
-                return String.Format("Types.{0}.ChangeTrackedAttributed",
+                return string.Format(System.Globalization.CultureInfo.InvariantCulture, "Types.{0}.ChangeTrackedAttributed",
                                      typeof (T).Name);
             }
         }

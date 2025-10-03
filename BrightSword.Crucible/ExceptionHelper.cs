@@ -4,7 +4,6 @@
 // MVID: 719B4D8D-7577-4C5C-8115-083F94C056BF
 // Assembly location: C:\Users\johnaz\AppData\Local\Temp\Depejin\bc05fa93a2\lib\net40\BrightSword.Crucible.dll
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
 #nullable disable
@@ -17,36 +16,27 @@ public static class ExceptionHelper
     string expectedExceptionMessage = null)
     where TException : Exception
   {
-    try
-    {
-      action();
-      Assert.Fail("An exception of type '{0}' was expected but not thrown", new object[1]
-      {
-        (object) typeof (TException).Name
-      });
-    }
-    catch (Exception ex)
-    {
-      if (ex is TException exception)
-      {
-        if (string.IsNullOrWhiteSpace(expectedExceptionMessage) || exception.Message.Equals(expectedExceptionMessage, StringComparison.OrdinalIgnoreCase))
-        {
-          return exception;
-        }
+            try
+            {
+                action();
+                throw new InvalidOperationException($"An exception of type '{typeof(TException).Name}' was expected but not thrown");
+            }
+            catch (Exception ex)
+            {
+                if (ex is TException exception)
+                {
+                    if (string.IsNullOrWhiteSpace(expectedExceptionMessage) || exception.Message.Equals(expectedExceptionMessage, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return exception;
+                    }
 
-        Assert.Fail(
-          "An exception of type '{0}' with message '{1}' was expected. The exception was thrown but the exception message was '{2}'.",
-          typeof(TException).Name,
-          expectedExceptionMessage,
-          exception.Message);
-      }
+                    throw new InvalidOperationException($"An exception of type '{typeof(TException).Name}' with message '{expectedExceptionMessage}' was expected. The exception was thrown but the exception message was '{exception.Message}'.");
+                }
 
-      Assert.Fail(
-        "An exception of type '{0}' was expected, but an exception of type '{1}', with message '{2}' was thrown instead.",
-        typeof(TException).Name,
-        ex.GetType().Name,
-        ex.Message);
-    }
-    return default;
+                throw new InvalidOperationException($"An exception of type '{typeof(TException).Name}' was expected, but an exception of type '{ex.GetType().Name}', with message '{ex.Message}' was thrown instead.");
+            }
+            // unreachable but required for compile-time return
+            // ReSharper disable once HeuristicUnreachableCode
+            // return default;
   }
 }

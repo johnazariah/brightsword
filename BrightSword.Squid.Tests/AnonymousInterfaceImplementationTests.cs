@@ -11,7 +11,7 @@ namespace Tests.BrightSword.Squid
     public class AnonymousInterfaceImplementationTests
     {
         [TestMethod]
-        public void Test_DynamicInstanceIsInitializedWithDynamicSuppliedValue()
+    public void TestDynamicInstanceIsInitializedWithDynamicSuppliedValue()
         {
             var source = new
                          {
@@ -31,7 +31,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_DynamicInstanceIsInitializedWithStaticSuppliedValue()
+    public void TestDynamicInstanceIsInitializedWithStaticSuppliedValue()
         {
             var source = new Foo
                          {
@@ -50,13 +50,13 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_DynamicInstanceCanBeCalledFromLinq()
+    public void TestDynamicInstanceCanBeCalledFromLinq()
         {
             var instances = from i in Enumerable.Range(0,
                                                        100)
                             select Dynamic<IFoo>.NewInstance(new
                                                              {
-                                                                 Name = String.Format("Person{0}",
+                                                                 Name = string.Format(System.Globalization.CultureInfo.InvariantCulture, "Person{0}",
                                                                                       i),
                                                                  Age = i
                                                              });
@@ -67,7 +67,7 @@ namespace Tests.BrightSword.Squid
                                                Assert.IsNotNull(_item);
                                                Assert.IsInstanceOfType(_item,
                                                                        typeof (IFoo));
-                                               Assert.AreEqual(String.Format("Person{0}",
+                                               Assert.AreEqual(string.Format(System.Globalization.CultureInfo.InvariantCulture, "Person{0}",
                                                                              _index),
                                                                _item.Name);
                                                Assert.AreEqual(_index,
@@ -77,7 +77,7 @@ namespace Tests.BrightSword.Squid
                                    .All(_ => _));
         }
 
-        private class Foo : IFoo
+    private sealed class Foo : IFoo
         {
             public string Name { get; set; }
             public int Age { get; set; }

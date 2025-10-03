@@ -19,7 +19,7 @@ namespace Tests.BrightSword.Squid
     public class MappedTypeTests
     {
         [TestMethod]
-        public void Test_InterfaceWithRemoteTypeProperty()
+    public void TestInterfaceWithRemoteTypeProperty()
         {
             var actual = MappedTypeDynamic<IInterfaceWithMappedRemoteTypeReadonlyProperty>.NewInstance();
 
@@ -29,7 +29,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_DefaultMappedReadonlyPropertiesWork()
+    public void TestDefaultMappedReadonlyPropertiesWork()
         {
             var instance = new BasicDataTransferObjectTypeCreator<IComprehensive>().CreateInstance();
 
@@ -42,7 +42,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void Test_InlineMappedReadonlyPropertiesWork()
+    public void TestInlineMappedReadonlyPropertiesWork()
         {
             var instance = new BasicDataTransferObjectTypeCreator<IComprehensive>((_ => typeof (IFoo).IsAssignableFrom(_)
                                                                                             ? typeof (Foo)
@@ -52,7 +52,7 @@ namespace Tests.BrightSword.Squid
                             instance.Foo.GetType());
         }
 
-        internal class LocalBar : IBar
+    internal sealed class LocalBar : IBar
         {
             private const decimal C_VALUE = 25;
 
