@@ -71,7 +71,9 @@ namespace BrightSword.SwissKnife
             {
                 _forwardCounter++;
                 var value = _forwardCounter;
-                return new Guid(a == -1 ? _a : a, b == -1 ? _b : b, c == -1 ? _c : c, value.GetReversedBytes());
+                Span<byte> bytes = stackalloc byte[8];
+                value.WriteReversedBytes(bytes);
+                return new Guid(a == -1 ? _a : a, b == -1 ? _b : b, c == -1 ? _c : c, bytes.ToArray());
             }
             finally
             {
@@ -86,7 +88,9 @@ namespace BrightSword.SwissKnife
             {
                 _reverseCounter--;
                 var value = _reverseCounter;
-                return new Guid(a == -1 ? _a : a, b == -1 ? _b : b, c == -1 ? _c : c, value.GetReversedBytes());
+                Span<byte> bytes = stackalloc byte[8];
+                value.WriteReversedBytes(bytes);
+                return new Guid(a == -1 ? _a : a, b == -1 ? _b : b, c == -1 ? _c : c, bytes.ToArray());
             }
             finally
             {

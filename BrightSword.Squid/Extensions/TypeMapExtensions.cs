@@ -9,32 +9,34 @@ namespace BrightSword.Squid
                                                     Type mapTo,
                                                     params Type[] mappableTypes)
         {
-            if (!mapFrom.IsGenericType)
-            {
-                return null;
-            }
+            ArgumentNullException.ThrowIfNull(mapFrom);
+            ArgumentNullException.ThrowIfNull(mapTo);
 
-            if (mapFrom.GetGenericArguments().Length != mapTo.GetGenericArguments().Length)
-            {
-                return null;
-            }
+            if (!mapFrom.IsGenericType) return null;
+
+            var fromArgs = mapFrom.GetGenericArguments();
+            var toArgs = mapTo.GetGenericArguments();
+            if (fromArgs.Length != toArgs.Length) return null;
 
             return mapFrom.GetGenericTypeDefinition()
-                          .MapTypeIfPossible(mapTo.MakeGenericType(mapFrom.GetGenericArguments()),
-                                             mappableTypes);
+                          .MapTypeIfPossible(mapTo.MakeGenericType(fromArgs), mappableTypes);
         }
 
         public static Type MapTypeIfPossible(this Type mapFrom,
                                              Type mapTo,
                                              params Type[] mappableTypes)
         {
-            var assignable = from mappableType in mappableTypes
-                             let mapIsPossible = mapFrom.IsAssignableFrom(mappableType)
-                             select mapIsPossible
-                                        ? mapTo
-                                        : null;
+            ArgumentNullException.ThrowIfNull(mapFrom);
+            ArgumentNullException.ThrowIfNull(mapTo);
 
-            return assignable.FirstOrDefault(_ => _ != null);
+            mappableTypes ??= [];
+
+            foreach (var mappableType in mappableTypes)
+            {
+                if (mapFrom.IsAssignableFrom(mappableType)) return mapTo;
+            }
+
+            return null;
         }
     }
 }

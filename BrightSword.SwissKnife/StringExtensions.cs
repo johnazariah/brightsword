@@ -89,8 +89,19 @@ namespace BrightSword.SwissKnife
             }
         }
 
-        // Private helpers for segment extraction
-        private static string GetNextSegment(this string @this, ref int iStart, ref int iEnd, out bool endOfString, bool respectSpace = true, bool respectCamelCase = true, bool respectPunctuation = true, params char[] separators)
+    /// <summary>
+    /// Private helper for segment extraction. Returns the next segment in the string based on the provided rules.
+    /// </summary>
+    /// <param name="this">The input string.</param>
+    /// <param name="iStart">Start index (by reference).</param>
+    /// <param name="iEnd">End index (by reference).</param>
+    /// <param name="endOfString">Set to true when the end of the string is reached.</param>
+    /// <param name="respectSpace">Whether to respect spaces as separators.</param>
+    /// <param name="respectCamelCase">Whether to split on camel case.</param>
+    /// <param name="respectPunctuation">Whether to split on punctuation.</param>
+    /// <param name="separators">Custom separator characters.</param>
+    /// <returns>The next segment as a string.</returns>
+    private static string GetNextSegment(this string @this, ref int iStart, ref int iEnd, out bool endOfString, bool respectSpace = true, bool respectCamelCase = true, bool respectPunctuation = true, params char[] separators)
         {
             // Ensure indices are within bounds
             if (iStart >= @this.Length)

@@ -9,17 +9,11 @@ namespace BrightSword.Squid
     public static class Dynamic<T>
         where T : class
     {
-        private static readonly BasicDataTransferObjectTypeCreator<T> _typeCreator = new BasicDataTransferObjectTypeCreator<T>();
+        private static readonly BasicDataTransferObjectTypeCreator<T> _typeCreator = new();
 
-        public static Type Type
-        {
-            get { return _typeCreator.Type; }
-        }
+        public static Type Type => _typeCreator.Type;
 
-        public static T NewInstance(dynamic source = null)
-        {
-            return _typeCreator.CreateInstance(source);
-        }
+        public static T NewInstance(dynamic source = null) => _typeCreator.CreateInstance(source);
     }
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "Intentional generic type-specific cached TypeCreator")]
@@ -27,16 +21,10 @@ namespace BrightSword.Squid
         where T : class
         where TTypeCreator : BasicDataTransferObjectTypeCreator<T>, new()
     {
-        private static readonly TTypeCreator _typeCreator = new TTypeCreator();
+        private static readonly TTypeCreator _typeCreator = new();
 
-        public static Type Type
-        {
-            get { return _typeCreator.Type; }
-        }
+        public static Type Type => _typeCreator.Type;
 
-        public static T NewInstance()
-        {
-            return _typeCreator.CreateInstance();
-        }
+        public static T NewInstance() => _typeCreator.CreateInstance();
     }
 }

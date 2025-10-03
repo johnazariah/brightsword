@@ -7,14 +7,28 @@ using Microsoft.CSharp.RuntimeBinder;
 
 namespace BrightSword.Squid.Behaviours
 {
+    /// <summary>
+    /// Helper that generates IL instructions to set field values for emitted types.
+    /// This class yields <see cref="Action{ILGenerator}"/> sequences that emit the
+    /// required opcodes to initialize fields with given values.
+    /// </summary>
     public class FieldValueSetInstructionHelper
     {
         // Cached parameter type arrays to avoid repeated allocations (CA1861)
         private static readonly Type[] GetTypeFromHandleArgTypes = new[] { typeof(RuntimeTypeHandle) };
+        private static readonly MethodInfo GetTypeFromHandleMethod = typeof(Type).GetMethod(nameof(Type.GetTypeFromHandle), BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, null, GetTypeFromHandleArgTypes, null);
 
+        /// <summary>
+        /// Generate IL instructions to set <paramref name="field"/> to <paramref name="value"/>.
+        /// </summary>
         internal IEnumerable<Action<ILGenerator>> GenerateCodeToSetFieldValue(FieldInfo field,
                                                                               object value)
         {
+            if (field == null)
+            {
+                ArgumentNullException.ThrowIfNull(field);
+            }
+
             try
             {
                 return GenerateCode(field,
@@ -22,8 +36,7 @@ namespace BrightSword.Squid.Behaviours
             }
             catch (RuntimeBinderException)
             {
-                throw new NotSupportedException(string.Format(System.Globalization.CultureInfo.InvariantCulture, "Cannot set default value for {0}",
-                                                              field.Name));
+                throw new NotSupportedException($"Cannot set default value for {field.Name}");
             }
         }
 
@@ -101,25 +114,22 @@ namespace BrightSword.Squid.Behaviours
             yield return _ => _.Emit(OpCodes.Ldc_I4,
                                      bits[2]);
 
-            var isNegative = (0x1 << 31 & bits[3]) != 0;
-            yield return _ => _.Emit(OpCodes.Ldc_I4,
-                                     isNegative
-                                         ? 1
-                                         : 0);
+            var isNegative = ((0x1 << 31) & bits[3]) != 0;
+            yield return _ => _.Emit(OpCodes.Ldc_I4, isNegative ? 1 : 0);
 
             var scale = (0x000F0000 & bits[3]) >> 16;
             yield return _ => _.Emit(OpCodes.Ldc_I4,
                                      scale);
             yield return _ => _.Emit(OpCodes.Newobj,
-                                     typeof(Decimal).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                                     typeof(decimal).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                                                                      null,
                                                                      new[]
                                                                      {
-                                                                         typeof (Int32),
-                                                                         typeof (Int32),
-                                                                         typeof (Int32),
-                                                                         typeof (Boolean),
-                                                                         typeof (Byte)
+                                                                         typeof(int),
+                                                                         typeof(int),
+                                                                         typeof(int),
+                                                                         typeof(bool),
+                                                                         typeof(byte)
                                                                      },
                                                                      null));
             yield return _ => _.Emit(OpCodes.Stfld,
@@ -128,29 +138,23 @@ namespace BrightSword.Squid.Behaviours
 
         private static Action<ILGenerator> GenerateCodeToWriteIntegralValue(long value)
         {
-            if (value >= sbyte.MinValue
-                && value <= sbyte.MaxValue)
+            // Prefer the smallest opcode that can hold the value where possible.
+            if (value is >= sbyte.MinValue and <= sbyte.MaxValue)
             {
-                return _ => _.Emit(OpCodes.Ldc_I4_S,
-                                   (sbyte)value);
+                return _ => _.Emit(OpCodes.Ldc_I4_S, (sbyte)value);
             }
 
-            if (value >= byte.MinValue
-                && value <= byte.MaxValue)
+            if (value is >= byte.MinValue and <= byte.MaxValue)
             {
-                return _ => _.Emit(OpCodes.Ldc_I4_S,
-                                   (byte)value);
+                return _ => _.Emit(OpCodes.Ldc_I4_S, (byte)value);
             }
 
-            if (value >= int.MinValue
-                && value <= int.MaxValue)
+            if (value is >= int.MinValue and <= int.MaxValue)
             {
-                return _ => _.Emit(OpCodes.Ldc_I4,
-                                   (int)value);
+                return _ => _.Emit(OpCodes.Ldc_I4, (int)value);
             }
 
-            return _ => _.Emit(OpCodes.Ldc_I8,
-                               value);
+            return _ => _.Emit(OpCodes.Ldc_I8, value);
         }
 
         protected virtual IEnumerable<Action<ILGenerator>> GenerateCode(FieldInfo field,
@@ -221,12 +225,7 @@ namespace BrightSword.Squid.Behaviours
         {
             return GenerateCodeForArray(value,
                                         field,
-                                        _item => new Action<ILGenerator>[]
-                                                 {
-                                                     _ => _.Emit(OpCodes.Ldc_I4,
-                                                                 _item),
-                                                     _ => _.Emit(OpCodes.Stelem_I4)
-                                                 });
+                                        _item => new Action<ILGenerator>[] { _ => _.Emit(OpCodes.Ldc_I4, _item), _ => _.Emit(OpCodes.Stelem_I4) });
         }
 
         protected virtual IEnumerable<Action<ILGenerator>> GenerateCode(FieldInfo field,
@@ -234,12 +233,7 @@ namespace BrightSword.Squid.Behaviours
         {
             return GenerateCodeForArray(value,
                                         field,
-                                        _item => new Action<ILGenerator>[]
-                                                 {
-                                                     _ => _.Emit(OpCodes.Ldstr,
-                                                                 _item),
-                                                     _ => _.Emit(OpCodes.Stelem_Ref)
-                                                 });
+                                        _item => new Action<ILGenerator>[] { _ => _.Emit(OpCodes.Ldstr, _item), _ => _.Emit(OpCodes.Stelem_Ref) });
         }
     }
 }

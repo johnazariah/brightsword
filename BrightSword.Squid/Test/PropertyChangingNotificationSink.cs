@@ -26,18 +26,14 @@ namespace BrightSword.Squid.Test
 
         public object GetOriginalValue(string propertyName)
         {
-            object result;
-            return _changedProperties.TryGetValue(propertyName,
-                                                  out result)
-                       ? result
-                       : null;
+            return _changedProperties.TryGetValue(propertyName, out var result) ? result : null;
         }
 
         public bool IsNew { get; internal set; }
 
         public bool IsChanged
         {
-            get { return _changedProperties.Count != 0; }
+            get => _changedProperties.Count != 0;
         }
 
         public bool OnPropertyChanging(string propertyName,
@@ -45,14 +41,14 @@ namespace BrightSword.Squid.Test
                                                object currentValue,
                                                object newValue)
         {
-            if (currentValue == newValue)
+            if (ReferenceEquals(currentValue, newValue) || Equals(currentValue, newValue))
             {
                 return false;
             }
 
-            if (_changedProperties.ContainsKey(propertyName))
+            if (_changedProperties.TryGetValue(propertyName, out var existing))
             {
-                if (_changedProperties[propertyName] == newValue)
+                if (EqualityComparer<object>.Default.Equals(existing, newValue))
                 {
                     _changedProperties.Remove(propertyName);
                 }

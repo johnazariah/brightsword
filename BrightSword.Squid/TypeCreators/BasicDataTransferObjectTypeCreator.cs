@@ -46,8 +46,8 @@ namespace BrightSword.Squid.TypeCreators
         private bool _trackReadonlyPropertyInitialized;
         private Type _type;
         // Cached Type[] arrays used for reflection GetMethod calls to avoid repeated allocations (CA1861)
-        private static readonly Type[] OnPropertyChangingArgTypes = new[] { typeof(String), typeof(Type), typeof(Object), typeof(Object) };
-        private static readonly Type[] GetTypeFromHandleArgTypes = new[] { typeof(RuntimeTypeHandle) };
+    private static readonly Type[] OnPropertyChangingArgTypes = new[] { typeof(string), typeof(Type), typeof(object), typeof(object) };
+    private static readonly Type[] GetTypeFromHandleArgTypes = new[] { typeof(RuntimeTypeHandle) };
 
         protected BasicDataTransferObjectTypeCreator()
         {
@@ -65,18 +65,15 @@ namespace BrightSword.Squid.TypeCreators
                             ? typeof(T)
                             : typeof(Object);
 
-            _assemblyName = string.Format(System.Globalization.CultureInfo.InvariantCulture, "Dynamic.{0}.{1}",
-                                          GetType().GetNonGenericPartOfClassName(),
-                                          _interfaceName);
+            _assemblyName = $"Dynamic.{GetType().GetNonGenericPartOfClassName()}.{_interfaceName}";
 
-            _facetInterfaces = Enumerable.Empty<Type>();
+            _facetInterfaces = Array.Empty<Type>();
 
             _fieldValueSetInstructionHelper = new FieldValueSetInstructionHelper();
 
             _specialBehaviours = new[]
                                  {
-                                     new KeyValuePair<Type, IBehaviour>(typeof (ICloneable),
-                                                                        new CloneBehaviour())
+                                     new KeyValuePair<Type, IBehaviour>(typeof(ICloneable), new CloneBehaviour())
                                  };
 
             _typeMaps = new List<Func<Type, Type>>
@@ -105,73 +102,65 @@ namespace BrightSword.Squid.TypeCreators
 
         public virtual bool TrackReadonlyPropertyInitialized
         {
-            get { return _trackReadonlyPropertyInitialized; }
-            set { _trackReadonlyPropertyInitialized = value; }
+            get => _trackReadonlyPropertyInitialized;
+            set => _trackReadonlyPropertyInitialized = value;
         }
 
         public virtual bool SaveAssemblyToDisk
         {
-            get { return _saveAssemblyToDisk; }
-            set { _saveAssemblyToDisk = value; }
+            get => _saveAssemblyToDisk;
+            set => _saveAssemblyToDisk = value;
         }
 
         public virtual string AssemblyName
         {
-            get { return _assemblyName; }
-            set { _assemblyName = value; }
+            get => _assemblyName;
+            set => _assemblyName = value;
         }
 
         public virtual string InterfaceName
         {
-            get { return _interfaceName; }
-            set { _interfaceName = value; }
+            get => _interfaceName;
+            set => _interfaceName = value;
         }
 
         public virtual string ClassName
         {
-            get { return _className; }
-            set { _className = value; }
+            get => _className;
+            set => _className = value;
         }
 
         public virtual Type BaseType
         {
-            get { return _baseType; }
-            set { _baseType = value; }
+            get => _baseType;
+            set => _baseType = value;
         }
 
         public virtual IEnumerable<Type> FacetInterfaces
         {
-            get { return _facetInterfaces; }
-            set { _facetInterfaces = value; }
+            get => _facetInterfaces;
+            set => _facetInterfaces = value;
         }
 
         public virtual FieldValueSetInstructionHelper FieldValueSetInstructionHelper
         {
-            get { return _fieldValueSetInstructionHelper; }
-            set { _fieldValueSetInstructionHelper = value; }
+            get => _fieldValueSetInstructionHelper;
+            set => _fieldValueSetInstructionHelper = value;
         }
 
-        public virtual IEnumerable<KeyValuePair<Type, IBehaviour>> SpecialBehaviours
-
-        {
-            get { return _specialBehaviours; }
-            set { _specialBehaviours = value; }
-        }
+        public virtual IEnumerable<KeyValuePair<Type, IBehaviour>> SpecialBehaviours => _specialBehaviours;
 
         #endregion
 
         #region Overridable Properties
 
-        protected virtual IEnumerable<Func<Type, Type>> TypeMaps
-        {
-            get { return _typeMaps; }
-        }
+    protected virtual IEnumerable<Func<Type, Type>> TypeMaps => _typeMaps;
 
         protected virtual IDictionary<PropertyInfo, PropertyBackingFieldMap> BackingFieldProperties
         {
             get
             {
-                return _backingFieldPropertyMap ?? (_backingFieldPropertyMap = (from _propertyInfo in typeof(T).GetAllNonExcludedProperties()
+                return _backingFieldPropertyMap ??= (from _propertyInfo in typeof(T).GetAllNonExcludedProperties()
                                                                                 let isReadonlyProperty = !_propertyInfo.CanWrite && _propertyInfo.GetSetMethod() == null
                                                                                 let mappedType = GetMappedType(_propertyInfo)
                                                                                 let backingFieldType = isReadonlyProperty
@@ -185,7 +174,7 @@ namespace BrightSword.Squid.TypeCreators
                                                                                     BackingFieldType = backingFieldType,
                                                                                     BackingField = null
                                                                                 }).ToDictionary(_ => _.PropertyInfo,
-                                                                                                       _ => _));
+                                                                                                       _ => _);
             }
         }
 
@@ -258,11 +247,7 @@ namespace BrightSword.Squid.TypeCreators
             }
         }
 
-        protected virtual string GetBackingFieldName(PropertyInfo propertyInfo)
-        {
-            return string.Format(System.Globalization.CultureInfo.InvariantCulture, "_{0}",
-                                 propertyInfo.Name.ToLowerInvariant());
-        }
+        protected virtual string GetBackingFieldName(PropertyInfo propertyInfo) => $"_{propertyInfo.Name.ToLowerInvariant()}";
 
         #endregion
 
@@ -270,8 +255,8 @@ namespace BrightSword.Squid.TypeCreators
         {
             get
             {
-                return _interfacesWithSpecialBehaviours ?? (_interfacesWithSpecialBehaviours = SpecialBehaviours.Select(_ => _.Key)
-                                                                                                                .ToArray());
+                return _interfacesWithSpecialBehaviours ??= SpecialBehaviours.Select(_ => _.Key)
+                                                                                                                .ToArray();
             }
         }
 
@@ -318,8 +303,7 @@ namespace BrightSword.Squid.TypeCreators
                                                                                                                   defaultValue)
                                    select instruction;
 
-                var dbg = instructions.ToList();
-                return dbg;
+                return instructions;
             }
         }
 
@@ -1090,7 +1074,7 @@ namespace BrightSword.Squid.TypeCreators
                                                                                                           null,
                                                                                                           Type.EmptyTypes,
                                                                                                           null),
-                                                                     Array.Empty<object>()));
+                                                                     []));
                 }
                 else if (param.IsDefined(typeof(ParamArrayAttribute),
                                          false))
@@ -1099,7 +1083,7 @@ namespace BrightSword.Squid.TypeCreators
                                                                                                                  null,
                                                                                                                  Type.EmptyTypes,
                                                                                                                  null),
-                                                                     Array.Empty<object>()));
+                                                                     []));
                 }
             }
 
@@ -1247,10 +1231,7 @@ namespace BrightSword.Squid.TypeCreators
 
         #region Instance Creation
 
-        protected virtual Func<T> InstanceFactory
-        {
-            get { return _instanceFactory ?? (_instanceFactory = BuildInstanceFactory()); }
-        }
+        protected virtual Func<T> InstanceFactory => _instanceFactory ??= BuildInstanceFactory();
 
         public virtual T CreateInstance(dynamic source = null)
         {
@@ -1281,7 +1262,7 @@ namespace BrightSword.Squid.TypeCreators
 
         public virtual Type Type
         {
-            get { return _type ?? (_type = BuildType()); }
+            get { return _type ??= BuildType(); }
         }
 
         protected virtual Type BuildType()

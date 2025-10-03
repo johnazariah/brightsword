@@ -6,7 +6,7 @@ namespace BrightSword.SwissKnife.Tests
         public void CheckBoolThrowsOnFalse()
         {
 #pragma warning disable CS0618
-            Assert.Throws<Exception>(() => false.Check("bad"));
+            Assert.Throws<InvalidOperationException>(() => false.Check("bad"));
 #pragma warning restore CS0618
         }
 
@@ -22,7 +22,7 @@ namespace BrightSword.SwissKnife.Tests
         public void CheckFuncThrowsOnFalse()
         {
 #pragma warning disable CS0618
-            Assert.Throws<Exception>(() => new Func<bool>(() => false).Check("bad"));
+            Assert.Throws<InvalidOperationException>(() => new Func<bool>(() => false).Check("bad"));
 #pragma warning restore CS0618
         }
 
