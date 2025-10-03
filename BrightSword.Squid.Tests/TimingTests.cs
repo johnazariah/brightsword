@@ -68,7 +68,7 @@ namespace Tests.BrightSword.Squid
                  i < count;
                  i++)
             {
-                new Mock<INonGenericInterfaceWithGenericProperties>().Object;
+                var _obj = new Mock<INonGenericInterfaceWithGenericProperties>().Object;
             }
 
             sw.Stop();

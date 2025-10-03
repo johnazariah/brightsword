@@ -1,3 +1,9 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using Xunit;
+using FsCheck.Xunit;
+
 namespace BrightSword.SwissKnife.Tests
 {
     public interface I1 { int A { get; } }
@@ -8,7 +14,7 @@ namespace BrightSword.SwissKnife.Tests
         [Fact]
         public void NameForGenericTypeWorks()
         {
-            var name = typeof(List<string>).Name();
+            var name = typeof(List<string>).PrintableName();
             Assert.Equal("List<String>", name);
         }
 
@@ -20,13 +26,13 @@ namespace BrightSword.SwissKnife.Tests
             Assert.Contains("B", props);
         }
 
-        private static readonly Type[] SampleTypes = [typeof(int), typeof(string), typeof(List<string>), typeof(object)];
+        private static readonly Type[] SampleTypes = new[] { typeof(int), typeof(string), typeof(List<string>), typeof(object) };
 
         [Property]
         public static void NameIdempotent(int idx)
         {
             var t = SampleTypes[Math.Abs(idx) % SampleTypes.Length];
-            var name = t.Name();
+            var name = t.PrintableName();
             Assert.NotNull(name);
         }
     }

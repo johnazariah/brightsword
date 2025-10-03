@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.Json;
 
 namespace BrightSword.Squid.Behaviours
 {
@@ -20,113 +20,147 @@ namespace BrightSword.Squid.Behaviours
 
         public virtual TypeBuilder AddCloneMethod(TypeBuilder typeBuilder)
         {
+            // Emit a simple clone method that calls back into a static helper which uses System.Text.Json
+            // for deep cloning. This avoids relying on BinaryFormatter which is unavailable on recent runtimes.
             var method = typeBuilder.DefineMethod("Clone",
                                                   MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.Final | MethodAttributes.HideBySig | MethodAttributes.NewSlot,
-                                                  typeof (Object),
-                                                  new Type[]
-                                                  {});
+                                                  typeof(object),
+                                                  Type.EmptyTypes);
 
             var gen = method.GetILGenerator();
 
-            gen.DeclareLocal(typeof (BinaryFormatter));
-            gen.DeclareLocal(typeof (MemoryStream));
-            gen.DeclareLocal(typeof (Object));
-            gen.DeclareLocal(typeof (Boolean));
-
-            var labelReturnAndExit = gen.DefineLabel();
-            var labelEndFinally = gen.DefineLabel();
-
-            gen.Emit(OpCodes.Nop);
-
-            gen.Emit(OpCodes.Newobj,
-                     typeof (BinaryFormatter).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                                                             null,
-                                                             new Type[]
-                                                             {},
-                                                             null));
-            gen.Emit(OpCodes.Stloc_0);
-
-            gen.Emit(OpCodes.Newobj,
-                     typeof (MemoryStream).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                                                          null,
-                                                          new Type[]
-                                                          {},
-                                                          null));
-            gen.Emit(OpCodes.Stloc_1);
-
-            gen.BeginExceptionBlock();
-            gen.Emit(OpCodes.Nop);
-            gen.Emit(OpCodes.Ldloc_0);
-            gen.Emit(OpCodes.Ldloc_1);
+            // Load 'this' onto the stack and call the static fallback helper
+            var helper = typeof(CloneBehaviour).GetMethod(nameof(FallbackClone), BindingFlags.Public | BindingFlags.Static);
             gen.Emit(OpCodes.Ldarg_0);
-            gen.Emit(OpCodes.Callvirt,
-                     typeof (BinaryFormatter).GetMethod("Serialize",
-                                                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                                                        null,
-                                                        new[]
-                                                        {
-                                                            typeof (Stream),
-                                                            typeof (Object)
-                                                        },
-                                                        null));
-            gen.Emit(OpCodes.Nop);
-            gen.Emit(OpCodes.Ldloc_1);
-            gen.Emit(OpCodes.Ldc_I4_0);
-            gen.Emit(OpCodes.Conv_I8);
-            gen.Emit(OpCodes.Ldc_I4_0);
-            gen.Emit(OpCodes.Callvirt,
-                     typeof (Stream).GetMethod("Seek",
-                                               BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                                               null,
-                                               new[]
-                                               {
-                                                   typeof (Int64),
-                                                   typeof (SeekOrigin)
-                                               },
-                                               null));
-            gen.Emit(OpCodes.Pop);
-            gen.Emit(OpCodes.Ldloc_0);
-            gen.Emit(OpCodes.Ldloc_1);
-
-            gen.Emit(OpCodes.Callvirt,
-                     typeof (BinaryFormatter).GetMethod("Deserialize",
-                                                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                                                        null,
-                                                        new[]
-                                                        {
-                                                            typeof (Stream)
-                                                        },
-                                                        null));
-            gen.Emit(OpCodes.Stloc_2);
-            gen.Emit(OpCodes.Leave_S,
-                     labelReturnAndExit);
-            gen.BeginFinallyBlock();
-            gen.Emit(OpCodes.Ldloc_1);
-            gen.Emit(OpCodes.Ldnull);
-
-            gen.Emit(OpCodes.Ceq);
-            gen.Emit(OpCodes.Stloc_3);
-            gen.Emit(OpCodes.Ldloc_3);
-            gen.Emit(OpCodes.Brtrue_S,
-                     labelEndFinally);
-            gen.Emit(OpCodes.Ldloc_1);
-            gen.Emit(OpCodes.Callvirt,
-                     typeof (IDisposable).GetMethod("Dispose",
-                                                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                                                    null,
-                                                    new Type[]
-                                                    {},
-                                                    null));
-            gen.Emit(OpCodes.Nop);
-            gen.MarkLabel(labelEndFinally);
-            gen.Emit(OpCodes.Endfinally);
-            gen.EndExceptionBlock();
-            gen.MarkLabel(labelReturnAndExit);
-            gen.Emit(OpCodes.Nop);
-            gen.Emit(OpCodes.Ldloc_2);
+            gen.Emit(OpCodes.Call, helper);
             gen.Emit(OpCodes.Ret);
 
             return typeBuilder;
+        }
+
+        // Public helper used by emitted Clone methods when BinaryFormatter is not available.
+        // Performs a reflection-based deep clone handling arrays, lists and dictionaries.
+        public static object FallbackClone(object obj)
+        {
+            if (obj == null)
+            {
+                return null;
+            }
+
+            var visited = new Dictionary<object, object>(new ReferenceEqualityComparer());
+            return InternalClone(obj, visited);
+        }
+
+        private static object InternalClone(object obj, Dictionary<object, object> visited)
+        {
+            if (obj == null) return null;
+
+            var type = obj.GetType();
+
+            // Immutable or primitive types
+            if (type.IsPrimitive || type.IsEnum || type == typeof(string) || type == typeof(decimal))
+            {
+                return obj;
+            }
+
+            if (visited.TryGetValue(obj, out var existing))
+            {
+                return existing;
+            }
+
+            // Arrays
+            if (type.IsArray)
+            {
+                var arr = (Array)obj;
+                var elementType = type.GetElementType() ?? typeof(object);
+                var clone = Array.CreateInstance(elementType, arr.Length);
+                visited[obj] = clone;
+                for (int i = 0; i < arr.Length; i++)
+                {
+                    clone.SetValue(InternalClone(arr.GetValue(i), visited), i);
+                }
+
+                return clone;
+            }
+
+            // IDictionary
+            if (typeof(System.Collections.IDictionary).IsAssignableFrom(type))
+            {
+                var dict = (System.Collections.IDictionary)obj;
+                object clone;
+                try
+                {
+                    clone = Activator.CreateInstance(type) ?? new System.Collections.Hashtable();
+                }
+                catch
+                {
+                    clone = new System.Collections.Hashtable();
+                }
+
+                visited[obj] = clone;
+                var cloneDict = (System.Collections.IDictionary)clone;
+                foreach (var key in dict.Keys)
+                {
+                    var k = InternalClone(key, visited);
+                    var v = InternalClone(dict[key], visited);
+                    cloneDict[k] = v;
+                }
+
+                return cloneDict;
+            }
+
+            // IEnumerable (IList)
+            if (typeof(System.Collections.IList).IsAssignableFrom(type))
+            {
+                var list = (System.Collections.IList)obj;
+                object clone;
+                try
+                {
+                    clone = Activator.CreateInstance(type) ?? new System.Collections.ArrayList();
+                }
+                catch
+                {
+                    clone = new System.Collections.ArrayList();
+                }
+
+                visited[obj] = clone;
+                var cloneList = (System.Collections.IList)clone;
+                foreach (var item in list)
+                {
+                    cloneList.Add(InternalClone(item, visited));
+                }
+
+                return cloneList;
+            }
+
+            // Fallback: create instance and copy fields
+            object result;
+            try
+            {
+                result = Activator.CreateInstance(type)!;
+            }
+            catch
+            {
+                // Try to get an uninitialized object if no public ctor
+                result = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(type);
+            }
+
+            visited[obj] = result;
+
+            var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            foreach (var field in fields)
+            {
+                var val = field.GetValue(obj);
+                field.SetValue(result, InternalClone(val, visited));
+            }
+
+            return result;
+        }
+
+        private sealed class ReferenceEqualityComparer : IEqualityComparer<object>
+        {
+            public new bool Equals(object? x, object? y) => ReferenceEquals(x, y);
+            public int GetHashCode(object obj) => System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(obj);
         }
     }
 }

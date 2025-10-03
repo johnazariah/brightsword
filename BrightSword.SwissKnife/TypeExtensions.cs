@@ -6,110 +6,134 @@ using System.Reflection;
 namespace BrightSword.SwissKnife
 {
     /// <summary>
-    /// Provides extension methods for <see cref="Type"/> to simplify reflection and property inspection.
+    /// Provides extension methods for <see cref="Type"/> to simplify reflection and type-name helpers.
+    /// This file adds a small set of helpers the Squid project expects: PrintableName, RenameToConcreteType,
+    /// and methods to enumerate members across interface inheritance.
     /// </summary>
-    /// <remarks>
-    /// These helpers make it easier to work with generic types, property discovery, and interface inheritance.
-    /// </remarks>
     public static class TypeExtensions
     {
         private const BindingFlags DefaultBindingFlags = BindingFlags.Instance | BindingFlags.Public;
 
-        /// <summary>
-        /// Gets a friendly name for the type, including generic arguments if applicable.
-        /// </summary>
-        /// <param name="this">The type to get the name for.</param>
-        /// <returns>A string representing the type name, e.g. <c>List<String></c> or <c>Int32</c>.</returns>
-        /// <example>
-        /// <code>
-        /// var name = typeof(List<string>).Name(); // "List<String>"
-        /// var name2 = typeof(int).Name(); // "Int32"
-        /// </code>
-        /// </example>
-        public static string Name(this Type @this)
+        // Friendly printable name similar to the original project's intent.
+        public static string PrintableName(this Type @this)
         {
+            if (@this == null) throw new ArgumentNullException(nameof(@this));
+
             if (!@this.IsGenericType)
             {
                 return @this.Name;
             }
 
             var genericTypeDefinition = @this.GetGenericTypeDefinition();
-            var baseName = genericTypeDefinition.Name[..genericTypeDefinition.Name.IndexOf('`')];
-            var args = string.Join(", ", @this.GetGenericArguments().Select(a => a.Name()));
+            var baseName = genericTypeDefinition.Name;
+            var tickIndex = baseName.IndexOf('`');
+            if (tickIndex > 0) baseName = baseName.Substring(0, tickIndex);
+
+            var args = string.Join(", ", @this.GetGenericArguments().Select(a => a.PrintableName()));
             return $"{baseName}<{args}>";
         }
 
-        /// <summary>
-        /// Gets all public instance properties for the type, including inherited properties and interface properties.
-        /// </summary>
-        /// <param name="this">The type to inspect.</param>
-        /// <param name="bindingFlags">Binding flags to use (defaults to public instance).</param>
-        /// <returns>An enumerable of <see cref="PropertyInfo"/> for all matching properties.</returns>
-        /// <example>
-        /// <code>
-        /// var props = typeof(IMyInterface).GetAllProperties();
-        /// foreach (var p in props) Console.WriteLine(p.Name);
-        /// </code>
-        /// </example>
-        public static IEnumerable<PropertyInfo> GetAllProperties(this Type @this, BindingFlags bindingFlags = DefaultBindingFlags)
-            => @this.IsInterface ? @this.GetInterfaceProperties(bindingFlags, []) : @this.GetClassProperties(bindingFlags);
+    // Backwards-compatible Name() extension used by tests and older code.
+    public static string Name(this Type @this) => PrintableName(@this);
 
-        /// <summary>
-        /// Gets a property by name, optionally searching interface inheritance hierarchy.
-        /// </summary>
-        /// <param name="this">The type to inspect.</param>
-        /// <param name="propertyName">The name of the property to find.</param>
-        /// <param name="walkInterfaceInheritanceHierarchy">If true, searches all inherited interfaces for the property.</param>
-        /// <returns>The <see cref="PropertyInfo"/> if found, otherwise null.</returns>
-        /// <example>
-        /// <code>
-        /// var prop = typeof(IMyInterface).GetProperty("MyProp", true);
-        /// if (prop != null) Console.WriteLine(prop.PropertyType);
-        /// </code>
-        /// </example>
-        public static PropertyInfo GetProperty(this Type @this, string propertyName, bool walkInterfaceInheritanceHierarchy)
-            => walkInterfaceInheritanceHierarchy ? @this.GetAllProperties().FirstOrDefault(_pi => _pi.Name == propertyName) : @this.GetProperty(propertyName);
-
-        // Private helpers for property discovery
-        private static IEnumerable<PropertyInfo> GetClassProperties(this Type @this, BindingFlags bindingFlags)
+        // Heuristic used by the Squid project to convert interface type names to a concrete class-like name.
+        // Example: IMyInterface -> MyInterface; IList<T> -> List<T>
+        public static string RenameToConcreteType(this Type @this)
         {
+            if (@this == null) throw new ArgumentNullException(nameof(@this));
+
+            // If it's an interface and starts with 'I' followed by uppercase letter, trim the leading 'I'.
+            var name = @this.IsGenericType ? @this.PrintableName() : @this.Name;
+            if (@this.IsInterface && name.Length >= 2 && name[0] == 'I' && char.IsUpper(name[1]))
+            {
+                return name.Substring(1);
+            }
+
+            return name;
+        }
+
+        // Return all properties including inherited interface properties and base class properties.
+        public static IEnumerable<PropertyInfo> GetAllProperties(this Type @this, BindingFlags bindingFlags = DefaultBindingFlags)
+        {
+            if (@this == null) throw new ArgumentNullException(nameof(@this));
+
             if (@this.IsInterface)
             {
-                yield break;
+                // Include properties from all inherited interfaces
+                var processed = new HashSet<Type>();
+                return GetInterfaceProperties(@this, bindingFlags, processed);
             }
 
             bindingFlags &= ~BindingFlags.DeclaredOnly;
-            foreach (var property in @this.GetProperties(bindingFlags))
+            return @this.GetProperties(bindingFlags);
+        }
+
+        private static IEnumerable<PropertyInfo> GetInterfaceProperties(Type @this, BindingFlags bindingFlags, HashSet<Type> processed)
+        {
+            bindingFlags |= BindingFlags.DeclaredOnly;
+            if (!processed.Add(@this)) yield break;
+
+            foreach (var p in @this.GetProperties(bindingFlags)) yield return p;
+
+            foreach (var i in @this.GetInterfaces())
             {
-                yield return property;
+                foreach (var p in GetInterfaceProperties(i, bindingFlags, processed)) yield return p;
             }
         }
 
-        private static IEnumerable<PropertyInfo> GetInterfaceProperties(this Type @this, BindingFlags bindingFlags, IList<Type> processedInterfaces)
+        // Methods and events helpers used by Squid
+        public static IEnumerable<MethodInfo> GetAllMethods(this Type @this, BindingFlags bindingFlags = DefaultBindingFlags)
         {
-            if (!@this.IsInterface)
+            if (@this == null) throw new ArgumentNullException(nameof(@this));
+
+            if (@this.IsInterface)
             {
-                yield break;
+                var processed = new HashSet<Type>();
+                return GetInterfaceMethods(@this, bindingFlags, processed);
             }
 
+            bindingFlags &= ~BindingFlags.DeclaredOnly;
+            return @this.GetMethods(bindingFlags);
+        }
+
+        private static IEnumerable<MethodInfo> GetInterfaceMethods(Type @this, BindingFlags bindingFlags, HashSet<Type> processed)
+        {
             bindingFlags |= BindingFlags.DeclaredOnly;
-            processedInterfaces ??= [];
-            if (processedInterfaces.Contains(@this))
+            if (!processed.Add(@this)) yield break;
+
+            foreach (var m in @this.GetMethods(bindingFlags)) yield return m;
+
+            foreach (var i in @this.GetInterfaces())
             {
-                yield break;
+                foreach (var m in GetInterfaceMethods(i, bindingFlags, processed)) yield return m;
+            }
+        }
+
+        public static IEnumerable<EventInfo> GetAllEvents(this Type @this, BindingFlags bindingFlags = DefaultBindingFlags)
+        {
+            if (@this == null) throw new ArgumentNullException(nameof(@this));
+
+            if (@this.IsInterface)
+            {
+                var processed = new HashSet<Type>();
+                return GetInterfaceEvents(@this, bindingFlags, processed);
             }
 
-            foreach (var property in @this.GetProperties(bindingFlags))
-            {
-                yield return property;
-            }
+            bindingFlags &= ~BindingFlags.DeclaredOnly;
+            return @this.GetEvents(bindingFlags);
+        }
 
-            foreach (var pi in @this.GetInterfaces().SelectMany(i => i.GetInterfaceProperties(bindingFlags, processedInterfaces)))
-            {
-                yield return pi;
-            }
+        private static IEnumerable<EventInfo> GetInterfaceEvents(Type @this, BindingFlags bindingFlags, HashSet<Type> processed)
+        {
+            bindingFlags |= BindingFlags.DeclaredOnly;
+            if (!processed.Add(@this)) yield break;
 
-            processedInterfaces.Add(@this);
+            foreach (var e in @this.GetEvents(bindingFlags)) yield return e;
+
+            foreach (var i in @this.GetInterfaces())
+            {
+                foreach (var e in GetInterfaceEvents(i, bindingFlags, processed)) yield return e;
+            }
         }
     }
 }

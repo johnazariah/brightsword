@@ -1,0 +1,13 @@
+<Project>
+  <PropertyGroup>
+    <!-- Centralize xUnit runner version for all test projects -->
+    <XunitRunnerVisualStudioVersion>3.0.0</XunitRunnerVisualStudioVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- If projects reference xunit.runner.visualstudio, this Update will apply the centralized version metadata -->
+    <PackageReference Update="xunit.runner.visualstudio">
+      <Version>$(XunitRunnerVisualStudioVersion)</Version>
+    </PackageReference>
+  </ItemGroup>
+</Project>

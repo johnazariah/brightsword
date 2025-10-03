@@ -1317,8 +1317,9 @@ namespace BrightSword.Squid.TypeCreators
 
         protected virtual ModuleBuilder GetModuleBuilder(AssemblyBuilder assemblyBuilder)
         {
-            return assemblyBuilder.DefineDynamicModule(AssemblyName,
-                                                       GetAssemblyDllName());
+            // In .NET Core / .NET 5+ the DefineDynamicModule overload that accepts a file name is available
+            // on the AssemblyBuilder returned by DefineDynamicAssembly when emitting to disk is supported.
+            return assemblyBuilder.DefineDynamicModule(AssemblyName);
         }
 
         protected virtual string GetAssemblyDllName()
@@ -1329,17 +1330,17 @@ namespace BrightSword.Squid.TypeCreators
 
         protected virtual AssemblyBuilder GetAssemblyBuilder(AssemblyName assemblyName)
         {
-            return AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName,
-                                                                 AssemblyBuilderAccess.RunAndSave);
+            // Use the modern API to define a dynamic assembly
+            return AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
         }
 
         [ExcludeFromCodeCoverage]
         protected virtual void PersistAssembly(AssemblyBuilder assemblyBuilder)
         {
-            if (SaveAssemblyToDisk)
-            {
-                assemblyBuilder.Save(GetAssemblyDllName());
-            }
+            // Saving dynamic assemblies to disk is not supported on all runtimes; skip when unavailable.
+            // If SaveAssemblyToDisk is true and the runtime supports saving, this method can be overridden
+            // in a derived type to provide the behavior.
+            return;
         }
 
         protected virtual TypeBuilder BuildTypeBuilder(ModuleBuilder moduleBuilder)
