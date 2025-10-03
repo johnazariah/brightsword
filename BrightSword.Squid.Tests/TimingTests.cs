@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using BrightSword.Squid;
 using BrightSword.Squid.TypeCreators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tests.BrightSword.Squid.core;
 using Moq;
+using Tests.BrightSword.Squid.core;
 
 namespace Tests.BrightSword.Squid
 {
@@ -14,14 +14,14 @@ namespace Tests.BrightSword.Squid
     public class TimingTests
     {
         [TestMethod]
-    public void GivenAnInterfaceTypeThenCreationOfObjectsShouldBeFasterWithSquid()
+        public void GivenAnInterfaceTypeThenCreationOfObjectsShouldBeFasterWithSquid()
         {
-            const int count = 1000*1000;
+            const int count = 1000 * 1000;
 
-// ReSharper disable UnusedVariable
+            // ReSharper disable UnusedVariable
             var foo = Dynamic<INonGenericInterfaceWithGenericProperties, PropertyChangingNotificationSinkTypeCreator<INonGenericInterfaceWithGenericProperties>>.NewInstance();
             var bar = Dynamic<INonGenericInterfaceWithNonGenericProperties, PropertyChangingNotificationSinkTypeCreator<INonGenericInterfaceWithNonGenericProperties>>.NewInstance();
-// ReSharper restore UnusedVariable
+            // ReSharper restore UnusedVariable
 
             var sw = new Stopwatch();
 
@@ -84,14 +84,14 @@ namespace Tests.BrightSword.Squid
 
             sw.Reset();
             sw.Start();
-// ReSharper disable RedundantAssignment
+            // ReSharper disable RedundantAssignment
             for (var i = 0;
                  i < count;
                  i++)
             {
                 foo = Dynamic<INonGenericInterfaceWithGenericProperties, PropertyChangingNotificationSinkTypeCreator<INonGenericInterfaceWithGenericProperties>>.NewInstance();
             }
-// ReSharper restore RedundantAssignment
+            // ReSharper restore RedundantAssignment
 
             sw.Stop();
 
@@ -101,8 +101,8 @@ namespace Tests.BrightSword.Squid
         private static long GetTimeForDefaultCtorInvoke(Stopwatch sw,
                                                         int count)
         {
-            var defaultCtorNonGenericInterfaceWithGenericProperties = typeof (NonGenericInterfaceWithGenericProperties).GetConstructor(Type.EmptyTypes);
-            var defaultCtorNonGenericInterfaceWithNonGenericProperties = typeof (NonGenericInterfaceWithNonGenericProperties).GetConstructor(Type.EmptyTypes);
+            var defaultCtorNonGenericInterfaceWithGenericProperties = typeof(NonGenericInterfaceWithGenericProperties).GetConstructor(Type.EmptyTypes);
+            var defaultCtorNonGenericInterfaceWithNonGenericProperties = typeof(NonGenericInterfaceWithNonGenericProperties).GetConstructor(Type.EmptyTypes);
             Debug.Assert(defaultCtorNonGenericInterfaceWithGenericProperties != null,
                          "defaultCtorNonGenericInterfaceWithGenericProperties != null");
             Debug.Assert(defaultCtorNonGenericInterfaceWithNonGenericProperties != null,
@@ -170,10 +170,10 @@ namespace Tests.BrightSword.Squid
                  i < count;
                  i++)
             {
-// ReSharper disable ObjectCreationAsStatement
+                // ReSharper disable ObjectCreationAsStatement
                 // Assign the created object to a variable to make the creation intentional
                 var _tmp = new NonGenericInterfaceWithGenericProperties();
-// ReSharper restore ObjectCreationAsStatement
+                // ReSharper restore ObjectCreationAsStatement
             }
 
             sw.Stop();

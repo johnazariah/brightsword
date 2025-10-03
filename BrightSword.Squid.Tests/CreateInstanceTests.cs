@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Linq;
 
@@ -23,56 +23,56 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestNonPrimitiveClassType()
+        public void TestNonPrimitiveClassType()
         {
             var actual = new BasicDataTransferObjectTypeCreator<Exception>().CreateInstance();
 
             Assert.IsNotNull(actual);
             Assert.IsInstanceOfType(actual,
-                                    typeof (Exception));
+                                    typeof(Exception));
         }
 
         [TestMethod]
-    public void TestInterfaceWithGenericMethods()
+        public void TestInterfaceWithGenericMethods()
         {
             var actual = new BasicDataTransferObjectTypeCreator<IInterfaceWithGenericMethods>().CreateInstance();
 
             Assert.IsNotNull(actual);
             Assert.IsInstanceOfType(actual,
-                                    typeof (IInterfaceWithGenericMethods));
+                                    typeof(IInterfaceWithGenericMethods));
         }
 
         [TestMethod]
-    public void TestNonGenericInterfaceType()
+        public void TestNonGenericInterfaceType()
         {
             var actual = new BasicDataTransferObjectTypeCreator<INonGenericInterfaceWithNonGenericProperties>().CreateInstance();
 
             Assert.IsNotNull(actual);
             Assert.IsInstanceOfType(actual,
-                                    typeof (INonGenericInterfaceWithNonGenericProperties));
+                                    typeof(INonGenericInterfaceWithNonGenericProperties));
         }
 
         [TestMethod]
-    public void TestDynamicIsObject()
+        public void TestDynamicIsObject()
         {
             var actual = new BasicDataTransferObjectTypeCreator<IInterfaceExtendingAnother>().CreateInstance();
 
             Assert.IsNotNull(actual);
             Assert.IsInstanceOfType(actual,
-                                    typeof (IInterfaceExtendingAnother));
+                                    typeof(IInterfaceExtendingAnother));
 
             Assert.AreEqual(actual.GetType()
                                   .BaseType,
-                            typeof (Object));
+                            typeof(Object));
         }
 
         [TestMethod]
-    public void TestGetOnlyMappedPropertyShouldNotThrow()
+        public void TestGetOnlyMappedPropertyShouldNotThrow()
         {
             var actual = new BasicDataTransferObjectTypeCreator<INonGenericInterfaceWithGenericProperties>().CreateInstance();
             Assert.IsNotNull(actual);
             Assert.IsInstanceOfType(actual,
-                                    typeof (INonGenericInterfaceWithGenericProperties));
+                                    typeof(INonGenericInterfaceWithGenericProperties));
 
             Assert.IsNotNull(actual.Things);
 
@@ -80,27 +80,27 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestHiddenProperty()
+        public void TestHiddenProperty()
         {
             var actual = new BasicDataTransferObjectTypeCreator<IDerivedWithHiddenProperty>().CreateInstance();
 
             Assert.IsNotNull(actual);
             Assert.IsInstanceOfType(actual,
-                                    typeof (IDerivedWithHiddenProperty));
+                                    typeof(IDerivedWithHiddenProperty));
         }
 
         [TestMethod]
-    public void TestNewHiddenProperty()
+        public void TestNewHiddenProperty()
         {
             var actual = new BasicDataTransferObjectTypeCreator<IDerivedWithNewHiddenProperty>().CreateInstance();
 
             Assert.IsNotNull(actual);
             Assert.IsInstanceOfType(actual,
-                                    typeof (IDerivedWithNewHiddenProperty));
+                                    typeof(IDerivedWithNewHiddenProperty));
         }
 
         [TestMethod]
-    public void TestNonGenericInterfaceTypeImplementingAllProperties()
+        public void TestNonGenericInterfaceTypeImplementingAllProperties()
         {
             var actual = new BasicDataTransferObjectTypeCreator<INonGenericInterfaceWithNonGenericProperties>().CreateInstance();
             actual.Name = "I Love Pi";
@@ -113,7 +113,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestInterfaceTypeWithGenericPropertiesImplementingAllProperties()
+        public void TestInterfaceTypeWithGenericPropertiesImplementingAllProperties()
         {
             var actual = new BasicDataTransferObjectTypeCreator<INonGenericInterfaceWithGenericProperties>().CreateInstance();
             actual.Name = "I Love Pi";
@@ -130,20 +130,20 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestInterfaceWithAVoidMethodNoArgs()
+        public void TestInterfaceWithAVoidMethodNoArgs()
         {
             TestInterfaceWithMethod<IInterfaceWithAVoidMethodNoArgs>(_ => _.VoidMethodNoArgs());
         }
 
         [TestMethod]
-    public void TestInterfaceWithAnIntMethodWithArgs()
+        public void TestInterfaceWithAnIntMethodWithArgs()
         {
             TestInterfaceWithMethod<IInterfaceWithAnIntMethodWithArgs>(_ => _.IntMethodWithArgs(1,
                                                                                                 1));
         }
 
         [TestMethod]
-    public void TestInterfaceWithACharMethodWithParamsArg()
+        public void TestInterfaceWithACharMethodWithParamsArg()
         {
             TestInterfaceWithMethod<IInterfaceWithACharMethodWithParamsArg>(_ => _.ParamsMethod(1,
                                                                                                 2,
@@ -152,21 +152,21 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestInterfaceWithAGuidMethodWithRefArg()
+        public void TestInterfaceWithAGuidMethodWithRefArg()
         {
             var arg = "Hello World";
             TestInterfaceWithMethod<IInterfaceWithAGuidMethodWithRefArg>(_ => _.MethodWithRefParameters(ref arg));
         }
 
         [TestMethod]
-    public void TestInterfaceWithAnArrayMethodWithOutArg()
+        public void TestInterfaceWithAnArrayMethodWithOutArg()
         {
             string arg;
             TestInterfaceWithMethod<IInterfaceWithAnArrayMethodWithOutArg>(_ => _.ArrayMethodWithOutParameters(out arg));
         }
 
         [TestMethod]
-    public void TestInterfaceExtendingAnother()
+        public void TestInterfaceExtendingAnother()
         {
             TestInterfaceWithMethod<IInterfaceExtendingAnother>(_ => _.IntMethodWithArgs(1,
                                                                                          2));
@@ -177,27 +177,27 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestInterfaceHidingAMethod()
+        public void TestInterfaceHidingAMethod()
         {
             TestInterfaceWithMethod<IInterfaceHidingAMethod>(_ => _.IntMethodWithArgs(1,
                                                                                       2));
 
-            TestInterfaceWithMethod<IInterfaceHidingAMethod>(_ => ((IInterfaceExtendingAnother) _).IntMethodWithArgs(1,
+            TestInterfaceWithMethod<IInterfaceHidingAMethod>(_ => ((IInterfaceExtendingAnother)_).IntMethodWithArgs(1,
                                                                                                                      2));
         }
 
         [TestMethod]
-    public void TestInterfaceWithRemoteTypeProperty()
+        public void TestInterfaceWithRemoteTypeProperty()
         {
             var actual = new BasicDataTransferObjectTypeCreator<IInterfaceWithRemoteTypeProperty>().CreateInstance();
 
             Assert.IsNotNull(actual);
             Assert.IsInstanceOfType(actual,
-                                    typeof (IInterfaceWithRemoteTypeProperty));
+                                    typeof(IInterfaceWithRemoteTypeProperty));
         }
 
         [TestMethod]
-    public void TestInterfaceWithEvent()
+        public void TestInterfaceWithEvent()
         {
             var instance = new BasicDataTransferObjectTypeCreator<IInterfaceWithEvent>().CreateInstance();
             Assert.IsNotNull(instance);
@@ -205,7 +205,8 @@ namespace Tests.BrightSword.Squid
             Action<IInterfaceWithEvent> action = _ =>
                                                  {
                                                      _.Foo += (sender,
-                                                               args) => { };
+                                                               args) =>
+                                                     { };
                                                  };
 
             action(instance);
@@ -221,16 +222,16 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestMultipleInheritanceWithCollisionWithSameType()
+        public void TestMultipleInheritanceWithCollisionWithSameType()
         {
             var instance = new BasicDataTransferObjectTypeCreator<IInterfaceWithMultipleInheritanceAndPropertyCollisions>().CreateInstance();
 
             Assert.IsNotNull(instance);
 
             Assert.IsInstanceOfType(instance,
-                                    typeof (IInterfaceLeftBase));
+                                    typeof(IInterfaceLeftBase));
             Assert.IsInstanceOfType(instance,
-                                    typeof (IInterfaceRightBase));
+                                    typeof(IInterfaceRightBase));
 
             var left = instance as IInterfaceLeftBase;
             left.CollisionWithSameType = 12;
@@ -246,16 +247,16 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestMultipleInheritanceWithCollisionWithDifferentType()
+        public void TestMultipleInheritanceWithCollisionWithDifferentType()
         {
             var instance = new BasicDataTransferObjectTypeCreator<IInterfaceWithMultipleInheritanceAndPropertyCollisions>().CreateInstance();
 
             Assert.IsNotNull(instance);
 
             Assert.IsInstanceOfType(instance,
-                                    typeof (IInterfaceLeftBase));
+                                    typeof(IInterfaceLeftBase));
             Assert.IsInstanceOfType(instance,
-                                    typeof (IInterfaceRightBase));
+                                    typeof(IInterfaceRightBase));
 
             var left = instance as IInterfaceLeftBase;
             left.CollisionWithDifferentType = 12;
@@ -271,13 +272,13 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestFacetsAreInjectedProperly()
+        public void TestFacetsAreInjectedProperly()
         {
             var actual = new BasicDataTransferObjectTypeCreator<INonGenericInterfaceWithNonGenericProperties>().CreateInstance();
 
             Assert.IsNotNull(actual);
             Assert.IsInstanceOfType(actual,
-                                    typeof (INonGenericInterfaceWithNonGenericProperties));
+                                    typeof(INonGenericInterfaceWithNonGenericProperties));
         }
     }
 }

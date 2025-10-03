@@ -1,4 +1,4 @@
-﻿using BrightSword.Squid;
+using BrightSword.Squid;
 using BrightSword.Squid.API;
 using BrightSword.Squid.Test;
 
@@ -12,17 +12,17 @@ namespace Tests.BrightSword.Squid
     public class ChangeTrackedPropertyTypeTests
     {
         [TestMethod]
-    public void GivenAPropertyChangesOnAnObjectThenTheChangedPropertiesDictionaryShouldRegisterThatChange()
+        public void GivenAPropertyChangesOnAnObjectThenTheChangedPropertiesDictionaryShouldRegisterThatChange()
         {
             var creator = new PropertyChangingNotificationSinkTypeCreator<INonGenericInterfaceWithNonGenericProperties>();
             var instance = creator.CreateInstance();
 
             Assert.IsInstanceOfType(instance,
-                                    typeof (INotifyPropertyChanging));
+                                    typeof(INotifyPropertyChanging));
             Assert.IsInstanceOfType(instance,
-                                    typeof (PropertyChangingNotificationSink));
+                                    typeof(PropertyChangingNotificationSink));
 
-            var sink = (PropertyChangingNotificationSink) instance;
+            var sink = (PropertyChangingNotificationSink)instance;
 
             Assert.IsFalse(sink.IsChanged);
             instance.Amount = 3.14M;
@@ -39,13 +39,13 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestDynamicChangeTrackedPropertyTypeIsPropertyChangingNotificationSink()
+        public void TestDynamicChangeTrackedPropertyTypeIsPropertyChangingNotificationSink()
         {
             var actual = Dynamic<IInterfaceExtendingAnother, PropertyChangingNotificationSinkTypeCreator<IInterfaceExtendingAnother>>.NewInstance();
 
             Assert.IsNotNull(actual);
             Assert.IsInstanceOfType(actual,
-                                    typeof (IInterfaceExtendingAnother));
+                                    typeof(IInterfaceExtendingAnother));
 
             Assert.AreEqual("Types.IInterfaceExtendingAnother.ChangeTrackedAttributed",
                             actual.GetType()
@@ -53,7 +53,7 @@ namespace Tests.BrightSword.Squid
 
             Assert.AreEqual(actual.GetType()
                                   .BaseType,
-                            typeof (PropertyChangingNotificationSink));
+                            typeof(PropertyChangingNotificationSink));
         }
 
         //[TestMethod]

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -18,14 +18,14 @@ namespace Tests.BrightSword.Squid
     public class AddCustomAttributeTests
     {
         [TestMethod]
-    public void TestAttributesOnTypeAreSet()
+        public void TestAttributesOnTypeAreSet()
         {
             var type = new AttributeDecorator<IComprehensive>().Type;
             Assert.IsNotNull(type.GetCustomAttribute<TestAttribute>());
         }
 
         [TestMethod]
-    public void TestAttributesOnPropertiesAreSet()
+        public void TestAttributesOnPropertiesAreSet()
         {
             var type = new AttributeDecorator<IComprehensive>().Type;
             foreach (var member in type.GetAllProperties())
@@ -36,7 +36,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestAttributesOnMethodsAreSet()
+        public void TestAttributesOnMethodsAreSet()
         {
             var type = new AttributeDecorator<IComprehensive>().Type;
             foreach (var member in type.GetAllMethods()
@@ -48,7 +48,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestAttributesOnEventsAreSet()
+        public void TestAttributesOnEventsAreSet()
         {
             var type = new AttributeDecorator<IComprehensive>().Type;
             foreach (var member in type.GetAllEvents())
@@ -58,8 +58,8 @@ namespace Tests.BrightSword.Squid
             }
         }
 
-    private sealed class AttributeDecorator<T> : BasicDataTransferObjectTypeCreator<T>
-            where T : class
+        private sealed class AttributeDecorator<T> : BasicDataTransferObjectTypeCreator<T>
+                where T : class
         {
             protected override IEnumerable<Func<TypeBuilder, TypeBuilder>> CustomClassOperations
             {
@@ -103,7 +103,7 @@ namespace Tests.BrightSword.Squid
             }
         }
 
-    [AttributeUsage(AttributeTargets.All)]
-    public class TestAttribute : Attribute {}
+        [AttributeUsage(AttributeTargets.All)]
+        public class TestAttribute : Attribute { }
     }
 }

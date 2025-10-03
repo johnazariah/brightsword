@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using BrightSword.Crucible;
 using BrightSword.Squid.TypeCreators;
@@ -13,8 +13,8 @@ namespace Tests.BrightSword.Squid
     [TestClass]
     public class InitializationCheckedDynamicTests
     {
-        private readonly BasicDataTransferObjectTypeCreator<IProjection> _simpleDTOTypeCreator = new BasicDataTransferObjectTypeCreator<IProjection>(_ => typeof (IFoo).IsAssignableFrom(_)
-                                                                                                                                                              ? typeof (Foo)
+        private readonly BasicDataTransferObjectTypeCreator<IProjection> _simpleDTOTypeCreator = new BasicDataTransferObjectTypeCreator<IProjection>(_ => typeof(IFoo).IsAssignableFrom(_)
+                                                                                                                                                              ? typeof(Foo)
                                                                                                                                                               : null);
 
         [TestMethod]
@@ -47,12 +47,12 @@ namespace Tests.BrightSword.Squid
         private static class InitializationCheckedDynamic<T>
             where T : class
         {
-            private static readonly BasicDataTransferObjectTypeCreator<T> typeCreator = new BasicDataTransferObjectTypeCreator<T>(_ => typeof (IFoo).IsAssignableFrom(_)
-                                                                                                                                           ? typeof (Foo)
+            private static readonly BasicDataTransferObjectTypeCreator<T> typeCreator = new BasicDataTransferObjectTypeCreator<T>(_ => typeof(IFoo).IsAssignableFrom(_)
+                                                                                                                                           ? typeof(Foo)
                                                                                                                                            : null)
-                                                                                        {
-                                                                                            TrackReadonlyPropertyInitialized = true,                                                                                            
-                                                                                        };
+            {
+                TrackReadonlyPropertyInitialized = true,
+            };
 
             public static T NewInstance()
             {

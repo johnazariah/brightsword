@@ -33,8 +33,8 @@ namespace BrightSword.SwissKnife
             return $"{baseName}<{args}>";
         }
 
-    // Backwards-compatible Name() extension used by tests and older code.
-    public static string Name(this Type @this) => PrintableName(@this);
+        // Backwards-compatible Name() extension used by tests and older code.
+        public static string Name(this Type @this) => PrintableName(@this);
 
         // Heuristic used by the Squid project to convert interface type names to a concrete class-like name.
         // Example: IMyInterface -> MyInterface; IList<T> -> List<T>

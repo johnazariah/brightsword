@@ -1,4 +1,4 @@
-﻿using RemoteBaseInterfaceAssembly;
+using RemoteBaseInterfaceAssembly;
 
 using RemotePropertyInterfaceAssembly;
 

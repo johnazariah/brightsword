@@ -1,4 +1,4 @@
-﻿using RemotePropertyInterfaceAssembly;
+using RemotePropertyInterfaceAssembly;
 
 namespace RemoteInterfaceAssembly
 {

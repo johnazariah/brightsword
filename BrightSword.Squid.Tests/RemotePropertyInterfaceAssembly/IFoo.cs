@@ -1,4 +1,4 @@
-﻿namespace RemotePropertyInterfaceAssembly
+namespace RemotePropertyInterfaceAssembly
 {
     public interface IFoo
     {

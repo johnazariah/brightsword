@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace Tests.BrightSword.Squid
     {
         private static readonly int[] _sampleItems = new[] { 1, 2, 3 };
         [TestMethod]
-    public void TestPropertyWithDefaultValueIsNoticed()
+        public void TestPropertyWithDefaultValueIsNoticed()
         {
             var creator = new DefaultValueTypeCreator<ITest>();
             var instance = creator.CreateInstance();
@@ -30,7 +30,7 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestDefaultValueIsSetWhenSpecified()
+        public void TestDefaultValueIsSetWhenSpecified()
         {
             var instance = new BasicDataTransferObjectTypeCreator<IBar>().CreateInstance();
 
@@ -50,9 +50,9 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestDefaultValueIsSetOnObjectCreatedWithDefaultConstructorWhenSpecified()
+        public void TestDefaultValueIsSetOnObjectCreatedWithDefaultConstructorWhenSpecified()
         {
-            var instance = (IBar) Activator.CreateInstance(new BasicDataTransferObjectTypeCreator<IBar>().Type);
+            var instance = (IBar)Activator.CreateInstance(new BasicDataTransferObjectTypeCreator<IBar>().Type);
 
             Assert.AreEqual(100,
                             instance.Id);
@@ -85,7 +85,8 @@ namespace Tests.BrightSword.Squid
 
         }
 
-    private sealed class PayRunFilter : IPayRunFilter {
+        private sealed class PayRunFilter : IPayRunFilter
+        {
             private readonly PayrollEmploymentStatus _employmentStatus = PayrollEmploymentStatus.All;
             private readonly PayrollEmploymentStatus _employmentStatusFullTime = PayrollEmploymentStatus.FullTime;
 
@@ -101,14 +102,14 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestCreateInstanceWithDefaultEnumValueMinusOneShouldCreate()
+        public void TestCreateInstanceWithDefaultEnumValueMinusOneShouldCreate()
         {
             var instance = new BasicDataTransferObjectTypeCreator<IPayRunFilter>().CreateInstance();
             Assert.IsNotNull(instance);
         }
 
-    private sealed class DefaultValueTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
-            where T : class
+        private sealed class DefaultValueTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
+                where T : class
         {
             public readonly ConcurrentDictionary<PropertyInfo, object> _propertiesWithDefaultValues = new ConcurrentDictionary<PropertyInfo, object>();
 
@@ -130,7 +131,7 @@ namespace Tests.BrightSword.Squid
             [DefaultValue(100)]
             int Id { get; }
 
-            [DefaultValue(typeof (decimal), "55.25")]
+            [DefaultValue(typeof(decimal), "55.25")]
             decimal Amount { get; set; }
 
             int Number { get; set; }

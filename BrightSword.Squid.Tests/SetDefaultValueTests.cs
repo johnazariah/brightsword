@@ -1,4 +1,4 @@
-﻿#define BOOLEAN
+#define BOOLEAN
 #define BYTE
 #define CHAR
 #define INT16
@@ -32,7 +32,7 @@ namespace Tests.BrightSword.Squid
         private readonly IInterfaceWithDefaultValue _instance = Dynamic<IInterfaceWithDefaultValue>.NewInstance();
 
         [TestMethod]
-    public void TestTypeWasCreated()
+        public void TestTypeWasCreated()
         {
             Assert.IsNotNull(Dynamic<IInterfaceWithDefaultValue>.Type);
             Assert.IsNotNull(_instance);
@@ -43,10 +43,10 @@ namespace Tests.BrightSword.Squid
         {
             var actualValue = accessor();
 
-            if (typeof (T).IsArray)
+            if (typeof(T).IsArray)
             {
-                CollectionAssert.AreEqual((ICollection) expectedValue,
-                                          (ICollection) actualValue);
+                CollectionAssert.AreEqual((ICollection)expectedValue,
+                                          (ICollection)actualValue);
                 return;
             }
 
@@ -56,7 +56,7 @@ namespace Tests.BrightSword.Squid
 
 #if BOOLEAN
         [TestMethod]
-    public void TestBooleanDefaultValueIsSet()
+        public void TestBooleanDefaultValueIsSet()
         {
             TestDefaultValueIsSet(true,
                                   () => _instance.TrueBooleanProperty);
@@ -68,7 +68,7 @@ namespace Tests.BrightSword.Squid
 #if BYTE
 
         [TestMethod]
-    public void TestByteDefaultValueIsSet()
+        public void TestByteDefaultValueIsSet()
         {
             TestDefaultValueIsSet(Constants.ByteConstant,
                                   () => _instance.ByteProperty);
@@ -77,7 +77,7 @@ namespace Tests.BrightSword.Squid
 
 #if CHAR
         [TestMethod]
-    public void TestCharDefaultValueIsSet()
+        public void TestCharDefaultValueIsSet()
         {
             TestDefaultValueIsSet(Constants.CharConstant,
                                   () => _instance.CharProperty);
@@ -86,7 +86,7 @@ namespace Tests.BrightSword.Squid
 
 #if INT16
         [TestMethod]
-    public void TestInt16DefaultValueIsSet()
+        public void TestInt16DefaultValueIsSet()
         {
             TestDefaultValueIsSet(Constants.Int16Constant,
                                   () => _instance.Int16Property);
@@ -95,7 +95,7 @@ namespace Tests.BrightSword.Squid
 
 #if INT32
         [TestMethod]
-    public void TestInt32DefaultValueIsSet()
+        public void TestInt32DefaultValueIsSet()
         {
             TestDefaultValueIsSet(Constants.Int32Constant,
                                   () => _instance.Int32Property);
@@ -104,7 +104,7 @@ namespace Tests.BrightSword.Squid
 
 #if INT64
         [TestMethod]
-    public void TestInt64DefaultValueIsSet()
+        public void TestInt64DefaultValueIsSet()
         {
             TestDefaultValueIsSet(Constants.Int64Constant,
                                   () => _instance.Int64Property);
@@ -113,7 +113,7 @@ namespace Tests.BrightSword.Squid
 
 #if DOUBLE
         [TestMethod]
-    public void TestDoubleDefaultValueIsSet()
+        public void TestDoubleDefaultValueIsSet()
         {
             TestDefaultValueIsSet(Constants.DoubleConstant,
                                   () => _instance.DoubleProperty);
@@ -122,7 +122,7 @@ namespace Tests.BrightSword.Squid
 
 #if DECIMAL
         [TestMethod]
-    public void TestDecimalDefaultValueIsSet()
+        public void TestDecimalDefaultValueIsSet()
         {
             TestDefaultValueIsSet(Constants.DecimalConstant,
                                   () => _instance.DecimalProperty);
@@ -131,7 +131,7 @@ namespace Tests.BrightSword.Squid
 
 #if SINGLE
         [TestMethod]
-    public void TestSingleDefaultValueIsSet()
+        public void TestSingleDefaultValueIsSet()
         {
             TestDefaultValueIsSet(Constants.SingleConstant,
                                   () => _instance.SingleProperty);
@@ -140,7 +140,7 @@ namespace Tests.BrightSword.Squid
 
 #if STRING
         [TestMethod]
-    public void TestStringDefaultValueIsSet()
+        public void TestStringDefaultValueIsSet()
         {
             TestDefaultValueIsSet(Constants.StringConstant,
                                   () => _instance.StringProperty);
@@ -149,7 +149,7 @@ namespace Tests.BrightSword.Squid
 
 #if TYPE
         [TestMethod]
-    public void TestTypeDefaultValueIsSet()
+        public void TestTypeDefaultValueIsSet()
         {
             TestDefaultValueIsSet(Constants.TypeConstant,
                                   () => _instance.TypeProperty);
@@ -158,7 +158,7 @@ namespace Tests.BrightSword.Squid
 
 #if ENUM
         [TestMethod]
-    public void TestEnumDefaultValueIsSet()
+        public void TestEnumDefaultValueIsSet()
         {
             TestDefaultValueIsSet(Constants.EnumConstant,
                                   () => _instance.EnumProperty);
@@ -167,7 +167,7 @@ namespace Tests.BrightSword.Squid
 
 #if STRING_ARRAY
         [TestMethod]
-    public void TestArrayDefaultValueIsSet()
+        public void TestArrayDefaultValueIsSet()
         {
             TestDefaultValueIsSet(Constants.StringArrayConstant,
                                   () => _instance.ArrayProperty);
@@ -175,7 +175,7 @@ namespace Tests.BrightSword.Squid
 #endif
 
         [TestMethod]
-    public void TestIllegalDefaultValueShouldThrow()
+        public void TestIllegalDefaultValueShouldThrow()
         {
             ExceptionHelper.ExpectException<NotSupportedException>(() => new BasicDataTransferObjectTypeCreator<IInterfaceWithNonSupportedDefaultValue>().CreateInstance());
         }
@@ -195,7 +195,7 @@ namespace Tests.BrightSword.Squid
             public const UInt64 UInt64Constant = 18446744073709551615UL;
             public const String StringConstant = "e^iπ + 1 = 0";
             public const SeekOrigin EnumConstant = SeekOrigin.End;
-            public static readonly Type TypeConstant = typeof (ISerializable);
+            public static readonly Type TypeConstant = typeof(ISerializable);
 
             public static readonly string[] StringArrayConstant =
             {
@@ -209,7 +209,7 @@ namespace Tests.BrightSword.Squid
 
         public interface IInterfaceWithNonSupportedDefaultValue
         {
-            [DefaultValue(typeof (Tuple<int, int>), "(12, 12)")]
+            [DefaultValue(typeof(Tuple<int, int>), "(12, 12)")]
             Tuple<int, int> SomeProperty { get; set; }
         }
 
@@ -224,7 +224,7 @@ namespace Tests.BrightSword.Squid
 #endif
 
 #if BYTE
-            [DefaultValue((byte) 129)]
+            [DefaultValue((byte)129)]
             Byte ByteProperty { get; set; }
 #endif
 
@@ -239,7 +239,7 @@ namespace Tests.BrightSword.Squid
 #endif
 
 #if DECIMAL
-            [DefaultValue(typeof (decimal), "-112.125")]
+            [DefaultValue(typeof(decimal), "-112.125")]
             Decimal DecimalProperty { get; set; }
 #endif
 
@@ -249,7 +249,7 @@ namespace Tests.BrightSword.Squid
 #endif
 
 #if INT16
-            [DefaultValue((short) 32223)]
+            [DefaultValue((short)32223)]
             Int16 Int16Property { get; set; }
 #endif
 
@@ -269,7 +269,7 @@ namespace Tests.BrightSword.Squid
 #endif
 
 #if TYPE
-            [DefaultValue(typeof (ISerializable))]
+            [DefaultValue(typeof(ISerializable))]
             Type TypeProperty { get; set; }
 #endif
 
@@ -291,8 +291,8 @@ namespace Tests.BrightSword.Squid
 #endif
         }
 
-// ReSharper disable once UnusedMember.Local
-    private sealed class InterfaceWithDefaultValue : IInterfaceWithDefaultValue
+        // ReSharper disable once UnusedMember.Local
+        private sealed class InterfaceWithDefaultValue : IInterfaceWithDefaultValue
         {
             private string[] _arrayProperty;
             private byte _byteProperty;
@@ -323,7 +323,7 @@ namespace Tests.BrightSword.Squid
                 //_uint32Property = 1288490000U;
                 //_uint64Property = 18446744073709551615UL;
                 _stringProperty = "e^iπ + 1 = 0";
-                _typeProperty = typeof (ISerializable);
+                _typeProperty = typeof(ISerializable);
                 _enumProperty = SeekOrigin.End;
                 _arrayProperty = new[]
                                  {
@@ -335,7 +335,7 @@ namespace Tests.BrightSword.Squid
                                  };
             }
 
-// ReSharper disable ConvertToAutoProperty
+            // ReSharper disable ConvertToAutoProperty
 
             public Type TypeProperty
             {
@@ -421,7 +421,7 @@ namespace Tests.BrightSword.Squid
                 set { _int64Property = value; }
             }
 
-// ReSharper restore ConvertToAutoProperty
+            // ReSharper restore ConvertToAutoProperty
         }
     }
 }

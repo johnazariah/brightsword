@@ -21,18 +21,18 @@ namespace BrightSword.SwissKnife
     {
         private readonly Action<T> _dispose = dispose ?? (_ => { });
 
-        /// <summary>
-        /// Gets the wrapped instance.
-        /// </summary>
-        public T Instance { get; } = instance;
+    /// <summary>
+    /// Gets the wrapped instance.
+    /// </summary>
+    public T Instance { get; } = instance;
 
-        /// <summary>
-        /// Invokes the dispose action and suppresses finalization.
-        /// </summary>
-        public void Dispose()
-        {
-            _dispose(Instance);
-            GC.SuppressFinalize(this);
-        }
+    /// <summary>
+    /// Invokes the dispose action and suppresses finalization.
+    /// </summary>
+    public void Dispose()
+    {
+        _dispose(Instance);
+        GC.SuppressFinalize(this);
     }
+}
 }

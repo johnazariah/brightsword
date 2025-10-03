@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 
 using BrightSword.Squid;
@@ -11,19 +11,19 @@ namespace Tests.BrightSword.Squid
     public class AnonymousInterfaceImplementationTests
     {
         [TestMethod]
-    public void TestDynamicInstanceIsInitializedWithDynamicSuppliedValue()
+        public void TestDynamicInstanceIsInitializedWithDynamicSuppliedValue()
         {
             var source = new
-                         {
-                             Name = "Test",
-                             Age = 100,
-                             Junk = false,
-                         };
+            {
+                Name = "Test",
+                Age = 100,
+                Junk = false,
+            };
 
             var instance = Dynamic<IFoo>.NewInstance(source);
             Assert.IsNotNull(instance);
             Assert.IsInstanceOfType(instance,
-                                    typeof (IFoo));
+                                    typeof(IFoo));
             Assert.AreEqual(source.Name,
                             instance.Name);
             Assert.AreEqual(source.Age,
@@ -31,18 +31,18 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestDynamicInstanceIsInitializedWithStaticSuppliedValue()
+        public void TestDynamicInstanceIsInitializedWithStaticSuppliedValue()
         {
             var source = new Foo
-                         {
-                             Name = "Test",
-                             Age = 100,
-                         };
+            {
+                Name = "Test",
+                Age = 100,
+            };
 
             var instance = Dynamic<IFoo>.NewInstance(source);
             Assert.IsNotNull(instance);
             Assert.IsInstanceOfType(instance,
-                                    typeof (IFoo));
+                                    typeof(IFoo));
             Assert.AreEqual(source.Name,
                             instance.Name);
             Assert.AreEqual(source.Age,
@@ -50,23 +50,23 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestDynamicInstanceCanBeCalledFromLinq()
+        public void TestDynamicInstanceCanBeCalledFromLinq()
         {
             var instances = from i in Enumerable.Range(0,
                                                        100)
                             select Dynamic<IFoo>.NewInstance(new
-                                                             {
-                                                                 Name = string.Format(System.Globalization.CultureInfo.InvariantCulture, "Person{0}",
+                            {
+                                Name = string.Format(System.Globalization.CultureInfo.InvariantCulture, "Person{0}",
                                                                                       i),
-                                                                 Age = i
-                                                             });
+                                Age = i
+                            });
 
             Assert.IsTrue(instances.Select((_item,
                                             _index) =>
                                            {
                                                Assert.IsNotNull(_item);
                                                Assert.IsInstanceOfType(_item,
-                                                                       typeof (IFoo));
+                                                                       typeof(IFoo));
                                                Assert.AreEqual(string.Format(System.Globalization.CultureInfo.InvariantCulture, "Person{0}",
                                                                              _index),
                                                                _item.Name);
@@ -77,7 +77,7 @@ namespace Tests.BrightSword.Squid
                                    .All(_ => _));
         }
 
-    private sealed class Foo : IFoo
+        private sealed class Foo : IFoo
         {
             public string Name { get; set; }
             public int Age { get; set; }

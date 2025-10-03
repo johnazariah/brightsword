@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using BrightSword.Squid.TypeCreators;
@@ -19,40 +19,40 @@ namespace Tests.BrightSword.Squid
     public class MappedTypeTests
     {
         [TestMethod]
-    public void TestInterfaceWithRemoteTypeProperty()
+        public void TestInterfaceWithRemoteTypeProperty()
         {
             var actual = MappedTypeDynamic<IInterfaceWithMappedRemoteTypeReadonlyProperty>.NewInstance();
 
             Assert.IsNotNull(actual);
             Assert.IsInstanceOfType(actual,
-                                    typeof (IInterfaceWithMappedRemoteTypeReadonlyProperty));
+                                    typeof(IInterfaceWithMappedRemoteTypeReadonlyProperty));
         }
 
         [TestMethod]
-    public void TestDefaultMappedReadonlyPropertiesWork()
+        public void TestDefaultMappedReadonlyPropertiesWork()
         {
             var instance = new BasicDataTransferObjectTypeCreator<IComprehensive>().CreateInstance();
 
-            Assert.AreEqual(typeof (List<int>),
+            Assert.AreEqual(typeof(List<int>),
                             instance.IntegerList.GetType());
-            Assert.AreEqual(typeof (HashSet<decimal>),
+            Assert.AreEqual(typeof(HashSet<decimal>),
                             instance.DecimalSet.GetType());
-            Assert.AreEqual(typeof (Dictionary<int, string>),
+            Assert.AreEqual(typeof(Dictionary<int, string>),
                             instance.StringDictionary.GetType());
         }
 
         [TestMethod]
-    public void TestInlineMappedReadonlyPropertiesWork()
+        public void TestInlineMappedReadonlyPropertiesWork()
         {
-            var instance = new BasicDataTransferObjectTypeCreator<IComprehensive>((_ => typeof (IFoo).IsAssignableFrom(_)
-                                                                                            ? typeof (Foo)
+            var instance = new BasicDataTransferObjectTypeCreator<IComprehensive>((_ => typeof(IFoo).IsAssignableFrom(_)
+                                                                                            ? typeof(Foo)
                                                                                             : null)).CreateInstance();
 
-            Assert.AreEqual(typeof (Foo),
+            Assert.AreEqual(typeof(Foo),
                             instance.Foo.GetType());
         }
 
-    internal sealed class LocalBar : IBar
+        internal sealed class LocalBar : IBar
         {
             private const decimal C_VALUE = 25;
 
@@ -75,15 +75,15 @@ namespace Tests.BrightSword.Squid
 
             private static Type MapIFooToFoo(Type arg)
             {
-                return typeof (IFoo).IsAssignableFrom(arg)
-                           ? typeof (Foo)
+                return typeof(IFoo).IsAssignableFrom(arg)
+                           ? typeof(Foo)
                            : null;
             }
 
             private static Type MapIBarToLocalBar(Type arg)
             {
-                return typeof (IBar).IsAssignableFrom(arg)
-                           ? typeof (LocalBar)
+                return typeof(IBar).IsAssignableFrom(arg)
+                           ? typeof(LocalBar)
                            : null;
             }
         }

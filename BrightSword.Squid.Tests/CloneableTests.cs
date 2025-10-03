@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -23,17 +23,17 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestICloneableImplementation()
+        public void TestICloneableImplementation()
         {
             CloneableIsSupported(new BasicDataTransferObjectTypeCreator<IFoo>
-                                 {
-                                     AssemblyName = "Dynamic.Cloneable.IFoo",
-                                     SaveAssemblyToDisk = true
-                                 });
+            {
+                AssemblyName = "Dynamic.Cloneable.IFoo",
+                SaveAssemblyToDisk = true
+            });
         }
 
         [TestMethod]
-    public void TestNonCloneableInterfaceDoesNotHaveCloneMethod()
+        public void TestNonCloneableInterfaceDoesNotHaveCloneMethod()
         {
             dynamic instance = new BasicDataTransferObjectTypeCreator<INonCloneable>().CreateInstance();
 
@@ -41,29 +41,29 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-    public void TestImplementationSupportsCloneableIfTypeCreatorSpecifiesICloneableFacet()
+        public void TestImplementationSupportsCloneableIfTypeCreatorSpecifiesICloneableFacet()
         {
             var typeCreator = new BasicDataTransferObjectTypeCreator<INonCloneable>
-                              {
-                                  AssemblyName = "Dynamic.Cloneable.ICloneable",
+            {
+                AssemblyName = "Dynamic.Cloneable.ICloneable",
 
-                                  FacetInterfaces = new[]
+                FacetInterfaces = new[]
                                                     {
                                                         typeof (ICloneable)
                                                     },
 
-                                  SaveAssemblyToDisk = true
-                              };
+                SaveAssemblyToDisk = true
+            };
 
             var root = typeCreator.CreateInstance();
             Assert.IsNotNull(root);
             Assert.IsInstanceOfType(root,
-                                    typeof (INonCloneable)); // from the interface definition
+                                    typeof(INonCloneable)); // from the interface definition
             Assert.IsInstanceOfType(root,
-                                    typeof (ICloneable)); // from the facet interfaces
+                                    typeof(ICloneable)); // from the facet interfaces
 
             root.FooBar = 99;
-            var cloned = (INonCloneable) ((dynamic) root).Clone();
+            var cloned = (INonCloneable)((dynamic)root).Clone();
 
             Assert.IsNotNull(cloned.GetType()
                                    .GetCustomAttribute<SerializableAttribute>());
@@ -72,23 +72,23 @@ namespace Tests.BrightSword.Squid
                             root.FooBar);
         }
 
-    private static void CloneableIsSupported(BasicDataTransferObjectTypeCreator<IFoo> typeCreator)
+        private static void CloneableIsSupported(BasicDataTransferObjectTypeCreator<IFoo> typeCreator)
         {
             var root = typeCreator.CreateInstance();
             var child = typeCreator.CreateInstance();
 
             Assert.IsNotNull(root);
             Assert.IsInstanceOfType(root,
-                                    typeof (IFoo));
+                                    typeof(IFoo));
             Assert.IsInstanceOfType(root,
-                                    typeof (ICloneable));
+                                    typeof(ICloneable));
 
             root.Value = 42;
             child.Value = 21;
 
-            ((List<IFoo>) root.Children).Add(child);
+            ((List<IFoo>)root.Children).Add(child);
 
-            var cloned = (IFoo) root.Clone();
+            var cloned = (IFoo)root.Clone();
 
             Assert.IsNotNull(cloned.GetType()
                                    .GetCustomAttribute<SerializableAttribute>());
@@ -107,7 +107,7 @@ namespace Tests.BrightSword.Squid
             int Value { get; set; }
         }
 
-// ReSharper disable once RedundantExtendsListEntry
+        // ReSharper disable once RedundantExtendsListEntry
         public interface IFoo : IBar,
                                 ICloneable
         {

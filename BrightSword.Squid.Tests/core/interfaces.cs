@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Tests.BrightSword.Squid.core
@@ -31,7 +31,7 @@ namespace Tests.BrightSword.Squid.core
         string HiddenProperty { get; }
     }
 
-    public interface IFacet {}
+    public interface IFacet { }
 
     public interface IDerivedWithNewHiddenProperty : IBase
     {
@@ -135,7 +135,7 @@ namespace Tests.BrightSword.Squid.core
         string CollisionWithDifferentType { get; set; }
     }
 
-    #pragma warning disable CA1716 // test interfaces intentionally use names that look like keywords for interop tests
+#pragma warning disable CA1716 // test interfaces intentionally use names that look like keywords for interop tests
     public interface IComprehensive
     {
         IFoo Foo { get; }
@@ -149,10 +149,11 @@ namespace Tests.BrightSword.Squid.core
         event EventHandler RaiseSomeEvent;
     }
 
-// ReSharper disable PossibleInterfaceMemberAmbiguity
+    // ReSharper disable PossibleInterfaceMemberAmbiguity
     public interface IInterfaceWithMultipleInheritanceAndPropertyCollisions : IInterfaceLeftBase,
-                                                                              IInterfaceRightBase {}
-    #pragma warning restore CA1716
+                                                                              IInterfaceRightBase
+    { }
+#pragma warning restore CA1716
 
-// ReSharper restore PossibleInterfaceMemberAmbiguity
+    // ReSharper restore PossibleInterfaceMemberAmbiguity
 }

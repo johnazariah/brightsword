@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 
@@ -74,7 +74,7 @@ namespace Tests.BrightSword.Squid
             TestConstraints<IInterfaceWithGenericMethods>("GenericParameterConstrainedToReferenceAndNewAndInterface",
                                                           GenericParameterAttributes.ReferenceTypeConstraint | GenericParameterAttributes.DefaultConstructorConstraint,
                                                           null,
-                                                          typeof (IBase));
+                                                          typeof(IBase));
         }
 
         [TestMethod]
@@ -82,7 +82,7 @@ namespace Tests.BrightSword.Squid
         {
             TestConstraints<IInterfaceWithGenericMethods>("GenericParameterConstrainedToNewAndBaseClass",
                                                           GenericParameterAttributes.DefaultConstructorConstraint,
-                                                          typeof (Exception));
+                                                          typeof(Exception));
         }
 
         [TestMethod]
@@ -90,8 +90,8 @@ namespace Tests.BrightSword.Squid
         {
             TestConstraints<IInterfaceWithGenericMethods>("GenericParameterConstrainedToNewAndBaseClassAndInterface",
                                                           GenericParameterAttributes.DefaultConstructorConstraint,
-                                                          typeof (Random),
-                                                          typeof (IInterfaceWithEvent));
+                                                          typeof(Random),
+                                                          typeof(IInterfaceWithEvent));
         }
 
         [TestMethod]
@@ -99,7 +99,7 @@ namespace Tests.BrightSword.Squid
         {
             TestConstraints<IInterfaceWithGenericMethods>("GenericParameterConstrainedToBaseClass",
                                                           GenericParameterAttributes.None,
-                                                          typeof (Random));
+                                                          typeof(Random));
         }
 
         [TestMethod]
@@ -107,9 +107,9 @@ namespace Tests.BrightSword.Squid
         {
             TestConstraints<IInterfaceWithGenericMethods>("GenericParameterConstrainedToBaseClassAndTwoInterfaces",
                                                           GenericParameterAttributes.None,
-                                                          typeof (Random),
-                                                          typeof (IBase),
-                                                          typeof (IInterfaceWithEvent));
+                                                          typeof(Random),
+                                                          typeof(IBase),
+                                                          typeof(IInterfaceWithEvent));
         }
     }
 }

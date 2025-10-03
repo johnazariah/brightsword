@@ -150,9 +150,9 @@ namespace BrightSword.Squid.Behaviours
                     // As a last resort, create an uninitialized object. FormatterServices is marked obsolete for
                     // formatter-based serialization scenarios, but GetUninitializedObject is still the pragmatic
                     // fallback for types with no accessible constructors. Suppress the obsoletion warning locally.
-                    #pragma warning disable SYSLIB0050
+#pragma warning disable SYSLIB0050
                     result = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(type);
-                    #pragma warning restore SYSLIB0050
+#pragma warning restore SYSLIB0050
                 }
             }
 

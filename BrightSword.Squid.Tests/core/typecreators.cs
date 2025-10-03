@@ -8,23 +8,23 @@ namespace Tests.BrightSword.Squid.core
     public class PropertyChangingNotificationSinkTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
         where T : class
     {
-        public PropertyChangingNotificationSinkTypeCreator() {}
+        public PropertyChangingNotificationSinkTypeCreator() { }
 
         public PropertyChangingNotificationSinkTypeCreator(params Func<Type, Type>[] typeMaps)
-            : base(typeMaps) {}
+            : base(typeMaps) { }
 
         public override string ClassName
         {
             get
             {
                 return string.Format(System.Globalization.CultureInfo.InvariantCulture, "Types.{0}.ChangeTrackedAttributed",
-                                     typeof (T).Name);
+                                     typeof(T).Name);
             }
         }
 
         public override Type BaseType
         {
-            get { return typeof (PropertyChangingNotificationSink); }
+            get { return typeof(PropertyChangingNotificationSink); }
         }
     }
 }

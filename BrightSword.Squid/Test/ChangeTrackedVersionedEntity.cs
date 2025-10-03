@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -34,7 +34,7 @@ namespace BrightSword.Squid.Test
             set
             {
                 if (OnPropertyChanging(nameof(IntegerValue),
-                                               typeof (int),
+                                               typeof(int),
                                                _integerValue,
                                                value))
                 {
@@ -49,7 +49,7 @@ namespace BrightSword.Squid.Test
             set
             {
                 if (OnPropertyChanging(nameof(LongValue),
-                                               typeof (int),
+                                               typeof(int),
                                                _longValue,
                                                value))
                 {
@@ -64,7 +64,7 @@ namespace BrightSword.Squid.Test
             set
             {
                 if (OnPropertyChanging(nameof(ShortValue),
-                                               typeof (int),
+                                               typeof(int),
                                                _shortValue,
                                                value))
                 {
@@ -79,7 +79,7 @@ namespace BrightSword.Squid.Test
             set
             {
                 if (OnPropertyChanging(nameof(ByteValue),
-                                               typeof (int),
+                                               typeof(int),
                                                _byteValue,
                                                value))
                 {
@@ -94,7 +94,7 @@ namespace BrightSword.Squid.Test
             set
             {
                 if (OnPropertyChanging(nameof(BoolValue),
-                                               typeof (int),
+                                               typeof(int),
                                                _boolValue,
                                                value))
                 {
@@ -109,7 +109,7 @@ namespace BrightSword.Squid.Test
             set
             {
                 if (OnPropertyChanging(nameof(DateTimeValue),
-                                               typeof (int),
+                                               typeof(int),
                                                _dateTimeValue,
                                                value))
                 {
@@ -124,7 +124,7 @@ namespace BrightSword.Squid.Test
             set
             {
                 if (OnPropertyChanging(nameof(StringValue),
-                                               typeof (int),
+                                               typeof(int),
                                                _stringValue,
                                                value))
                 {
@@ -159,7 +159,7 @@ namespace BrightSword.Squid.Test
             set
             {
                 if (OnPropertyChanging(nameof(MutableValue),
-                                               typeof (decimal),
+                                               typeof(decimal),
                                                _mutableValue,
                                                value))
                 {
@@ -176,7 +176,7 @@ namespace BrightSword.Squid.Test
             {
                 _hiddenProperty = value;
                 if (OnPropertyChanging(nameof(IBaseInterface.HiddenProperty),
-                                               typeof (string),
+                                               typeof(string),
                                                _mutableValue,
                                                value))
                 {

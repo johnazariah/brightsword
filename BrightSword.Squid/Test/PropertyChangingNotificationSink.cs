@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace BrightSword.Squid.Test
     [ExcludeFromCodeCoverage]
     public class PropertyChangingNotificationSink : INotifyPropertyChanging
     {
-    private readonly Dictionary<string, object> _changedProperties;
+        private readonly Dictionary<string, object> _changedProperties;
 
         public PropertyChangingNotificationSink()
         {

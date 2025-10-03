@@ -1,8 +1,8 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using Xunit;
+using System.Linq;
 using FsCheck.Xunit;
+using Xunit;
 
 namespace BrightSword.SwissKnife.Tests
 {

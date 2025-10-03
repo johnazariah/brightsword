@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 
 using BrightSword.Feber.Samples;
 using BrightSword.Squid.TypeCreators;
 
 namespace BrightSword.Squid
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "Intentional generic type-specific cached TypeCreator")] 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "Intentional generic type-specific cached TypeCreator")]
     public static class Dynamic<T>
         where T : class
     {
@@ -22,7 +22,7 @@ namespace BrightSword.Squid
         }
     }
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "Intentional generic type-specific cached TypeCreator")] 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "Intentional generic type-specific cached TypeCreator")]
     public static class Dynamic<T, TTypeCreator>
         where T : class
         where TTypeCreator : BasicDataTransferObjectTypeCreator<T>, new()

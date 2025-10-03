@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
-
 using Microsoft.CSharp.RuntimeBinder;
-using System.Globalization;
 
 namespace BrightSword.Squid.Behaviours
 {
     public class FieldValueSetInstructionHelper
     {
-    // Cached parameter type arrays to avoid repeated allocations (CA1861)
-    private static readonly Type[] GetTypeFromHandleArgTypes = new[] { typeof(RuntimeTypeHandle) };
+        // Cached parameter type arrays to avoid repeated allocations (CA1861)
+        private static readonly Type[] GetTypeFromHandleArgTypes = new[] { typeof(RuntimeTypeHandle) };
 
         internal IEnumerable<Action<ILGenerator>> GenerateCodeToSetFieldValue(FieldInfo field,
                                                                               object value)
@@ -19,7 +18,7 @@ namespace BrightSword.Squid.Behaviours
             try
             {
                 return GenerateCode(field,
-                                    (dynamic) value);
+                                    (dynamic)value);
             }
             catch (RuntimeBinderException)
             {
@@ -112,7 +111,7 @@ namespace BrightSword.Squid.Behaviours
             yield return _ => _.Emit(OpCodes.Ldc_I4,
                                      scale);
             yield return _ => _.Emit(OpCodes.Newobj,
-                                     typeof (Decimal).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                                     typeof(Decimal).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                                                                      null,
                                                                      new[]
                                                                      {
@@ -133,21 +132,21 @@ namespace BrightSword.Squid.Behaviours
                 && value <= sbyte.MaxValue)
             {
                 return _ => _.Emit(OpCodes.Ldc_I4_S,
-                                   (sbyte) value);
+                                   (sbyte)value);
             }
 
             if (value >= byte.MinValue
                 && value <= byte.MaxValue)
             {
                 return _ => _.Emit(OpCodes.Ldc_I4_S,
-                                   (byte) value);
+                                   (byte)value);
             }
 
             if (value >= int.MinValue
                 && value <= int.MaxValue)
             {
                 return _ => _.Emit(OpCodes.Ldc_I4,
-                                   (int) value);
+                                   (int)value);
             }
 
             return _ => _.Emit(OpCodes.Ldc_I8,
@@ -159,8 +158,8 @@ namespace BrightSword.Squid.Behaviours
         {
             yield return _ => _.Emit(OpCodes.Ldarg_0);
 
-            yield return GenerateCodeToWriteIntegralValue((long) Convert.ChangeType(value,
-                                                                                    typeof (long),
+            yield return GenerateCodeToWriteIntegralValue((long)Convert.ChangeType(value,
+                                                                                    typeof(long),
                                                                                     CultureInfo.InvariantCulture));
 
             yield return _ => _.Emit(OpCodes.Stfld,
@@ -174,7 +173,7 @@ namespace BrightSword.Squid.Behaviours
             yield return _ => _.Emit(OpCodes.Ldtoken,
                                      value);
             yield return _ => _.Emit(OpCodes.Call,
-                                     typeof (Type).GetMethod("GetTypeFromHandle",
+                                     typeof(Type).GetMethod("GetTypeFromHandle",
                                                              BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                                                              null,
                                                              GetTypeFromHandleArgTypes,
@@ -187,13 +186,13 @@ namespace BrightSword.Squid.Behaviours
                                                                                    FieldInfo field,
                                                                                    Func<T, Action<ILGenerator>[]> itemSetInstructions)
         {
-            yield return _ => _.DeclareLocal(typeof (T[]));
+            yield return _ => _.DeclareLocal(typeof(T[]));
 
             yield return _ => _.Emit(OpCodes.Ldarg_0);
             yield return _ => _.Emit(OpCodes.Ldc_I4,
                                      value.Count);
             yield return _ => _.Emit(OpCodes.Newarr,
-                                     typeof (T));
+                                     typeof(T));
             yield return _ => _.Emit(OpCodes.Stloc_0);
             yield return _ => _.Emit(OpCodes.Ldloc_0);
 

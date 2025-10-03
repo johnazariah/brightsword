@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyCopyright("Copyright © BrightSword Technologies Pte. Ltd., Singapore 2011")]

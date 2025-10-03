@@ -29,7 +29,7 @@ namespace BrightSword.Squid.TypeCreators
     {
         protected const MethodAttributes PropertyHiddenMethodAttributes = MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig | MethodAttributes.Final | MethodAttributes.NewSlot | MethodAttributes.SpecialName;
 
-    private readonly List<Func<Type, Type>> _typeMaps;
+        private readonly List<Func<Type, Type>> _typeMaps;
 
         private string _assemblyName;
 
@@ -45,9 +45,9 @@ namespace BrightSword.Squid.TypeCreators
         private IEnumerable<KeyValuePair<Type, IBehaviour>> _specialBehaviours;
         private bool _trackReadonlyPropertyInitialized;
         private Type _type;
-    // Cached Type[] arrays used for reflection GetMethod calls to avoid repeated allocations (CA1861)
-    private static readonly Type[] OnPropertyChangingArgTypes = new[] { typeof(String), typeof(Type), typeof(Object), typeof(Object) };
-    private static readonly Type[] GetTypeFromHandleArgTypes = new[] { typeof(RuntimeTypeHandle) };
+        // Cached Type[] arrays used for reflection GetMethod calls to avoid repeated allocations (CA1861)
+        private static readonly Type[] OnPropertyChangingArgTypes = new[] { typeof(String), typeof(Type), typeof(Object), typeof(Object) };
+        private static readonly Type[] GetTypeFromHandleArgTypes = new[] { typeof(RuntimeTypeHandle) };
 
         protected BasicDataTransferObjectTypeCreator()
         {
@@ -55,15 +55,15 @@ namespace BrightSword.Squid.TypeCreators
 
             _trackReadonlyPropertyInitialized = false;
 
-            _interfaceName = typeof (T).IsInterface
-                                 ? typeof (T).PrintableName()
+            _interfaceName = typeof(T).IsInterface
+                                 ? typeof(T).PrintableName()
                                  : String.Empty;
 
             _className = typeof(T).RenameToConcreteType();
 
-            _baseType = typeof (T).IsClass
-                            ? typeof (T)
-                            : typeof (Object);
+            _baseType = typeof(T).IsClass
+                            ? typeof(T)
+                            : typeof(Object);
 
             _assemblyName = string.Format(System.Globalization.CultureInfo.InvariantCulture, "Dynamic.{0}.{1}",
                                           GetType().GetNonGenericPartOfClassName(),
@@ -171,20 +171,20 @@ namespace BrightSword.Squid.TypeCreators
         {
             get
             {
-                return _backingFieldPropertyMap ?? (_backingFieldPropertyMap = (from _propertyInfo in typeof (T).GetAllNonExcludedProperties()
+                return _backingFieldPropertyMap ?? (_backingFieldPropertyMap = (from _propertyInfo in typeof(T).GetAllNonExcludedProperties()
                                                                                 let isReadonlyProperty = !_propertyInfo.CanWrite && _propertyInfo.GetSetMethod() == null
                                                                                 let mappedType = GetMappedType(_propertyInfo)
                                                                                 let backingFieldType = isReadonlyProperty
                                                                                                            ? mappedType ?? _propertyInfo.PropertyType
                                                                                                            : _propertyInfo.PropertyType
                                                                                 select new PropertyBackingFieldMap
-                                                                                       {
-                                                                                           IsReadOnly = isReadonlyProperty,
-                                                                                           MappedType = mappedType,
-                                                                                           PropertyInfo = _propertyInfo,
-                                                                                           BackingFieldType = backingFieldType,
-                                                                                           BackingField = null
-                                                                                       }).ToDictionary(_ => _.PropertyInfo,
+                                                                                {
+                                                                                    IsReadOnly = isReadonlyProperty,
+                                                                                    MappedType = mappedType,
+                                                                                    PropertyInfo = _propertyInfo,
+                                                                                    BackingFieldType = backingFieldType,
+                                                                                    BackingField = null
+                                                                                }).ToDictionary(_ => _.PropertyInfo,
                                                                                                        _ => _));
             }
         }
@@ -246,9 +246,9 @@ namespace BrightSword.Squid.TypeCreators
         {
             get
             {
-                if (typeof (T).IsInterface)
+                if (typeof(T).IsInterface)
                 {
-                    yield return typeof (T);
+                    yield return typeof(T);
                 }
 
                 foreach (var _interface in FacetInterfaces)
@@ -293,7 +293,7 @@ namespace BrightSword.Squid.TypeCreators
 
         #region Default Constructor
 
-    protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsCallBaseClassConstructor
+        protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsCallBaseClassConstructor
         {
             get
             {
@@ -306,11 +306,11 @@ namespace BrightSword.Squid.TypeCreators
             }
         }
 
-    protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsInitializeDefaultValueFromAttributes
+        protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsInitializeDefaultValueFromAttributes
         {
             get
             {
-                var instructions = from property in typeof (T).GetAllProperties()
+                var instructions = from property in typeof(T).GetAllProperties()
                                    let defaultValueAttribute = property.GetCustomAttribute<DefaultValueAttribute>()
                                    where defaultValueAttribute != null
                                    let defaultValue = defaultValueAttribute.Value
@@ -323,7 +323,7 @@ namespace BrightSword.Squid.TypeCreators
             }
         }
 
-    protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsAddCustomConstructionInstructions
+        protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsAddCustomConstructionInstructions
         {
             get
             {
@@ -331,7 +331,7 @@ namespace BrightSword.Squid.TypeCreators
             }
         }
 
-    protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsAddTrackReadonlyPropertyInitializedSupport
+        protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsAddTrackReadonlyPropertyInitializedSupport
         {
             get
             {
@@ -342,7 +342,7 @@ namespace BrightSword.Squid.TypeCreators
 
                 yield return _ => _.Emit(OpCodes.Ldarg_0);
                 yield return _ => _.Emit(OpCodes.Newobj,
-                                         typeof (HashSet<>).MakeGenericType(typeof (String))
+                                         typeof(HashSet<>).MakeGenericType(typeof(String))
                                                            .GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                                                                            null,
                                                                            Type.EmptyTypes,
@@ -352,7 +352,7 @@ namespace BrightSword.Squid.TypeCreators
             }
         }
 
-    protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsInitializeMappedReadonlyProperties
+        protected virtual IEnumerable<Action<ILGenerator>> DefaultConstructorInstructionsInitializeMappedReadonlyProperties
         {
             get
             {
@@ -400,7 +400,7 @@ namespace BrightSword.Squid.TypeCreators
             {
                 instruction(gen);
             }
-            
+
             foreach (var instruction in DefaultConstructorInstructionsAddCustomConstructionInstructions)
             {
                 instruction(gen);
@@ -436,7 +436,7 @@ namespace BrightSword.Squid.TypeCreators
 
         protected virtual TypeBuilder AddEvents(TypeBuilder typeBuilder)
         {
-            var events = typeof (T).GetAllNonExcludedEvents(InterfacesWithSpecialBehaviours);
+            var events = typeof(T).GetAllNonExcludedEvents(InterfacesWithSpecialBehaviours);
             var tb = typeBuilder;
             foreach (var ev in events)
             {
@@ -503,7 +503,7 @@ namespace BrightSword.Squid.TypeCreators
             var methodBuilder = typeBuilder.DefineMethod(attachOrDetachMethodName,
                                                          MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.Final | MethodAttributes.HideBySig | MethodAttributes.NewSlot);
 
-            methodBuilder.SetReturnType(typeof (void));
+            methodBuilder.SetReturnType(typeof(void));
             methodBuilder.SetParameters(eventInfo.EventHandlerType);
 
             methodBuilder.DefineParameter(1,
@@ -524,7 +524,7 @@ namespace BrightSword.Squid.TypeCreators
             gen.DeclareLocal(eventInfo.EventHandlerType);
             gen.DeclareLocal(eventInfo.EventHandlerType);
             gen.DeclareLocal(eventInfo.EventHandlerType);
-            gen.DeclareLocal(typeof (Boolean));
+            gen.DeclareLocal(typeof(Boolean));
 
             // Preparing labels
             var label7 = gen.DefineLabel();
@@ -540,7 +540,7 @@ namespace BrightSword.Squid.TypeCreators
             gen.Emit(OpCodes.Ldloc_1);
             gen.Emit(OpCodes.Ldarg_1);
             gen.Emit(OpCodes.Call,
-                     typeof (Delegate).GetMethod(attachOrDetachDelegateName,
+                     typeof(Delegate).GetMethod(attachOrDetachDelegateName,
                                                  BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                                                  null,
                                                  new[]
@@ -558,7 +558,7 @@ namespace BrightSword.Squid.TypeCreators
             gen.Emit(OpCodes.Ldloc_2);
             gen.Emit(OpCodes.Ldloc_1);
             gen.Emit(OpCodes.Call,
-                     typeof (Interlocked).GetGenericMethodOnType("CompareExchange",
+                     typeof(Interlocked).GetGenericMethodOnType("CompareExchange",
                                                                  eventInfo.EventHandlerType));
             gen.Emit(OpCodes.Stloc_0);
             gen.Emit(OpCodes.Ldloc_0);
@@ -586,7 +586,7 @@ namespace BrightSword.Squid.TypeCreators
 
         protected virtual TypeBuilder AddProperties(TypeBuilder typeBuilder)
         {
-            var props = typeof (T).GetAllNonExcludedProperties(InterfacesWithSpecialBehaviours).Where(PropertyFilter);
+            var props = typeof(T).GetAllNonExcludedProperties(InterfacesWithSpecialBehaviours).Where(PropertyFilter);
             var tb = typeBuilder;
             foreach (var p in props)
             {
@@ -690,8 +690,8 @@ namespace BrightSword.Squid.TypeCreators
                                                               PropertyInfo propertyInfo)
         {
             var gen = methodBuilder.GetILGenerator();
-            gen.DeclareLocal(typeof (Int32));
-            gen.DeclareLocal(typeof (Boolean));
+            gen.DeclareLocal(typeof(Int32));
+            gen.DeclareLocal(typeof(Boolean));
 
             var getAndReturnValue = gen.DefineLabel();
             var exit = gen.DefineLabel();
@@ -710,7 +710,7 @@ namespace BrightSword.Squid.TypeCreators
             gen.Emit(OpCodes.Ldstr,
                      propertyInfo.Name);
             gen.Emit(OpCodes.Newobj,
-                     typeof (MethodAccessException).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                     typeof(MethodAccessException).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                                                                    null,
                                                                    new[]
                                                                    {
@@ -772,8 +772,8 @@ namespace BrightSword.Squid.TypeCreators
         {
             var backingFieldProperty = BackingFieldProperties[propertyInfo];
 
-            var propertyChangingNotificationRequired = typeof (INotifyPropertyChanging).IsAssignableFrom(BaseType);
-            var propertyChangedNotificationRequired = typeof (INotifyPropertyChanged).IsAssignableFrom(BaseType);
+            var propertyChangingNotificationRequired = typeof(INotifyPropertyChanging).IsAssignableFrom(BaseType);
+            var propertyChangedNotificationRequired = typeof(INotifyPropertyChanged).IsAssignableFrom(BaseType);
 
             Debug.Assert(!backingFieldProperty.IsReadOnly || backingFieldProperty.MappedType == null);
 
@@ -786,7 +786,7 @@ namespace BrightSword.Squid.TypeCreators
                                                                                                                                                        propertyChangedNotificationRequired);
             var mutatorGenerator = backingFieldProperty.IsReadOnly
                                        ? (TrackReadonlyPropertyInitialized
-                                              ? (Action<TypeBuilder, MethodBuilder, PropertyInfo>) GenerateCodeForTrackedMutator
+                                              ? (Action<TypeBuilder, MethodBuilder, PropertyInfo>)GenerateCodeForTrackedMutator
                                               : GenerateCodeForNormalMutator)
                                        : (propertyChangingNotificationRequired || propertyChangedNotificationRequired)
                                              ? changedTrackedMethodGenerator
@@ -855,7 +855,7 @@ namespace BrightSword.Squid.TypeCreators
 
             if (propertyChangingNotificationRequired)
             {
-                gen.DeclareLocal(typeof (Boolean));
+                gen.DeclareLocal(typeof(Boolean));
             }
 
             var loadCurrentValueOpCode = OpCodes.Nop;
@@ -896,7 +896,7 @@ namespace BrightSword.Squid.TypeCreators
                 gen.Emit(OpCodes.Ldtoken,
                          propertyInfo.PropertyType);
                 gen.Emit(OpCodes.Call,
-                         typeof (Type).GetMethod("GetTypeFromHandle",
+                         typeof(Type).GetMethod("GetTypeFromHandle",
                                                  BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                                                  null,
                                                  GetTypeFromHandleArgTypes,
@@ -978,7 +978,7 @@ namespace BrightSword.Squid.TypeCreators
                 gen.Emit(OpCodes.Ldtoken,
                          propertyInfo.PropertyType);
                 gen.Emit(OpCodes.Call,
-                         typeof (Type).GetMethod("GetTypeFromHandle",
+                         typeof(Type).GetMethod("GetTypeFromHandle",
                                                  BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                                                  null,
                                                  GetTypeFromHandleArgTypes,
@@ -1024,7 +1024,7 @@ namespace BrightSword.Squid.TypeCreators
 
         protected virtual TypeBuilder AddMethods(TypeBuilder typeBuilder)
         {
-            return typeof (T).GetAllNonExcludedMethods(InterfacesWithSpecialBehaviours)
+            return typeof(T).GetAllNonExcludedMethods(InterfacesWithSpecialBehaviours)
                              .Where(MethodFilter)
                              .Where(_ => !_.IsSpecialName)
                              .Aggregate(typeBuilder,
@@ -1086,16 +1086,16 @@ namespace BrightSword.Squid.TypeCreators
 
                 if (param.IsOut)
                 {
-                    _p.SetCustomAttribute(new CustomAttributeBuilder(typeof (OutAttribute).GetConstructor(parameterBindingFlags,
+                    _p.SetCustomAttribute(new CustomAttributeBuilder(typeof(OutAttribute).GetConstructor(parameterBindingFlags,
                                                                                                           null,
                                                                                                           Type.EmptyTypes,
                                                                                                           null),
                                                                      Array.Empty<object>()));
                 }
-                else if (param.IsDefined(typeof (ParamArrayAttribute),
+                else if (param.IsDefined(typeof(ParamArrayAttribute),
                                          false))
                 {
-                    _p.SetCustomAttribute(new CustomAttributeBuilder(typeof (ParamArrayAttribute).GetConstructor(parameterBindingFlags,
+                    _p.SetCustomAttribute(new CustomAttributeBuilder(typeof(ParamArrayAttribute).GetConstructor(parameterBindingFlags,
                                                                                                                  null,
                                                                                                                  Type.EmptyTypes,
                                                                                                                  null),
@@ -1121,7 +1121,7 @@ namespace BrightSword.Squid.TypeCreators
             // Writing body
             gen.Emit(OpCodes.Nop);
             gen.Emit(OpCodes.Newobj,
-                     typeof (NotImplementedException).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                     typeof(NotImplementedException).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                                                                      null,
                                                                      Type.EmptyTypes,
                                                                      null));
@@ -1158,7 +1158,7 @@ namespace BrightSword.Squid.TypeCreators
         {
             var method = type.DefineMethod("InitializePropertyValue",
                                            MethodAttributes.Family | MethodAttributes.HideBySig,
-                                           typeof (void),
+                                           typeof(void),
                                            new[]
                                            {
                                                typeof (string)
@@ -1176,7 +1176,7 @@ namespace BrightSword.Squid.TypeCreators
                      initializedPropertiesField);
             gen.Emit(OpCodes.Ldarg_1);
             gen.Emit(OpCodes.Callvirt,
-                     typeof (HashSet<>).MakeGenericType(typeof (string))
+                     typeof(HashSet<>).MakeGenericType(typeof(string))
                                        .GetMethod("Add",
                                                   BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                                                   null,
@@ -1195,7 +1195,7 @@ namespace BrightSword.Squid.TypeCreators
         {
             var method = type.DefineMethod("IsPropertyValueInitialized",
                                            MethodAttributes.Family | MethodAttributes.HideBySig,
-                                           typeof (Boolean),
+                                           typeof(Boolean),
                                            new[]
                                            {
                                                typeof (String)
@@ -1205,7 +1205,7 @@ namespace BrightSword.Squid.TypeCreators
                                    "propertyName");
             var gen = method.GetILGenerator();
 
-            gen.DeclareLocal(typeof (Boolean));
+            gen.DeclareLocal(typeof(Boolean));
 
             var label16 = gen.DefineLabel();
 
@@ -1215,7 +1215,7 @@ namespace BrightSword.Squid.TypeCreators
                      initializedPropertiesField);
             gen.Emit(OpCodes.Ldarg_1);
             gen.Emit(OpCodes.Callvirt,
-                     typeof (HashSet<>).MakeGenericType(typeof (String))
+                     typeof(HashSet<>).MakeGenericType(typeof(String))
                                        .GetMethod("Contains",
                                                   BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                                                   null,
@@ -1237,7 +1237,7 @@ namespace BrightSword.Squid.TypeCreators
         private static FieldBuilder BuildField_InitializedProperties(TypeBuilder type)
         {
             return type.DefineField("_initializedProperties",
-                                    typeof (HashSet<>).MakeGenericType(typeof (String)),
+                                    typeof(HashSet<>).MakeGenericType(typeof(String)),
                                     FieldAttributes.Private);
         }
 
@@ -1255,7 +1255,7 @@ namespace BrightSword.Squid.TypeCreators
         public virtual T CreateInstance(dynamic source = null)
         {
             var result = InstanceFactory();
-            
+
             if (source != null)
             {
                 FastMapper<T>.MapDynamicToStatic(source,
@@ -1272,7 +1272,7 @@ namespace BrightSword.Squid.TypeCreators
 
             var lambda = Expression.Lambda(Expression.New(ctor));
 
-            return (Func<T>) lambda.Compile();
+            return (Func<T>)lambda.Compile();
         }
 
         #endregion
@@ -1286,9 +1286,9 @@ namespace BrightSword.Squid.TypeCreators
 
         protected virtual Type BuildType()
         {
-            if (typeof (T).IsClass)
+            if (typeof(T).IsClass)
             {
-                return typeof (T);
+                return typeof(T);
             }
 
             var assemblyName = new AssemblyName(AssemblyName);

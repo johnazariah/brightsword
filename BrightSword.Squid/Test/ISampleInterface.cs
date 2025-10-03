@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace BrightSword.Squid.Test
 {
-    #pragma warning disable CA1716 // test interface uses Event member name intentionally
+#pragma warning disable CA1716 // test interface uses Event member name intentionally
     public interface ISampleInterface : IBaseInterface
     {
         new decimal HiddenProperty { get; }
@@ -35,5 +35,5 @@ namespace BrightSword.Squid.Test
 
         event EventHandler Event;
     }
-    #pragma warning restore CA1716
+#pragma warning restore CA1716
 }
