@@ -103,6 +103,7 @@ namespace Tests.BrightSword.Squid
             }
         }
 
-        public class TestAttribute : Attribute {}
+    [AttributeUsage(AttributeTargets.All)]
+    public class TestAttribute : Attribute {}
     }
 }

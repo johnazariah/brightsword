@@ -135,6 +135,7 @@ namespace Tests.BrightSword.Squid.core
         string CollisionWithDifferentType { get; set; }
     }
 
+    #pragma warning disable CA1716 // test interfaces intentionally use names that look like keywords for interop tests
     public interface IComprehensive
     {
         IFoo Foo { get; }
@@ -151,6 +152,7 @@ namespace Tests.BrightSword.Squid.core
 // ReSharper disable PossibleInterfaceMemberAmbiguity
     public interface IInterfaceWithMultipleInheritanceAndPropertyCollisions : IInterfaceLeftBase,
                                                                               IInterfaceRightBase {}
+    #pragma warning restore CA1716
 
 // ReSharper restore PossibleInterfaceMemberAmbiguity
 }

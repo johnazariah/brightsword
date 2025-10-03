@@ -10,7 +10,7 @@ namespace BrightSword.Squid.Test
     [ExcludeFromCodeCoverage]
     public class PropertyChangingNotificationSink : INotifyPropertyChanging
     {
-        private readonly IDictionary<string, object> _changedProperties;
+    private readonly Dictionary<string, object> _changedProperties;
 
         public PropertyChangingNotificationSink()
         {
@@ -37,7 +37,7 @@ namespace BrightSword.Squid.Test
 
         public bool IsChanged
         {
-            get { return _changedProperties.Any(); }
+            get { return _changedProperties.Count != 0; }
         }
 
         public bool OnPropertyChanging(string propertyName,

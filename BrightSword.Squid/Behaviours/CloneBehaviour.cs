@@ -132,7 +132,7 @@ namespace BrightSword.Squid.Behaviours
             }
 
             // Fallback: create instance and copy fields
-            object? result = null;
+            object result = null;
             // First try a normal public constructor
             try
             {
@@ -156,7 +156,7 @@ namespace BrightSword.Squid.Behaviours
                 }
             }
 
-            if (result is null)
+            if (result == null)
             {
                 throw new InvalidOperationException($"Unable to create instance of type {type.FullName} for cloning.");
             }
@@ -175,7 +175,7 @@ namespace BrightSword.Squid.Behaviours
 
         private sealed class ReferenceEqualityComparer : IEqualityComparer<object>
         {
-            public new bool Equals(object? x, object? y) => ReferenceEquals(x, y);
+            public new bool Equals(object x, object y) => ReferenceEquals(x, y);
             public int GetHashCode(object obj) => System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(obj);
         }
     }

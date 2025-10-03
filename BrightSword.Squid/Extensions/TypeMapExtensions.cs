@@ -14,9 +14,7 @@ namespace BrightSword.Squid
                 return null;
             }
 
-            if (mapFrom.GetGenericArguments()
-                       .Count() != mapTo.GetGenericArguments()
-                                        .Count())
+            if (mapFrom.GetGenericArguments().Length != mapTo.GetGenericArguments().Length)
             {
                 return null;
             }

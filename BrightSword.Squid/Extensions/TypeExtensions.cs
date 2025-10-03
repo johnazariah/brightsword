@@ -23,7 +23,7 @@ namespace BrightSword.Squid
                                                         params Type[] typeParameters)
         {
             return self.GetAllMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic)
-                        .Single(_ => _.Name.Equals(methodName) && _.IsGenericMethod)
+                        .Single(_ => _.Name.Equals(methodName, StringComparison.Ordinal) && _.IsGenericMethod)
                         .MakeGenericMethod(typeParameters);
         }
 

@@ -29,7 +29,7 @@ namespace BrightSword.Squid.TypeCreators
     {
         protected const MethodAttributes PropertyHiddenMethodAttributes = MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig | MethodAttributes.Final | MethodAttributes.NewSlot | MethodAttributes.SpecialName;
 
-        private readonly IList<Func<Type, Type>> _typeMaps;
+    private readonly List<Func<Type, Type>> _typeMaps;
 
         private string _assemblyName;
 

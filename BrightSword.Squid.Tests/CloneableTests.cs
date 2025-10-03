@@ -72,7 +72,7 @@ namespace Tests.BrightSword.Squid
                             root.FooBar);
         }
 
-        private static void CloneableIsSupported(ITypeCreator<IFoo> typeCreator)
+    private static void CloneableIsSupported(BasicDataTransferObjectTypeCreator<IFoo> typeCreator)
         {
             var root = typeCreator.CreateInstance();
             var child = typeCreator.CreateInstance();
