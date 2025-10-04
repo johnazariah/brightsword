@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <!-- Package Version -->
+    <VersionPrefix>1.0.19</VersionPrefix>
+    
+    <!-- Package Metadata -->
+    <PackageId>BrightSword.SwissKnife</PackageId>
+    <Description>A collection of utility classes and extension methods for .NET development</Description>
+    <PackageTags>$(PackageTags);utilities;extensions;helpers</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+</Project>

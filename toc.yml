@@ -1,0 +1,27 @@
+- name: Home
+  href: README.md
+- name: Packages
+  items:
+  - name: BrightSword.SwissKnife
+    href: swissknife/README.md
+  - name: BrightSword.Crucible
+    href: crucible/README.md
+  - name: BrightSword.Feber
+    href: feber/README.md
+  - name: BrightSword.Squid
+    href: squid/README.md
+- name: Documentation
+  items:
+  - name: Build Guide
+    href: docs/BUILD.md
+  - name: Contributing
+    href: docs/CONTRIBUTING.md
+  - name: Versioning
+    href: docs/VERSIONING.md
+  - name: CI/CD
+    href: docs/CICD.md
+  - name: Architecture
+    href: docs/ARCHITECTURE.md
+- name: API Reference
+  href: api/
+  homepage: api/index.md

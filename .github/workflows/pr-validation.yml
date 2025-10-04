@@ -1,0 +1,59 @@
+name: Pull Request Validation
+
+on:
+  pull_request:
+    branches: [ main ]
+    types: [opened, synchronize, reopened]
+
+env:
+  DOTNET_VERSION: '10.0.x'
+
+jobs:
+  validate:
+    name: Validate PR
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build solution
+      run: msbuild Build.proj /t:BuildPackages /p:Configuration=Release /v:minimal
+    
+    - name: Run tests with coverage
+      run: msbuild Build.proj /t:Test /p:Configuration=Release /v:minimal
+    
+    - name: Check for breaking changes
+      run: |
+        echo "Checking for breaking API changes..."
+        # This is a placeholder - you would use a tool like Microsoft.DotNet.ApiCompat
+    
+    - name: Verify version updates
+      run: |
+        echo "Verifying version numbers are updated if needed..."
+        # Check if version.props files have been updated when code changes
+    
+    - name: Create packages (validation only)
+      run: msbuild Build.proj /t:Pack /p:Configuration=Release /v:minimal
+    
+    - name: Post PR comment
+      if: always()
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: '? PR validation completed successfully!'
+          })

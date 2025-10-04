@@ -1,0 +1,132 @@
+<Project>
+  <!--
+    Master build script for BrightSword monorepo
+    
+    Usage:
+      Build all: msbuild Build.proj
+      Build specific package: msbuild Build.proj /p:Package=BrightSword.SwissKnife
+      Clean: msbuild Build.proj /t:Clean
+      Pack all: msbuild Build.proj /t:Pack
+      Pack specific: msbuild Build.proj /t:Pack /p:Package=BrightSword.SwissKnife
+      Restore: msbuild Build.proj /t:Restore
+  -->
+
+  <PropertyGroup>
+    <!-- Solution Configuration -->
+    <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
+    <Platform Condition="'$(Platform)' == ''">Any CPU</Platform>
+    
+    <!-- Output Paths -->
+    <ArtifactsPath>$(MSBuildThisFileDirectory)artifacts</ArtifactsPath>
+    <PackageOutputPath>$(ArtifactsPath)\packages</PackageOutputPath>
+    <TestResultsPath>$(ArtifactsPath)\test-results</TestResultsPath>
+    
+    <!-- Package Projects -->
+    <PackageProjects>
+      BrightSword.SwissKnife;
+      BrightSword.Crucible;
+      BrightSword.Feber;
+      BrightSword.Squid
+    </PackageProjects>
+    
+    <!-- Test Projects -->
+    <TestProjects>
+      BrightSword.SwissKnife.Tests;
+      BrightSword.Feber.Tests;
+      BrightSword.Squid.Tests
+    </TestProjects>
+  </PropertyGroup>
+
+  <!-- Define package projects as items -->
+  <ItemGroup>
+    <PackageProject Include="$(MSBuildThisFileDirectory)BrightSword.SwissKnife\BrightSword.SwissKnife.csproj" />
+    <PackageProject Include="$(MSBuildThisFileDirectory)BrightSword.Crucible\BrightSword.Crucible.csproj" />
+    <PackageProject Include="$(MSBuildThisFileDirectory)BrightSword.Feber\BrightSword.Feber.csproj" />
+    <PackageProject Include="$(MSBuildThisFileDirectory)BrightSword.Squid\BrightSword.Squid.csproj" />
+  </ItemGroup>
+
+  <!-- Define test projects as items -->
+  <ItemGroup>
+    <TestProject Include="$(MSBuildThisFileDirectory)BrightSword.SwissKnife.Tests\BrightSword.SwissKnife.Tests.csproj" />
+    <TestProject Include="$(MSBuildThisFileDirectory)BrightSword.Feber.Tests\BrightSword.Feber.Tests.csproj" />
+    <TestProject Include="$(MSBuildThisFileDirectory)BrightSword.Squid.Tests\BrightSword.Squid.Tests.csproj" />
+  </ItemGroup>
+
+  <!-- Default target: Build all packages -->
+  <Target Name="Build" DependsOnTargets="Restore;BuildPackages">
+    <Message Text="Build completed successfully" Importance="high" />
+  </Target>
+
+  <!-- Restore all projects -->
+  <Target Name="Restore">
+    <Message Text="Restoring packages..." Importance="high" />
+    <MSBuild Projects="@(PackageProject)" Targets="Restore" />
+    <MSBuild Projects="@(TestProject)" Targets="Restore" />
+  </Target>
+
+  <!-- Build all package projects -->
+  <Target Name="BuildPackages">
+    <Message Text="Building package projects..." Importance="high" />
+    <MSBuild Projects="@(PackageProject)" 
+             Targets="Build" 
+             Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+  </Target>
+
+  <!-- Build all test projects -->
+  <Target Name="BuildTests">
+    <Message Text="Building test projects..." Importance="high" />
+    <MSBuild Projects="@(TestProject)" 
+             Targets="Build" 
+             Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+  </Target>
+
+  <!-- Run all tests -->
+  <Target Name="Test" DependsOnTargets="BuildTests">
+    <Message Text="Running tests..." Importance="high" />
+    <MakeDir Directories="$(TestResultsPath)" />
+    <Exec Command="dotnet test &quot;%(TestProject.Identity)&quot; --no-build --configuration $(Configuration) --logger:trx --results-directory &quot;$(TestResultsPath)&quot;" 
+          ContinueOnError="false" />
+  </Target>
+
+  <!-- Pack all packages -->
+  <Target Name="Pack" DependsOnTargets="BuildPackages">
+    <Message Text="Creating NuGet packages..." Importance="high" />
+    <MakeDir Directories="$(PackageOutputPath)" />
+    <MSBuild Projects="@(PackageProject)" 
+             Targets="Pack" 
+             Properties="Configuration=$(Configuration);Platform=$(Platform);PackageOutputPath=$(PackageOutputPath);NoBuild=true" />
+    <Message Text="Packages created in $(PackageOutputPath)" Importance="high" />
+  </Target>
+
+  <!-- Pack a specific package (use /p:Package=ProjectName) -->
+  <Target Name="PackSingle" Condition="'$(Package)' != ''">
+    <PropertyGroup>
+      <ProjectPath>$(MSBuildThisFileDirectory)$(Package)\$(Package).csproj</ProjectPath>
+    </PropertyGroup>
+    <Message Text="Building and packing $(Package)..." Importance="high" />
+    <MSBuild Projects="$(ProjectPath)" Targets="Restore;Build" Properties="Configuration=$(Configuration)" />
+    <MakeDir Directories="$(PackageOutputPath)" />
+    <MSBuild Projects="$(ProjectPath)" 
+             Targets="Pack" 
+             Properties="Configuration=$(Configuration);PackageOutputPath=$(PackageOutputPath);NoBuild=true" />
+  </Target>
+
+  <!-- Clean all projects -->
+  <Target Name="Clean">
+    <Message Text="Cleaning solution..." Importance="high" />
+    <MSBuild Projects="@(PackageProject)" Targets="Clean" />
+    <MSBuild Projects="@(TestProject)" Targets="Clean" />
+    <RemoveDir Directories="$(ArtifactsPath)" Condition="Exists('$(ArtifactsPath)')" />
+  </Target>
+
+  <!-- Rebuild = Clean + Build -->
+  <Target Name="Rebuild" DependsOnTargets="Clean;Build">
+    <Message Text="Rebuild completed" Importance="high" />
+  </Target>
+
+  <!-- Full CI build: Restore, Build, Test, Pack -->
+  <Target Name="CI" DependsOnTargets="Clean;Restore;BuildPackages;BuildTests;Test;Pack">
+    <Message Text="CI build completed successfully" Importance="high" />
+  </Target>
+
+</Project>

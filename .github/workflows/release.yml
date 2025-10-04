@@ -1,0 +1,112 @@
+name: Release and Publish
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Trigger on version tags like v1.0.0
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package to publish'
+        required: true
+        type: choice
+        options:
+          - BrightSword.SwissKnife
+          - BrightSword.Feber
+          - BrightSword.Squid
+          - All
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  publish:
+    name: Build and Publish Release
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Extract version from tag
+      id: version
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/v}
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Releasing version: $VERSION"
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build solution
+      run: msbuild Build.proj /t:BuildPackages /p:Configuration=Release /v:minimal
+    
+    - name: Run tests
+      run: msbuild Build.proj /t:Test /p:Configuration=Release /v:minimal
+    
+    - name: Create packages
+      run: msbuild Build.proj /t:Pack /p:Configuration=Release /v:minimal
+    
+    - name: Publish to NuGet.org
+      run: |
+        dotnet nuget push "artifacts/packages/*.nupkg" \
+          --source https://api.nuget.org/v3/index.json \
+          --api-key ${{ secrets.NUGET_API_KEY }} \
+          --skip-duplicate
+      env:
+        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+    
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: artifacts/packages/*.nupkg
+        generate_release_notes: true
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-dependencies:
+    name: Publish Dependent Packages
+    runs-on: ubuntu-latest
+    needs: publish
+    if: |
+      github.event_name == 'workflow_dispatch' && 
+      github.event.inputs.package != 'All'
+    
+    strategy:
+      matrix:
+        include:
+          - package: BrightSword.SwissKnife
+            dependents: []
+          - package: BrightSword.Feber
+            dependents: ['BrightSword.Squid']
+          - package: BrightSword.Squid
+            dependents: []
+    
+    steps:
+    - name: Determine if we need to publish dependents
+      id: check
+      run: |
+        if [[ "${{ github.event.inputs.package }}" == "${{ matrix.package }}" ]]; then
+          echo "publish_dependents=true" >> $GITHUB_OUTPUT
+        else
+          echo "publish_dependents=false" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Trigger dependent package builds
+      if: steps.check.outputs.publish_dependents == 'true' && matrix.dependents != '[]'
+      run: |
+        echo "Would trigger builds for: ${{ join(matrix.dependents, ', ') }}"
+        # In a real scenario, you would increment versions and trigger builds here

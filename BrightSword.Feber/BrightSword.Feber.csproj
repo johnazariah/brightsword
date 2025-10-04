@@ -1,14 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="version.props" />
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>BrightSword.Feber</AssemblyName>
     <RootNamespace>BrightSword.Feber</RootNamespace>
-  <AssemblyVersion>2.0.3.0</AssemblyVersion>
-  <FileVersion>2.0.3.0</FileVersion>
-  
-  <Version>2.0.3</Version>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
@@ -19,6 +17,5 @@
   <ItemGroup>
     <PackageReference Include="Roslynator.Analyzers" Version="4.0.0" PrivateAssets="all" />
   </ItemGroup>
-
 
 </Project>

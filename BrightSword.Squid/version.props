@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <!-- Package Version -->
+    <VersionPrefix>1.0.0</VersionPrefix>
+    
+    <!-- Package Metadata -->
+    <PackageId>BrightSword.Squid</PackageId>
+    <Description>Super QUantum Interface serialization and Deserialization - Advanced interface serialization library</Description>
+    <PackageTags>$(PackageTags);serialization;interfaces;quantum</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+</Project>

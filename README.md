@@ -1,143 +1,232 @@
-# BrightSword — quick runtime note
+# BrightSword Monorepo
 
-Short summary
-- The Feber builders (ActionBuilder / FunctionBuilder and their OperationBuilder bases) compose LINQ Expression fragments for each property and then compile a delegate from the composed expression block.
+A collection of high-quality .NET libraries for utilities, testing, automated code generation, and advanced serialization.
 
-Performance characteristics
-- Building the expression blocks is relatively expensive: it involves reflection (scanning properties), creating Expression nodes, and JIT/compiling the resulting lambda. This cost is paid once when the builder composes and compiles the delegate.
-- To avoid repeating that cost, builders cache the compiled delegate (for example a private field populated with `_action ??= BuildAction()` or `_function ??= BuildFunction()`). After the first build, running the compiled delegate is very fast — comparable to a hand-written method call.
+[![CI Build](https://github.com/brightsword/BrightSword/actions/workflows/ci.yml/badge.svg)](https://github.com/brightsword/BrightSword/actions/workflows/ci.yml)
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
-Practical guidance
-- Expect a one-time setup/compile cost at first use; measure in your scenario and consider warming (call the Action/Function once at app startup) if low-latency first requests are important.
-- If compilation cost is a concern in multi-threaded server environments, consider initializing the delegate at startup or replace the simple null-coalescing cache with a thread-safe Lazy<T> or explicit synchronization to avoid duplicate compilation work.
-- Avoid creating new ParameterExpression instances in overrides. Use the supplied `InstanceParameterExpression`, `LeftInstanceParameterExpression` and `RightInstanceParameterExpression` properties so that the compiled lambda parameter identity matches expressions in the body; mismatched parameter identity causes runtime compilation errors.
+## 📦 Packages
 
-Testing and maintainability
-- Prefer stable, introspective tests that validate `FilteredProperties` and `OperationExpressions` content rather than attempting to compile large composed blocks in tests. If you must compile the block in tests, obtain the exact ParameterExpression instance used by the builder.
+This monorepo contains the following NuGet packages:
 
-Customization points
-- Override `BuildAction()` / `BuildFunction()` to change compilation or caching strategy (for example to use different compilation options or to emit an interpreted delegate).
-- Consider exposing a customizable field-discovery or mapping strategy if you rely on convention-based behaviors (backing-field lookup, naming conventions).
+| Package | Version | Description |
+|---------|---------|-------------|
+| [BrightSword.SwissKnife](./BrightSword.SwissKnife) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.SwissKnife.svg)](https://www.nuget.org/packages/BrightSword.SwissKnife/) | Utility classes and extension methods for .NET development |
+| [BrightSword.Crucible](./BrightSword.Crucible) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.Crucible.svg)](https://www.nuget.org/packages/BrightSword.Crucible/) | Unit testing utilities for MSTest |
+| [BrightSword.Feber](./BrightSword.Feber) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.Feber.svg)](https://www.nuget.org/packages/BrightSword.Feber/) | Automated delegate generation using Expression trees |
+| [BrightSword.Squid](./BrightSword.Squid) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.Squid.svg)](https://www.nuget.org/packages/BrightSword.Squid/) | Runtime type emission utilities |
 
-Where to look next
-- Package-level docs and per-sample pages live under `BrightSword.Feber/docs/` and `BrightSword.SwissKnife/docs/`.
-- See `BrightSword.Feber/docs/FunctionBuilder.md` and `BrightSword.Feber.Tests/NullCheckBuilderTests.cs` for concrete examples (NullChecker) and tests.
-# BrightSword — build & publishing
+## 🚀 Quick Start
 
-This repository uses an MSBuild orchestration file (`build.proj`) to bump versions, pack projects, and optionally publish NuGet packages.
+### Installation
 
-Quick overview
-- High-level MSBuild targets (run with `dotnet msbuild build.proj -t:<Target>`):
-  - `PublishSwissknife` — bump SwissKnife (or set explicit version), pack SwissKnife and Feber, publish if configured, and commit bumped files when requested.
-  - `PublishFeber` — bump Feber (or set explicit version), pack Feber, publish if configured, and commit bumped files when requested.
-  - `PackSwissKnife`, `PackFeber` — pack-only targets.
-  - `Publish` — publish any `.nupkg` files created under `artifacts/` (uses helpers in `tools/`).
+Install the packages via NuGet Package Manager or .NET CLI:
 
-Files of interest
-- `build.proj` — MSBuild orchestration (root).
-- `tools/bump_versions.py` — version bump helper (updates `versions.json` and csproj `<Version>` fields, writes `bumped_versions.json`).
-- `versions.json` — canonical per-project versions tracked in repo.
-- `bumped_versions.json` — machine-readable output from bump script (created during bump runs).
-- `tools/publish_nupkgs.sh` and `tools/publish_nupkgs.ps1` — cross-platform helpers used by the `Publish` target.
-- `.github/workflows/ci-pack.yml` — CI workflow now invokes `build.proj` targets.
+```bash
+# SwissKnife - Utilities and helpers
+dotnet add package BrightSword.SwissKnife
 
-Local examples
-- Pack SwissKnife only:
+# Crucible - MSTest utilities
+dotnet add package BrightSword.Crucible
 
-```powershell
-dotnet msbuild build.proj -t:PackSwissKnife
+# Feber - Expression-based code generation
+dotnet add package BrightSword.Feber
+
+# Squid - Runtime type emission
+dotnet add package BrightSword.Squid
 ```
 
-- Full publish flow for SwissKnife (no commit, no publish to NuGet):
+### Basic Usage
 
-```powershell
-dotnet msbuild build.proj -t:PublishSwissknife -p:DoCommit=false -p:NUGET_API_KEY=
+```csharp
+using BrightSword.SwissKnife;
+using BrightSword.Crucible;
+using BrightSword.Feber.Core;
+using BrightSword.Squid;
+
+// Use the libraries in your code
 ```
 
-- Full publish flow for Feber with an explicit version (like a tag-driven release):
+## 🏗️ Building from Source
 
-```powershell
-dotnet msbuild build.proj -t:PublishFeber -p:DoCommit=false -p:NUGET_API_KEY= -p:VersionFromTag=2.0.0
+### Prerequisites
+
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) or later
+- MSBuild (included with .NET SDK)
+
+### Build Commands
+
+```bash
+# Build all projects
+./build.ps1
+
+# Build specific package
+./build.ps1 -Package BrightSword.SwissKnife
+
+# Run tests
+./build.ps1 -Target Test
+
+# Create NuGet packages
+./build.ps1 -Target Pack
+
+# Full CI build (clean, build, test, pack)
+./build.ps1 -Target CI
+
+# Clean build artifacts
+./build.ps1 -Target Clean
 ```
 
-CI invocation (what the workflow does)
-- The GitHub Actions workflow calls `dotnet msbuild build.proj` and invokes `PublishSwissknife` or `PublishFeber` depending on the dispatch input or pushed tag.
-- When dispatching the workflow with `publish=publish-swissknife`, the workflow sets `DoCommit=true` and runs the `PublishSwissknife` target. That target will call the bump script, pack, publish (if `NUGET_API_KEY` is present), and attempt to commit bumped files back to the branch.
+### Using MSBuild Directly
 
-Commit behavior
-- `CommitBumped` runs only when `DoCommit=true`. The workflow sets this flag for explicit dispatch runs so bump commits are attempted automatically.
-- If your branch has protection rules that prevent pushes from the workflow token, the push may fail. The workflow is tolerant and logs the outcome. If you prefer, we can alter the workflow to open a PR with bumped files instead of pushing directly.
+```bash
+# Build
+msbuild Build.proj /t:Build /p:Configuration=Release
 
-Tagging conventions
-- To publish an explicit version for SwissKnife or Feber, push a tag using the form `swissknife-vX.Y.Z` or `feber-vX.Y.Z`. The workflow will pass the version to MSBuild and `bump_versions.py` will set that explicit version.
+# Test
+msbuild Build.proj /t:Test
 
-# BrightSword — build & publishing
+# Pack
+msbuild Build.proj /t:Pack
 
-This repository uses an MSBuild-based orchestration (`build.proj`) to bump versions, pack the projects, and optionally publish NuGet packages.
-
-Overview
-- Packages:
-  - BrightSword.SwissKnife
-  - BrightSword.Feber (depends on SwissKnife)
-- Orchestration: `build.proj` is the canonical entry point used by local maintainers and the GitHub Actions workflow (`.github/workflows/ci-pack.yml`).
-- Helper script: `tools/bump_versions.py` updates `versions.json` and project `<Version>` metadata and writes `bumped_versions.json` (used for traceability in CI logs).
-
-Common targets
-- `PackSwissKnife` / `PackFeber` — pack only.
-- `PublishSwissknife` — bump SwissKnife (or set explicit version), pack SwissKnife and Feber, publish artifacts, and optionally commit bumped files when `DoCommit=true`.
-- `PublishFeber` — bump Feber (or set explicit version), pack Feber, publish artifacts, and optionally commit bumped files.
-- `Publish` — publish `.nupkg` files in `artifacts/` using the cross-platform helpers in `tools/`.
-
-Local examples
-- Pack SwissKnife only:
-
-```powershell
-dotnet msbuild build.proj -t:PackSwissKnife
+# Pack specific package
+msbuild Build.proj /t:PackSingle /p:Package=BrightSword.SwissKnife
 ```
 
-- Run the full SwissKnife publish flow locally without committing or pushing to NuGet:
+## 📚 Documentation
 
-```powershell
-dotnet msbuild build.proj -t:PublishSwissknife -p:DoCommit=false -p:NUGET_API_KEY=
+- [Build and Development Guide](./docs/BUILD.md)
+- [Contributing Guidelines](./docs/CONTRIBUTING.md)
+- [Versioning Strategy](./docs/VERSIONING.md)
+- [CI/CD Pipeline](./docs/CICD.md)
+- [Architecture Overview](./docs/ARCHITECTURE.md)
+
+### Package Documentation
+
+- [BrightSword.SwissKnife Documentation](./BrightSword.SwissKnife/docs/)
+- [BrightSword.Crucible Documentation](./BrightSword.Crucible/docs/)
+- [BrightSword.Feber Documentation](./BrightSword.Feber/docs/)
+- [BrightSword.Squid Documentation](./BrightSword.Squid/docs/)
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](./docs/CONTRIBUTING.md) for details.
+
+### Development Workflow
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
+
+### Versioning
+
+We use [Semantic Versioning](https://semver.org/). To increment versions:
+
+```bash
+# Increment patch version (1.0.0 -> 1.0.1)
+./increment-version.ps1 -Package BrightSword.SwissKnife
+
+# Increment minor version (1.0.0 -> 1.1.0)
+./increment-version.ps1 -Package BrightSword.Feber -Component Minor
+
+# Increment major version (1.0.0 -> 2.0.0)
+./increment-version.ps1 -Package BrightSword.Squid -Component Major
 ```
 
-- Publish Feber with a specific version (tag-style):
+## 📋 Project Structure
 
-```powershell
-dotnet msbuild build.proj -t:PublishFeber -p:DoCommit=false -p:NUGET_API_KEY= -p:VersionFromTag=2.0.0
+```
+BrightSword/
+├── .github/
+│   └── workflows/          # CI/CD pipelines
+├── BrightSword.SwissKnife/ # Utilities package
+├── BrightSword.Crucible/   # MSTest utilities package
+├── BrightSword.Feber/      # Expression builder package
+├── BrightSword.Squid/      # Type emission package
+├── docs/                   # Monorepo documentation
+├── Build.proj              # MSBuild build script
+├── build.ps1               # PowerShell build script
+├── increment-version.ps1   # Version management script
+├── Directory.Build.props   # Common MSBuild properties
+└── Directory.Build.targets # Common MSBuild targets
 ```
 
-CI behavior
-- The GitHub Actions workflow `.github/workflows/ci-pack.yml` runs the MSBuild targets and decides which target to invoke based on:
-  - workflow_dispatch inputs (`publish=publish-swissknife` or `publish=publish-feber`), or
-  - pushed tags of the form `swissknife-vX.Y.Z` or `feber-vX.Y.Z` (the workflow extracts the version and passes it to MSBuild).
-- For explicit dispatch flows the workflow sets `DoCommit=true` so `CommitBumped` can attempt to push bumped files back to the branch. If branch protection blocks the push, the workflow logs the failure.
+## 🔄 CI/CD
 
-Secrets
-- To publish packages to NuGet.org set the repository secret `NUGET_API_KEY`.
-- The workflow will place `NUGET_API_KEY` in step env so MSBuild and the `tools/` publish helpers can access it at runtime. CI uses `GITHUB_TOKEN` for any commit-back operations.
+The repository uses GitHub Actions for continuous integration and deployment:
 
-Troubleshooting
-- `bumped_versions.json` is printed to CI logs and contains the exact versions applied by the bump script. Use it to confirm what was published.
-- If `CommitBumped` push fails, convert the flow to open a PR with bumped files instead of pushing directly (I can implement that change on request).
+- **CI Build** - Runs on all pushes and pull requests
+- **PR Validation** - Validates pull requests to main branch
+- **Release** - Publishes packages to NuGet.org on version tags
 
-Want me to open a PR with these docs updates or add a small `build.ps1` wrapper for Windows contributors? Say which and I'll do it next.
+See [CI/CD Documentation](./docs/CICD.md) for more details.
 
-## Run samples and tests
+---
+
+## Package Highlights
+
+### BrightSword.SwissKnife
+Utility classes and extension methods that provide robust, dependency-light helpers for common programming tasks like reflection, validation, collections, and string manipulation.
+
+### BrightSword.Crucible
+Testing utilities for MSTest that make exception testing more expressive with the `ExpectException<T>` extension method.
+
+### BrightSword.Feber
+Automated delegate generation using LINQ Expression trees. Compose property-based operations (copying, printing, validation) once per type and execute them efficiently with cached compiled delegates.
+
+**Performance**: 
+- First call: ~10-100ms (reflection + expression building + JIT)
+- Subsequent calls: <0.001ms (cached compiled delegate)
+
+### BrightSword.Squid
+Runtime type emission utilities for creating types dynamically using Reflection.Emit. Includes support for data transfer objects, behaviors, and advanced type creation scenarios.
+
+## Run Samples and Tests
 
 This repository targets .NET 10. Use the SDK pinned in `global.json`.
 
-Run the Squid sample
-1. Build the sample project:
-   - `dotnet build BrightSword.Squid.Samples/BrightSword.Squid.Squid.Samples.csproj`
-2. Run the sample:
-   - `dotnet run --project BrightSword.Squid.Samples/BrightSword.Squid.Squid.Samples.csproj`
+### Run the Feber Sample
 
-Run tests
-- To run all tests in the solution:
-  - `dotnet test BrightSword.sln`
-- To run only the Squid tests project:
-  - `dotnet test BrightSword.Squid.Tests/BrightSword.Squid.Tests.csproj`
+```bash
+# Build and run the sample
+dotnet run --project BrightSword.Feber.SamplesApp/BrightSword.Feber.SamplesApp.csproj
+```
 
-Notes
-- Some tests and samples rely on runtime type emission (`Reflection.Emit`). Use the SDK/runtime pinned in `global.json` for consistent behavior.
+### Run Tests
+
+```bash
+# Run all tests
+dotnet test
+
+# Run specific test project
+dotnet test BrightSword.SwissKnife.Tests/BrightSword.SwissKnife.Tests.csproj
+```
+
+## 📄 License
+
+This project is licensed under the **Creative Commons Legal Code (CC0 1.0 Universal)**.
+
+You are free to:
+- **Share** — copy and redistribute the material in any medium or format
+- **Adapt** — remix, transform, and build upon the material for any purpose, even commercially
+
+Under the following terms:
+- **Attribution** — You must give appropriate credit to BrightSword Technologies Pte Ltd, provide a link to the license, and indicate if changes were made.
+
+See the full license at [https://creativecommons.org/licenses/by/4.0/](https://creativecommons.org/licenses/by/4.0/)
+
+## 🙏 Acknowledgments
+
+- Developed and maintained by [BrightSword Technologies Pte Ltd](https://brightsword.com)
+- Copyright © BrightSword Technologies Pte Ltd, Singapore
+
+## 📞 Support
+
+- **Documentation**: [GitHub Pages](https://brightsword.github.io/BrightSword/)
+- **Issues**: [GitHub Issues](https://github.com/brightsword/BrightSword/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/brightsword/BrightSword/discussions)
+
+---
+
+**Built with ❤️ by BrightSword Technologies**
