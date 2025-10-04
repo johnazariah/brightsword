@@ -35,71 +35,8 @@ jobs:
     
     - name: Build documentation
       run: |
-        # Create docfx.json if it doesn't exist
-        if [ ! -f "docfx.json" ]; then
-          cat > docfx.json << 'EOF'
-        {
-          "metadata": [
-            {
-              "src": [
-                {
-                  "files": [ "**/*.csproj" ],
-                  "exclude": [ "**/bin/**", "**/obj/**", "**/*Tests.csproj", "**/*Samples*.csproj" ],
-                  "src": "."
-                }
-              ],
-              "dest": "api",
-              "disableGitFeatures": false,
-              "disableDefaultFilter": false
-            }
-          ],
-          "build": {
-            "content": [
-              {
-                "files": [ "api/**.yml", "api/index.md" ]
-              },
-              {
-                "files": [ "docs/**.md", "*.md" ],
-                "exclude": [ "_site/**" ]
-              },
-              {
-                "files": [ "**/docs/**.md" ],
-                "src": "BrightSword.SwissKnife",
-                "dest": "swissknife"
-              },
-              {
-                "files": [ "**/docs/**.md" ],
-                "src": "BrightSword.Feber",
-                "dest": "feber"
-              },
-              {
-                "files": [ "**/docs/**.md" ],
-                "src": "BrightSword.Squid",
-                "dest": "squid"
-              }
-            ],
-            "resource": [
-              {
-                "files": [ "images/**" ]
-              }
-            ],
-            "output": "_site",
-            "template": [ "default", "modern" ],
-            "globalMetadata": {
-              "_appTitle": "BrightSword Documentation",
-              "_appName": "BrightSword",
-              "_appFooter": "© BrightSword Technologies Pte Ltd",
-              "_enableSearch": true
-            },
-            "fileMetadata": {
-              "_layout": {
-                "api/**": "Reference"
-              }
-            }
-          }
-        }
-        EOF
-        fi
+        # Ensure docfx is in PATH
+        export PATH="$PATH:$HOME/.dotnet/tools"
         
         # Build docs
         docfx docfx.json

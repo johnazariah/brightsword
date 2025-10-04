@@ -3,7 +3,10 @@ name: Release and Publish
 on:
   push:
     tags:
-      - 'v*.*.*'  # Trigger on version tags like v1.0.0
+      - 'swissknife-v*.*.*'
+      - 'crucible-v*.*.*'
+      - 'feber-v*.*.*'
+      - 'squid-v*.*.*'
   workflow_dispatch:
     inputs:
       package:
@@ -12,9 +15,13 @@ on:
         type: choice
         options:
           - BrightSword.SwissKnife
+          - BrightSword.Crucible
           - BrightSword.Feber
           - BrightSword.Squid
-          - All
+      version:
+        description: 'Version to publish (e.g., 1.0.0)'
+        required: true
+        type: string
 
 env:
   DOTNET_VERSION: '10.0.x'
@@ -22,8 +29,47 @@ env:
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
 jobs:
-  publish:
-    name: Build and Publish Release
+  determine-package:
+    name: Determine Package to Release
+    runs-on: ubuntu-latest
+    outputs:
+      package: ${{ steps.package.outputs.name }}
+      version: ${{ steps.package.outputs.version }}
+    
+    steps:
+    - name: Determine package from tag or input
+      id: package
+      run: |
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          PACKAGE="${{ github.event.inputs.package }}"
+          VERSION="${{ github.event.inputs.version }}"
+        else
+          TAG="${{ github.ref_name }}"
+          if [[ $TAG == swissknife-v* ]]; then
+            PACKAGE="BrightSword.SwissKnife"
+            VERSION="${TAG#swissknife-v}"
+          elif [[ $TAG == crucible-v* ]]; then
+            PACKAGE="BrightSword.Crucible"
+            VERSION="${TAG#crucible-v}"
+          elif [[ $TAG == feber-v* ]]; then
+            PACKAGE="BrightSword.Feber"
+            VERSION="${TAG#feber-v}"
+          elif [[ $TAG == squid-v* ]]; then
+            PACKAGE="BrightSword.Squid"
+            VERSION="${TAG#squid-v}"
+          else
+            echo "Unknown tag format: $TAG"
+            exit 1
+          fi
+        fi
+        
+        echo "name=$PACKAGE" >> $GITHUB_OUTPUT
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Releasing: $PACKAGE version $VERSION"
+
+  build-and-publish:
+    name: Build and Publish
+    needs: determine-package
     runs-on: ubuntu-latest
     
     steps:
@@ -37,76 +83,87 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
-    - name: Extract version from tag
-      id: version
-      if: startsWith(github.ref, 'refs/tags/')
-      run: |
-        VERSION=${GITHUB_REF#refs/tags/v}
-        echo "version=$VERSION" >> $GITHUB_OUTPUT
-        echo "Releasing version: $VERSION"
-    
     - name: Restore dependencies
-      run: dotnet restore
+      run: msbuild Build.proj /t:Restore /v:minimal
     
     - name: Build solution
-      run: msbuild Build.proj /t:BuildPackages /p:Configuration=Release /v:minimal
+      run: msbuild Build.proj /t:Build /p:Configuration=Release /v:minimal
     
     - name: Run tests
       run: msbuild Build.proj /t:Test /p:Configuration=Release /v:minimal
     
-    - name: Create packages
-      run: msbuild Build.proj /t:Pack /p:Configuration=Release /v:minimal
+    - name: Pack package
+      run: msbuild Build.proj /t:PackSingle /p:Configuration=Release /p:Package=${{ needs.determine-package.outputs.package }} /v:minimal
+    
+    - name: List generated packages
+      run: |
+        echo "Generated packages:"
+        ls -la artifacts/packages/
     
     - name: Publish to NuGet.org
       run: |
-        dotnet nuget push "artifacts/packages/*.nupkg" \
-          --source https://api.nuget.org/v3/index.json \
-          --api-key ${{ secrets.NUGET_API_KEY }} \
-          --skip-duplicate
-      env:
-        NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        for package in artifacts/packages/${{ needs.determine-package.outputs.package }}.*.nupkg; do
+          if [[ $package != *".symbols.nupkg" ]]; then
+            echo "Publishing: $package"
+            dotnet nuget push "$package" \
+              --source https://api.nuget.org/v3/index.json \
+              --api-key ${{ secrets.NUGET_API_KEY }} \
+              --skip-duplicate
+          fi
+        done
     
     - name: Create GitHub Release
-      if: startsWith(github.ref, 'refs/tags/')
       uses: softprops/action-gh-release@v1
+      if: github.event_name == 'push'
       with:
-        files: artifacts/packages/*.nupkg
-        generate_release_notes: true
+        name: ${{ needs.determine-package.outputs.package }} v${{ needs.determine-package.outputs.version }}
+        body: |
+          Release of ${{ needs.determine-package.outputs.package }} version ${{ needs.determine-package.outputs.version }}
+          
+          ## Installation
+          
+          ```bash
+          dotnet add package ${{ needs.determine-package.outputs.package }} --version ${{ needs.determine-package.outputs.version }}
+          ```
+          
+          ## Changes
+          
+          See the [commit history](https://github.com/${{ github.repository }}/commits/${{ github.ref_name }}) for details.
+        files: |
+          artifacts/packages/${{ needs.determine-package.outputs.package }}.*.nupkg
+          artifacts/packages/${{ needs.determine-package.outputs.package }}.*.snupkg
         draft: false
         prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  publish-dependencies:
+  publish-dependent-packages:
     name: Publish Dependent Packages
+    needs: [determine-package, build-and-publish]
     runs-on: ubuntu-latest
-    needs: publish
-    if: |
-      github.event_name == 'workflow_dispatch' && 
-      github.event.inputs.package != 'All'
-    
-    strategy:
-      matrix:
-        include:
-          - package: BrightSword.SwissKnife
-            dependents: []
-          - package: BrightSword.Feber
-            dependents: ['BrightSword.Squid']
-          - package: BrightSword.Squid
-            dependents: []
+    if: needs.determine-package.outputs.package == 'BrightSword.SwissKnife' || needs.determine-package.outputs.package == 'BrightSword.Feber'
     
     steps:
-    - name: Determine if we need to publish dependents
-      id: check
-      run: |
-        if [[ "${{ github.event.inputs.package }}" == "${{ matrix.package }}" ]]; then
-          echo "publish_dependents=true" >> $GITHUB_OUTPUT
-        else
-          echo "publish_dependents=false" >> $GITHUB_OUTPUT
-        fi
+    - name: Checkout code
+      uses: actions/checkout@v4
     
-    - name: Trigger dependent package builds
-      if: steps.check.outputs.publish_dependents == 'true' && matrix.dependents != '[]'
+    - name: Determine dependent packages
+      id: dependents
       run: |
-        echo "Would trigger builds for: ${{ join(matrix.dependents, ', ') }}"
-        # In a real scenario, you would increment versions and trigger builds here
+        PACKAGE="${{ needs.determine-package.outputs.package }}"
+        DEPENDENTS=""
+        
+        if [ "$PACKAGE" == "BrightSword.SwissKnife" ]; then
+          DEPENDENTS="BrightSword.Feber,BrightSword.Squid"
+        elif [ "$PACKAGE" == "BrightSword.Feber" ]; then
+          DEPENDENTS="BrightSword.Squid"
+        fi
+        
+        echo "packages=$DEPENDENTS" >> $GITHUB_OUTPUT
+        echo "Dependent packages: $DEPENDENTS"
+    
+    - name: Notify about dependent packages
+      run: |
+        echo "The following packages depend on ${{ needs.determine-package.outputs.package }}:"
+        echo "${{ steps.dependents.outputs.packages }}"
+        echo ""
+        echo "Consider updating and releasing these packages as well."
+        echo "Run increment-version.ps1 for each dependent package and create new tags."

@@ -2,7 +2,7 @@ name: CI Build
 
 on:
   push:
-    branches: [ main, develop, 'feature/**', 'release/**', 'hotfix/**' ]
+    branches: [ main, develop, 'feature/**', 'fix/**', 'release/**' ]
   pull_request:
     branches: [ main, develop ]
   workflow_dispatch:
@@ -21,18 +21,21 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # Full history for versioning
+        fetch-depth: 0  # Shallow clones should be disabled for better analysis
     
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
+    - name: Display .NET version
+      run: dotnet --version
+    
     - name: Restore dependencies
-      run: dotnet restore
+      run: msbuild Build.proj /t:Restore /v:minimal
     
     - name: Build solution
-      run: msbuild Build.proj /t:BuildPackages /p:Configuration=Release /v:minimal
+      run: msbuild Build.proj /t:Build /p:Configuration=Release /v:minimal
     
     - name: Run tests
       run: msbuild Build.proj /t:Test /p:Configuration=Release /v:minimal
@@ -46,9 +49,11 @@ jobs:
         retention-days: 30
     
     - name: Create packages
+      if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
       run: msbuild Build.proj /t:Pack /p:Configuration=Release /v:minimal
     
     - name: Upload packages
+      if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
       uses: actions/upload-artifact@v4
       with:
         name: nuget-packages
@@ -56,10 +61,12 @@ jobs:
         retention-days: 30
 
   analyze-changes:
-    name: Analyze Changed Projects
+    name: Analyze Changed Packages
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     outputs:
       swissknife: ${{ steps.filter.outputs.swissknife }}
+      crucible: ${{ steps.filter.outputs.crucible }}
       feber: ${{ steps.filter.outputs.feber }}
       squid: ${{ steps.filter.outputs.squid }}
     
@@ -67,31 +74,25 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     
-    - name: Check changed files
+    - name: Check which packages changed
       uses: dorny/paths-filter@v3
       id: filter
       with:
         filters: |
           swissknife:
             - 'BrightSword.SwissKnife/**'
+          crucible:
+            - 'BrightSword.Crucible/**'
           feber:
             - 'BrightSword.Feber/**'
-            - 'BrightSword.SwissKnife/**'
           squid:
             - 'BrightSword.Squid/**'
-            - 'BrightSword.Feber/**'
-            - 'BrightSword.SwissKnife/**'
 
   publish-preview:
     name: Publish Preview Packages
-    runs-on: ubuntu-latest
     needs: [build, analyze-changes]
-    if: |
-      github.event_name == 'push' && 
-      github.ref != 'refs/heads/main' &&
-      (needs.analyze-changes.outputs.swissknife == 'true' ||
-       needs.analyze-changes.outputs.feber == 'true' ||
-       needs.analyze-changes.outputs.squid == 'true')
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref != 'refs/heads/main'
     
     steps:
     - name: Checkout code
@@ -108,11 +109,13 @@ jobs:
         name: nuget-packages
         path: artifacts/packages
     
-    - name: Publish to GitHub Packages
+    - name: Publish preview packages to GitHub Packages
       run: |
-        dotnet nuget push "artifacts/packages/*.nupkg" \
-          --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
-          --api-key ${{ secrets.GITHUB_TOKEN }} \
-          --skip-duplicate
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        for package in artifacts/packages/*.nupkg; do
+          echo "Publishing preview: $package"
+          dotnet nuget push "$package" \
+            --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --skip-duplicate
+        done
+      continue-on-error: true
