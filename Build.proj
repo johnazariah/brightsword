@@ -14,7 +14,6 @@
   <PropertyGroup>
     <!-- Solution Configuration -->
     <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
-    <Platform Condition="'$(Platform)' == ''">Any CPU</Platform>
     
     <!-- Output Paths -->
     <ArtifactsPath>$(MSBuildThisFileDirectory)artifacts</ArtifactsPath>
@@ -69,7 +68,7 @@
     <Message Text="Building package projects..." Importance="high" />
     <MSBuild Projects="@(PackageProject)" 
              Targets="Build" 
-             Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+             Properties="Configuration=$(Configuration)" />
   </Target>
 
   <!-- Build all test projects -->
@@ -77,7 +76,7 @@
     <Message Text="Building test projects..." Importance="high" />
     <MSBuild Projects="@(TestProject)" 
              Targets="Build" 
-             Properties="Configuration=$(Configuration);Platform=$(Platform)" />
+             Properties="Configuration=$(Configuration)" />
   </Target>
 
   <!-- Run all tests -->
@@ -94,7 +93,7 @@
     <MakeDir Directories="$(PackageOutputPath)" />
     <MSBuild Projects="@(PackageProject)" 
              Targets="Pack" 
-             Properties="Configuration=$(Configuration);Platform=$(Platform);PackageOutputPath=$(PackageOutputPath);NoBuild=true" />
+             Properties="Configuration=$(Configuration);PackageOutputPath=$(PackageOutputPath);NoBuild=true" />
     <Message Text="Packages created in $(PackageOutputPath)" Importance="high" />
   </Target>
 
