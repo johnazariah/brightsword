@@ -32,13 +32,13 @@ jobs:
       run: dotnet --version
     
     - name: Restore dependencies
-      run: msbuild Build.proj /t:Restore /v:minimal
+      run: dotnet msbuild Build.proj /t:Restore /v:minimal
     
     - name: Build solution
-      run: msbuild Build.proj /t:Build /p:Configuration=Release /v:minimal
+      run: dotnet msbuild Build.proj /t:Build /p:Configuration=Release /v:minimal
     
     - name: Run tests
-      run: msbuild Build.proj /t:Test /p:Configuration=Release /v:minimal
+      run: dotnet msbuild Build.proj /t:Test /p:Configuration=Release /v:minimal
     
     - name: Upload test results
       if: always()
@@ -50,7 +50,7 @@ jobs:
     
     - name: Create packages
       if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-      run: msbuild Build.proj /t:Pack /p:Configuration=Release /v:minimal
+      run: dotnet msbuild Build.proj /t:Pack /p:Configuration=Release /v:minimal
     
     - name: Upload packages
       if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'

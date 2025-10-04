@@ -27,13 +27,13 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     
     - name: Restore dependencies
-      run: msbuild Build.proj /t:Restore /v:minimal
+      run: dotnet msbuild Build.proj /t:Restore /v:minimal
     
     - name: Build solution
-      run: msbuild Build.proj /t:Build /p:Configuration=Release /v:minimal
+      run: dotnet msbuild Build.proj /t:Build /p:Configuration=Release /v:minimal
     
     - name: Run tests
-      run: msbuild Build.proj /t:Test /p:Configuration=Release /v:minimal
+      run: dotnet msbuild Build.proj /t:Test /p:Configuration=Release /v:minimal
     
     - name: Check for breaking changes
       run: |
