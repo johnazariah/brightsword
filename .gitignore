@@ -1,0 +1,80 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+TestResults/
+*.log
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+packages/
+*.nuspec
+
+# Visual Studio Code
+.vscode/
+
+# Rider
+.idea/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Publish
+*.publishsettings
+
+# Others
+*.dbmdl
+*.pdb
+*.cache
+*.bak
+*.swp
+*.tmp
+*.tmp/
+*.vspscc
+*.vssscc
+
+# Entity Framework
+Migrations/
+
+# IIS Express
+*.vspscc
+*.vssscc
+*.dbmdl
+*.pidb
+*.svclog
+*.sdf
+*.cache
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# DotCover
+*.dotCover
+
+# StyleCop
+StyleCopReport.xml
+
+# Node.js
+node_modules/
+
+# Yarn
+.yarn/
+.pnp.*
+
+# Others
+*.orig
+*.rej
+*.scc
+# Local CI/runtime artifacts
+# bumped_versions.json is produced by tools/bump_versions.py and should not be committed
+bumped_versions.json

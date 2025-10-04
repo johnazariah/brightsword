@@ -1,0 +1,121 @@
+name: CI Build
+
+on:
+  push:
+    branches: [ main, develop, 'feature/**', 'fix/**', 'release/**' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Shallow clones should be disabled for better analysis
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Display .NET version
+      run: dotnet --version
+    
+    - name: Restore dependencies
+      run: dotnet msbuild Build.proj /t:Restore /v:minimal
+    
+    - name: Build solution
+      run: dotnet msbuild Build.proj /t:Build /p:Configuration=Release /v:minimal
+    
+    - name: Run tests
+      run: dotnet msbuild Build.proj /t:Test /p:Configuration=Release /v:minimal
+    
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: artifacts/test-results/**/*.trx
+        retention-days: 30
+    
+    - name: Create packages
+      if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+      run: dotnet msbuild Build.proj /t:Pack /p:Configuration=Release /v:minimal
+    
+    - name: Upload packages
+      if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-packages
+        path: artifacts/packages/**/*.nupkg
+        retention-days: 30
+
+  analyze-changes:
+    name: Analyze Changed Packages
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    outputs:
+      swissknife: ${{ steps.filter.outputs.swissknife }}
+      crucible: ${{ steps.filter.outputs.crucible }}
+      feber: ${{ steps.filter.outputs.feber }}
+      squid: ${{ steps.filter.outputs.squid }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Check which packages changed
+      uses: dorny/paths-filter@v3
+      id: filter
+      with:
+        filters: |
+          swissknife:
+            - 'BrightSword.SwissKnife/**'
+          crucible:
+            - 'BrightSword.Crucible/**'
+          feber:
+            - 'BrightSword.Feber/**'
+          squid:
+            - 'BrightSword.Squid/**'
+
+  publish-preview:
+    name: Publish Preview Packages
+    needs: [build, analyze-changes]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref != 'refs/heads/main'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Download packages
+      uses: actions/download-artifact@v4
+      with:
+        name: nuget-packages
+        path: artifacts/packages
+    
+    - name: Publish preview packages to GitHub Packages
+      run: |
+        for package in artifacts/packages/*.nupkg; do
+          echo "Publishing preview: $package"
+          dotnet nuget push "$package" \
+            --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --skip-duplicate
+        done
+      continue-on-error: true

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="version.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>BrightSword.Squid</AssemblyName>
+    <RootNamespace>BrightSword.Squid</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Prefer project references to local packages if project exists in the repo -->
+    <ProjectReference Include="..\BrightSword.Feber\BrightSword.Feber.csproj" />
+    <ProjectReference Include="..\BrightSword.SwissKnife\BrightSword.SwissKnife.csproj" />
+  </ItemGroup>
+
+  <!-- Use SDK implicit Compile items; no explicit Compile or packages.config entries to avoid duplicates -->
+
+</Project>

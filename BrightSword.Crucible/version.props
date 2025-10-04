@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <!-- Package Version -->
+    <VersionPrefix>1.0.16</VersionPrefix>
+    
+    <!-- Package Metadata -->
+    <PackageId>BrightSword.Crucible</PackageId>
+    <Description>Unit testing utilities for MSTest - Helper methods for testing exception scenarios</Description>
+    <PackageTags>$(PackageTags);testing;mstest;unittest;exceptions</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+</Project>

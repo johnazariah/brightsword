@@ -1,0 +1,87 @@
+{
+  "metadata": [
+    {
+      "src": [
+        {
+          "files": [ "**/*.csproj" ],
+          "exclude": [ 
+            "**/bin/**", 
+            "**/obj/**", 
+            "**/*Tests.csproj", 
+            "**/*Samples*.csproj",
+            "**/RemoteBaseInterfaceAssembly/**",
+            "**/RemoteInterfaceAssembly/**",
+            "**/RemotePropertyInterfaceAssembly/**",
+            "**/RemotePropertyTypeAssembly/**"
+          ],
+          "src": "."
+        }
+      ],
+      "dest": "api",
+      "disableGitFeatures": false,
+      "disableDefaultFilter": false,
+      "properties": {
+        "TargetFramework": "net10.0"
+      }
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [ "api/**.yml", "api/index.md" ]
+      },
+      {
+        "files": [ "**.md" ],
+        "src": "docs",
+        "dest": "docs"
+      },
+      {
+        "files": [ "**.md" ],
+        "src": "BrightSword.SwissKnife/docs",
+        "dest": "swissknife"
+      },
+      {
+        "files": [ "**.md" ],
+        "src": "BrightSword.Crucible/docs",
+        "dest": "crucible"
+      },
+      {
+        "files": [ "**.md" ],
+        "src": "BrightSword.Feber/docs",
+        "dest": "feber"
+      },
+      {
+        "files": [ "**.md" ],
+        "src": "BrightSword.Squid/docs",
+        "dest": "squid"
+      },
+      {
+        "files": [ "README.md", "toc.yml" ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [ "images/**", "assets/**" ]
+      }
+    ],
+    "output": "_site",
+    "template": [ "default", "modern" ],
+    "globalMetadata": {
+      "_appTitle": "BrightSword Documentation",
+      "_appName": "BrightSword",
+      "_appFooter": "© BrightSword Technologies Pte Ltd, Singapore",
+      "_enableSearch": true,
+      "_gitContribute": {
+        "repo": "https://github.com/brightsword/BrightSword",
+        "branch": "main"
+      }
+    },
+    "fileMetadata": {
+      "_layout": {
+        "api/**": "Reference"
+      }
+    },
+    "dest": "_site",
+    "xref": [ "https://xref.docs.microsoft.com/query?uid={uid}" ]
+  }
+}

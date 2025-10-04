@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <!-- Package Version -->
+    <VersionPrefix>2.0.3</VersionPrefix>
+    
+    <!-- Package Metadata -->
+    <PackageId>BrightSword.Feber</PackageId>
+    <Description>Fast Expression Based Extensions for Reflection</Description>
+    <PackageTags>$(PackageTags);functional;fsharp;extensions</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+</Project>

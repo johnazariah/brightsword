@@ -1,0 +1,169 @@
+name: Release and Publish
+
+on:
+  push:
+    tags:
+      - 'swissknife-v*.*.*'
+      - 'crucible-v*.*.*'
+      - 'feber-v*.*.*'
+      - 'squid-v*.*.*'
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Package to publish'
+        required: true
+        type: choice
+        options:
+          - BrightSword.SwissKnife
+          - BrightSword.Crucible
+          - BrightSword.Feber
+          - BrightSword.Squid
+      version:
+        description: 'Version to publish (e.g., 1.0.0)'
+        required: true
+        type: string
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  determine-package:
+    name: Determine Package to Release
+    runs-on: ubuntu-latest
+    outputs:
+      package: ${{ steps.package.outputs.name }}
+      version: ${{ steps.package.outputs.version }}
+    
+    steps:
+    - name: Determine package from tag or input
+      id: package
+      run: |
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          PACKAGE="${{ github.event.inputs.package }}"
+          VERSION="${{ github.event.inputs.version }}"
+        else
+          TAG="${{ github.ref_name }}"
+          if [[ $TAG == swissknife-v* ]]; then
+            PACKAGE="BrightSword.SwissKnife"
+            VERSION="${TAG#swissknife-v}"
+          elif [[ $TAG == crucible-v* ]]; then
+            PACKAGE="BrightSword.Crucible"
+            VERSION="${TAG#crucible-v}"
+          elif [[ $TAG == feber-v* ]]; then
+            PACKAGE="BrightSword.Feber"
+            VERSION="${TAG#feber-v}"
+          elif [[ $TAG == squid-v* ]]; then
+            PACKAGE="BrightSword.Squid"
+            VERSION="${TAG#squid-v}"
+          else
+            echo "Unknown tag format: $TAG"
+            exit 1
+          fi
+        fi
+        
+        echo "name=$PACKAGE" >> $GITHUB_OUTPUT
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Releasing: $PACKAGE version $VERSION"
+
+  build-and-publish:
+    name: Build and Publish
+    needs: determine-package
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+    
+    - name: Restore dependencies
+      run: dotnet msbuild Build.proj /t:Restore /v:minimal
+    
+    - name: Build solution
+      run: dotnet msbuild Build.proj /t:Build /p:Configuration=Release /v:minimal
+    
+    - name: Run tests
+      run: dotnet msbuild Build.proj /t:Test /p:Configuration=Release /v:minimal
+    
+    - name: Pack package
+      run: dotnet msbuild Build.proj /t:PackSingle /p:Configuration=Release /p:Package=${{ needs.determine-package.outputs.package }} /v:minimal
+    
+    - name: List generated packages
+      run: |
+        echo "Generated packages:"
+        ls -la artifacts/packages/
+    
+    - name: Publish to NuGet.org
+      run: |
+        for package in artifacts/packages/${{ needs.determine-package.outputs.package }}.*.nupkg; do
+          if [[ $package != *".symbols.nupkg" ]]; then
+            echo "Publishing: $package"
+            dotnet nuget push "$package" \
+              --source https://api.nuget.org/v3/index.json \
+              --api-key ${{ secrets.NUGET_API_KEY }} \
+              --skip-duplicate
+          fi
+        done
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      if: github.event_name == 'push'
+      with:
+        name: ${{ needs.determine-package.outputs.package }} v${{ needs.determine-package.outputs.version }}
+        body: |
+          Release of ${{ needs.determine-package.outputs.package }} version ${{ needs.determine-package.outputs.version }}
+          
+          ## Installation
+          
+          ```bash
+          dotnet add package ${{ needs.determine-package.outputs.package }} --version ${{ needs.determine-package.outputs.version }}
+          ```
+          
+          ## Changes
+          
+          See the [commit history](https://github.com/${{ github.repository }}/commits/${{ github.ref_name }}) for details.
+        files: |
+          artifacts/packages/${{ needs.determine-package.outputs.package }}.*.nupkg
+          artifacts/packages/${{ needs.determine-package.outputs.package }}.*.snupkg
+        draft: false
+        prerelease: false
+
+  publish-dependent-packages:
+    name: Publish Dependent Packages
+    needs: [determine-package, build-and-publish]
+    runs-on: ubuntu-latest
+    if: needs.determine-package.outputs.package == 'BrightSword.SwissKnife' || needs.determine-package.outputs.package == 'BrightSword.Feber'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Determine dependent packages
+      id: dependents
+      run: |
+        PACKAGE="${{ needs.determine-package.outputs.package }}"
+        DEPENDENTS=""
+        
+        if [ "$PACKAGE" == "BrightSword.SwissKnife" ]; then
+          DEPENDENTS="BrightSword.Feber,BrightSword.Squid"
+        elif [ "$PACKAGE" == "BrightSword.Feber" ]; then
+          DEPENDENTS="BrightSword.Squid"
+        fi
+        
+        echo "packages=$DEPENDENTS" >> $GITHUB_OUTPUT
+        echo "Dependent packages: $DEPENDENTS"
+    
+    - name: Notify about dependent packages
+      run: |
+        echo "The following packages depend on ${{ needs.determine-package.outputs.package }}:"
+        echo "${{ steps.dependents.outputs.packages }}"
+        echo ""
+        echo "Consider updating and releasing these packages as well."
+        echo "Run increment-version.ps1 for each dependent package and create new tags."

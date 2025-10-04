@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="version.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>BrightSword.Feber</AssemblyName>
+    <RootNamespace>BrightSword.Feber</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BrightSword.SwissKnife\BrightSword.SwissKnife.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Roslynator.Analyzers" Version="4.0.0" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>
