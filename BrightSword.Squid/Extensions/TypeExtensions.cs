@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-
 using BrightSword.SwissKnife;
 
-namespace BrightSword.Squid
+namespace BrightSword.Squid.Extensions
 {
     /// <summary>
     /// Extension methods for <see cref="Type"/> used by the Squid type creators.
@@ -17,7 +13,7 @@ namespace BrightSword.Squid
         /// Gets the non-generic portion of a type's name. For example, for
         /// a generic type whose concrete name is "Enumerable<Int32>" this
         /// returns "Enumerable". If the type is not generic the concrete name
-        /// returned by <see cref="BrightSword.SwissKnife.TypeRenameExtensions.RenameToConcreteType"/>
+        /// returned by <see cref="SwissKnife.TypeRenameExtensions.RenameToConcreteType"/>
         /// is returned unchanged.
         /// </summary>
         /// <param name="self">The type to inspect.</param>

@@ -1,8 +1,7 @@
-using System;
 using System.Diagnostics;
 using System.Reflection.Emit;
 
-namespace BrightSword.Squid
+namespace BrightSword.Squid.Extensions
 {
     public static class TypeBuilderExtensions
     {

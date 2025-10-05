@@ -1,10 +1,7 @@
-using System.Linq;
-
 using BrightSword.Squid;
-
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tests.BrightSword.Squid
+namespace BrightSword.Squid.Tests
 {
     [TestClass]
     public class AnonymousInterfaceImplementationTests

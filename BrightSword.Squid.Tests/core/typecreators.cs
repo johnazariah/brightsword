@@ -1,9 +1,7 @@
-using System;
-
 using BrightSword.Squid.Test;
 using BrightSword.Squid.TypeCreators;
 
-namespace Tests.BrightSword.Squid.core
+namespace BrightSword.Squid.Tests.core
 {
     public class PropertyChangingNotificationSinkTypeCreator<T> : BasicDataTransferObjectTypeCreator<T>
         where T : class

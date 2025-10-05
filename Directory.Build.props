@@ -10,7 +10,7 @@
     <!-- Package properties -->
     <Authors>John S Azariah</Authors>
     <Company>BrightSword Technologies Pte Ltd, Singapore</Company>
-    <Copyright>Copyright � BrightSword $(CurrentYear)</Copyright>
+    <Copyright>Copyright © BrightSword $(CurrentYear)</Copyright>
     <PackageLicenseExpression>CC-BY-4.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/johnazariah/BrightSword</PackageProjectUrl>
     <RepositoryUrl>https://github.com/johnazariah/BrightSword</RepositoryUrl>
@@ -24,7 +24,34 @@
     
     <!-- Documentation -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CS1591</NoWarn><!-- Missing XML comment for publicly visible type or member -->
+    
+    <!-- Suppress common warnings across all projects -->
+    <!-- CS1591: Missing XML comment for publicly visible type or member -->
+    <!-- CS1570: XML comment has badly formed XML -->
+    <!-- CS1572: XML comment has a param tag for 'X', but there is no parameter by that name -->
+    <!-- CS1573: Parameter 'X' has no matching param tag in the XML comment -->
+    <!-- CS1574: XML comment has cref attribute 'X' that could not be resolved -->
+    <!-- CS1734: XML comment on 'X' has a paramref tag for 'Y', but there is no parameter by that name -->
+    <!-- CS0419: Ambiguous reference in cref attribute -->
+    <NoWarn>$(NoWarn);CS1591;CS1570;CS1572;CS1573;CS1574;CS1734;CS0419</NoWarn>
+    
+    <!-- Nullable warnings - suppress for now to allow gradual adoption -->
+    <!-- CS8600: Converting null literal or possible null value to non-nullable type -->
+    <!-- CS8601: Possible null reference assignment -->
+    <!-- CS8602: Dereference of a possibly null reference -->
+    <!-- CS8603: Possible null reference return -->
+    <!-- CS8604: Possible null reference argument -->
+    <!-- CS8618: Non-nullable field must contain a non-null value when exiting constructor -->
+    <!-- CS8619: Nullability of reference types in value doesn't match target type -->
+    <!-- CS8620: Argument cannot be used for parameter due to differences in the nullability of reference types -->
+    <!-- CS8625: Cannot convert null literal to non-nullable reference type -->
+    <!-- CS8714: The type cannot be used as type parameter in the generic type or method -->
+    <!-- CS8767: Nullability of reference types in type of parameter doesn't match implicitly implemented member -->
+    <!-- CS9264: Non-nullable property must contain a non-null value when exiting constructor -->
+    <NoWarn>$(NoWarn);CS8600;CS8601;CS8602;CS8603;CS8604;CS8618;CS8619;CS8620;CS8625;CS8714;CS8767;CS9264</NoWarn>
+    
+    <!-- CS0067: The event is never used -->
+    <NoWarn>$(NoWarn);CS0067</NoWarn>
     
     <!-- Source Link -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>

@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-
 using BrightSword.Squid.TypeCreators;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tests.BrightSword.Squid
+namespace BrightSword.Squid.Tests
 {
     /// <summary>
     /// Unit tests that validate the naming conventions produced by the

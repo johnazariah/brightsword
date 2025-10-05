@@ -1,23 +1,26 @@
 # ObjectDescriber
 
-Purpose
+## Purpose
 
-Produces human-readable descriptions of objects (for logging, diagnostics, tests), including nested objects and collections.
+Small expression-based helpers implemented in `ObjectDescriber.cs`. Provides `GetName(...)` overloads that extract member or method names from expression trees.
 
-Public API
+## API
 
-- string Describe(object o, int maxDepth = 3)
-- IDictionary<string, object?> DescribeProperties(object o)
+- `string GetName(Expression<Action> e)`
+- `string GetName<TResult>(Expression<Func<TResult>> selector)`
+- `string GetName<TArg, TResult>(Expression<Func<TArg, TResult>> selector)`
+- `string GetName<TArg>(Expression<Action<TArg>> selector)`
 
-Examples
+## Examples
 
 ```csharp
-var desc = ObjectDescriber.Describe(myObj, maxDepth: 2);
-Console.WriteLine(desc);
+class Person { public string Name { get; set; } public void Update() { } }
 
-var props = ObjectDescriber.DescribeProperties(myObj);
+var propName = ObjectDescriber.GetName<Person, string>(x => x.Name); // "Name"
+var methodName = ObjectDescriber.GetName(() => new Person().Update()); // "Update"
 ```
 
-Remarks
+## Remarks
 
-Useful for debugging and unit-test failure messages. The output is formatted for readability and tries to avoid circular references by respecting `maxDepth`.
+- The helper expects simple member or method call expressions and throws `NotSupportedException` when passed expressions it cannot analyze.
+- Useful in logging, test assertions, and scenarios where code-based member name retrieval avoids string literals.

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace BrightSword.Squid.Test
 {
 #pragma warning disable CA1716 // test interface uses Event member name intentionally

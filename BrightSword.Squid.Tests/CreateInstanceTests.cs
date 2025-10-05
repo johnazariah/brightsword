@@ -1,17 +1,14 @@
-using System;
 using System.Diagnostics;
-using System.Linq;
 
 using BrightSword.Crucible;
+using BrightSword.Squid.Tests.core;
 using BrightSword.Squid.TypeCreators;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using RemoteInterfaceAssembly;
 
-using Tests.BrightSword.Squid.core;
-
-namespace Tests.BrightSword.Squid
+namespace BrightSword.Squid.Tests
 {
     /// <summary>
     /// Tests validating that the runtime type creator can generate concrete instances

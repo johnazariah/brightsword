@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-
+using BrightSword.Squid.Tests.core;
 using BrightSword.Squid.TypeCreators;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Tests.BrightSword.Squid.core;
-
-namespace Tests.BrightSword.Squid
+namespace BrightSword.Squid.Tests
 {
     [TestClass]
     public class FacetInjectionTests

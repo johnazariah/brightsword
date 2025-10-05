@@ -1,18 +1,23 @@
 # ConcurrentDictionary
 
-Purpose
-- A small, possibly enhanced implementation or wrapper around System.Collections.Concurrent.ConcurrentDictionary to provide convenience methods used in the repo.
+A small helper wrapper implemented in `ConcurrentDictionary.cs`.
 
-Key APIs (typical)
-- GetOrAdd(TKey key, Func<TKey, TValue> valueFactory)
-- TryGetValue(TKey key, out TValue value)
-- AddOrUpdate(TKey key, TValue addValue, Func<TKey,TValue,TValue> updateFactory)
+## Purpose
 
-Usage
+Provides a nested concurrent dictionary type `ConcurrentDictionary<TKey1, TKey2, TValue>` that inherits from `ConcurrentDictionary<TKey1, ConcurrentDictionary<TKey2, TValue>>` and adds a convenient indexer `this[key1, key2]` for two-key access.
+
+## API
+
+- `TValue this[TKey1 key1, TKey2 key2] { get; set; }` — Indexer that provides get/set semantics. Setting a value ensures the inner dictionary is created via `GetOrAdd`.
+
+## Example
+
 ```csharp
-var cache = new ConcurrentDictionary<string, MyType>();
-var value = cache.GetOrAdd("key", k => new MyType());
+var map = new ConcurrentDictionary<string, string, int>();
+map["user", "score"] = 100;
+var s = map["user", "score"]; // 100
 ```
 
-Notes
-- This file may include helpers for efficient double-checked initialization patterns used by the expression builders.
+## Remarks
+
+This type is a small convenience; it allows using a nested dictionary without repeatedly creating inner dictionaries. It is not a full substitute for a dedicated two-key map with custom semantics.

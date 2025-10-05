@@ -1,28 +1,29 @@
 # Validator
 
 ## Purpose
-Provides guard and validation helpers for runtime argument and condition checking. These helpers throw exceptions when conditions or predicates fail, simplifying defensive programming.
+
+Legacy guard helpers implemented in `Validator.cs`. These extension methods provide succinct guard/check semantics but are marked `[Obsolete]` in source. They throw exceptions when conditions or predicates fail.
 
 ## When to Use
-- When you need to validate arguments, parameters, or object state at runtime.
-- When you want to centralize guard patterns and consistent exception messages.
 
-## How to Use
-Use these methods to check conditions and throw exceptions if validation fails. You can specify the exception type or use the default.
+Prefer modern guard patterns in new code (e.g., `ArgumentNullException.ThrowIfNull`, `ArgumentException`, `Debug.Assert`). Use these only for compatibility with existing code that relies on them.
 
-## Key APIs
-- <code>Check(this bool condition, string message = null)</code>: Throws an Exception if the condition is false.
-- <code>Check<TException>(this bool condition, string message = null)</code>: Throws a specific exception type if the condition is false.
-- <code>Check(this Func<bool> predicate, string message = null)</code>: Throws an Exception if the predicate returns false.
-- <code>Check<TException>(this Func<bool> predicate, string message = null)</code>: Throws a specific exception type if the predicate returns false.
+## API
+
+- `void Check(this bool condition, string message = null)` — Throws `InvalidOperationException` when `condition` is false.
+- `void Check<TException>(this bool condition, string message = null) where TException : Exception, new()` — Throws `TException` (attempts to construct with `message` first, falls back to default ctor and then `InvalidOperationException`).
+- `void Check(this Func<bool> predicate, string message = null)` — Throws `InvalidOperationException` when predicate returns false.
+- `void Check<TException>(this Func<bool> predicate, string message = null) where TException : Exception, new()` — Throws typed exception when predicate fails.
 
 ## Examples
+
 ```csharp
-Validator.Check(x > 0, "x must be positive");
-Validator.Check<ArgumentNullException>(obj != null, "obj cannot be null");
-Validator.Check(() => value > 0, "value must be positive");
-Validator.Check<ArgumentException>(() => value > 0, "value must be positive");
+Validator.Check(value != null, "value required");
+Validator.Check<ArgumentNullException>(value != null, "value cannot be null");
+Validator.Check(() => value > 0, "must be positive");
 ```
 
 ## Remarks
-Centralizes guard patterns and consistent exception messages used across the codebase. These helpers are useful for defensive programming and runtime validation.
+
+- These helpers are maintained for legacy compatibility and are intentionally marked `[Obsolete]` to encourage modern alternatives.
+- `Check<TException>` uses `Activator.CreateInstance(typeof(TException), message)` when possible; if that fails it falls back to `new TException()` and finally an `InvalidOperationException` with the message.

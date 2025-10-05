@@ -1,18 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-
-using BrightSword.Squid;
+using BrightSword.Squid.Extensions;
+using BrightSword.Squid.Tests.core;
 using BrightSword.Squid.TypeCreators;
 using BrightSword.SwissKnife;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Tests.BrightSword.Squid.core;
-
-namespace Tests.BrightSword.Squid
+namespace BrightSword.Squid.Tests
 {
     [TestClass]
     public class AddCustomAttributeTests

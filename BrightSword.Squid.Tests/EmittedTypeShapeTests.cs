@@ -1,10 +1,8 @@
-using System;
-using System.Linq;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BrightSword.Squid.TypeCreators;
 
-namespace Tests.BrightSword.Squid
+namespace BrightSword.Squid.Tests
 {
     public interface IFacetMarker { }
 
@@ -29,11 +27,11 @@ namespace Tests.BrightSword.Squid
     public class EmittedTypeShapeTests
     {
         [TestMethod]
-        public void FacetInterface_Is_Implemented_On_Emitted_Type()
+        public void FacetInterfaceIsImplementedOnEmittedType()
         {
             var creator = new BasicDataTransferObjectTypeCreator<IFacetExample>
             {
-                FacetInterfaces = new[] { typeof(IFacetMarker) }
+                FacetInterfaces = [typeof(IFacetMarker)]
             };
 
             var emittedType = creator.Type;
@@ -45,7 +43,7 @@ namespace Tests.BrightSword.Squid
 
         [TestMethod]
         [Ignore("Failing in .NET 10 - PropertyFilter not properly excluding property implementation. Needs investigation.")]
-        public void PropertyFilter_Excludes_Configured_Property()
+        public void PropertyFilterExcludesConfiguredProperty()
         {
             // PropertyFilter is a protected virtual method on the creator; create a subclass to override it.
             var creator = new SecretFilteringCreator();
@@ -62,10 +60,10 @@ namespace Tests.BrightSword.Squid
         }
 
         [TestMethod]
-        public void CreateInstance_Allows_Property_ReadWrite_Access()
+        public void CreateInstanceAllowsPropertyReadWriteAccess()
         {
             var creator = new BasicDataTransferObjectTypeCreator<ISimple>();
-            var instance = (ISimple)creator.CreateInstance();
+            var instance = creator.CreateInstance();
 
             instance.Name = "test";
             instance.Count = 42;

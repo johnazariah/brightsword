@@ -30,9 +30,39 @@ csharp_prefer_simple_default_expression = true:suggestion
 # Analyzer severities (raise to warning to surface diagnostics during this scan)
 dotnet_analyzer_diagnostic.severity = warning
 
-# File-specific overrides can be added below as needed
+# Disable Public API Analyzers warnings
+# RS0016: Symbol is not part of the declared public API
+dotnet_diagnostic.RS0016.severity = none
 
-# (temporarily allow Roslynator rules to run with configured defaults)
+# RS0037: PublicAPI.txt is missing '#nullable enable'
+dotnet_diagnostic.RS0037.severity = none
+
+# RS0026: Do not add multiple public overloads with optional parameters
+dotnet_diagnostic.RS0026.severity = none
+
+# Roslynator analyzers - set to suggestion to reduce noise
+# RCS1140: Add exception to documentation comment
+dotnet_diagnostic.RCS1140.severity = suggestion
+
+# RCS1141: Add 'param' element to documentation comment
+dotnet_diagnostic.RCS1141.severity = suggestion
+
+# RCS1142: Add 'typeparam' element to documentation comment
+dotnet_diagnostic.RCS1142.severity = suggestion
+
+# RCS1181: Convert comment to documentation comment
+dotnet_diagnostic.RCS1181.severity = suggestion
+
+# RCS1228: Unused element in documentation comment
+dotnet_diagnostic.RCS1228.severity = suggestion
+
+# RCS1032: Remove redundant parentheses
+dotnet_diagnostic.RCS1032.severity = suggestion
+
+# RCS1118: Mark local variable as const
+dotnet_diagnostic.RCS1118.severity = suggestion
+
+# File-specific overrides can be added below as needed
 
 # Roslynator configuration defaults (conservative choices)
 roslynator_object_creation_type_style = explicit

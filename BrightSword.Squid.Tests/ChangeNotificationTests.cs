@@ -1,12 +1,11 @@
-using System;
 using System.ComponentModel;
+using BrightSword.Squid.Tests.core;
 using BrightSword.Squid.TypeCreators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tests.BrightSword.Squid.core;
 using INotifyPropertyChanged = BrightSword.Squid.API.INotifyPropertyChanged;
 using INotifyPropertyChanging = BrightSword.Squid.API.INotifyPropertyChanging;
 
-namespace Tests.BrightSword.Squid
+namespace BrightSword.Squid.Tests
 {
     /// <summary>
     /// Tests for property change notification behavior. These validate both

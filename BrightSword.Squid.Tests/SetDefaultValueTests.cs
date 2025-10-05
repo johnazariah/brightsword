@@ -12,10 +12,8 @@
 #define ENUM
 #define STRING_ARRAY
 
-using System;
 using System.Collections;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.Serialization;
 
 using BrightSword.Crucible;
@@ -24,7 +22,7 @@ using BrightSword.Squid.TypeCreators;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tests.BrightSword.Squid
+namespace BrightSword.Squid.Tests
 {
     [TestClass]
     public class SetDefaultValueTests
