@@ -14,6 +14,11 @@
     <ProjectReference Include="..\BrightSword.SwissKnife\BrightSword.SwissKnife.csproj" />
   </ItemGroup>
 
+  <!-- Include docs README in the nupkg at the package root as README.md (Directory.Build.props also includes this by default) -->
+  <ItemGroup>
+    <None Include="docs/README.md" Pack="true" PackagePath="" Condition="Exists('docs/README.md')" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="Roslynator.Analyzers" Version="4.0.0" PrivateAssets="all" />
   </ItemGroup>

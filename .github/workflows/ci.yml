@@ -1,4 +1,4 @@
-name: CI Build
+name: CI Build & Test
 
 on:
   push:
@@ -9,113 +9,54 @@ on:
 
 env:
   DOTNET_VERSION: '10.0.x'
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
 
+permissions:
+  contents: read
+
 jobs:
-  build:
-    name: Build and Test
+  build-and-test:
+    name: Build, Test and Prepare Artifacts
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
+    - name: Checkout
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0  # Shallow clones should be disabled for better analysis
-    
+        fetch-depth: 0
+
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotent@v4
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-    
-    - name: Display .NET version
-      run: dotnet --version
-    
-    - name: Restore dependencies
-      run: dotnet msbuild Build.proj /t:Restore /v:minimal
-    
-    - name: Build solution
-      run: dotnet msbuild Build.proj /t:Build /p:Configuration=Release /v:minimal
-    
+
+    - name: Restore
+      run: dotnet restore
+
+    - name: Build (Release)
+      run: dotnet build -c Release --no-restore
+
     - name: Run tests
-      run: dotnet msbuild Build.proj /t:Test /p:Configuration=Release /v:minimal
-    
-    - name: Upload test results
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: test-results
-        path: artifacts/test-results/**/*.trx
-        retention-days: 30
-    
-    - name: Create packages
-      if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-      run: dotnet msbuild Build.proj /t:Pack /p:Configuration=Release /v:minimal
-    
-    - name: Upload packages
-      if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-      uses: actions/upload-artifact@v4
-      with:
-        name: nuget-packages
-        path: artifacts/packages/**/*.nupkg
-        retention-days: 30
+      run: dotnet test -c Release --no-build --verbosity normal
 
-  analyze-changes:
-    name: Analyze Changed Packages
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    outputs:
-      swissknife: ${{ steps.filter.outputs.swissknife }}
-      crucible: ${{ steps.filter.outputs.crucible }}
-      feber: ${{ steps.filter.outputs.feber }}
-      squid: ${{ steps.filter.outputs.squid }}
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Check which packages changed
-      uses: dorny/paths-filter@v3
-      id: filter
-      with:
-        filters: |
-          swissknife:
-            - 'BrightSword.SwissKnife/**'
-          crucible:
-            - 'BrightSword.Crucible/**'
-          feber:
-            - 'BrightSword.Feber/**'
-          squid:
-            - 'BrightSword.Squid/**'
-
-  publish-preview:
-    name: Publish Preview Packages
-    needs: [build, analyze-changes]
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref != 'refs/heads/main'
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
-    
-    - name: Download packages
-      uses: actions/download-artifact@v4
-      with:
-        name: nuget-packages
-        path: artifacts/packages
-    
-    - name: Publish preview packages to GitHub Packages
+    - name: Collect XML docs
       run: |
-        for package in artifacts/packages/*.nupkg; do
-          echo "Publishing preview: $package"
-          dotnet nuget push "$package" \
-            --source https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json \
-            --api-key ${{ secrets.GITHUB_TOKEN }} \
-            --skip-duplicate
-        done
-      continue-on-error: true
+        mkdir -p artifacts/docs
+        # copy generated XML doc files from projects
+        find . -type f -path "*/bin/Release/net10.0/*.xml" -print0 | xargs -0 -I{} cp {} artifacts/docs/ || true
+        # include docs/ markdown content
+        find . -type d -name docs -prune -print0 | while IFS= read -r -d '' d; do cp -r "$d" artifacts/docs/ || true; done
+
+    - name: Generate package-dependencies.json (PRs and manual)
+      if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+      run: pwsh -NoProfile -NonInteractive -File ./scripts/generate-package-dependencies.ps1
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ci-artifacts
+        path: |
+          artifacts/docs
+          package-dependencies.json
+          artifacts/test-results/**/*.trx
+        retention-days: 7

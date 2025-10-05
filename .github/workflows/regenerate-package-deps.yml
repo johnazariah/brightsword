@@ -1,0 +1,55 @@
+name: Regenerate package-dependencies.json
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  regen-deps:
+    name: Regenerate package-dependencies.json
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Ensure PowerShell is available
+        run: pwsh -c "Write-Host PowerShell available:" $PSVersionTable.PSVersion
+
+      - name: Run generator
+        run: pwsh -NoProfile -NonInteractive -File ./scripts/generate-package-dependencies.ps1
+
+      - name: Show git status
+        run: |
+          git status --porcelain
+          git diff --name-only || true
+
+      - name: Commit and push if changed
+        env:
+          PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -e
+          CHANGED=$(git status --porcelain)
+          if [ -z "$CHANGED" ]; then
+            echo "No changes to package-dependencies.json"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add package-dependencies.json
+          git commit -m "ci: regenerate package-dependencies.json"
+          # Determine target branch to push to
+          if [ -n "$PR_HEAD_REF" ]; then
+            TARGET_BRANCH="$PR_HEAD_REF"
+          else
+            TARGET_BRANCH="${GITHUB_REF_NAME}"
+          fi
+          echo "Pushing changes to branch: $TARGET_BRANCH"
+          git push origin HEAD:"$TARGET_BRANCH"

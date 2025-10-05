@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="version.props" />
@@ -17,6 +17,11 @@
 
   <ItemGroup>
     <PackageReference Include="Roslynator.Analyzers" Version="4.0.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!-- Include docs README in the nupkg at the package root as README.md -->
+  <ItemGroup>
+    <None Include="docs/README.md" Pack="true" PackagePath="" Condition="Exists('docs/README.md')" />
   </ItemGroup>
 
 </Project>
