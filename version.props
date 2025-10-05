@@ -1,0 +1,38 @@
+<Project>
+  <Import Project="versioning.targets" />
+
+  <!-- Centralized version and package metadata for BrightSword projects -->
+
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'BrightSword.Crucible'">
+    <VersionPrefix>1.1.0</VersionPrefix>
+    <PackageId>BrightSword.Crucible</PackageId>
+    <Description>Unit testing utilities for MSTest - Helper methods for testing exception scenarios</Description>
+    <PackageTags>testing;mstest;unittest;exceptions</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'BrightSword.Feber'">
+    <VersionPrefix>1.1.0</VersionPrefix>
+    <PackageId>BrightSword.Feber</PackageId>
+    <Description>Fast Expression Based Extensions for Reflection</Description>
+    <PackageTags>functional;fsharp;extensions</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'BrightSword.SwissKnife'">
+    <VersionPrefix>1.1.0</VersionPrefix>
+    <PackageId>BrightSword.SwissKnife</PackageId>
+    <Description>A collection of utility classes and extension methods for .NET development</Description>
+    <PackageTags>utilities;extensions;helpers</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(MSBuildProjectName)' == 'BrightSword.Squid'">
+    <VersionPrefix>1.1.0</VersionPrefix>
+    <PackageId>BrightSword.Squid</PackageId>
+    <Description>Super QUantum Interface serialization and Deserialization - Advanced interface serialization library</Description>
+    <PackageTags>serialization;interfaces;quantum</PackageTags>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,41 @@
+name: Publish docs to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restore and build docs artifacts
+      run: |
+        dotnet restore
+        dotnet build -c Release --no-restore
+        # Ensure artifacts/docs exists, otherwise generate via script
+        if [ -d "artifacts/docs" ]; then ls -la artifacts/docs; else echo "No artifacts/docs; generating"; pwsh -NoProfile -NonInteractive -File ./scripts/generate-docs.ps1 || true; fi
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh-pages
+        publish_dir: ./artifacts/docs

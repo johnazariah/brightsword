@@ -1,16 +1,13 @@
-using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-
 using BrightSword.Squid.TypeCreators;
 using BrightSword.SwissKnife;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tests.BrightSword.Squid
+namespace BrightSword.Squid.Tests
 {
     [TestClass]
     public class DefaultValueTypeCreatorTests

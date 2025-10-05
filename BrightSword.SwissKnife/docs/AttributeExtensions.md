@@ -1,36 +1,63 @@
 # AttributeExtensions
 
 ## Purpose
-Provides extension methods for retrieving custom attributes and their values from types and members. These helpers simplify attribute discovery and value extraction for reflection scenarios.
+
+Convenience extension methods for discovering and extracting custom attribute instances and values from `Type` and `MemberInfo` using `System.Reflection`.
+
+These wrappers reduce boilerplate by performing casting and null-checks and by returning default values when attributes are not present.
 
 ## When to Use
-- When you need to retrieve custom attributes from types or members using reflection.
-- When you want to extract values from attributes in a null-safe and convenient way.
+
+- When you need to read attribute instances or values from types, methods, properties, fields, or other members via reflection.
+- When you want compact, null-safe attribute value extraction without repeated `GetCustomAttributes(...).OfType<T>().FirstOrDefault()` code.
+
+## API Reference
+
+- `TAttribute? GetCustomAttribute<TAttribute>(this Type @this, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TAttribute : Attribute`
+  - Returns the first attribute of type `TAttribute` applied to the `Type`, or `null` if not found.
+
+- `TAttribute? GetCustomAttribute<TAttribute>(this MemberInfo @this, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TAttribute : Attribute`
+  - Returns the first attribute of type `TAttribute` applied to the `MemberInfo`, or `null` if not found.
+
+- `TResult GetCustomAttributeValue<TAttribute, TResult>(this Type @this, Func<TAttribute, TResult> selector, TResult defaultValue = default, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TAttribute : Attribute`
+  - Finds the first attribute of type `TAttribute` on the `Type` and returns the projected value via `selector`, or `defaultValue` when the attribute is missing.
+
+- `TResult GetCustomAttributeValue<TAttribute, TResult>(this MemberInfo @this, Func<TAttribute, TResult> selector, TResult defaultValue = default, BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic) where TAttribute : Attribute`
+  - Same as above for `MemberInfo`.
 
 ## How to Use
-Use these methods to get single or multiple attributes, or extract values from attributes using a selector function.
 
-## Key APIs
-- `GetCustomAttribute<TAttribute>(this Type @this)`: Gets the first custom attribute of the specified type applied to a type.
-- `GetCustomAttribute<TAttribute>(this MemberInfo @this)`: Gets the first custom attribute of the specified type applied to a member.
-- `GetCustomAttributeValue<TAttribute, TResult>(this Type @this, Func<TAttribute, TResult> selector, TResult defaultValue = default)`: Gets a value from the first custom attribute of the specified type applied to a type.
-- `GetCustomAttributeValue<TAttribute, TResult>(this MemberInfo @this, Func<TAttribute, TResult> selector, TResult defaultValue = default)`: Gets a value from the first custom attribute of the specified type applied to a member.
+- To test presence of an attribute:
+
+```csharp
+var has = typeof(MyClass).GetCustomAttribute<ObsoleteAttribute>() != null;
+```
+
+- To get an attribute value with a safe fallback:
+
+```csharp
+var msg = typeof(MyClass).GetCustomAttributeValue<ObsoleteAttribute, string>(a => a.Message, "");
+```
 
 ## Examples
+
 ```csharp
-// Get a single attribute from a type
-var attr = typeof(MyClass).GetCustomAttribute<SerializableAttribute>();
+[Obsolete("Use NewClass instead")]
+public class OldClass { }
 
-// Get a value from an attribute
-var message = typeof(MyClass).GetCustomAttributeValue<SerializableAttribute, string>(attr => "Serializable", "NotSerializable");
+var attr = typeof(OldClass).GetCustomAttribute<ObsoleteAttribute>();
+Console.WriteLine(attr?.Message); // "Use NewClass instead"
 
-// Get a single attribute from a member
-var method = typeof(MyClass).GetMethod("OldMethod");
-var obsolete = method.GetCustomAttribute<ObsoleteAttribute>();
-
-// Get a value from an attribute on a member
-var msg = method.GetCustomAttributeValue<ObsoleteAttribute, string>(attr => attr.Message, "");
+var message = typeof(OldClass).GetCustomAttributeValue<ObsoleteAttribute, string>(a => a.Message, "No message");
+Console.WriteLine(message); // "Use NewClass instead"
 ```
 
 ## Remarks
-These are convenience wrappers over System.Reflection that reduce casting/boilerplate when working with attributes. They return null or default values where appropriate to keep call sites simple and safe.
+
+- The `flags` parameter is currently not used in the implementation but is retained for API compatibility; passing different binding flags has no effect.
+- These helpers return `null` or `default` when attributes are missing — prefer this behavior for concise call sites.
+- For performance-sensitive loops, consider caching attribute lookups.
+
+---
+
+Documentation mirrors the helper implementations in `AttributeExtensions.cs` in the source tree.

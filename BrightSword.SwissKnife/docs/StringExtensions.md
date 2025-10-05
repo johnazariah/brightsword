@@ -1,28 +1,42 @@
 # StringExtensions
 
 ## Purpose
-Provides extension methods for <code>string</code> to split into segments by camel case, underscores, spaces, or punctuation. These helpers simplify string tokenization for display, parsing, or formatting scenarios.
+
+Provides helpers for tokenizing and splitting strings into readable segments based on camel case, underscores, punctuation, spaces, and custom separators. Implemented in `StringExtensions.cs`.
 
 ## When to Use
-- When you need to split strings for display, formatting, or parsing.
-- When you want to convert camel case, dotted, or underscored strings into segments.
 
-## How to Use
-Use these methods to split strings by camel case, underscores, dots, or custom separators.
+- Humanizing identifiers (e.g., `CamelCase` -> `Camel Case`).
+- Breaking dotted or underscored identifiers into parts for display, logging, or parsing.
+- Extracting tokens from strings for code generation or documentation tools.
 
-## Key APIs
-- <code>SplitCamelCase(this string @this)</code>: Splits a camel-case string into its constituent segments.
-- <code>SplitCamelCaseAndUnderscore(this string @this)</code>: Splits a string into segments by camel case and underscores.
-- <code>SplitDotted(this string @this)</code>: Splits a string into segments by dots.
-- <code>SplitIntoSegments(this string @this, ...)</code>: Splits a string into segments by spaces, camel case, punctuation, or custom separators.
+## API Reference
+
+- `IEnumerable<string> SplitCamelCase(this string @this)` — Split a camel-case string into segments, ignoring punctuation splitting.
+- `IEnumerable<string> SplitCamelCaseAndUnderscore(this string @this)` — Split camel case and underscores.
+- `IEnumerable<string> SplitDotted(this string @this)` — Split string on dots ('.').
+- `IEnumerable<string> SplitIntoSegments(this string @this, bool splitBySpace = true, bool splitOnCamelCase = true, bool splitOnPunctuation = true, params char[] separators)` — Flexible splitter with options.
 
 ## Examples
+
 ```csharp
-var segments = "CamelCaseString".SplitCamelCase(); // ["Camel", "Case", "String"]
-var segments2 = "Camel_CaseString".SplitCamelCaseAndUnderscore(); // ["Camel", "Case", "String"]
-var segments3 = "A.B.C".SplitDotted(); // ["A", "B", "C"]
-var segments4 = "A_B C.D".SplitIntoSegments(true, true, true, '_', '.'); // ["A", "B", "C", "D"]
+var parts = "CamelCaseExample".SplitCamelCase().ToArray(); // ["Camel", "Case", "Example"]
+var parts2 = "XMLHttpRequest".SplitCamelCase().ToArray(); // ["XML", "Http", "Request"]
+var dotted = "part.one.two".SplitDotted().ToArray(); // ["part", "one", "two"]
+var mixed = "A_B C.D".SplitIntoSegments(true, true, true, '_', '.').ToArray(); // ["A", "B", "C", "D"]
 ```
 
+## Implementation Notes
+
+- The splitter manages acronyms (consecutive uppercase letters) specially: `XMLHttpRequest` produces `XML`, `Http`, `Request`.
+- Recognized punctuation defaults to `char.IsPunctuation`, but passing `separators` replaces punctuation recognition with those chars.
+- Empty or whitespace-only segments are skipped.
+
 ## Remarks
-These helpers simplify string tokenization and formatting. They are useful for display, parsing, and code generation scenarios.
+
+- The algorithms are implemented for readability and correctness; they avoid allocations where reasonable but favor clarity.
+- Use `string.Join(" ", input.SplitCamelCase())` to produce a human-readable phrase.
+
+---
+
+This document mirrors the implementation in `StringExtensions.cs`.

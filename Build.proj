@@ -83,8 +83,8 @@
   <Target Name="Test" DependsOnTargets="BuildTests">
     <Message Text="Running tests..." Importance="high" />
     <MakeDir Directories="$(TestResultsPath)" />
-    <Exec Command="dotnet test &quot;%(TestProject.Identity)&quot; --no-build --configuration $(Configuration) --logger:trx --results-directory &quot;$(TestResultsPath)&quot;" 
-          ContinueOnError="false" />
+    <!-- Use MSBuild to invoke the VSTest target on each test project; pass logger and results directory via properties -->
+    <MSBuild Projects="@(TestProject)" Targets="VSTest" Properties="Configuration=$(Configuration);VSTestLogger=trx;VSTestResultsDirectory=$(TestResultsPath)" ContinueOnError="false" />
   </Target>
 
   <!-- Pack all packages -->

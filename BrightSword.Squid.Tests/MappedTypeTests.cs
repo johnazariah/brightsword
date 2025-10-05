@@ -1,6 +1,4 @@
-using System;
-using System.Collections.Generic;
-
+using BrightSword.Squid.Tests.core;
 using BrightSword.Squid.TypeCreators;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,11 +7,9 @@ using RemoteInterfaceAssembly;
 
 using RemotePropertyInterfaceAssembly;
 
-using Tests.BrightSword.Squid.core;
+using IFoo = BrightSword.Squid.Tests.core.IFoo;
 
-using IFoo = Tests.BrightSword.Squid.core.IFoo;
-
-namespace Tests.BrightSword.Squid
+namespace BrightSword.Squid.Tests
 {
     [TestClass]
     public class MappedTypeTests

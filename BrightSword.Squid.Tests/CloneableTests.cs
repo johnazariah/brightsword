@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 
 using BrightSword.Crucible;
@@ -10,7 +7,7 @@ using BrightSword.Squid.TypeCreators;
 using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tests.BrightSword.Squid
+namespace BrightSword.Squid.Tests
 {
     /// <summary>
     /// Tests that the clone behaviour is composed correctly into generated types

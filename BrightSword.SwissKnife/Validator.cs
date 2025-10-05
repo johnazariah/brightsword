@@ -1,5 +1,3 @@
-using System;
-
 namespace BrightSword.SwissKnife
 {
     /// <summary>
@@ -115,7 +113,10 @@ namespace BrightSword.SwissKnife
                 try
                 {
                     var instance = Activator.CreateInstance(typeof(TException), message) as Exception;
-                    if (instance != null) return instance;
+                    if (instance != null)
+                    {
+                        return instance;
+                    }
                 }
                 catch
                 {

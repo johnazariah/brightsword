@@ -1,6 +1,4 @@
-using System;
-
-namespace BrightSword.Squid
+namespace BrightSword.Squid.Extensions
 {
     /// <summary>
     /// Helpers to map between generic or mappable types and their intended concrete counterparts.
@@ -40,12 +38,9 @@ namespace BrightSword.Squid
 
             var fromArgs = mapFrom.GetGenericArguments();
             var toArgs = mapTo.GetGenericArguments();
-            if (fromArgs.Length != toArgs.Length)
-            {
-                return null;
-            }
-
-            return mapFrom.GetGenericTypeDefinition()
+            return fromArgs.Length != toArgs.Length
+                ? null
+                : mapFrom.GetGenericTypeDefinition()
                           .MapTypeIfPossible(mapTo.MakeGenericType(fromArgs), mappableTypes);
         }
 

@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-
 using BrightSword.Squid.Test;
 
-namespace Tests.BrightSword.Squid.core
+namespace BrightSword.Squid.Tests.core
 {
     internal sealed class NonGenericInterfaceWithGenericProperties : ChangeTrackedVersionedEntity,
                                                               INonGenericInterfaceWithGenericProperties

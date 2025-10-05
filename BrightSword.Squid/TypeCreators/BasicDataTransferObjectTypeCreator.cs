@@ -1,18 +1,15 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
-using System.Threading;
 using BrightSword.Feber.Samples;
 using BrightSword.Squid.API;
 using BrightSword.Squid.Behaviours;
+using BrightSword.Squid.Extensions;
 using BrightSword.SwissKnife;
 using INotifyPropertyChanged = BrightSword.Squid.API.INotifyPropertyChanged;
 using INotifyPropertyChanging = BrightSword.Squid.API.INotifyPropertyChanging;
@@ -69,8 +66,8 @@ namespace BrightSword.Squid.TypeCreators
         private bool _trackReadonlyPropertyInitialized;
         private Type _type;
         // Cached Type[] arrays used for reflection GetMethod calls to avoid repeated allocations (CA1861)
-        private static readonly Type[] OnPropertyChangingArgTypes = new[] { typeof(string), typeof(Type), typeof(object), typeof(object) };
-        private static readonly Type[] GetTypeFromHandleArgTypes = new[] { typeof(RuntimeTypeHandle) };
+        private static readonly Type[] OnPropertyChangingArgTypes = [typeof(string), typeof(Type), typeof(object), typeof(object)];
+        private static readonly Type[] GetTypeFromHandleArgTypes = [typeof(RuntimeTypeHandle)];
 
         private Type[] _interfacesWithSpecialBehaviours;
 
@@ -96,10 +93,10 @@ namespace BrightSword.Squid.TypeCreators
 
             _fieldValueSetInstructionHelper = new FieldValueSetInstructionHelper();
 
-            _specialBehaviours = new[]
-            {
+            _specialBehaviours =
+            [
                 new KeyValuePair<Type, IBehaviour>(typeof(ICloneable), new CloneBehaviour())
-            };
+            ];
 
             _typeMaps = new List<Func<Type, Type>>
             {
@@ -582,7 +579,7 @@ namespace BrightSword.Squid.TypeCreators
                      typeof(Delegate).GetMethod(attachOrDetachDelegateName,
                                                  BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic,
                                                  null,
-                                                 new[] { typeof(Delegate), typeof(Delegate) },
+                                                 [typeof(Delegate), typeof(Delegate)],
                                                  null));
             gen.Emit(OpCodes.Castclass,
                      eventInfo.EventHandlerType);
@@ -779,7 +776,7 @@ namespace BrightSword.Squid.TypeCreators
             gen.Emit(OpCodes.Newobj,
                      typeof(MethodAccessException).GetConstructor(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
                                                                    null,
-                                                                   new[] { typeof(string) },
+                                                                   [typeof(string)],
                                                                    null));
             gen.Emit(OpCodes.Throw);
             gen.MarkLabel(getAndReturnValue);
@@ -813,7 +810,7 @@ namespace BrightSword.Squid.TypeCreators
                                                                        propertyInfo.Name),
                                                          PropertyHiddenMethodAttributes,
                                                          null,
-                                                         new[] { propertyInfo.PropertyType });
+                                                         [propertyInfo.PropertyType]);
             _ = methodBuilder.DefineParameter(1,
                                           ParameterAttributes.None,
                                           "value");
@@ -1246,7 +1243,7 @@ namespace BrightSword.Squid.TypeCreators
             var method = type.DefineMethod("InitializePropertyValue",
                                            MethodAttributes.Family | MethodAttributes.HideBySig,
                                            typeof(void),
-                                           new[] { typeof(string) });
+                                           [typeof(string)]);
 
             _ = method.DefineParameter(1,
                                    ParameterAttributes.None,
@@ -1260,7 +1257,7 @@ namespace BrightSword.Squid.TypeCreators
                      initializedPropertiesField);
             gen.Emit(OpCodes.Ldarg_1);
             gen.Emit(OpCodes.Callvirt,
-                     typeof(HashSet<string>).GetMethod("Add", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new[] { typeof(string) }, null));
+                     typeof(HashSet<string>).GetMethod("Add", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, [typeof(string)], null));
             gen.Emit(OpCodes.Pop);
             gen.Emit(OpCodes.Ret);
             return method;
@@ -1275,7 +1272,7 @@ namespace BrightSword.Squid.TypeCreators
             var method = type.DefineMethod("IsPropertyValueInitialized",
                                            MethodAttributes.Family | MethodAttributes.HideBySig,
                                            typeof(bool),
-                                           new[] { typeof(string) });
+                                           [typeof(string)]);
             _ = method.DefineParameter(1, ParameterAttributes.None, "propertyName");
             var gen = method.GetILGenerator();
             _ = gen.DeclareLocal(typeof(bool));
@@ -1289,7 +1286,7 @@ namespace BrightSword.Squid.TypeCreators
             gen.Emit(OpCodes.Ldarg_1);
             gen.Emit(OpCodes.Callvirt,
                      typeof(HashSet<string>)
-                        .GetMethod("Contains", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, new[] { typeof(string) }, null));
+                        .GetMethod("Contains", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, [typeof(string)], null));
             gen.Emit(OpCodes.Stloc_0);
             gen.Emit(OpCodes.Br_S,
                      label16);
@@ -1422,7 +1419,7 @@ namespace BrightSword.Squid.TypeCreators
                                                        BaseType,
                                                        implementedInterfaces);
 
-            var applicableInterfaces = FacetInterfaces.Union(new[] { typeof(T) });
+            var applicableInterfaces = FacetInterfaces.Union([typeof(T)]);
 
             var behaviourOperations = from behaviour in SpecialBehaviours
                                       from _interface in applicableInterfaces

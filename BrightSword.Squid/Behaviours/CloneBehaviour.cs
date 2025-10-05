@@ -1,7 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
+using BrightSword.Squid.Extensions;
 
 namespace BrightSword.Squid.Behaviours
 {

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
@@ -40,13 +38,9 @@ namespace BrightSword.Squid.Behaviours
             // Handle nulls explicitly: reference types may accept null, value types do not here.
             if (value == null)
             {
-                if (field.FieldType.IsValueType)
-                {
-                    throw new NotSupportedException($"Cannot set default value for {field.Name}");
-                }
-
-                return
-                [
+                return field.FieldType.IsValueType
+                    ? throw new NotSupportedException($"Cannot set default value for {field.Name}")
+                    : [
                     (_ => _.Emit(OpCodes.Ldarg_0)),
                     _ => _.Emit(OpCodes.Ldnull),
                     _ => _.Emit(OpCodes.Stfld, field)
@@ -134,12 +128,7 @@ namespace BrightSword.Squid.Behaviours
                     return true;
                 }
 
-                if (typeof(IList<int>).IsAssignableFrom(t) || typeof(IList<string>).IsAssignableFrom(t))
-                {
-                    return true;
-                }
-
-                return false;
+                return typeof(IList<int>).IsAssignableFrom(t) || typeof(IList<string>).IsAssignableFrom(t);
             }
 
             if (IsSimpleTarget(field.FieldType))
@@ -298,12 +287,7 @@ namespace BrightSword.Squid.Behaviours
                 return _ => _.Emit(OpCodes.Ldc_I4_S, (byte)value);
             }
 
-            if (value is >= int.MinValue and <= int.MaxValue)
-            {
-                return _ => _.Emit(OpCodes.Ldc_I4, (int)value);
-            }
-
-            return _ => _.Emit(OpCodes.Ldc_I8, value);
+            return value is >= int.MinValue and <= int.MaxValue ? (_ => _.Emit(OpCodes.Ldc_I4, (int)value)) : (_ => _.Emit(OpCodes.Ldc_I8, value));
         }
 
         /// <summary>

@@ -1,11 +1,10 @@
-using System;
 using System.Diagnostics;
 using BrightSword.Squid;
+using BrightSword.Squid.Tests.core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Tests.BrightSword.Squid.core;
 
-namespace Tests.BrightSword.Squid
+namespace BrightSword.Squid.Tests
 {
     [TestClass]
     public class TimingTests

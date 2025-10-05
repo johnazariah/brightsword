@@ -1,14 +1,11 @@
-using System;
-
 using BrightSword.Crucible;
+using BrightSword.Squid.Tests.core;
 using BrightSword.Squid.TypeCreators;
 
 using Microsoft.CSharp.RuntimeBinder;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Tests.BrightSword.Squid.core;
-
-namespace Tests.BrightSword.Squid
+namespace BrightSword.Squid.Tests
 {
     [TestClass]
     public class InitializationCheckedDynamicTests

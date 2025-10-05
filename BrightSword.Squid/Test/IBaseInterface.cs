@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace BrightSword.Squid.Test
 {
     public interface IBaseInterface

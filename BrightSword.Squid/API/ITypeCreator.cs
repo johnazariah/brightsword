@@ -1,5 +1,3 @@
-using System;
-
 namespace BrightSword.Squid.API
 {
     /// <summary>

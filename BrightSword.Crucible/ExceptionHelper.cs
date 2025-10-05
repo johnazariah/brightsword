@@ -1,5 +1,3 @@
-using System;
-
 namespace BrightSword.Crucible
 {
     public static class ExceptionHelper

@@ -1,12 +1,10 @@
 using BrightSword.Squid;
 using BrightSword.Squid.API;
 using BrightSword.Squid.Test;
-
+using BrightSword.Squid.Tests.core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using Tests.BrightSword.Squid.core;
-
-namespace Tests.BrightSword.Squid
+namespace BrightSword.Squid.Tests
 {
     [TestClass]
     public class ChangeTrackedPropertyTypeTests

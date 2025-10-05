@@ -1,4 +1,3 @@
-using System;
 using BrightSword.Squid.TypeCreators;
 
 namespace BrightSword.Squid

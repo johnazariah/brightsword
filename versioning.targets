@@ -1,0 +1,93 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask
+    TaskName="UpdateVersionInline"
+    TaskFactory="CodeTaskFactory"
+    AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <FilePath ParameterType="System.String" Required="true" />
+      <ProjectName ParameterType="System.String" Required="true" />
+      <Level ParameterType="System.String" Required="false" />
+      <NewVersion Output="true" ParameterType="System.String" />
+    </ParameterGroup>
+    <Task>
+      <Reference Include="System.Core" />
+      <Using Namespace="System" />
+      <Using Namespace="System.IO" />
+      <Using Namespace="System.Xml.Linq" />
+      <Code Type="Fragment" Language="cs"><![CDATA[
+        if (string.IsNullOrEmpty(Level)) Level = "Patch";
+        if (!File.Exists(FilePath)) {
+            Log.LogError($"Version file '{FilePath}' not found.");
+            return false;
+        }
+        try {
+            var doc = XDocument.Load(FilePath);
+            XNamespace ns = doc.Root.Name.Namespace;
+            bool updated = false;
+            foreach (var pg in doc.Root.Elements(ns + "PropertyGroup")) {
+                var cond = (string)pg.Attribute("Condition");
+                if (cond == null) continue;
+                // look for project name in condition
+                if (!cond.Contains("'" + ProjectName + "'")) continue;
+                var vp = pg.Element(ns + "VersionPrefix");
+                if (vp == null) {
+                    // create element
+                    vp = new XElement(ns + "VersionPrefix", "0.0.0");
+                    pg.Add(vp);
+                }
+                var cur = vp.Value.Trim();
+                // parse semantic version
+                var parts = cur.Split('-')[0].Split('.');
+                int major = 0, minor = 0, patch = 0;
+                if (parts.Length > 0) int.TryParse(parts[0], out major);
+                if (parts.Length > 1) int.TryParse(parts[1], out minor);
+                if (parts.Length > 2) int.TryParse(parts[2], out patch);
+                switch (Level.ToLowerInvariant()) {
+                    case "major":
+                        major += 1; minor = 0; patch = 0; break;
+                    case "minor":
+                        minor += 1; patch = 0; break;
+                    default:
+                        patch += 1; break;
+                }
+                var newVer = $"{major}.{minor}.{patch}";
+                vp.Value = newVer;
+                NewVersion = newVer;
+                updated = true;
+                break;
+            }
+            if (updated) {
+                doc.Save(FilePath);
+                Log.LogMessage(MessageImportance.High, $"Updated version in '{FilePath}' for '{ProjectName}' to {NewVersion}");
+                return true;
+            } else {
+                Log.LogError($"No PropertyGroup with condition for project '{ProjectName}' found in '{FilePath}'.");
+                return false;
+            }
+        } catch (Exception ex) {
+            Log.LogErrorFromException(ex, true);
+            return false;
+        }
+      ]]></Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="IncrementVersion">
+    <!-- Parameters: Level=Patch|Minor|Major; Commit=true|false -->
+    <PropertyGroup>
+      <_VersionFile>$(MSBuildThisFileDirectory)version.props</_VersionFile>
+      <_Level>$(Level)</_Level>
+      <_ProjectName Condition="'$(ProjectName)' == ''">$(MSBuildProjectName)</_ProjectName>
+    </PropertyGroup>
+
+    <UpdateVersionInline FilePath="$(_VersionFile)" ProjectName="$(_ProjectName)" Level="$(_Level)">
+      <Output TaskParameter="NewVersion" PropertyName="NewVersion" />
+    </UpdateVersionInline>
+
+    <Message Importance="High" Text="NewVersion=$([System.String]::Copy('$(NewVersion)'))" />
+
+    <!-- Optionally commit the change if Commit=true -->
+    <Exec Command="git add version.props" WorkingDirectory="$(MSBuildThisFileDirectory)" Condition="'$(Commit)' == 'true'" />
+    <Exec Command="git commit -m &quot;Bump $(ProjectName) to $(NewVersion)&quot; version.props" WorkingDirectory="$(MSBuildThisFileDirectory)" Condition="'$(Commit)' == 'true' and '$(NewVersion)' != ''" />
+  </Target>
+</Project>

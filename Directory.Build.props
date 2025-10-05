@@ -10,7 +10,7 @@
     <!-- Package properties -->
     <Authors>John S Azariah</Authors>
     <Company>BrightSword Technologies Pte Ltd, Singapore</Company>
-    <Copyright>Copyright � BrightSword $(CurrentYear)</Copyright>
+    <Copyright>Copyright © BrightSword $(CurrentYear)</Copyright>
     <PackageLicenseExpression>CC-BY-4.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/johnazariah/BrightSword</PackageProjectUrl>
     <RepositoryUrl>https://github.com/johnazariah/BrightSword</RepositoryUrl>
@@ -24,8 +24,12 @@
     
     <!-- Documentation -->
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);CS1591</NoWarn><!-- Missing XML comment for publicly visible type or member -->
     
+    <!-- Suppress common warnings across all projects -->
+    <NoWarn>$(NoWarn);CS1591;CS1570;CS1572;CS1573;CS1574;CS1734;CS0419</NoWarn>
+    <NoWarn>$(NoWarn);CS8600;CS8601;CS8602;CS8603;CS8604;CS8618;CS8619;CS8620;CS8625;CS8714;CS8767;CS9264</NoWarn>
+    <NoWarn>$(NoWarn);CS0067</NoWarn>
+
     <!-- Source Link -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -45,5 +49,10 @@
   <PropertyGroup>
     <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
   </PropertyGroup>
+
+  <!-- Include docs README in package root for any project that has one -->
+  <ItemGroup>
+    <None Include="docs/README.md" Pack="true" PackagePath="" Condition="Exists('docs/README.md')" />
+  </ItemGroup>
 
 </Project>
