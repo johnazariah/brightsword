@@ -59,6 +59,6 @@ public sealed class NullCheckBuilder<T> : UnaryOperationBuilderBase<T, T>
 - Use the protected properties for parameter expressions to ensure correct lambda compilation.
 
 ## See Also
-- [ActionBuilder.md](ActionBuilder.md) — for composing side-effecting delegates.
-- [FunctionBuilder.md](FunctionBuilder.md) — for folding/aggregation patterns.
+- [ActionBuilder.md](ActionBuilder.md) â€” for composing side-effecting delegates.
+- [FunctionBuilder.md](FunctionBuilder.md) â€” for folding/aggregation patterns.
 

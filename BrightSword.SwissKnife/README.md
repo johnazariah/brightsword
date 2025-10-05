@@ -44,11 +44,11 @@ BrightSword.SwissKnife provides a set of extension methods and helpers for refle
 ## How to use (for library users)
 - Reference the library in your project and use the extension methods and helpers as needed.
 - See the `docs/` folder for per-class documentation and examples:
-  - [TypeExtensions](docs/TypeExtensions.md) — reflection helpers
-  - [Validator](docs/Validator.md) — argument/parameter guard helpers
-  - [AttributeExtensions](docs/AttributeExtensions.md) — attribute handling helpers
-  - [EnumerableExtensions](docs/EnumerableExtensions.md) — collection helpers
-  - [StringExtensions](docs/StringExtensions.md) — string manipulation helpers
+  - [TypeExtensions](docs/TypeExtensions.md) â€” reflection helpers
+  - [Validator](docs/Validator.md) â€” argument/parameter guard helpers
+  - [AttributeExtensions](docs/AttributeExtensions.md) â€” attribute handling helpers
+  - [EnumerableExtensions](docs/EnumerableExtensions.md) â€” collection helpers
+  - [StringExtensions](docs/StringExtensions.md) â€” string manipulation helpers
 
 ### Quick tasks
 - **Build:**

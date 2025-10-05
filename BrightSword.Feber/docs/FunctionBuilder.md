@@ -24,8 +24,8 @@ This builder pattern is designed to **improve runtime performance** for repeated
 - **Error modes:** Ensure type compatibility between seed, property expressions, and conjunction results.
 
 ## Common Members
-- `Function` property (cached) — returns the compiled delegate.
-- `BuildFunction()` — protected virtual method that folds and compiles the block.
+- `Function` property (cached) â€” returns the compiled delegate.
+- `BuildFunction()` â€” protected virtual method that folds and compiles the block.
 
 ## Usage Examples
 
@@ -90,6 +90,6 @@ Console.WriteLine(nullChecker(p1)); // True if any property is null
 - **Performance:** For large types, consider the cost of expression compilation and delegate invocation.
 
 ## See Also
-- [ActionBuilder.md](ActionBuilder.md) — for side-effecting property operations.
-- [OperationBuilders.md](OperationBuilders.md) — for low-level property scanning and expression generation.
+- [ActionBuilder.md](ActionBuilder.md) â€” for side-effecting property operations.
+- [OperationBuilders.md](OperationBuilders.md) â€” for low-level property scanning and expression generation.
 

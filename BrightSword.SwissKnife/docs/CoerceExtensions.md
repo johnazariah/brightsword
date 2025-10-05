@@ -46,7 +46,7 @@ var day = e.CoerceType(typeof(DayOfWeek), DayOfWeek.Monday); // DayOfWeek.Sunday
 
 ## Remarks
 
-- The code is annotated `[Obsolete]` — prefer explicit `TryParse` calls and `Convert.ChangeType` where possible for clarity and maintainability.
+- The code is annotated `[Obsolete]` â€” prefer explicit `TryParse` calls and `Convert.ChangeType` where possible for clarity and maintainability.
 - Culture: parsing uses `CultureInfo.InvariantCulture` for numeric and DateTime parsing to avoid culture-dependent surprises.
 - Enum parsing is case-insensitive.
 - `CoerceType` may return original `value` if conversions fail; review call sites to ensure this behavior is acceptable.

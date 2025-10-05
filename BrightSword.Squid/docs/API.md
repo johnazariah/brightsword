@@ -5,10 +5,10 @@ This document covers the primary public-facing types and how you typically inter
 Primary entry points
 
 - `BasicDataTransferObjectTypeCreator<T>`
-  - `Type` — returns the emitted `System.Type` for `T`. Accessing it builds the type (if `T` is an interface).
-  - `CreateInstance(dynamic source = null)` — constructs an instance of the generated type; if `source` provided, values are mapped into the instance via `FastMapper<T>`.
-  - `AssemblyName`, `ClassName`, `FacetInterfaces` — configuration points to control naming and additional interfaces.
-  - `SaveAssemblyToDisk` and `PersistAssembly` — control whether emitted assemblies are persisted (default no-op for portability).
+  - `Type` â€” returns the emitted `System.Type` for `T`. Accessing it builds the type (if `T` is an interface).
+  - `CreateInstance(dynamic source = null)` â€” constructs an instance of the generated type; if `source` provided, values are mapped into the instance via `FastMapper<T>`.
+  - `AssemblyName`, `ClassName`, `FacetInterfaces` â€” configuration points to control naming and additional interfaces.
+  - `SaveAssemblyToDisk` and `PersistAssembly` â€” control whether emitted assemblies are persisted (default no-op for portability).
 
 Control points and order of operations
 
@@ -51,4 +51,4 @@ Error handling
 
 Notes
 - If `typeof(T).IsClass` then `BuildType` returns `typeof(T)` unchanged; the generator only emits types for interface `T`.
-- `CreateInstance` uses `FastMapper<T>` for copying from dynamic sources — review `FastMapper` documentation in `BrightSword.Feber` for mapping rules.
+- `CreateInstance` uses `FastMapper<T>` for copying from dynamic sources â€” review `FastMapper` documentation in `BrightSword.Feber` for mapping rules.

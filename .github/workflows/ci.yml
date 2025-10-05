@@ -35,6 +35,10 @@ jobs:
         echo "Invoking MSBuild CI target"
         dotnet msbuild Build.proj /t:CI /p:Configuration=Release /v:minimal
 
+    - name: Normalize text file encodings to UTF-8
+      if: always()
+      run: pwsh -NoProfile -NonInteractive -File ./scripts/convert-files-to-utf8.ps1
+
     - name: Collect XML docs
       run: |
         mkdir -p artifacts/docs
