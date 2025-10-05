@@ -30,14 +30,10 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: Restore
-      run: dotnet restore
-
-    - name: Build (Release)
-      run: dotnet build -c Release --no-restore
-
-    - name: Run tests
-      run: dotnet test -c Release --no-build --verbosity normal
+    - name: Run repository MSBuild CI target
+      run: |
+        echo "Invoking MSBuild CI target"
+        dotnet msbuild Build.proj /t:CI /p:Configuration=Release /v:minimal
 
     - name: Collect XML docs
       run: |

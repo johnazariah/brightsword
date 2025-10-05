@@ -5,7 +5,7 @@ on:
     inputs:
       package:
         description: 'PackageId to publish (e.g. BrightSword.Squid)'
-        required: true
+        required: false
       configuration:
         description: 'Build configuration'
         required: false
@@ -49,7 +49,7 @@ jobs:
           esac
 
       - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
 
@@ -146,6 +146,7 @@ jobs:
           $order = '${{ steps.order.outputs.order }}'.Split(';') | Where-Object { $_ -ne '' }
           if ($order.Count -eq 0) { Write-Error "No packages to publish"; exit 1 }
 
+          # Helper to map package id to csproj path
           function Resolve-CsprojForPackage($packageId) {
             $csprojFiles = Get-ChildItem -Recurse -Filter *.csproj | Where-Object { -not $_.FullName.Contains('obj') -and -not $_.FullName.Contains('bin') }
             foreach ($f in $csprojFiles) {
@@ -187,8 +188,8 @@ jobs:
             $csproj = Resolve-CsprojForPackage $pkg
             if (-not $csproj) { Write-Error "Could not locate csproj for package $pkg"; exit 1 }
 
-            Write-Host "Packing project: $csproj"
-            dotnet pack $csproj -c $env:CONFIGURATION -o $artifacts --no-build
+            Write-Host "Packing project via MSBuild: $csproj"
+            dotnet msbuild $csproj /t:Pack /p:Configuration=$env:CONFIGURATION;PackageOutputPath=$artifacts /v:minimal
 
             $nupkgs = Get-ChildItem -Path $artifacts -Filter "$pkg*.nupkg" -File
             if (-not $nupkgs -or $nupkgs.Count -eq 0) {
