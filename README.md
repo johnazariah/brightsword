@@ -5,7 +5,7 @@ A collection of high-quality .NET libraries for utilities, testing, automated co
 [![CI Build](https://github.com/brightsword/BrightSword/actions/workflows/ci.yml/badge.svg)](https://github.com/brightsword/BrightSword/actions/workflows/ci.yml)
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
-## 📦 Packages
+## ðŸ“¦ Packages
 
 This monorepo contains the following NuGet packages:
 
@@ -16,7 +16,7 @@ This monorepo contains the following NuGet packages:
 | [BrightSword.Feber](./BrightSword.Feber) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.Feber.svg)](https://www.nuget.org/packages/BrightSword.Feber/) | Automated delegate generation using Expression trees |
 | [BrightSword.Squid](./BrightSword.Squid) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.Squid.svg)](https://www.nuget.org/packages/BrightSword.Squid/) | Runtime type emission utilities |
 
-## 🚀 Quick Start
+## ðŸš€ Quick Start
 
 ### Installation
 
@@ -47,7 +47,7 @@ using BrightSword.Squid;
 // Use the libraries in your code
 ```
 
-## 🏗️ Building from Source
+## ðŸ—ï¸ Building from Source
 
 ### Prerequisites
 
@@ -92,7 +92,7 @@ msbuild Build.proj /t:Pack
 msbuild Build.proj /t:PackSingle /p:Package=BrightSword.SwissKnife
 ```
 
-## 📚 Documentation
+## ðŸ“š Documentation
 
 - [Build and Development Guide](./docs/BUILD.md)
 - [Contributing Guidelines](./docs/CONTRIBUTING.md)
@@ -107,7 +107,7 @@ msbuild Build.proj /t:PackSingle /p:Package=BrightSword.SwissKnife
 - [BrightSword.Feber Documentation](./BrightSword.Feber/docs/)
 - [BrightSword.Squid Documentation](./BrightSword.Squid/docs/)
 
-## 🤝 Contributing
+## ðŸ¤ Contributing
 
 We welcome contributions! Please see our [Contributing Guidelines](./docs/CONTRIBUTING.md) for details.
 
@@ -134,25 +134,25 @@ We use [Semantic Versioning](https://semver.org/). To increment versions:
 ./increment-version.ps1 -Package BrightSword.Squid -Component Major
 ```
 
-## 📋 Project Structure
+## ðŸ“‹ Project Structure
 
 ```
 BrightSword/
-├── .github/
-│   └── workflows/          # CI/CD pipelines
-├── BrightSword.SwissKnife/ # Utilities package
-├── BrightSword.Crucible/   # MSTest utilities package
-├── BrightSword.Feber/      # Expression builder package
-├── BrightSword.Squid/      # Type emission package
-├── docs/                   # Monorepo documentation
-├── Build.proj              # MSBuild build script
-├── build.ps1               # PowerShell build script
-├── increment-version.ps1   # Version management script
-├── Directory.Build.props   # Common MSBuild properties
-└── Directory.Build.targets # Common MSBuild targets
+â”œâ”€â”€ .github/
+â”‚   â””â”€â”€ workflows/          # CI/CD pipelines
+â”œâ”€â”€ BrightSword.SwissKnife/ # Utilities package
+â”œâ”€â”€ BrightSword.Crucible/   # MSTest utilities package
+â”œâ”€â”€ BrightSword.Feber/      # Expression builder package
+â”œâ”€â”€ BrightSword.Squid/      # Type emission package
+â”œâ”€â”€ docs/                   # Monorepo documentation
+â”œâ”€â”€ Build.proj              # MSBuild build script
+â”œâ”€â”€ build.ps1               # PowerShell build script
+â”œâ”€â”€ increment-version.ps1   # Version management script
+â”œâ”€â”€ Directory.Build.props   # Common MSBuild properties
+â””â”€â”€ Directory.Build.targets # Common MSBuild targets
 ```
 
-## 🔄 CI/CD
+## ðŸ”„ CI/CD
 
 The repository uses GitHub Actions for continuous integration and deployment:
 
@@ -203,25 +203,25 @@ dotnet test
 dotnet test BrightSword.SwissKnife.Tests/BrightSword.SwissKnife.Tests.csproj
 ```
 
-## 📄 License
+## ðŸ“„ License
 
 This project is licensed under the **Creative Commons Legal Code (CC0 1.0 Universal)**.
 
 You are free to:
-- **Share** — copy and redistribute the material in any medium or format
-- **Adapt** — remix, transform, and build upon the material for any purpose, even commercially
+- **Share** â€” copy and redistribute the material in any medium or format
+- **Adapt** â€” remix, transform, and build upon the material for any purpose, even commercially
 
 Under the following terms:
-- **Attribution** — You must give appropriate credit to BrightSword Technologies Pte Ltd, provide a link to the license, and indicate if changes were made.
+- **Attribution** â€” You must give appropriate credit to BrightSword Technologies Pte Ltd, provide a link to the license, and indicate if changes were made.
 
 See the full license at [https://creativecommons.org/licenses/by/4.0/](https://creativecommons.org/licenses/by/4.0/)
 
-## 🙏 Acknowledgments
+## ðŸ™ Acknowledgments
 
 - Developed and maintained by [BrightSword Technologies Pte Ltd](https://brightsword.com)
-- Copyright © BrightSword Technologies Pte Ltd, Singapore
+- Copyright Â© BrightSword Technologies Pte Ltd, Singapore
 
-## 📞 Support
+## ðŸ“ž Support
 
 - **Documentation**: [GitHub Pages](https://brightsword.github.io/BrightSword/)
 - **Issues**: [GitHub Issues](https://github.com/brightsword/BrightSword/issues)
@@ -229,4 +229,4 @@ See the full license at [https://creativecommons.org/licenses/by/4.0/](https://c
 
 ---
 
-**Built with ❤️ by BrightSword Technologies**
+**Built with â¤ï¸ by BrightSword Technologies**

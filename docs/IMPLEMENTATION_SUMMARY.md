@@ -1,4 +1,4 @@
-﻿# BrightSword Monorepo - Implementation Summary
+# BrightSword Monorepo - Implementation Summary
 
 This document summarizes the comprehensive build, versioning, CI/CD, and documentation infrastructure implemented for the BrightSword monorepo.
 

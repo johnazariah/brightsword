@@ -3,10 +3,10 @@
 Squid supports pluggable behaviours that can modify the emitted type during type creation. A behaviour implements `IBehaviour` and exposes operations applied to a `TypeBuilder`.
 
 Key concept
-- `IBehaviour` — provides an `IEnumerable<Func<TypeBuilder, TypeBuilder>> Operations` allowing behaviours to transform the `TypeBuilder` as part of the `BuildTypeBuilder` pipeline.
+- `IBehaviour` â€” provides an `IEnumerable<Func<TypeBuilder, TypeBuilder>> Operations` allowing behaviours to transform the `TypeBuilder` as part of the `BuildTypeBuilder` pipeline.
 
 Built-in behaviours
-- `CloneBehaviour` — adds a `Clone` method to the emitted type. The behaviour may add helper methods or attributes required for clone semantics. The repository includes a concrete `CloneBehaviour` implementation in `BrightSword.Squid.Behaviours.CloneBehaviour` that provides a portable deep-clone fallback used by generated `Clone()` methods.
+- `CloneBehaviour` â€” adds a `Clone` method to the emitted type. The behaviour may add helper methods or attributes required for clone semantics. The repository includes a concrete `CloneBehaviour` implementation in `BrightSword.Squid.Behaviours.CloneBehaviour` that provides a portable deep-clone fallback used by generated `Clone()` methods.
 
 When to use behaviours vs facets
 - Use facets (via `FacetInterfaces`) when you want the emitted type to declare additional interfaces for consumers to detect capabilities. Facets are about typing and discovery.
@@ -40,9 +40,9 @@ var clone = ((ICloneable)instance).Clone();
 If you need to replace or extend the behaviour registration, subclass `BasicDataTransferObjectTypeCreator<T>` and override the `SpecialBehaviours` property (it is virtual) to supply your own mapping or behaviour instances.
 
 Guidance for behaviour authors
-- Keep operations idempotent — the builder pipeline may iterate behaviours in sequence and operations may be applied more than once in different build scenarios.
+- Keep operations idempotent â€” the builder pipeline may iterate behaviours in sequence and operations may be applied more than once in different build scenarios.
 - Minimize assumptions about backing field names or existing emitted members; prefer to add independent helper members.
-- Be conservative with public API surface added by behaviours — consumers will depend on generated members.
+- Be conservative with public API surface added by behaviours â€” consumers will depend on generated members.
 - Test behaviours using small, focused interfaces and assert the emitted members behave as expected.
 
 Advanced tip: conditional behaviour application

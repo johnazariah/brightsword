@@ -11,17 +11,17 @@ Utilities for working with `System.Type` and reflection, implemented in `TypeExt
 
 ## API Reference
 
-- `string PrintableName(this Type @this)` — Returns a readable name for the type; for generic types it includes type parameters using recursive `PrintableName` calls.
+- `string PrintableName(this Type @this)` â€” Returns a readable name for the type; for generic types it includes type parameters using recursive `PrintableName` calls.
 
-- `string Name(this Type @this)` — Backwards-compatible alias for `PrintableName` used in older code/tests.
+- `string Name(this Type @this)` â€” Backwards-compatible alias for `PrintableName` used in older code/tests.
 
-- `string RenameToConcreteType(this Type @this)` — Heuristic to map interface names to concrete-like names (trims leading `I` if followed by uppercase letter) while preserving generic notation.
+- `string RenameToConcreteType(this Type @this)` â€” Heuristic to map interface names to concrete-like names (trims leading `I` if followed by uppercase letter) while preserving generic notation.
 
-- `IEnumerable<PropertyInfo> GetAllProperties(this Type @this, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)` — Returns properties including those inherited through interfaces; for non-interfaces it removes `DeclaredOnly` to include inherited properties.
+- `IEnumerable<PropertyInfo> GetAllProperties(this Type @this, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)` â€” Returns properties including those inherited through interfaces; for non-interfaces it removes `DeclaredOnly` to include inherited properties.
 
-- `IEnumerable<MethodInfo> GetAllMethods(this Type @this, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)` — Same as above for methods.
+- `IEnumerable<MethodInfo> GetAllMethods(this Type @this, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)` â€” Same as above for methods.
 
-- `IEnumerable<EventInfo> GetAllEvents(this Type @this, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)` — Same as above for events.
+- `IEnumerable<EventInfo> GetAllEvents(this Type @this, BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public)` â€” Same as above for events.
 
 ## Examples
 

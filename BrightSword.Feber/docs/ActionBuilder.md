@@ -26,8 +26,8 @@ This builder pattern is designed to **improve runtime performance** for repeated
 - **Error modes:** Compilation throws if an expression references undeclared parameters. Builders keep `ParameterExpression` instances stable to avoid this.
 
 ## Common Members
-- `Action` property (cached) — returns the compiled delegate.
-- `BuildAction()` — protected virtual method that composes and compiles the block.
+- `Action` property (cached) â€” returns the compiled delegate.
+- `BuildAction()` â€” protected virtual method that composes and compiles the block.
 
 ## Usage Examples
 
@@ -89,6 +89,6 @@ copier(targetInstance, sourceInstance); // Copies properties
 - **Expression validity:** Ensure all referenced parameters are declared in the lambda.
 
 ## See Also
-- [FunctionBuilder.md](FunctionBuilder.md) — for folding/aggregation patterns.
-- [OperationBuilders.md](OperationBuilders.md) — for low-level property scanning and expression generation.
+- [FunctionBuilder.md](FunctionBuilder.md) â€” for folding/aggregation patterns.
+- [OperationBuilders.md](OperationBuilders.md) â€” for low-level property scanning and expression generation.
 

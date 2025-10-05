@@ -73,7 +73,7 @@ Examples
 Caveats and recommendations
 - This is a convention-based lookup only; it will not detect compiler-generated auto-property backing fields (which commonly look like `<PropertyName>k__BackingField`) unless the mapper is extended to check for those names explicitly.
 - The current implementation lower-cases the first character using the current culture. If you need culture-invariant behavior, change the implementation to use `CultureInfo.InvariantCulture` when lower-casing.
-- Assigning into private fields circumvents the type's encapsulation — exercise caution and prefer using setters when available.
+- Assigning into private fields circumvents the type's encapsulation â€” exercise caution and prefer using setters when available.
 - If no backing field or setter is available, the mapper leaves the property unchanged (no-op) for that property.
 
 Possible improvements (optional)

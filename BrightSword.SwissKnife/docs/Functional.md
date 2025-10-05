@@ -6,7 +6,7 @@ Provides functional programming helpers implemented in `Functional.cs`: an imple
 
 ## When to Use
 
-- When you want to define recursion without naming a method (anonymous recursion) — e.g. inline or local recursive definitions.
+- When you want to define recursion without naming a method (anonymous recursion) â€” e.g. inline or local recursive definitions.
 - When a recursive algorithm has overlapping subproblems (Fibonacci, dynamic programming style recurrences) and memoization will reduce recomputation.
 - When you want a compact, functional-style way to express recursive logic for algorithms used in tests, prototypes, or libraries.
 

@@ -8,7 +8,7 @@ Provides a nested concurrent dictionary type `ConcurrentDictionary<TKey1, TKey2,
 
 ## API
 
-- `TValue this[TKey1 key1, TKey2 key2] { get; set; }` — Indexer that provides get/set semantics. Setting a value ensures the inner dictionary is created via `GetOrAdd`.
+- `TValue this[TKey1 key1, TKey2 key2] { get; set; }` â€” Indexer that provides get/set semantics. Setting a value ensures the inner dictionary is created via `GetOrAdd`.
 
 ## Example
 

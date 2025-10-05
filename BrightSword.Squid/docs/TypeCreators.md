@@ -13,7 +13,7 @@ Highlights
 - Supports mapping patterns for property backing types using `TypeMaps` (e.g., map `IList<T>` to `List<T>` backing field).
 - Generates a default constructor that initializes mapped readonly properties and sets default values provided by `DefaultValueAttribute`.
 - Optionally tracks initialization of readonly properties (use `TrackReadonlyPropertyInitialized`).
-- Supports custom behaviours via `SpecialBehaviours` — behaviours may add methods, attributes or other modifications to the emitted type.
+- Supports custom behaviours via `SpecialBehaviours` â€” behaviours may add methods, attributes or other modifications to the emitted type.
 
 When to use facets vs behaviours
 - Facets (use `FacetInterfaces`) are primarily markers: they declare extra interfaces the emitted type should implement. Use facets when you want the generated type to advertise additional capabilities or to have consumer code detect features by interface checks (e.g. `IMyFacet`).
@@ -25,17 +25,17 @@ Common pattern
 
 Controlling generation (configuration and extension points)
 - Public configuration properties on the creator instance:
-  - `FacetInterfaces` — list of additional interfaces the emitted type should implement.
-  - `SpecialBehaviours` — dictionary mapping a key `Type` to an `IBehaviour` instance to apply behaviour operations.
-  - `TypeMaps` — collection/dictionary used to map interface or abstract property types to concrete backing types (for example map `IList<T>` -> `List<T>`).
-  - `PropertyFilter` — a delegate or predicate used to exclude certain properties from emission.
-  - `TrackReadonlyPropertyInitialized` — whether to generate initialization tracking for get-only properties.
-  - `ClassName` / `AssemblyName` — control naming of the emitted class and assembly.
+  - `FacetInterfaces` â€” list of additional interfaces the emitted type should implement.
+  - `SpecialBehaviours` â€” dictionary mapping a key `Type` to an `IBehaviour` instance to apply behaviour operations.
+  - `TypeMaps` â€” collection/dictionary used to map interface or abstract property types to concrete backing types (for example map `IList<T>` -> `List<T>`).
+  - `PropertyFilter` â€” a delegate or predicate used to exclude certain properties from emission.
+  - `TrackReadonlyPropertyInitialized` â€” whether to generate initialization tracking for get-only properties.
+  - `ClassName` / `AssemblyName` â€” control naming of the emitted class and assembly.
 - Virtual/override extension points (subclass to change behaviour):
-  - `GetBackingFieldName(PropertyInfo)` — change the naming convention for backing fields.
-  - `PropertyOperations`, `MethodOperations`, `EventOperations`, `ClassOperations` — override to inject custom IL or attributes as the generator composes the `TypeBuilder`.
-  - `GetAssemblyBuilder` / `GetModuleBuilder` — influence how dynamic assemblies/modules are created (useful to enable persistence or debugging).
-  - `PersistAssembly(AssemblyBuilder)` — override to save emitted assembly to disk on supported runtimes.
+  - `GetBackingFieldName(PropertyInfo)` â€” change the naming convention for backing fields.
+  - `PropertyOperations`, `MethodOperations`, `EventOperations`, `ClassOperations` â€” override to inject custom IL or attributes as the generator composes the `TypeBuilder`.
+  - `GetAssemblyBuilder` / `GetModuleBuilder` â€” influence how dynamic assemblies/modules are created (useful to enable persistence or debugging).
+  - `PersistAssembly(AssemblyBuilder)` â€” override to save emitted assembly to disk on supported runtimes.
 
 Examples
 

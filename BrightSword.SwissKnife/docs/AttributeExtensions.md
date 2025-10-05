@@ -55,7 +55,7 @@ Console.WriteLine(message); // "Use NewClass instead"
 ## Remarks
 
 - The `flags` parameter is currently not used in the implementation but is retained for API compatibility; passing different binding flags has no effect.
-- These helpers return `null` or `default` when attributes are missing — prefer this behavior for concise call sites.
+- These helpers return `null` or `default` when attributes are missing â€” prefer this behavior for concise call sites.
 - For performance-sensitive loops, consider caching attribute lookups.
 
 ---

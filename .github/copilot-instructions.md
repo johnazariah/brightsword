@@ -94,16 +94,16 @@ BrightSword.SwissKnife
 - Pack: `dotnet pack BrightSword.SwissKnife/BrightSword.SwissKnife.csproj -c Release`.
 - Versioning: project-level `Version` / `PackageVersion` in the `.csproj` controls NuGet output. Preserve existing numbers when making small fixes.
 - Docs: keep `docs/` files (many exist: `AttributeExtensions.md`, `EnumerableExtensions.md`, etc.) in sync with XML comments.
-- Tips: these are commonly re-used helpers — add thorough XML comments and examples; run tests after any API change.
+- Tips: these are commonly re-used helpers â€” add thorough XML comments and examples; run tests after any API change.
 
 BrightSword.Squid
 - Purpose: a more complex component with tests that use small helper test assemblies under `BrightSword.Squid.Tests/Remote*Assembly/`.
 - Key files: `BrightSword.Squid/BrightSword.Squid.csproj`, test project `BrightSword.Squid.Tests/BrightSword.Squid.Tests.csproj`, helper assemblies under `BrightSword.Squid.Tests/Remote*Assembly/`, docs under `BrightSword.Squid/docs/`.
 - Build: `dotnet build BrightSword.Squid/BrightSword.Squid.csproj -c Release`.
-- Test: `dotnet test BrightSword.Squid.Tests/BrightSword.Squid.Tests.csproj -c Release` (these tests reference helper assemblies — build the test project which will compile them automatically).
+- Test: `dotnet test BrightSword.Squid.Tests/BrightSword.Squid.Tests.csproj -c Release` (these tests reference helper assemblies â€” build the test project which will compile them automatically).
 - Pack: `dotnet pack BrightSword.Squid/BrightSword.Squid.csproj -c Release`.
 - Versioning: check `Version`/`PackageVersion` in `BrightSword.Squid.csproj`.
-- Docs: keep `BrightSword.Squid/docs/` synchronized with code; tests sometimes document expected behavior — update docs accordingly.
+- Docs: keep `BrightSword.Squid/docs/` synchronized with code; tests sometimes document expected behavior â€” update docs accordingly.
 - Tips: when running `BrightSword.Squid.Tests`, ensure no leftover `obj/` artifacts in the helper projects cause spurious test behavior; if tests fail inconsistently, delete `obj/` and `bin/` in `BrightSword.Squid.Tests` and re-run.
 
 General per-project rules
@@ -114,7 +114,7 @@ General per-project rules
 - Keep `docs/` markdown files per project in sync with code comments; use scripts or CI to publish docs to GitHub Pages if required.
 
 Release and cross-package publishing policy (important)
-- Independent package versions: publish each top-level project as an independently versioned NuGet package. Do not attempt to keep a single global version across packages — each library has its own lifecycle.
+- Independent package versions: publish each top-level project as an independently versioned NuGet package. Do not attempt to keep a single global version across packages â€” each library has its own lifecycle.
 - Dependency graph and dependent revs: maintain a dependency graph (either a checked-in manifest such as `package-dependencies.json` or compute it dynamically from project references) that maps which packages depend on which. This graph is used by CI to determine which additional packages must be re-released when a package changes.
 
 How CI should handle a package publish
@@ -157,7 +157,7 @@ To help future agents and maintainers, the following changes were added to this 
 3) Package dependency graph generator (`scripts/generate-package-dependencies.ps1`)
 - What: PowerShell script that scans `*.csproj`, maps each project to its `PackageId`, computes `dependencies`, `dependents`, `dependentsRecursive`, and `publishOrder`, and writes `package-dependencies.json` at repo root.
 - Why: CI needs a quick way to compute what dependent packages must be re-published when an upstream package changes.
-- How to run: `pwsh ./scripts/generate-package-dependencies.ps1` — check `package-dependencies.json` for `publishOrder` and `dependentsRecursive` outputs.
+- How to run: `pwsh ./scripts/generate-package-dependencies.ps1` â€” check `package-dependencies.json` for `publishOrder` and `dependentsRecursive` outputs.
 
 4) CI job to regenerate dependency manifest (`.github/workflows/regenerate-package-deps.yml`)
 - What: Workflow runs the generator on PRs and pushes the updated `package-dependencies.json` back to the PR branch if it changes.
@@ -173,7 +173,7 @@ To help future agents and maintainers, the following changes were added to this 
 6) CI harmonization (`.github/workflows/ci.yml`)
 - What: Consolidated build-and-test workflow to run on branch pushes and PRs; it produces XML docs and artifacts and runs the dependency generator on PRs. It uploads artifacts for downstream jobs.
 - Why: single, predictable CI for build/test and artifacts reduces duplicated configuration and provides a standard place to run validations.
-- How to validate: open Actions ? run the workflow (manual dispatch) or push to a feature branch / open a PR.
+- How to validate: open Actions. run the workflow (manual dispatch) or push to a feature branch / open a PR.
 
 7) GitHub Pages publishing (`.github/workflows/gh-pages.yml`)
 - What: Workflow to publish `artifacts/docs` to the `gh-pages` branch on `main` push. It uses `peaceiris/actions-gh-pages` and expects `artifacts/docs` to contain consolidated documentation (XML docs + markdown).
@@ -191,12 +191,12 @@ General validation and safety notes
 - Secrets and permissions: ensure `NUGET_API_KEY` and `NUGET_SOURCE` are set in repository secrets and that only trusted workflows can use them. Publishing workflows enforce a collaborator permission check.
 
 Where to look for related files
-- `version.props`, `versioning.targets` — centralized versioning and IncrementVersion target.
-- `Directory.Build.props` — packaging defaults and readme handling.
-- `scripts/generate-package-dependencies.ps1` — package graph generator.
-- `.github/workflows/regenerate-package-deps.yml` — regenerates dependency manifest on PRs.
-- `.github/workflows/publish-packages.yml` — tag/manual/dispatch package publisher.
-- `.github/workflows/ci.yml` — CI build/test, docs collection.
-- `.github/workflows/gh-pages.yml` — publishes `artifacts/docs` to GitHub Pages.
+- `version.props`, `versioning.targets` â€” centralized versioning and IncrementVersion target.
+- `Directory.Build.props` â€” packaging defaults and readme handling.
+- `scripts/generate-package-dependencies.ps1` â€” package graph generator.
+- `.github/workflows/regenerate-package-deps.yml` â€” regenerates dependency manifest on PRs.
+- `.github/workflows/publish-packages.yml` â€” tag/manual/dispatch package publisher.
+- `.github/workflows/ci.yml` â€” CI build/test, docs collection.
+- `.github/workflows/gh-pages.yml` â€” publishes `artifacts/docs` to GitHub Pages.
 
 Trust these documented changes: follow the guidance in this file before making publishing or versioning changes. Only search the repository if the file locations or behaviors described here deviate from the current state.

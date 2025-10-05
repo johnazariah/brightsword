@@ -46,9 +46,9 @@ BrightSword.Feber composes property-based operations into compiled delegates for
 ## How to use (for library users)
 - Reference the library in your project and use the builder types to generate delegates for your property-based operations.
 - See the `docs/` folder for per-class documentation and examples:
-  - [ActionBuilder](docs/ActionBuilder.md) — compiles and caches `Action` delegates
-  - [FunctionBuilder](docs/FunctionBuilder.md) — compiles and caches `Func` delegates
-  - [OperationBuilders](docs/OperationBuilders.md) — low-level property scanning and expression generation
+  - [ActionBuilder](docs/ActionBuilder.md) â€” compiles and caches `Action` delegates
+  - [FunctionBuilder](docs/FunctionBuilder.md) â€” compiles and caches `Func` delegates
+  - [OperationBuilders](docs/OperationBuilders.md) â€” low-level property scanning and expression generation
 
 ### Quick tasks
 - **Build:**
@@ -102,7 +102,7 @@ See each file in `BrightSword.Feber/docs/` for detailed usage, implementation no
 ---
 
 ## Contributor Notes
-- Feber composes Expression trees; take care when changing API shapes — the library compiles delegates at runtime and subtle changes can affect consumers.
+- Feber composes Expression trees; take care when changing API shapes â€” the library compiles delegates at runtime and subtle changes can affect consumers.
 - Expression-building code is sensitive to ordering and parameter expressions. When refactoring builder code, preserve the structure used to create lambda expressions:
   - Example canonical pattern: `Expression.Lambda<Action<T>>(Expression.Block(OperationExpressions), InstanceParameterExpression).Compile();`
 - Caching pattern: fields often cache compiled delegates. Look for `_field ??= Build...()` style; use null-coalescing assignment where appropriate but keep behavior identical.

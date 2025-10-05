@@ -10,10 +10,10 @@ Prefer modern guard patterns in new code (e.g., `ArgumentNullException.ThrowIfNu
 
 ## API
 
-- `void Check(this bool condition, string message = null)` — Throws `InvalidOperationException` when `condition` is false.
-- `void Check<TException>(this bool condition, string message = null) where TException : Exception, new()` — Throws `TException` (attempts to construct with `message` first, falls back to default ctor and then `InvalidOperationException`).
-- `void Check(this Func<bool> predicate, string message = null)` — Throws `InvalidOperationException` when predicate returns false.
-- `void Check<TException>(this Func<bool> predicate, string message = null) where TException : Exception, new()` — Throws typed exception when predicate fails.
+- `void Check(this bool condition, string message = null)` â€” Throws `InvalidOperationException` when `condition` is false.
+- `void Check<TException>(this bool condition, string message = null) where TException : Exception, new()` â€” Throws `TException` (attempts to construct with `message` first, falls back to default ctor and then `InvalidOperationException`).
+- `void Check(this Func<bool> predicate, string message = null)` â€” Throws `InvalidOperationException` when predicate returns false.
+- `void Check<TException>(this Func<bool> predicate, string message = null) where TException : Exception, new()` â€” Throws typed exception when predicate fails.
 
 ## Examples
 

@@ -12,10 +12,10 @@ Provides helpers for tokenizing and splitting strings into readable segments bas
 
 ## API Reference
 
-- `IEnumerable<string> SplitCamelCase(this string @this)` — Split a camel-case string into segments, ignoring punctuation splitting.
-- `IEnumerable<string> SplitCamelCaseAndUnderscore(this string @this)` — Split camel case and underscores.
-- `IEnumerable<string> SplitDotted(this string @this)` — Split string on dots ('.').
-- `IEnumerable<string> SplitIntoSegments(this string @this, bool splitBySpace = true, bool splitOnCamelCase = true, bool splitOnPunctuation = true, params char[] separators)` — Flexible splitter with options.
+- `IEnumerable<string> SplitCamelCase(this string @this)` â€” Split a camel-case string into segments, ignoring punctuation splitting.
+- `IEnumerable<string> SplitCamelCaseAndUnderscore(this string @this)` â€” Split camel case and underscores.
+- `IEnumerable<string> SplitDotted(this string @this)` â€” Split string on dots ('.').
+- `IEnumerable<string> SplitIntoSegments(this string @this, bool splitBySpace = true, bool splitOnCamelCase = true, bool splitOnPunctuation = true, params char[] separators)` â€” Flexible splitter with options.
 
 ## Examples
 

@@ -54,7 +54,8 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Ensure PowerShell is available
-        run: pwsh -c "Write-Host PowerShell available: $PSVersionTable.PSVersion"
+        run: |
+          pwsh -c "Write-Host 'PowerShell available:' $PSVersionTable.PSVersion"
 
       - name: Generate package dependency manifest
         run: pwsh -NoProfile -NonInteractive -File ./scripts/generate-package-dependencies.ps1

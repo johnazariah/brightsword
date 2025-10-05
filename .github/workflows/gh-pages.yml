@@ -26,6 +26,9 @@ jobs:
       with:
         dotnet-version: '10.0.x'
 
+    - name: Normalize text file encodings to UTF-8
+      run: pwsh -NoProfile -NonInteractive -File ./scripts/convert-files-to-utf8.ps1
+
     - name: Restore and build docs artifacts
       run: |
         dotnet restore

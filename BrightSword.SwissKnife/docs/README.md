@@ -16,14 +16,14 @@ dotnet add package BrightSword.SwissKnife
 
 All classes live in the `BrightSword.SwissKnife` namespace. The following documents describe the components that are present in the repository source files:
 
-- [TypeExtensions](TypeExtensions.md) — type inspection and reflection helpers
-- [StringExtensions](StringExtensions.md) — string tokenization helpers
-- [AttributeExtensions](AttributeExtensions.md) — attribute discovery and value extraction
-- [CoerceExtensions](CoerceExtensions.md) — type coercion and conversion helpers
-- [ObjectDescriber](ObjectDescriber.md) — expression-based name extraction helpers
-- [Validator](Validator.md) — legacy guard helpers (marked Obsolete)
-- [Functional](Functional.md) — functional helpers (Y combinator, memoization)
-- [ConcurrentDictionary](ConcurrentDictionary.md) — small nested concurrent dictionary helper
+- [TypeExtensions](TypeExtensions.md) â€” type inspection and reflection helpers
+- [StringExtensions](StringExtensions.md) â€” string tokenization helpers
+- [AttributeExtensions](AttributeExtensions.md) â€” attribute discovery and value extraction
+- [CoerceExtensions](CoerceExtensions.md) â€” type coercion and conversion helpers
+- [ObjectDescriber](ObjectDescriber.md) â€” expression-based name extraction helpers
+- [Validator](Validator.md) â€” legacy guard helpers (marked Obsolete)
+- [Functional](Functional.md) â€” functional helpers (Y combinator, memoization)
+- [ConcurrentDictionary](ConcurrentDictionary.md) â€” small nested concurrent dictionary helper
 
 ## Usage Examples
 
