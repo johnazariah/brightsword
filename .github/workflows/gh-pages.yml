@@ -23,6 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-docs
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Download docs artifact
         uses: actions/download-artifact@v4
         with:
@@ -46,6 +51,7 @@ jobs:
           echo "Checking whether GITHUB_TOKEN can push to gh-pages branch..."
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          # Configure origin to use token so push dry-run uses correct auth
           git remote set-url origin "https://${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
           git fetch origin gh-pages || true
           if git push --dry-run origin HEAD:gh-pages >/dev/null 2>&1; then
@@ -70,10 +76,8 @@ jobs:
         run: |
           set -euo pipefail
           echo "Creating a pull request with docs because direct push is blocked"
-          git init
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote add origin "https://${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
           # Create an orphan branch to contain only the docs
           git checkout --orphan "$PR_BRANCH"
           git rm -rf . >/dev/null 2>&1 || true
