@@ -88,11 +88,12 @@ jobs:
           git checkout --orphan "$PR_BRANCH"
           git rm -rf . >/dev/null 2>&1 || true
 
-          # Copy docs into repo root; use rsync if available for a reliable copy
-          if command -v rsync >/dev/null 2>&1; then
-            rsync -a --delete "artifacts/docs/" .
+          # Copy docs into repo root using a tar stream to avoid rsync 'vanished' issues
+          if [ -d "artifacts/docs" ]; then
+            echo "Streaming artifacts/docs into repo root via tar"
+            (cd artifacts/docs && tar -cf - .) | tar -C . -xvf - || true
           else
-            cp -r artifacts/docs/. .
+            echo "No artifacts/docs directory found to copy"
           fi
 
           echo "Contents of repo root after copying docs:"
@@ -100,7 +101,7 @@ jobs:
 
           # Ensure there is something to commit. If no files were copied, abort with helpful message.
           if [ -z "$(git ls-files)" ]; then
-            echo "No files to commit after copying docs. Check the generator output."
+            echo "No files to commit after copying docs. Check the generator output and that artifacts/docs contained generated files."
             exit 1
           fi
 
