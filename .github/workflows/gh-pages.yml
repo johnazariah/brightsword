@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -36,6 +36,27 @@ jobs:
           COUNT=$(find artifacts/docs -type f | wc -l)
           echo "Files found: $COUNT"
           if [ "$COUNT" -eq "0" ]; then echo "No files in artifacts/docs"; exit 1; fi
+
+      - name: Verify GITHUB_TOKEN can push to gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          echo "Checking whether GITHUB_TOKEN can push to gh-pages branch..."
+          # Configure git to use the GITHUB_TOKEN for auth when pushing
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
+          # Fetch remote branch (if exists) then attempt a dry-run push to gh-pages
+          git fetch origin gh-pages || true
+          if git push --dry-run origin HEAD:gh-pages; then
+            echo "GITHUB_TOKEN appears to have push permission to gh-pages."
+          else
+            echo "GITHUB_TOKEN cannot push to gh-pages. This repository may restrict GITHUB_TOKEN from pushing to branches or protect the gh-pages branch."
+            echo "To allow status-less publishing without a personal access token, enable Actions to have write permission for contents and allow workflows to create and push to the gh-pages branch."
+            echo "Alternatively, create a PAT and store it in a repository secret (this repo policy prevents PATs per instruction)."
+            exit 1
+          fi
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
