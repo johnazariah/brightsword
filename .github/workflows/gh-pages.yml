@@ -12,29 +12,30 @@ permissions:
   id-token: write
 
 jobs:
-  build-docs:
-    name: Build docs artifacts (reusable build-and-test)
-    uses: ./.github/workflows/build-and-test.yml
-    with:
-      configuration: 'Release'
-
   publish-docs:
-    name: Publish docs to gh-pages
+    name: Build, Generate and Publish docs to gh-pages
     runs-on: ubuntu-latest
-    needs: build-docs
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Download docs artifact
-        uses: actions/download-artifact@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
         with:
-          name: ci-artifacts
-          path: artifacts/docs
+          dotnet-version: '10.0.x'
 
-      - name: Verify docs artifact
+      - name: Build packages (restore & build)
+        run: |
+          echo "Building packages for docs generation"
+          dotnet msbuild Build.proj /t:"Restore;BuildPackages" /p:Configuration=Release /v:minimal
+
+      - name: Generate HTML docs from XML and project docs
+        run: |
+          pwsh -NoProfile -NonInteractive -File ./scripts/generate-docs.ps1
+
+      - name: Verify docs generated
         run: |
           echo "Verifying artifacts/docs exists and is not empty"
           if [ ! -d "artifacts/docs" ]; then echo "No docs found at artifacts/docs"; exit 1; fi
@@ -78,14 +79,35 @@ jobs:
           echo "Creating a pull request with docs because direct push is blocked"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Inspect generated docs layout for debugging
+          echo "Contents of artifacts/docs (post-generation):"
+          ls -la artifacts/docs || true
+
           # Create an orphan branch to contain only the docs
           git checkout --orphan "$PR_BRANCH"
           git rm -rf . >/dev/null 2>&1 || true
-          # Copy docs into repo root
-          cp -r artifacts/docs/. .
-          # Ensure there is something to commit
-          if [ -z "$(git ls-files)" ]; then echo "No files to commit"; exit 1; fi
+
+          # Copy docs into repo root using a tar stream to avoid rsync 'vanished' issues
+          if [ -d "artifacts/docs" ]; then
+            echo "Streaming artifacts/docs into repo root via tar"
+            (cd artifacts/docs && tar -cf - .) | tar -C . -xvf - || true
+          else
+            echo "No artifacts/docs directory found to copy"
+          fi
+
+          echo "Contents of repo root after copying docs:"
+          ls -la || true
+
+          # Stage all files for commit
           git add -A
+
+          # Ensure there is something to commit. If no files were staged, abort with helpful message.
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "No files to commit after copying docs. Check the generator output and that artifacts/docs contained generated files."
+            exit 1
+          fi
+
           git commit -m "chore(docs): update gh-pages from CI ${{ github.sha }}"
           git push origin "$PR_BRANCH"
 
