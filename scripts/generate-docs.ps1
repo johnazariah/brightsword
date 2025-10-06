@@ -15,6 +15,51 @@ param(
 
 Set-StrictMode -Version Latest
 
+# Helper: simple markdown to HTML converter (handles headings, lists, links, code fences, paragraphs)
+function Convert-MarkdownToHtml([string]$md) {
+    if (-not $md) { return '' }
+    # Normalize line endings
+    $md = $md -replace "\r\n","\n"
+
+    $lines = $md -split "\n"
+    $inCode = $false
+    $html = ""
+    foreach ($line in $lines) {
+        if ($line -match '^```') {
+            if (-not $inCode) { $inCode = $true; $html += "<pre><code>"; continue } else { $inCode = $false; $html += "</code></pre>`n"; continue }
+        }
+        if ($inCode) { $html += [System.Net.WebUtility]::HtmlEncode($line) + "`n"; continue }
+
+        # headings
+        if ($line -match '^# (.*)') { $html += "<h1>" + [System.Net.WebUtility]::HtmlEncode($matches[1].Trim()) + "</h1>`n"; continue }
+        if ($line -match '^## (.*)') { $html += "<h2>" + [System.Net.WebUtility]::HtmlEncode($matches[1].Trim()) + "</h2>`n"; continue }
+        if ($line -match '^### (.*)') { $html += "<h3>" + [System.Net.WebUtility]::HtmlEncode($matches[1].Trim()) + "</h3>`n"; continue }
+
+        # unordered list
+        if ($line -match '^[\*\-\+]\s+(.*)') {
+            if ($html -notmatch '<ul[^>]*>$') { $html += "<ul>`n" }
+            $item = [System.Net.WebUtility]::HtmlEncode($matches[1].Trim())
+            # convert inline links [text](url)
+            $item = [regex]::Replace($item, '\\[(.*?)\\]\\((.*?)\\)', '<a href="$2">$1</a>')
+            $html += "<li>$item</li>`n"
+            continue
+        } else {
+            if ($html -match '<ul[^>]*>$') { $html += "</ul>`n" }
+        }
+
+        # inline links and bold/italic (basic)
+        $safe = [System.Net.WebUtility]::HtmlEncode($line)
+        $safe = [regex]::Replace($safe, '\\[(.*?)\\]\\((.*?)\\)', '<a href="$2">$1</a>')
+        $safe = $safe -replace '\*\*(.*?)\*\*', '<strong>$1</strong>'
+        $safe = $safe -replace '\*(.*?)\*', '<em>$1</em>'
+
+        if ($line -match '^\s*$') { $html += "<p></p>`n" } else { $html += "<p>$safe</p>`n" }
+    }
+    # close any open ul
+    if ($html -match '<ul[^>]*>$') { $html += "</ul>`n" }
+    return $html
+}
+
 Push-Location $Root
 try {
     Write-Host "Generating docs into: $OutDir"
@@ -79,7 +124,14 @@ try {
             # optional type summary: look for member with prefix 'T:'
             $typeMember = $types[$tn] | Where-Object { $_.name -like 'T*' }
             if ($typeMember) {
-                $summary = $typeMember[0].summary
+                $summary = ''
+                try {
+                    $summaryNode = $typeMember[0].SelectSingleNode('summary')
+                } catch {
+                    $summaryNode = $null
+                }
+                if ($summaryNode -ne $null) { $summary = [string]$summaryNode.InnerText }
+                elseif ($typeMember[0] -ne $null) { $summary = [string]$typeMember[0] }
                 if ($summary) { $html += "<div>" + ([System.Net.WebUtility]::HtmlEncode($summary.Trim())) + "</div>" }
             }
 
@@ -99,7 +151,12 @@ try {
                 # remove full type qualification for display
                 if ($display -match '\.') { $display = $display.Substring($display.LastIndexOf('.') + 1) }
                 $summary = ''
-                if ($m.summary) { $summary = $m.summary.Trim() }
+                try {
+                    $mSummaryNode = $m.SelectSingleNode('summary')
+                } catch {
+                    $mSummaryNode = $null
+                }
+                if ($mSummaryNode -ne $null) { $summary = [string]$mSummaryNode.InnerText.Trim() }
                 $html += "<tr><td><code>" + [System.Net.WebUtility]::HtmlEncode($display) + "</code></td><td>" + $kind + "</td><td>" + [System.Net.WebUtility]::HtmlEncode($summary) + "</td></tr>"
             }
             $html += "</tbody></table>"
@@ -119,20 +176,6 @@ try {
         $idxHtml += "</ul><p><a href='../README.html'>Back to README</a></p></body></html>"
         [System.IO.File]::WriteAllText($apiIndex, $idxHtml, [System.Text.Encoding]::UTF8)
         Write-Host "Wrote API index: $apiIndex"
-    }
-
-    # Convert project README.md files to README.html for consistent site layout
-    foreach ($p in $projectDocs) {
-        $projName = $p.Name
-        $readmePath = Join-Path $OutDir "$projName\README.md"
-        $htmlPath = Join-Path $OutDir "$projName\README.html"
-        if (Test-Path $readmePath) {
-            $md = Get-Content -Raw -Path $readmePath
-            $htmlBody = Convert-MarkdownToHtml $md
-            $page = "<html><head><meta charset='utf-8'><title>$projName</title></head><body>" + $htmlBody + "</body></html>"
-            [System.IO.File]::WriteAllText($htmlPath, $page, [System.Text.Encoding]::UTF8)
-            Write-Host "Generated project README HTML: $htmlPath"
-        }
     }
 
     # Copy project docs into artifacts/docs/<ProjectName>/... (exclude scanning under OutDir)
@@ -155,6 +198,20 @@ try {
         $projectDocs += @{ Name = $projName; Readme = (Join-Path $target 'README.md') }
     }
 
+    # Convert project README.md files to README.html for consistent site layout
+    foreach ($p in $projectDocs) {
+        $projName = $p.Name
+        $readmePath = Join-Path $OutDir "$projName\README.md"
+        $htmlPath = Join-Path $OutDir "$projName\README.html"
+        if (Test-Path $readmePath) {
+            $md = Get-Content -Raw -Path $readmePath
+            $htmlBody = Convert-MarkdownToHtml $md
+            $page = "<html><head><meta charset='utf-8'><title>$projName</title></head><body>" + $htmlBody + "</body></html>"
+            [System.IO.File]::WriteAllText($htmlPath, $page, [System.Text.Encoding]::UTF8)
+            Write-Host "Generated project README HTML: $htmlPath"
+        }
+    }
+
     # Copy top-level docs/*.md into artifacts/docs root, but avoid copying already-generated files under OutDir
     $topDocsDir = Join-Path $Root 'docs'
     if (Test-Path $topDocsDir) {
@@ -163,51 +220,6 @@ try {
             Copy-Item -Path $_.FullName -Destination $dest -Force
             Write-Host "Copied top-level MD: $($_.FullName) -> $dest"
         }
-    }
-
-    # Helper: simple markdown to HTML converter (handles headings, lists, links, code fences, paragraphs)
-    function Convert-MarkdownToHtml([string]$md) {
-        if (-not $md) { return '' }
-        # Normalize line endings
-        $md = $md -replace "\r\n","\n"
-
-        $lines = $md -split "\n"
-        $inCode = $false
-        $html = ""
-        foreach ($line in $lines) {
-            if ($line -match '^```') {
-                if (-not $inCode) { $inCode = $true; $html += "<pre><code>"; continue } else { $inCode = $false; $html += "</code></pre>`n"; continue }
-            }
-            if ($inCode) { $html += [System.Net.WebUtility]::HtmlEncode($line) + "`n"; continue }
-
-            # headings
-            if ($line -match '^# (.*)') { $html += "<h1>" + [System.Net.WebUtility]::HtmlEncode($matches[1].Trim()) + "</h1>`n"; continue }
-            if ($line -match '^## (.*)') { $html += "<h2>" + [System.Net.WebUtility]::HtmlEncode($matches[1].Trim()) + "</h2>`n"; continue }
-            if ($line -match '^### (.*)') { $html += "<h3>" + [System.Net.WebUtility]::HtmlEncode($matches[1].Trim()) + "</h3>`n"; continue }
-
-            # unordered list
-            if ($line -match '^[\*\-\+]\s+(.*)') { 
-                if ($html -notmatch '<ul[^>]*>$') { $html += "<ul>`n" }
-                $item = [System.Net.WebUtility]::HtmlEncode($matches[1].Trim())
-                # convert inline links [text](url)
-                $item = [regex]::Replace($item, '\\[(.*?)\\]\\((.*?)\\)', '<a href="$2">$1</a>')
-                $html += "<li>$item</li>`n"
-                continue
-            } else {
-                if ($html -match '<ul[^>]*>$') { $html += "</ul>`n" }
-            }
-
-            # inline links and bold/italic (basic)
-            $safe = [System.Net.WebUtility]::HtmlEncode($line)
-            $safe = [regex]::Replace($safe, '\\[(.*?)\\]\\((.*?)\\)', '<a href="$2">$1</a>')
-            $safe = $safe -replace '\*\*(.*?)\*\*', '<strong>$1</strong>'
-            $safe = $safe -replace '\*(.*?)\*', '<em>$1</em>'
-
-            if ($line -match '^\s*$') { $html += "<p></p>`n" } else { $html += "<p>$safe</p>`n" }
-        }
-        # close any open ul
-        if ($html -match '<ul[^>]*>$') { $html += "</ul>`n" }
-        return $html
     }
 
     # Build index.html: prefer root README.md if present
