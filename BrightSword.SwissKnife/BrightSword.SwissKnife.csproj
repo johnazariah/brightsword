@@ -20,8 +20,6 @@
   </ItemGroup>
 
   <!-- Include docs README in the nupkg at the package root as README.md -->
-  <ItemGroup>
-    <None Include="docs/README.md" Pack="true" PackagePath="" Condition="Exists('docs/README.md')" />
-  </ItemGroup>
+  <!-- Removed per-project docs README to avoid duplicate packaging entries -->
 
 </Project>

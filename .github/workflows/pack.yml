@@ -1,0 +1,40 @@
+name: Reusable Pack
+
+on:
+  workflow_call:
+    inputs:
+      configuration:
+        type: string
+        required: false
+        default: 'Release'
+        description: 'Build configuration'
+
+permissions:
+  contents: read
+
+jobs:
+  pack:
+    name: Pack packages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Run MSBuild Pack target
+        run: |
+          dotnet msbuild Build.proj /t:Pack /p:Configuration=${{ inputs.configuration }} /v:minimal
+
+      - name: Upload package artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: artifacts/packages
+          retention-days: 7

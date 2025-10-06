@@ -16,151 +16,82 @@ This monorepo contains the following NuGet packages:
 | [BrightSword.Feber](./BrightSword.Feber) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.Feber.svg)](https://www.nuget.org/packages/BrightSword.Feber/) | Automated delegate generation using Expression trees |
 | [BrightSword.Squid](./BrightSword.Squid) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.Squid.svg)](https://www.nuget.org/packages/BrightSword.Squid/) | Runtime type emission utilities |
 
-## ðŸš€ Quick Start
-
-### Installation
-
-Install the packages via NuGet Package Manager or .NET CLI:
-
-```bash
-# SwissKnife - Utilities and helpers
-dotnet add package BrightSword.SwissKnife
-
-# Crucible - MSTest utilities
-dotnet add package BrightSword.Crucible
-
-# Feber - Expression-based code generation
-dotnet add package BrightSword.Feber
-
-# Squid - Runtime type emission
-dotnet add package BrightSword.Squid
-```
-
-### Basic Usage
-
-```csharp
-using BrightSword.SwissKnife;
-using BrightSword.Crucible;
-using BrightSword.Feber.Core;
-using BrightSword.Squid;
-
-// Use the libraries in your code
-```
-
-## ðŸ—ï¸ Building from Source
+## 🔧 Quick Start
 
 ### Prerequisites
+- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) and `pwsh` (PowerShell) available.
 
-- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) or later
-- MSBuild (included with .NET SDK)
+### Canonical build entrypoint
+- Use the repository MSBuild driver: `dotnet msbuild Build.proj` so local runs match CI.
 
-### Build Commands
+## 🛠 Contributor Quick Commands
 
-```bash
-# Build all projects
-./build.ps1
+Use these copy-paste examples to perform common tasks locally (they match CI behavior).
 
-# Build specific package
-./build.ps1 -Package BrightSword.SwissKnife
-
-# Run tests
-./build.ps1 -Target Test
-
-# Create NuGet packages
-./build.ps1 -Target Pack
-
-# Full CI build (clean, build, test, pack)
-./build.ps1 -Target CI
-
-# Clean build artifacts
-./build.ps1 -Target Clean
-```
-
-### Using MSBuild Directly
+- Full CI-equivalent (clean, restore, build, test, pack):
 
 ```bash
-# Build
-msbuild Build.proj /t:Build /p:Configuration=Release
-
-# Test
-msbuild Build.proj /t:Test
-
-# Pack
-msbuild Build.proj /t:Pack
-
-# Pack specific package
-msbuild Build.proj /t:PackSingle /p:Package=BrightSword.SwissKnife
+# From repo root (PowerShell: quote multi-target argument)
+dotnet msbuild Build.proj /t:CI /p:Configuration=Release /v:minimal
 ```
 
-## ðŸ“š Documentation
-
-- [Build and Development Guide](./docs/BUILD.md)
-- [Contributing Guidelines](./docs/CONTRIBUTING.md)
-- [Versioning Strategy](./docs/VERSIONING.md)
-- [CI/CD Pipeline](./docs/CICD.md)
-- [Architecture Overview](./docs/ARCHITECTURE.md)
-
-### Package Documentation
-
-- [BrightSword.SwissKnife Documentation](./BrightSword.SwissKnife/docs/)
-- [BrightSword.Crucible Documentation](./BrightSword.Crucible/docs/)
-- [BrightSword.Feber Documentation](./BrightSword.Feber/docs/)
-- [BrightSword.Squid Documentation](./BrightSword.Squid/docs/)
-
-## ðŸ¤ Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](./docs/CONTRIBUTING.md) for details.
-
-### Development Workflow
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
-
-### Versioning
-
-We use [Semantic Versioning](https://semver.org/). To increment versions:
+- Restore, build and run tests (multi-target quoting required in PowerShell):
 
 ```bash
-# Increment patch version (1.0.0 -> 1.0.1)
-./increment-version.ps1 -Package BrightSword.SwissKnife
-
-# Increment minor version (1.0.0 -> 1.1.0)
-./increment-version.ps1 -Package BrightSword.Feber -Component Minor
-
-# Increment major version (1.0.0 -> 2.0.0)
-./increment-version.ps1 -Package BrightSword.Squid -Component Major
+dotnet msbuild Build.proj /t:"Restore;BuildPackages;BuildTests;Test" /p:Configuration=Release
 ```
 
-## ðŸ“‹ Project Structure
+- Pack a single project into `artifacts/packages`:
 
-```
-BrightSword/
-â”œâ”€â”€ .github/
-â”‚   â””â”€â”€ workflows/          # CI/CD pipelines
-â”œâ”€â”€ BrightSword.SwissKnife/ # Utilities package
-â”œâ”€â”€ BrightSword.Crucible/   # MSTest utilities package
-â”œâ”€â”€ BrightSword.Feber/      # Expression builder package
-â”œâ”€â”€ BrightSword.Squid/      # Type emission package
-â”œâ”€â”€ docs/                   # Monorepo documentation
-â”œâ”€â”€ Build.proj              # MSBuild build script
-â”œâ”€â”€ build.ps1               # PowerShell build script
-â”œâ”€â”€ increment-version.ps1   # Version management script
-â”œâ”€â”€ Directory.Build.props   # Common MSBuild properties
-â””â”€â”€ Directory.Build.targets # Common MSBuild targets
+```bash
+dotnet msbuild Build.proj /t:PackSingle /p:Configuration=Release;Package=BrightSword.SwissKnife
 ```
 
-## ðŸ”„ CI/CD
+- Generate dependency manifest (used by CI):
 
-The repository uses GitHub Actions for continuous integration and deployment:
+```bash
+pwsh ./scripts/generate-package-dependencies.ps1
+```
 
-- **CI Build** - Runs on all pushes and pull requests
-- **PR Validation** - Validates pull requests to main branch
-- **Release** - Publishes packages to NuGet.org on version tags
+- Generate docs (placeholder generator used by GitHub Pages workflow):
 
-See [CI/CD Documentation](./docs/CICD.md) for more details.
+```bash
+# build required projects first
+dotnet msbuild Build.proj /t:"Restore;BuildPackages" /p:Configuration=Release
+pwsh ./scripts/generate-docs.ps1
+ls artifacts/docs   # verify index.html
+```
+
+- Bump a project's version (MSBuild `IncrementVersion` target):
+
+```bash
+# Increment patch locally (no commit)
+dotnet msbuild /t:IncrementVersion /p:ProjectName=BrightSword.SwissKnife /p:Level=Patch
+# To increment and commit locally (be careful):
+dotnet msbuild /t:IncrementVersion /p:ProjectName=BrightSword.SwissKnife /p:Level=Patch /p:Commit=true
+```
+
+- Publish (recommended via GitHub Actions):
+  - Run the `Publish packages in dependency order` workflow manually from Actions and supply the `package` input, or push a tag containing the package id (example: `v-BrightSword.SwissKnife-1.1.1`).
+
+
+## 📚 Documentation
+
+- See per-project docs under each project's `docs/` folder (e.g., `BrightSword.SwissKnife/docs/`). The GH-Pages workflow publishes `artifacts/docs` to `gh-pages`.
+
+## 🔁 CI / CD
+
+- CI uses `Build.proj` (`/t:CI`) as the canonical pipeline and publishes packages using the dependency-aware `publish-packages.yml` workflow.
+
+## Files of interest
+- `Build.proj` — centralized MSBuild targets used by local and CI builds.
+- `version.props`, `versioning.targets` — centralized versioning and `IncrementVersion` target.
+- `Directory.Build.props` — packaging defaults and `LangVersion`.
+- `scripts/generate-package-dependencies.ps1` — dependency graph generator.
+- `scripts/generate-docs.ps1` — placeholder docs generator used by GH-Pages workflow.
+- `.github/workflows/*` — CI, regen-deps, publish-packages and gh-pages workflows.
+
+If you want this README expanded into a contributor quickstart page under `docs/`, I can add that in a follow-up change.
 
 ---
 

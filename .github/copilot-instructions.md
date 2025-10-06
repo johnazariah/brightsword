@@ -34,6 +34,57 @@ Build and validation (always follow these exact steps first)
 - Preconditions: ensure the .NET 10 SDK is installed and on PATH. Confirm with: `dotnet --version` (should report a 10.x SDK).
 - Centralized MSBuild entrypoint: this repository provides `Build.proj` at the repo root. Use `dotnet msbuild` against `Build.proj` so local development and CI run the same targets.
 
+Examples (copy-paste ready)
+
+Local build & test (full CI-equivalent)
+- Run the centralized CI target (clean, restore, build, test, pack):
+  - `dotnet msbuild Build.proj /t:CI /p:Configuration=Release /v:minimal`
+
+Build only and run tests
+- Restore + build packages and tests, then run tests:
+  - `dotnet msbuild Build.proj /t:"Restore;BuildPackages;BuildTests;Test" /p:Configuration=Release`
+
+Pack a single project (msbuild PackSingle target)
+- Pack `BrightSword.SwissKnife` into `artifacts/packages`:
+  - `dotnet msbuild Build.proj /t:PackSingle /p:Configuration=Release;Package=BrightSword.SwissKnife`
+
+Bump a project's version (MSBuild IncrementVersion)
+- Increment patch for `BrightSword.SwissKnife` locally (no commit):
+  - `dotnet msbuild /t:IncrementVersion /p:ProjectName=BrightSword.SwissKnife /p:Level=Patch`
+- Increment and commit the change locally (careful):
+  - `dotnet msbuild /t:IncrementVersion /p:ProjectName=BrightSword.SwissKnife /p:Level=Patch /p:Commit=true`
+
+Generate package dependency manifest
+- Run the generator locally to produce `package-dependencies.json`:
+  - `pwsh ./scripts/generate-package-dependencies.ps1`
+
+Generate docs locally (placeholder generator)
+- Ensure packages are built then generate docs into `artifacts/docs`:
+  - `dotnet msbuild Build.proj /t:Restore;BuildPackages /p:Configuration=Release`
+  - `pwsh ./scripts/generate-docs.ps1`
+  - `ls artifacts/docs` (verify `index.html` exists)
+
+Manual publish via Actions (recommended for safety)
+- Go to GitHub → Actions → "Publish packages in dependency order" → Run workflow.
+- Supply `package` = e.g. `BrightSword.SwissKnife`. The workflow will compute `publishOrder` and publish in dependency order using repo secrets.
+
+Tag-triggered publish (automatic inference)
+- Tag and push a release tag that includes the package id so the workflow can infer it:
+  - `git tag -a v-BrightSword.SwissKnife-1.1.1 -m "Release BrightSword.SwissKnife v1.1.1"`
+  - `git push origin v-BrightSword.SwissKnife-1.1.1`
+- The `publish-packages.yml` workflow runs on `push` tags `v*` and will attempt to infer packages and publish.
+
+GitHub Pages docs publish (manual test)
+- Build docs and run the gh-pages workflow manually from Actions (or push to `main`):
+  - `dotnet msbuild Build.proj /t:Restore;BuildPackages /p:Configuration=Release`
+  - `pwsh ./scripts/generate-docs.ps1`
+  - Trigger `.github/workflows/gh-pages.yml` via Actions → Run workflow.
+
+Notes
+- In PowerShell, quote multi-target `/t:"Restore;BuildPackages"` to avoid `;` being treated by the shell.
+- Use `--skip-duplicate` when pushing packages to NuGet from CI to avoid failures on repeated runs.
+- Prefer PR-based version bumps and CI publishing unless you have governance for CI to push commits.
+
 - Recommended local commands (exact):
   - Full CI-equivalent run (clean, restore, build, test, pack):
     - `dotnet msbuild Build.proj /t:CI /p:Configuration=Release /v:minimal`
@@ -104,7 +155,6 @@ BrightSword.Squid
 - Pack: `dotnet pack BrightSword.Squid/BrightSword.Squid.csproj -c Release`.
 - Versioning: check `Version`/`PackageVersion` in `BrightSword.Squid.csproj`.
 - Docs: keep `BrightSword.Squid/docs/` synchronized with code; tests sometimes document expected behavior — update docs accordingly.
-- Tips: when running `BrightSword.Squid.Tests`, ensure no leftover `obj/` artifacts in the helper projects cause spurious test behavior; if tests fail inconsistently, delete `obj/` and `bin/` in `BrightSword.Squid.Tests` and re-run.
 
 General per-project rules
 - Always run `dotnet restore` then `dotnet build -c Release` before running `dotnet test`.
@@ -113,15 +163,14 @@ General per-project rules
 - Ensure XML documentation generation is enabled on library projects that should publish docs (add `<GenerateDocumentationFile>true</GenerateDocumentationFile>` and a stable `PackageId`/`Version`).
 - Keep `docs/` markdown files per project in sync with code comments; use scripts or CI to publish docs to GitHub Pages if required.
 
-Release and cross-package publishing policy (important)
+Release and cross-package publishing policy ( important )
 - Independent package versions: publish each top-level project as an independently versioned NuGet package. Do not attempt to keep a single global version across packages — each library has its own lifecycle.
-- Dependency graph and dependent revs: maintain a dependency graph (either a checked-in manifest such as `package-dependencies.json` or compute it dynamically from project references) that maps which packages depend on which. This graph is used by CI to determine which additional packages must be re-released when a package changes.
+- Dependency graph and dependent revs: maintain a dependency graph (either a checked-in manifest such as `package-dependencies.json` or compute it dynamically from project references) that maps which packages depend on which. This graph is used by CI to determine which additional packages must be re-released when an upstream package changes.
 
 How CI should handle a package publish
 1. Identify the package(s) that changed in the PR or the release tag.
 2. For each changed package:
    - Run `dotnet msbuild /t:IncrementVersion /p:ProjectName=<ProjectName> /p:Level=Patch` (or Minor/Major) locally or from a release job to produce the next `VersionPrefix` in `version.props`. Use `/p:Commit=true` only in trusted automation with git push credentials; otherwise capture the new version and apply it via PR or release commits.
-   - Build, test, then `dotnet pack -c Release` and publish the package.
 3. Using the dependency graph, compute the set of dependent packages (recursively). For each dependent package:
    - Bump its version (typically Patch), update any package references if you publish to an internal feed, run build/tests, pack and publish. This ensures downstream consumers receive updated packages with updated dependency constraints.
 4. Publish order: publish the changed package(s) first, then their dependents in dependency-order to ensure published packages can resolve upstream dependencies.
@@ -164,16 +213,16 @@ To help future agents and maintainers, the following changes were added to this 
 - Why: keep dependency manifest up-to-date automatically for PR reviewers and subsequent CI steps.
 - Notes: pushing to forked PR branches may be blocked in some repos; the workflow will fail to push in that case. The workflow uses the checkout action with persisted credentials to push.
 
-5) Publish workflow for dependency-ordered package publishing (`.github/workflows/publish-packages.yml`)
+5) Reusable workflows for CI and publishing
+- What: `.github/workflows/ci.yml` and `.github/workflows/publish-packages.yml` are now reusable workflows. They support passing parameters for customization, such as configuration, target package, and versioning options.
+- Why: standardize and simplify CI configuration, enable easier adoption of best practices, and reduce duplication.
+- How to use: see the "Using reusable workflows" section below.
+
+6) Publish workflow for dependency-ordered package publishing (`.github/workflows/publish-packages.yml`)
 - What: Workflow computes packages to publish (manual dispatch or tag-triggered), computes a final `publishOrder` using `package-dependencies.json`, packs, and publishes packages in dependency order to the specified NuGet source. It enforces a permission guard so only repo collaborators with admin/write/maintain can dispatch.
 - Why: ensures that when a package is released, dependents are re-published in the correct order so consumers can resolve upstream dependencies.
 - How tag-triggering works: push a tag `v*`. The workflow will attempt to infer package(s) from the tag name or from files changed by the tagged commit; otherwise manual `package` input is required.
 - Security: requires `NUGET_API_KEY` secret; the permission check uses the repository API to prevent external fork contributors from dispatching the workflow.
-
-6) CI harmonization (`.github/workflows/ci.yml`)
-- What: Consolidated build-and-test workflow to run on branch pushes and PRs; it produces XML docs and artifacts and runs the dependency generator on PRs. It uploads artifacts for downstream jobs.
-- Why: single, predictable CI for build/test and artifacts reduces duplicated configuration and provides a standard place to run validations.
-- How to validate: open Actions. run the workflow (manual dispatch) or push to a feature branch / open a PR.
 
 7) GitHub Pages publishing (`.github/workflows/gh-pages.yml`)
 - What: Workflow to publish `artifacts/docs` to the `gh-pages` branch on `main` push. It uses `peaceiris/actions-gh-pages` and expects `artifacts/docs` to contain consolidated documentation (XML docs + markdown).
@@ -187,16 +236,22 @@ To help future agents and maintainers, the following changes were added to this 
 General validation and safety notes
 - Always test locally: run `dotnet restore`, `dotnet build -c Release`, `dotnet test -c Release` before packing/publishing.
 - Use `--skip-duplicate` when pushing packages to avoid transient failures for re-published versions.
-- Prefer PR-driven version bumps: use `dotnet msbuild /t:IncrementVersion` locally and produce a PR containing the `version.props` change rather than committing from CI, unless you have governance and credentials to allow CI commits.
+- Prefer PR-driven version bumps: use `dotnet msbuild /t:IncrementVersion` locally and produce a PR containing the `version.props` change rather than committing from CI, unless you have secure CI credentials to commit and push from CI.
 - Secrets and permissions: ensure `NUGET_API_KEY` and `NUGET_SOURCE` are set in repository secrets and that only trusted workflows can use them. Publishing workflows enforce a collaborator permission check.
+
+Using reusable workflows
+- The CI and publish workflows are now reusable. To use them, reference the workflow file and pass the required parameters.
+- Example: to call the CI workflow in a PR, add the following to your workflow:
+  ```yaml
+  jobs:
+    build:
+      uses: ./.github/workflows/ci.yml
+      with:
+        configuration: Release
+        skip_tests: false
+  ```
+- The publish workflow can be called similarly, with parameters for the package and versioning options.
 
 Where to look for related files
 - `version.props`, `versioning.targets` — centralized versioning and IncrementVersion target.
 - `Directory.Build.props` — packaging defaults and readme handling.
-- `scripts/generate-package-dependencies.ps1` — package graph generator.
-- `.github/workflows/regenerate-package-deps.yml` — regenerates dependency manifest on PRs.
-- `.github/workflows/publish-packages.yml` — tag/manual/dispatch package publisher.
-- `.github/workflows/ci.yml` — CI build/test, docs collection.
-- `.github/workflows/gh-pages.yml` — publishes `artifacts/docs` to GitHub Pages.
-
-Trust these documented changes: follow the guidance in this file before making publishing or versioning changes. Only search the repository if the file locations or behaviors described here deviate from the current state.

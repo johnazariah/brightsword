@@ -11,7 +11,7 @@
   <ItemGroup>
     <None Include="AssemblyInfo.cs" />
     <!-- Include docs README in the nupkg at the package root as README.md (Directory.Build.props will also include this) -->
-    <None Include="docs/README.md" Pack="true" PackagePath="" Condition="Exists('docs/README.md')" />
+    <!-- Removed per-project docs README to avoid duplicate packaging entries -->
   </ItemGroup>
 
   <ItemGroup>

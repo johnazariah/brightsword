@@ -15,48 +15,60 @@ permissions:
   contents: read
 
 jobs:
-  build-and-test:
-    name: Build, Test and Prepare Artifacts
+  call-build-and-test:
+    uses: ./.github/workflows/build-and-test.yml
+    with:
+      configuration: 'Release'
+      dotnet-version: ${{ env.DOTNET_VERSION }}
+
+  generate-deps:
+    name: Generate package-dependencies.json
     runs-on: ubuntu-latest
-
+    needs: call-build-and-test
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Ensure PowerShell is available
+        run: |
+          pwsh -c "Write-Host 'PowerShell available:' $PSVersionTable.PSVersion"
 
-    - name: Run repository MSBuild CI target
-      run: |
-        echo "Invoking MSBuild CI target"
-        dotnet msbuild Build.proj /t:CI /p:Configuration=Release /v:minimal
+      - name: Run generator
+        run: pwsh -NoProfile -NonInteractive -File ./scripts/generate-package-dependencies.ps1
 
-    - name: Normalize text file encodings to UTF-8
-      if: always()
-      run: pwsh -NoProfile -NonInteractive -File ./scripts/convert-files-to-utf8.ps1
+      - name: Upload package-dependencies.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-deps
+          path: package-dependencies.json
+          retention-days: 7
 
-    - name: Collect XML docs
-      run: |
-        mkdir -p artifacts/docs
-        # copy generated XML doc files from projects
-        find . -type f -path "*/bin/Release/net10.0/*.xml" -print0 | xargs -0 -I{} cp {} artifacts/docs/ || true
-        # include docs/ markdown content
-        find . -type d -name docs -prune -print0 | while IFS= read -r -d '' d; do cp -r "$d" artifacts/docs/ || true; done
+  upload-artifacts:
+    name: Upload additional artifacts
+    runs-on: ubuntu-latest
+    needs: [call-build-and-test, generate-deps]
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ci-artifacts
+          path: artifacts
 
-    - name: Generate package-dependencies.json (PRs and manual)
-      if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
-      run: pwsh -NoProfile -NonInteractive -File ./scripts/generate-package-dependencies.ps1
+      - name: Download package-deps artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: package-deps
+          path: .
 
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: ci-artifacts
-        path: |
-          artifacts/docs
-          package-dependencies.json
-          artifacts/test-results/**/*.trx
-        retention-days: 7
+      - name: Upload combined artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-combined
+          path: |
+            artifacts/docs
+            package-dependencies.json
+            artifacts/test-results/**/*.trx
+          retention-days: 7
