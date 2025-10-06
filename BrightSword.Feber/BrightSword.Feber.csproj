@@ -4,7 +4,7 @@
   <Import Project="version.props" />
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <AssemblyName>BrightSword.Feber</AssemblyName>
     <RootNamespace>BrightSword.Feber</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
