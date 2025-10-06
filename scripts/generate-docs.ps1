@@ -69,7 +69,10 @@ try {
     $fullOutDir = (Resolve-Path -Path $OutDir).ProviderPath
 
     # Copy XML docs produced by builds (exclude any files already in the OutDir)
-    $xmls = Get-ChildItem -Recurse -File -Include *.xml | Where-Object { $_.FullName -like "*\bin\Release\net10.0\*.xml" -and $_.FullName -notlike "$fullOutDir*" }
+    # Match XML docs regardless of path separator to support Windows and Linux runners
+    $xmls = Get-ChildItem -Recurse -File -Filter *.xml | Where-Object {
+        ($_.FullName -match '[\\/]bin[\\/]Release[\\/]net10\.0[\\/]') -and ($_.FullName -notlike "$fullOutDir*")
+    }
     foreach ($x in $xmls) {
         $dest = Join-Path $OutDir $x.Name
         Copy-Item -Path $x.FullName -Destination $dest -Force
