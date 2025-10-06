@@ -40,17 +40,13 @@ jobs:
           # Quote the /t argument so shells do not split the semicolon-separated target list
           dotnet msbuild Build.proj /t:"Restore;BuildPackages;BuildTests;Test" /p:Configuration=${{ inputs.configuration }} /v:minimal
 
+      - name: Generate HTML docs from XML and project docs
+        run: |
+          pwsh -NoProfile -NonInteractive -File ./scripts/generate-docs.ps1
+
       - name: Normalize text file encodings to UTF-8
         if: always()
         run: pwsh -NoProfile -NonInteractive -File ./scripts/convert-files-to-utf8.ps1
-
-      - name: Collect XML docs
-        run: |
-          mkdir -p artifacts/docs
-          # copy generated XML doc files from projects
-          find . -type f -path "*/bin/Release/net10.0/*.xml" -print0 | xargs -0 -I{} cp {} artifacts/docs/ || true
-          # include docs/ markdown content
-          find . -type d -name docs -prune -print0 | while IFS= read -r -d '' d; do cp -r "$d" artifacts/docs/ || true; done
 
       - name: Upload build/test artifacts
         uses: actions/upload-artifact@v4

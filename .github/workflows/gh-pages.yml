@@ -32,7 +32,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ci-artifacts
-          path: artifacts/docs
+          # Download to repository root so uploaded paths like 'artifacts/docs' are preserved as-is
+          path: .
 
       - name: Verify docs artifact
         run: |
@@ -78,13 +79,48 @@ jobs:
           echo "Creating a pull request with docs because direct push is blocked"
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Inspect downloaded artifact layout for debugging
+          echo "Contents of artifacts/docs (post-download):"
+          ls -la artifacts/docs || true
+
+          # Determine the correct source directory inside the artifact download. The artifact may contain a nested
+          # 'artifacts/docs' path depending on how it was uploaded; handle both cases.
+          SRC=""
+          if [ -d "artifacts/docs/artifacts/docs" ]; then
+            SRC="artifacts/docs/artifacts/docs"
+          elif [ -d "artifacts/docs" ]; then
+            SRC="artifacts/docs"
+          fi
+
+          if [ -z "$SRC" ]; then
+            echo "Could not locate docs in artifacts/docs; aborting PR creation"
+            exit 1
+          fi
+
+          echo "Using source directory: $SRC"
+
           # Create an orphan branch to contain only the docs
           git checkout --orphan "$PR_BRANCH"
+          # Remove all files from the index and working tree
           git rm -rf . >/dev/null 2>&1 || true
-          # Copy docs into repo root
-          cp -r artifacts/docs/. .
-          # Ensure there is something to commit
-          if [ -z "$(git ls-files)" ]; then echo "No files to commit"; exit 1; fi
+
+          # Copy docs into repo root; use rsync if available for a reliable copy
+          if command -v rsync >/dev/null 2>&1; then
+            rsync -a --delete "$SRC"/ .
+          else
+            cp -r "$SRC"/. .
+          fi
+
+          echo "Contents of repo root after copying docs:"
+          ls -la || true
+
+          # Ensure there is something to commit. If no files were copied, abort with helpful message.
+          if [ -z "$(git ls-files)" ]; then
+            echo "No files to commit after copying docs. Check the artifact layout and that artifacts/docs contained generated files."
+            exit 1
+          fi
+
           git add -A
           git commit -m "chore(docs): update gh-pages from CI ${{ github.sha }}"
           git push origin "$PR_BRANCH"
@@ -95,3 +131,60 @@ jobs:
           API_JSON=$(jq -n --arg title "$PR_TITLE" --arg head "$PR_BRANCH" --arg base "gh-pages" --arg body "$PR_BODY" '{title:$title,head:$head,base:$base,body:$body}')
           RESP=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/${{ github.repository }}/pulls -d "$API_JSON")
           echo "PR created: $(echo "$RESP" | jq -r .html_url // "(no url)")"
+
+      - name: Normalize docs layout (flatten nested docs folders)
+        run: |
+          set -euo pipefail
+          ROOT="artifacts/docs"
+          if [ ! -d "$ROOT" ]; then echo "No $ROOT directory"; exit 1; fi
+
+          # Descend while there are no markdown/html files at current level and exactly one subdirectory
+          CUR="$ROOT"
+          while true; do
+            MDCOUNT=$(find "$CUR" -maxdepth 1 -type f \( -name '*.md' -o -name '*.html' \) | wc -l)
+            SUBDIRCOUNT=$(find "$CUR" -mindepth 1 -maxdepth 1 -type d | wc -l)
+            if [ "$MDCOUNT" -gt 0 ] || [ "$SUBDIRCOUNT" -ne 1 ]; then
+              break
+            fi
+            # descend into the single subdirectory
+            CUR=$(find "$CUR" -mindepth 1 -maxdepth 1 -type d | head -n1)
+          done
+
+          if [ "$CUR" != "$ROOT" ]; then
+            echo "Flattening docs from $CUR to $ROOT"
+            # move contents up
+            if command -v rsync >/dev/null 2>&1; then
+              rsync -a --remove-source-files "$CUR"/ "$ROOT"/
+            else
+              mv "$CUR"/* "$ROOT"/ || true
+            fi
+            # remove any now-empty directories under ROOT
+            find "$ROOT" -type d -empty -delete || true
+          else
+            echo "Docs already at root $ROOT"
+          fi
+
+      - name: Ensure index exists (generate if only markdown files)
+        run: |
+          # If no index.html or index.md is present, generate a simple index.md listing available markdown pages
+          if [ -f artifacts/docs/index.html ] || [ -f artifacts/docs/index.md ]; then
+            echo "Index already present"
+          else
+            echo "No index found — generating artifacts/docs/index.md"
+            mkdir -p artifacts/docs
+            cat > artifacts/docs/index.md <<'MD'
+          ---
+          title: Documentation
+          ---
+
+          # Documentation
+
+          This site was generated automatically by CI. The following documentation pages are available:
+
+          MD
+            # Find markdown files and append as links
+            find artifacts/docs -type f -name '*.md' ! -name 'index.md' | sed 's|^artifacts/docs/||' | sort | while IFS= read -r f; do
+              echo "- [${f%.*}](${f})" >> artifacts/docs/index.md
+            done
+            echo "Generated artifacts/docs/index.md"
+          fi
