@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="569e5dbd-cfb3-4b72-9528-f8b5fa6e05ad" name="@runnervmwhb2z 2025-10-06 02:02:26" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-10-06T02:02:26.7446822+00:00" queuing="2025-10-06T02:02:26.7446823+00:00" start="2025-10-06T02:02:25.4443336+00:00" finish="2025-10-06T02:02:26.7886475+00:00" />
+  <TestSettings name="default" id="97ce619e-0a54-4c18-91c9-c9239c7e3bde">
+    <Deployment runDeploymentRoot="_runnervmwhb2z_2025-10-06_02_02_26" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="f05b7af5-a1c7-4b40-aa3a-d19e57f5b615" testId="734a049b-e69b-f5c6-1d4c-0dcaea3bad73" testName="BrightSword.SwissKnife.Tests.StringExtensionsTests.SplitCamelCaseWorks(input: &quot;&quot;, expected: [])" computerName="runnervmwhb2z" duration="00:00:00.0000278" startTime="2025-10-06T02:02:26.7112598+00:00" endTime="2025-10-06T02:02:26.7113939+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f05b7af5-a1c7-4b40-aa3a-d19e57f5b615" />
+    <UnitTestResult executionId="e2439d6d-1739-41a7-ace6-900d935fb2f8" testId="aad7a3ad-58ec-b01e-0625-602c490aa70f" testName="BrightSword.SwissKnife.Tests.StringExtensionsTests.SplitDottedWorks" computerName="runnervmwhb2z" duration="00:00:00.0001812" startTime="2025-10-06T02:02:26.7116454+00:00" endTime="2025-10-06T02:02:26.7117733+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e2439d6d-1739-41a7-ace6-900d935fb2f8" />
+    <UnitTestResult executionId="9c2a4de8-e713-4096-a1e1-224681416b46" testId="80ce125f-3ef0-8299-5aa6-efced4c5f9b4" testName="BrightSword.SwissKnife.Tests.ValidatorTests.CheckBoolThrowsOnFalse" computerName="runnervmwhb2z" duration="00:00:00.0028956" startTime="2025-10-06T02:02:26.7040856+00:00" endTime="2025-10-06T02:02:26.7054463+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9c2a4de8-e713-4096-a1e1-224681416b46" />
+    <UnitTestResult executionId="a4b7c349-0aec-49af-ba27-cc0563623689" testId="6c5a6663-e19e-f4e3-0070-c8c2067781be" testName="BrightSword.SwissKnife.Tests.CoerceExtensionsTests.CoerceBoolYNWorks" computerName="runnervmwhb2z" duration="00:00:00.0005151" startTime="2025-10-06T02:02:26.7084011+00:00" endTime="2025-10-06T02:02:26.7084796+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a4b7c349-0aec-49af-ba27-cc0563623689" />
+    <UnitTestResult executionId="488abc9f-472e-4837-a081-83b1ece7f4fb" testId="5213a31d-046b-fdec-c1ed-a0ec3a42c356" testName="BrightSword.SwissKnife.Tests.ValidatorTests.CheckFuncThrowsOnFalse" computerName="runnervmwhb2z" duration="00:00:00.0008903" startTime="2025-10-06T02:02:26.6494066+00:00" endTime="2025-10-06T02:02:26.6494935+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="488abc9f-472e-4837-a081-83b1ece7f4fb" />
+    <UnitTestResult executionId="7e3cdd70-114d-4fd3-bf45-1f64c96fc22c" testId="ff3fc78d-fb88-3662-bb6a-71ffc1c576e2" testName="BrightSword.SwissKnife.Tests.ConcurrentDictionaryTests.IndexerSetGetWorks" computerName="runnervmwhb2z" duration="00:00:00.0001587" startTime="2025-10-06T02:02:26.6414734+00:00" endTime="2025-10-06T02:02:26.6415978+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7e3cdd70-114d-4fd3-bf45-1f64c96fc22c" />
+    <UnitTestResult executionId="2fcef347-d9dd-484d-a0ef-e9b05fe769d1" testId="44db4dbf-f9ab-9e8c-5afa-9eaa96cac2d5" testName="BrightSword.SwissKnife.Tests.FunctionalTests.MemoizeFixFibWorks" computerName="runnervmwhb2z" duration="00:00:00.0249058" startTime="2025-10-06T02:02:26.3329333+00:00" endTime="2025-10-06T02:02:26.3827708+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2fcef347-d9dd-484d-a0ef-e9b05fe769d1" />
+    <UnitTestResult executionId="5fa4a893-929b-4afa-ad57-8a44f4546183" testId="3e05e22f-9807-8caf-e854-aceb47c009e8" testName="BrightSword.SwissKnife.Tests.TypeExtensionsTests.NameIdempotent" computerName="runnervmwhb2z" duration="00:00:00.0076014" startTime="2025-10-06T02:02:26.7093047+00:00" endTime="2025-10-06T02:02:26.7096305+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5fa4a893-929b-4afa-ad57-8a44f4546183">
+      <Output>
+        <StdOut>Ok, passed 100 tests.</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7579271e-1011-406b-9065-0772a8d5c843" testId="6e8a968f-dc29-8f35-b7f6-be68e33c3670" testName="BrightSword.SwissKnife.Tests.StringExtensionsTests.SplitCamelCaseWorks(input: &quot;XMLHttpRequest&quot;, expected: [&quot;XML&quot;, &quot;Http&quot;, &quot;Request&quot;])" computerName="runnervmwhb2z" duration="00:00:00.0076440" startTime="2025-10-06T02:02:26.7095162+00:00" endTime="2025-10-06T02:02:26.7101070+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7579271e-1011-406b-9065-0772a8d5c843" />
+    <UnitTestResult executionId="37ebcff8-9aec-4eb7-bd63-090b8e9130dd" testId="e2313c4a-0f3d-8aa3-20c1-09ff38555631" testName="BrightSword.SwissKnife.Tests.TypeExtensionsTests.NameForGenericTypeWorks" computerName="runnervmwhb2z" duration="00:00:00.0001204" startTime="2025-10-06T02:02:26.7098203+00:00" endTime="2025-10-06T02:02:26.7098993+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="37ebcff8-9aec-4eb7-bd63-090b8e9130dd" />
+    <UnitTestResult executionId="9d36db9a-6202-4552-90a3-8921d6d6225c" testId="3af89935-ae80-af33-d025-fe7072c14744" testName="BrightSword.SwissKnife.Tests.AttributeExtensionsTests.GetCustomAttributeOnMemberWorks" computerName="runnervmwhb2z" duration="00:00:00.0028314" startTime="2025-10-06T02:02:26.7037952+00:00" endTime="2025-10-06T02:02:26.7050633+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9d36db9a-6202-4552-90a3-8921d6d6225c" />
+    <UnitTestResult executionId="beacdad3-9647-4aa3-9f05-048412ad64f6" testId="d994cf23-9a92-9c34-1d30-afb276c96878" testName="BrightSword.SwissKnife.Tests.FunctionalTests.YFactorialWorks" computerName="runnervmwhb2z" duration="00:00:00.0094103" startTime="2025-10-06T02:02:26.4085435+00:00" endTime="2025-10-06T02:02:26.4086849+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="beacdad3-9647-4aa3-9f05-048412ad64f6" />
+    <UnitTestResult executionId="38d551e3-c627-4136-8444-66588110a935" testId="93656267-e920-dfde-89b3-595f97934768" testName="BrightSword.SwissKnife.Tests.StringExtensionsTests.SplitCamelCaseWorks(input: &quot;CamelCaseExample&quot;, expected: [&quot;Camel&quot;, &quot;Case&quot;, &quot;Example&quot;])" computerName="runnervmwhb2z" duration="00:00:00.0174075" startTime="2025-10-06T02:02:26.7056983+00:00" endTime="2025-10-06T02:02:26.7093601+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="38d551e3-c627-4136-8444-66588110a935" />
+    <UnitTestResult executionId="e5e95542-fcbd-4aae-8781-b2fb4586d1f4" testId="0c4c7430-2443-4049-f977-ae0a29f9a8a7" testName="BrightSword.SwissKnife.Tests.ValidatorTests.CheckBoolTExceptionWorks" computerName="runnervmwhb2z" duration="00:00:00.0004615" startTime="2025-10-06T02:02:26.6497407+00:00" endTime="2025-10-06T02:02:26.6501804+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e5e95542-fcbd-4aae-8781-b2fb4586d1f4" />
+    <UnitTestResult executionId="5d806cc3-3eee-4b74-8fcb-df2998afa88f" testId="288c285b-3cbe-c263-e888-e99725c61df4" testName="BrightSword.SwissKnife.Tests.ObjectDescriberTests.GetNameMemberExpressionWorks" computerName="runnervmwhb2z" duration="00:00:00.0008349" startTime="2025-10-06T02:02:26.7043045+00:00" endTime="2025-10-06T02:02:26.7043904+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5d806cc3-3eee-4b74-8fcb-df2998afa88f" />
+    <UnitTestResult executionId="26536dc6-5d2a-443b-82d6-4d097895438f" testId="6878da27-a62c-a2ce-6713-b198a48e6535" testName="BrightSword.SwissKnife.Tests.AttributeExtensionsTests.GetCustomAttributeOnTypeWorks" computerName="runnervmwhb2z" duration="00:00:00.0013927" startTime="2025-10-06T02:02:26.6491296+00:00" endTime="2025-10-06T02:02:26.6498162+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="26536dc6-5d2a-443b-82d6-4d097895438f" />
+    <UnitTestResult executionId="52df3b3d-01d7-4f18-a75b-5a429b33fa5d" testId="70653113-7581-49a6-c654-ec8ab941bb31" testName="BrightSword.SwissKnife.Tests.ObjectDescriberTests.GetNameMethodCallWorks" computerName="runnervmwhb2z" duration="00:00:00.0004706" startTime="2025-10-06T02:02:26.7045899+00:00" endTime="2025-10-06T02:02:26.7046781+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="52df3b3d-01d7-4f18-a75b-5a429b33fa5d" />
+    <UnitTestResult executionId="9aa3176b-bc95-4afe-9743-05cd724b14cf" testId="9819b389-a9d0-bd5a-4a6c-ac96f9eae1e5" testName="BrightSword.SwissKnife.Tests.CoerceExtensionsTests.CoerceNumberWorks" computerName="runnervmwhb2z" duration="00:00:00.0003036" startTime="2025-10-06T02:02:26.7080628+00:00" endTime="2025-10-06T02:02:26.7081886+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9aa3176b-bc95-4afe-9743-05cd724b14cf" />
+    <UnitTestResult executionId="eae9e6c6-24dc-41f4-91cc-1d17cb89db11" testId="aaeb004d-ca21-da92-67e5-a6a13c23a893" testName="BrightSword.SwissKnife.Tests.CoerceExtensionsTests.CoerceInvalidReturnsOriginal" computerName="runnervmwhb2z" duration="00:00:00.0143883" startTime="2025-10-06T02:02:26.7049513+00:00" endTime="2025-10-06T02:02:26.7057860+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eae9e6c6-24dc-41f4-91cc-1d17cb89db11" />
+    <UnitTestResult executionId="bc29f965-b691-43a5-9138-2bad192ef02e" testId="40258b67-fd5d-ba8a-b694-c1098416613a" testName="BrightSword.SwissKnife.Tests.ValidatorTests.CheckFuncTExceptionWorks" computerName="runnervmwhb2z" duration="00:00:00.0005614" startTime="2025-10-06T02:02:26.7033053+00:00" endTime="2025-10-06T02:02:26.7038764+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bc29f965-b691-43a5-9138-2bad192ef02e" />
+    <UnitTestResult executionId="7d5f280c-1d36-4d46-940b-2e9ad4a04d2e" testId="0bcee6ee-78ea-644a-d13b-61a9a629f92e" testName="BrightSword.SwissKnife.Tests.CoerceExtensionsTests.CoerceEnumWorks" computerName="runnervmwhb2z" duration="00:00:00.0002323" startTime="2025-10-06T02:02:26.7086865+00:00" endTime="2025-10-06T02:02:26.7087761+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7d5f280c-1d36-4d46-940b-2e9ad4a04d2e" />
+    <UnitTestResult executionId="1528d544-fbf5-49a0-8b24-81e7a75d50e2" testId="54f0acf0-756e-c24c-ce6e-4f81358b4bb9" testName="BrightSword.SwissKnife.Tests.TypeExtensionsTests.GetAllPropertiesInterfaceInheritanceWorks" computerName="runnervmwhb2z" duration="00:00:00.0165390" startTime="2025-10-06T02:02:26.7053552+00:00" endTime="2025-10-06T02:02:26.7090526+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1528d544-fbf5-49a0-8b24-81e7a75d50e2" />
+    <UnitTestResult executionId="165a79d2-4b88-42cb-973b-af01548051a5" testId="e8164149-7d07-b7b2-6135-57a99d65ab4b" testName="BrightSword.SwissKnife.Tests.AttributeExtensionsTests.GetCustomAttributeValueWorks" computerName="runnervmwhb2z" duration="00:00:00.0004689" startTime="2025-10-06T02:02:26.6500373+00:00" endTime="2025-10-06T02:02:26.7034158+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="165a79d2-4b88-42cb-973b-af01548051a5" />
+    <UnitTestResult executionId="68c89150-c92d-4a64-97c2-9281495333e6" testId="1e825900-c4dd-d32c-aa0c-9f6317e5f012" testName="BrightSword.SwissKnife.Tests.StringExtensionsTests.SplitCamelCaseIdempotent" computerName="runnervmwhb2z" duration="00:00:00.0085744" startTime="2025-10-06T02:02:26.7120509+00:00" endTime="2025-10-06T02:02:26.7124523+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="68c89150-c92d-4a64-97c2-9281495333e6">
+      <Output>
+        <StdOut>Ok, passed 100 tests.</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="80b744d8-59a1-46b9-bf35-c48d0aab4e6a" testId="bc374e4f-c796-5fd0-8b93-7eaa5a32c70a" testName="BrightSword.SwissKnife.Tests.FunctionalTests.YCompositionIdempotent" computerName="runnervmwhb2z" duration="00:00:00.1587985" startTime="2025-10-06T02:02:26.4096475+00:00" endTime="2025-10-06T02:02:26.6410160+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="80b744d8-59a1-46b9-bf35-c48d0aab4e6a">
+      <Output>
+        <StdOut>Ok, passed 100 tests.</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5d6954d0-b494-4925-be72-f7d9bcb225b6" testId="d750f800-0c36-360b-1c50-cbb3ace78fe7" testName="BrightSword.SwissKnife.Tests.CoerceExtensionsTests.CoerceIntRoundtrip" computerName="runnervmwhb2z" duration="00:00:00.0136639" startTime="2025-10-06T02:02:26.7090151+00:00" endTime="2025-10-06T02:02:26.7121704+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5d6954d0-b494-4925-be72-f7d9bcb225b6">
+      <Output>
+        <StdOut>Ok, passed 100 tests.</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="32335372-786c-4dd9-843c-4592af4beb7f" testId="db93ead2-932e-0002-0d0b-d2dae8a6b7b3" testName="BrightSword.SwissKnife.Tests.ConcurrentDictionaryTests.IndexerSetGetRoundtrip" computerName="runnervmwhb2z" duration="00:00:00.1676545" startTime="2025-10-06T02:02:26.3309189+00:00" endTime="2025-10-06T02:02:26.6403615+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="32335372-786c-4dd9-843c-4592af4beb7f">
+      <Output>
+        <StdOut>Ok, passed 100 tests.</StdOut>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="BrightSword.SwissKnife.Tests.StringExtensionsTests.SplitCamelCaseWorks(input: &quot;&quot;, expected: [])" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="734a049b-e69b-f5c6-1d4c-0dcaea3bad73">
+      <Execution id="f05b7af5-a1c7-4b40-aa3a-d19e57f5b615" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.StringExtensionsTests" name="SplitCamelCaseWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.ConcurrentDictionaryTests.IndexerSetGetWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="ff3fc78d-fb88-3662-bb6a-71ffc1c576e2">
+      <Execution id="7e3cdd70-114d-4fd3-bf45-1f64c96fc22c" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.ConcurrentDictionaryTests" name="IndexerSetGetWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.ObjectDescriberTests.GetNameMemberExpressionWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="288c285b-3cbe-c263-e888-e99725c61df4">
+      <Execution id="5d806cc3-3eee-4b74-8fcb-df2998afa88f" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.ObjectDescriberTests" name="GetNameMemberExpressionWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.CoerceExtensionsTests.CoerceNumberWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="9819b389-a9d0-bd5a-4a6c-ac96f9eae1e5">
+      <Execution id="9aa3176b-bc95-4afe-9743-05cd724b14cf" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.CoerceExtensionsTests" name="CoerceNumberWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.AttributeExtensionsTests.GetCustomAttributeOnTypeWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="6878da27-a62c-a2ce-6713-b198a48e6535">
+      <Execution id="26536dc6-5d2a-443b-82d6-4d097895438f" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.AttributeExtensionsTests" name="GetCustomAttributeOnTypeWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.ValidatorTests.CheckFuncTExceptionWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="40258b67-fd5d-ba8a-b694-c1098416613a">
+      <Execution id="bc29f965-b691-43a5-9138-2bad192ef02e" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.ValidatorTests" name="CheckFuncTExceptionWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.ValidatorTests.CheckBoolThrowsOnFalse" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="80ce125f-3ef0-8299-5aa6-efced4c5f9b4">
+      <Execution id="9c2a4de8-e713-4096-a1e1-224681416b46" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.ValidatorTests" name="CheckBoolThrowsOnFalse" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.AttributeExtensionsTests.GetCustomAttributeOnMemberWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="3af89935-ae80-af33-d025-fe7072c14744">
+      <Execution id="9d36db9a-6202-4552-90a3-8921d6d6225c" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.AttributeExtensionsTests" name="GetCustomAttributeOnMemberWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.TypeExtensionsTests.NameIdempotent" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="3e05e22f-9807-8caf-e854-aceb47c009e8">
+      <Execution id="5fa4a893-929b-4afa-ad57-8a44f4546183" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.TypeExtensionsTests" name="NameIdempotent" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.FunctionalTests.MemoizeFixFibWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="44db4dbf-f9ab-9e8c-5afa-9eaa96cac2d5">
+      <Execution id="2fcef347-d9dd-484d-a0ef-e9b05fe769d1" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.FunctionalTests" name="MemoizeFixFibWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.CoerceExtensionsTests.CoerceEnumWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="0bcee6ee-78ea-644a-d13b-61a9a629f92e">
+      <Execution id="7d5f280c-1d36-4d46-940b-2e9ad4a04d2e" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.CoerceExtensionsTests" name="CoerceEnumWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.CoerceExtensionsTests.CoerceIntRoundtrip" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="d750f800-0c36-360b-1c50-cbb3ace78fe7">
+      <Execution id="5d6954d0-b494-4925-be72-f7d9bcb225b6" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.CoerceExtensionsTests" name="CoerceIntRoundtrip" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.CoerceExtensionsTests.CoerceBoolYNWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="6c5a6663-e19e-f4e3-0070-c8c2067781be">
+      <Execution id="a4b7c349-0aec-49af-ba27-cc0563623689" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.CoerceExtensionsTests" name="CoerceBoolYNWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.StringExtensionsTests.SplitDottedWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="aad7a3ad-58ec-b01e-0625-602c490aa70f">
+      <Execution id="e2439d6d-1739-41a7-ace6-900d935fb2f8" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.StringExtensionsTests" name="SplitDottedWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.StringExtensionsTests.SplitCamelCaseIdempotent" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="1e825900-c4dd-d32c-aa0c-9f6317e5f012">
+      <Execution id="68c89150-c92d-4a64-97c2-9281495333e6" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.StringExtensionsTests" name="SplitCamelCaseIdempotent" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.ValidatorTests.CheckBoolTExceptionWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="0c4c7430-2443-4049-f977-ae0a29f9a8a7">
+      <Execution id="e5e95542-fcbd-4aae-8781-b2fb4586d1f4" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.ValidatorTests" name="CheckBoolTExceptionWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.ValidatorTests.CheckFuncThrowsOnFalse" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="5213a31d-046b-fdec-c1ed-a0ec3a42c356">
+      <Execution id="488abc9f-472e-4837-a081-83b1ece7f4fb" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.ValidatorTests" name="CheckFuncThrowsOnFalse" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.FunctionalTests.YFactorialWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="d994cf23-9a92-9c34-1d30-afb276c96878">
+      <Execution id="beacdad3-9647-4aa3-9f05-048412ad64f6" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.FunctionalTests" name="YFactorialWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.TypeExtensionsTests.GetAllPropertiesInterfaceInheritanceWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="54f0acf0-756e-c24c-ce6e-4f81358b4bb9">
+      <Execution id="1528d544-fbf5-49a0-8b24-81e7a75d50e2" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.TypeExtensionsTests" name="GetAllPropertiesInterfaceInheritanceWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.ObjectDescriberTests.GetNameMethodCallWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="70653113-7581-49a6-c654-ec8ab941bb31">
+      <Execution id="52df3b3d-01d7-4f18-a75b-5a429b33fa5d" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.ObjectDescriberTests" name="GetNameMethodCallWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.StringExtensionsTests.SplitCamelCaseWorks(input: &quot;CamelCaseExample&quot;, expected: [&quot;Camel&quot;, &quot;Case&quot;, &quot;Example&quot;])" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="93656267-e920-dfde-89b3-595f97934768">
+      <Execution id="38d551e3-c627-4136-8444-66588110a935" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.StringExtensionsTests" name="SplitCamelCaseWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.TypeExtensionsTests.NameForGenericTypeWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="e2313c4a-0f3d-8aa3-20c1-09ff38555631">
+      <Execution id="37ebcff8-9aec-4eb7-bd63-090b8e9130dd" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.TypeExtensionsTests" name="NameForGenericTypeWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.AttributeExtensionsTests.GetCustomAttributeValueWorks" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="e8164149-7d07-b7b2-6135-57a99d65ab4b">
+      <Execution id="165a79d2-4b88-42cb-973b-af01548051a5" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.AttributeExtensionsTests" name="GetCustomAttributeValueWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.ConcurrentDictionaryTests.IndexerSetGetRoundtrip" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="db93ead2-932e-0002-0d0b-d2dae8a6b7b3">
+      <Execution id="32335372-786c-4dd9-843c-4592af4beb7f" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.ConcurrentDictionaryTests" name="IndexerSetGetRoundtrip" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.StringExtensionsTests.SplitCamelCaseWorks(input: &quot;XMLHttpRequest&quot;, expected: [&quot;XML&quot;, &quot;Http&quot;, &quot;Request&quot;])" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="6e8a968f-dc29-8f35-b7f6-be68e33c3670">
+      <Execution id="7579271e-1011-406b-9065-0772a8d5c843" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.StringExtensionsTests" name="SplitCamelCaseWorks" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.CoerceExtensionsTests.CoerceInvalidReturnsOriginal" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="aaeb004d-ca21-da92-67e5-a6a13c23a893">
+      <Execution id="eae9e6c6-24dc-41f4-91cc-1d17cb89db11" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.CoerceExtensionsTests" name="CoerceInvalidReturnsOriginal" />
+    </UnitTest>
+    <UnitTest name="BrightSword.SwissKnife.Tests.FunctionalTests.YCompositionIdempotent" storage="/home/runner/work/brightsword/brightsword/brightsword.swissknife.tests/bin/release/net10.0/brightsword.swissknife.tests.dll" id="bc374e4f-c796-5fd0-8b93-7eaa5a32c70a">
+      <Execution id="80b744d8-59a1-46b9-bf35-c48d0aab4e6a" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife.Tests/bin/Release/net10.0/BrightSword.SwissKnife.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="BrightSword.SwissKnife.Tests.FunctionalTests" name="YCompositionIdempotent" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="734a049b-e69b-f5c6-1d4c-0dcaea3bad73" executionId="f05b7af5-a1c7-4b40-aa3a-d19e57f5b615" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="aad7a3ad-58ec-b01e-0625-602c490aa70f" executionId="e2439d6d-1739-41a7-ace6-900d935fb2f8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="80ce125f-3ef0-8299-5aa6-efced4c5f9b4" executionId="9c2a4de8-e713-4096-a1e1-224681416b46" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6c5a6663-e19e-f4e3-0070-c8c2067781be" executionId="a4b7c349-0aec-49af-ba27-cc0563623689" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5213a31d-046b-fdec-c1ed-a0ec3a42c356" executionId="488abc9f-472e-4837-a081-83b1ece7f4fb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ff3fc78d-fb88-3662-bb6a-71ffc1c576e2" executionId="7e3cdd70-114d-4fd3-bf45-1f64c96fc22c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="44db4dbf-f9ab-9e8c-5afa-9eaa96cac2d5" executionId="2fcef347-d9dd-484d-a0ef-e9b05fe769d1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3e05e22f-9807-8caf-e854-aceb47c009e8" executionId="5fa4a893-929b-4afa-ad57-8a44f4546183" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e8a968f-dc29-8f35-b7f6-be68e33c3670" executionId="7579271e-1011-406b-9065-0772a8d5c843" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e2313c4a-0f3d-8aa3-20c1-09ff38555631" executionId="37ebcff8-9aec-4eb7-bd63-090b8e9130dd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3af89935-ae80-af33-d025-fe7072c14744" executionId="9d36db9a-6202-4552-90a3-8921d6d6225c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d994cf23-9a92-9c34-1d30-afb276c96878" executionId="beacdad3-9647-4aa3-9f05-048412ad64f6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="93656267-e920-dfde-89b3-595f97934768" executionId="38d551e3-c627-4136-8444-66588110a935" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0c4c7430-2443-4049-f977-ae0a29f9a8a7" executionId="e5e95542-fcbd-4aae-8781-b2fb4586d1f4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="288c285b-3cbe-c263-e888-e99725c61df4" executionId="5d806cc3-3eee-4b74-8fcb-df2998afa88f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6878da27-a62c-a2ce-6713-b198a48e6535" executionId="26536dc6-5d2a-443b-82d6-4d097895438f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="70653113-7581-49a6-c654-ec8ab941bb31" executionId="52df3b3d-01d7-4f18-a75b-5a429b33fa5d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9819b389-a9d0-bd5a-4a6c-ac96f9eae1e5" executionId="9aa3176b-bc95-4afe-9743-05cd724b14cf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="aaeb004d-ca21-da92-67e5-a6a13c23a893" executionId="eae9e6c6-24dc-41f4-91cc-1d17cb89db11" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="40258b67-fd5d-ba8a-b694-c1098416613a" executionId="bc29f965-b691-43a5-9138-2bad192ef02e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0bcee6ee-78ea-644a-d13b-61a9a629f92e" executionId="7d5f280c-1d36-4d46-940b-2e9ad4a04d2e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="54f0acf0-756e-c24c-ce6e-4f81358b4bb9" executionId="1528d544-fbf5-49a0-8b24-81e7a75d50e2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e8164149-7d07-b7b2-6135-57a99d65ab4b" executionId="165a79d2-4b88-42cb-973b-af01548051a5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1e825900-c4dd-d32c-aa0c-9f6317e5f012" executionId="68c89150-c92d-4a64-97c2-9281495333e6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bc374e4f-c796-5fd0-8b93-7eaa5a32c70a" executionId="80b744d8-59a1-46b9-bf35-c48d0aab4e6a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d750f800-0c36-360b-1c50-cbb3ace78fe7" executionId="5d6954d0-b494-4925-be72-f7d9bcb225b6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="db93ead2-932e-0002-0d0b-d2dae8a6b7b3" executionId="32335372-786c-4dd9-843c-4592af4beb7f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="27" executed="27" passed="27" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.0.0+e341b939fe (64-bit .NET 10.0.0-rc.1.25451.107)
+[xUnit.net 00:00:00.11]   Discovering: BrightSword.SwissKnife.Tests
+[xUnit.net 00:00:00.20]   Discovered:  BrightSword.SwissKnife.Tests
+[xUnit.net 00:00:00.25]   Starting:    BrightSword.SwissKnife.Tests
+[xUnit.net 00:00:00.68]   Finished:    BrightSword.SwissKnife.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

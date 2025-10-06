@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BrightSword.Squid.Tests</name>
+    </assembly>
+    <members>
+        <member name="T:BrightSword.Squid.Tests.ChangeNotificationTests">
+             <summary>
+             Tests for property change notification behavior. These validate both
+             the control scenarios (hand-written base classes raising events) and
+             generated types that inherit from base types which implement the
+             notification contracts.
+            
+             The tests ensure that OnPropertyChanging is called before mutation and
+             that OnPropertyChanged is called after mutation with the expected values.
+             </summary>
+        </member>
+        <member name="T:BrightSword.Squid.Tests.ChangeNotificationTests.CommonBaseTypeWithPropertyChanged">
+            <summary>
+            Base class used by control tests to raise PropertyChanged events. The generated
+            types may derive from classes like this to provide notification semantics.
+            </summary>
+        </member>
+        <member name="T:BrightSword.Squid.Tests.ChangeNotificationTests.CommonBaseTypeWithPropertyChanging">
+            <summary>
+            Base class used by control tests to raise PropertyChanging events. The generated
+            types may derive from classes like this to provide notification semantics.
+            </summary>
+        </member>
+        <member name="T:BrightSword.Squid.Tests.ChangeNotificationTests.CommonBaseTypeWithPropertyChangingAndPropertyChanged">
+            <summary>
+            Base class used in tests which supports both PropertyChanging and PropertyChanged.
+            This models a common pattern where a generated type derives from a single base
+            providing both pre- and post-change notifications.
+            </summary>
+        </member>
+        <member name="T:BrightSword.Squid.Tests.CloneableTests">
+             <summary>
+             Tests that the clone behaviour is composed correctly into generated types
+             when <see cref="T:System.ICloneable"/> is present as a facet or when the primary
+             interface extends <see cref="T:System.ICloneable"/>.
+            
+             The tests validate that the emitted type implements <see cref="T:System.ICloneable"/>,
+             that the runtime Clone method exists when expected, and that the returned clone
+             is a deep copy (children and value equality) and is annotated with <see cref="T:System.SerializableAttribute"/>,
+             matching legacy expectations for serialization compatibility.
+             </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CloneableTests.TestICloneableImplementation">
+            <summary>
+            If the interface hierarchy includes <see cref="T:System.ICloneable"/>, the generated
+            type should expose a working Clone method that returns a deep clone.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CloneableTests.TestNonCloneableInterfaceDoesNotHaveCloneMethod">
+            <summary>
+            When the primary interface does not include <see cref="T:System.ICloneable"/>, there
+            should be no Clone method available on the dynamic object (dynamic binding should fail).
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CloneableTests.TestImplementationSupportsCloneableIfTypeCreatorSpecifiesICloneableFacet">
+            <summary>
+            If the type creator is configured to inject <see cref="T:System.ICloneable"/> as a facet
+            into the generated type, the resulting instance should present both the primary
+            interface and the cloneable facet and the clone should preserve values.
+            </summary>
+        </member>
+        <member name="T:BrightSword.Squid.Tests.CreateInstanceTests">
+             <summary>
+             Tests validating that the runtime type creator can generate concrete instances
+             for a variety of input types (interfaces and classes) and that the generated
+             objects meet the expected shape and behavior.
+            
+             These tests focus on creation semantics (not behavior of individual members)
+             and assert that generated objects implement required interfaces, expose
+             properties and methods, and correctly handle inheritance, hiding and generic
+             member shapes.
+             </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CreateInstanceTests.TestNonPrimitiveClassType">
+            <summary>
+            Creating an instance for a concrete non-primitive class type should
+            return a real instance of that class.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CreateInstanceTests.TestInterfaceWithGenericMethods">
+            <summary>
+            Ensure generator can create an instance for an interface that declares generic methods.
+            The test verifies that an object is produced and that it exposes the interface type.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CreateInstanceTests.TestNonGenericInterfaceType">
+            <summary>
+            Ensure generator can create an instance for a simple non-generic interface
+            and that the returned object is assignable to the interface.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CreateInstanceTests.TestDynamicIsObject">
+            <summary>
+            When an interface extends another interface, ensure the generated dynamic
+            implementation has a base type that is object (dynamic proxy semantics) rather
+            than attempting to inherit from the interface type itself.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CreateInstanceTests.TestGetOnlyMappedPropertyShouldNotThrow">
+            <summary>
+            Validate that get-only properties which are backed by mapped collection types
+            are initialized correctly and are usable (i.e., adding an item does not throw).
+            This tests default construction of mapped collection properties.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CreateInstanceTests.TestHiddenProperty">
+            <summary>
+            Ensure interface members that hide base members still result in a generated
+            object that can be assigned to the derived interface type.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CreateInstanceTests.TestNewHiddenProperty">
+            <summary>
+            Tests that a 'new' hidden property is correctly handled in generated types.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CreateInstanceTests.TestNonGenericInterfaceTypeImplementingAllProperties">
+            <summary>
+            Verify that generated object implements simple property getters/setters for a
+            non-generic interface and that values round-trip through the generated properties.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CreateInstanceTests.TestInterfaceTypeWithGenericPropertiesImplementingAllProperties">
+            <summary>
+            Verify that generated object implements generic collection properties and
+            that items can be added and retrieved as expected.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CreateInstanceTests.TestInterfaceWithAVoidMethodNoArgs">
+            <summary>
+            Helper wrapper used to verify that calling non-implemented methods on a generated
+            instance throws <see cref="T:System.NotImplementedException"/> as expected.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CreateInstanceTests.TestInterfaceWithEvent">
+            <summary>
+            Verify that events can be attached to a generated instance without throwing and
+            that the generated event field supports standard subscription semantics.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CreateInstanceTests.TestMultipleInheritanceWithCollisionWithSameType">
+            <summary>
+            Test that multiple inheritance with property collisions where both sides use
+            the same property type are handled by the generator such that each interface
+            view has its own independent storage.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CreateInstanceTests.TestMultipleInheritanceWithCollisionWithDifferentType">
+            <summary>
+            Test that multiple inheritance with property collisions where the colliding
+            properties have different types still keeps the values isolated per-interface.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.CreateInstanceTests.TestFacetsAreInjectedProperly">
+            <summary>
+            Ensures that facet interfaces (additional interfaces injected into the generated type)
+            are correctly added to the generated type and that it remains assignable to the primary
+            interface under test.
+            </summary>
+        </member>
+        <member name="T:BrightSword.Squid.Tests.DynamicTypeCreatorTests">
+            <summary>
+            Unit tests that validate the naming conventions produced by the
+            BasicDataTransferObjectTypeCreator for interface and class names
+            when working with generic type parameters.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.DynamicTypeCreatorTests.TestInterfaceName">
+            <summary>
+            The creator should expose a printable interface name for diagnostic purposes
+            that includes the generic argument types.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Tests.DynamicTypeCreatorTests.TestClassName">
+            <summary>
+            The computed class name for the generated concrete type should strip the leading 'I'
+            and show generic arguments in the same printable format.
+            </summary>
+        </member>
+    </members>
+</doc>

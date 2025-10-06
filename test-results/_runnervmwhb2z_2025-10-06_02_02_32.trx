@@ -1,0 +1,517 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="364c7d27-3bf4-4266-8726-1e89b5bdbf67" name="@runnervmwhb2z 2025-10-06 02:02:32" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-10-06T02:02:32.1500212+00:00" queuing="2025-10-06T02:02:32.1500214+00:00" start="2025-10-06T02:02:31.2327902+00:00" finish="2025-10-06T02:02:35.0589149+00:00" />
+  <TestSettings name="default" id="38fd1343-3fd1-42f3-b922-49f3266e9784">
+    <Deployment runDeploymentRoot="_runnervmwhb2z_2025-10-06_02_02_32" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="7cf5caa4-9559-4877-8848-099c9a058521" testId="04dc7e40-053e-2dfb-07fd-9a38791a6762" testName="TestBooleanDefaultValueIsSet" computerName="runnervmwhb2z" duration="00:00:00.0007095" startTime="2025-10-06T02:02:32.2391124+00:00" endTime="2025-10-06T02:02:32.2399314+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7cf5caa4-9559-4877-8848-099c9a058521" />
+    <UnitTestResult executionId="472bd32c-b060-4e96-b4a7-679e4274983c" testId="6f7c54a3-7d41-bd56-ffa0-23f945740b78" testName="PropertyFilterExcludesConfiguredProperty" computerName="runnervmwhb2z" startTime="2025-10-06T02:02:32.1918249+00:00" endTime="2025-10-06T02:02:32.1921970+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="NotExecuted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="472bd32c-b060-4e96-b4a7-679e4274983c">
+      <Output>
+        <ErrorInfo>
+          <Message>Failing in .NET 10 - PropertyFilter not properly excluding property implementation. Needs investigation.</Message>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1f05630c-6e3d-46d3-86fe-415dd411c8ed" testId="080b3cee-97e7-b019-97bc-b0db70b9b988" testName="TestIllegalDefaultValueShouldThrow" computerName="runnervmwhb2z" duration="00:00:00.0029688" startTime="2025-10-06T02:02:32.2467663+00:00" endTime="2025-10-06T02:02:32.2498258+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1f05630c-6e3d-46d3-86fe-415dd411c8ed" />
+    <UnitTestResult executionId="4674a318-36dd-4b99-a1d9-c85564cf5ce5" testId="22e84818-5a2b-7822-12ca-e45127de0856" testName="TestArrayDefaultValueIsSet" computerName="runnervmwhb2z" duration="00:00:00.0001922" startTime="2025-10-06T02:02:32.2464579+00:00" endTime="2025-10-06T02:02:32.2467387+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4674a318-36dd-4b99-a1d9-c85564cf5ce5" />
+    <UnitTestResult executionId="318bf59f-fa1b-40ba-92d1-ff2e63a695e8" testId="dee556bb-4ad8-bf83-e66d-693bdee7a91d" testName="TestInt64DefaultValueIsSet" computerName="runnervmwhb2z" duration="00:00:00.0004783" startTime="2025-10-06T02:02:32.2418883+00:00" endTime="2025-10-06T02:02:32.2424380+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="318bf59f-fa1b-40ba-92d1-ff2e63a695e8" />
+    <UnitTestResult executionId="9a1a8ca6-f95e-44aa-99ba-6d97fc6df74a" testId="1b6e1024-1ac0-ac31-bbcf-239fec4771a3" testName="TestFacetsAreInjectedProperly" computerName="runnervmwhb2z" duration="00:00:00.0008961" startTime="2025-10-06T02:02:32.1672932+00:00" endTime="2025-10-06T02:02:32.1683074+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9a1a8ca6-f95e-44aa-99ba-6d97fc6df74a" />
+    <UnitTestResult executionId="d3bd10d6-07c2-459f-b159-b7b7072c541e" testId="b241d3d9-c9dd-8250-097f-6b7f87ced7cd" testName="TestDefaultValueIsSetOnObjectCreatedWithDefaultConstructorWhenSpecified" computerName="runnervmwhb2z" duration="00:00:00.0010369" startTime="2025-10-06T02:02:32.1863232+00:00" endTime="2025-10-06T02:02:32.1874331+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d3bd10d6-07c2-459f-b159-b7b7072c541e" />
+    <UnitTestResult executionId="f32bc3b0-0e43-4bb6-9de8-61a6768a0c19" testId="d869ca4f-e5ec-bce3-b8bc-5ad55e330439" testName="TestInterfaceWithAVoidMethodNoArgs" computerName="runnervmwhb2z" duration="00:00:00.0026905" startTime="2025-10-06T02:02:32.1332909+00:00" endTime="2025-10-06T02:02:32.1360919+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f32bc3b0-0e43-4bb6-9de8-61a6768a0c19" />
+    <UnitTestResult executionId="78a0ae28-5d8e-42f5-b213-721a2bc4e303" testId="7fcb4d21-8d60-6311-c294-0fba2465ad06" testName="GivenAnInterfaceTypeThenCreationOfObjectsShouldBeFasterWithSquid" computerName="runnervmwhb2z" duration="00:00:02.6452746" startTime="2025-10-06T02:02:32.2498541+00:00" endTime="2025-10-06T02:02:34.8953670+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="78a0ae28-5d8e-42f5-b213-721a2bc4e303">
+      <Output>
+        <StdOut>Debug Trace:
+Lambda: 1000000 items created in 65 ms 
+New: 1000000 items created in 53 ms 
+Squid: 1000000 items created in 161 ms 
+Activator: 1000000 items created in 224 ms 
+Default CTOR: 1000000 items created in 96 ms 
+Rhino: 1000000 items created in 2038 ms</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7f0e0ca4-ca5b-4762-b6b0-1aa1773cc7c5" testId="3f339f40-72d6-e9b0-f757-7158bbf26670" testName="TestTypeWasCreated" computerName="runnervmwhb2z" duration="00:00:00.0107832" startTime="2025-10-06T02:02:32.2280681+00:00" endTime="2025-10-06T02:02:32.2390866+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7f0e0ca4-ca5b-4762-b6b0-1aa1773cc7c5" />
+    <UnitTestResult executionId="fd89fa92-b87b-46b4-835c-3b838d7d50a5" testId="4daf1044-6efd-90df-6fbb-a0149dbcacfa" testName="TestInterfaceHidingAMethod" computerName="runnervmwhb2z" duration="00:00:00.0030312" startTime="2025-10-06T02:02:32.1528792+00:00" endTime="2025-10-06T02:02:32.1560021+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fd89fa92-b87b-46b4-835c-3b838d7d50a5" />
+    <UnitTestResult executionId="49fda633-2f96-4074-a0bd-714a61040b2b" testId="fde4027b-9d5e-430d-5a19-69c720ceac23" testName="TestGenericParameterConstrainedToNewAndBaseClass" computerName="runnervmwhb2z" duration="00:00:00.0001115" startTime="2025-10-06T02:02:32.1991621+00:00" endTime="2025-10-06T02:02:32.1993443+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="49fda633-2f96-4074-a0bd-714a61040b2b" />
+    <UnitTestResult executionId="a2d6cc6a-dc4a-4272-b165-4367126f3299" testId="e060b20d-0e00-4e5b-5a22-da44ce75235e" testName="TestHiddenProperty" computerName="runnervmwhb2z" duration="00:00:00.0020481" startTime="2025-10-06T02:02:32.1238839+00:00" endTime="2025-10-06T02:02:32.1260249+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a2d6cc6a-dc4a-4272-b165-4367126f3299" />
+    <UnitTestResult executionId="2f6ecb4f-3557-422a-b852-ce45e6bf2e7b" testId="18b91f20-0129-a8f8-fa28-8e8f66403845" testName="TestTypeDefaultValueIsSet" computerName="runnervmwhb2z" duration="00:00:00.0002961" startTime="2025-10-06T02:02:32.2451865+00:00" endTime="2025-10-06T02:02:32.2455885+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2f6ecb4f-3557-422a-b852-ce45e6bf2e7b" />
+    <UnitTestResult executionId="6fa84103-5318-4d9f-aacb-5d34950b2b37" testId="a9324463-490c-b7ff-8008-202ecfb5144e" testName="TestInterfaceWithACharMethodWithParamsArg" computerName="runnervmwhb2z" duration="00:00:00.0033063" startTime="2025-10-06T02:02:32.1414258+00:00" endTime="2025-10-06T02:02:32.1448310+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6fa84103-5318-4d9f-aacb-5d34950b2b37" />
+    <UnitTestResult executionId="05b34b6f-c118-480e-bc74-3e87d9ec36a0" testId="842fb997-7ae0-2f0f-da44-9c48f717707d" testName="TestSingleDefaultValueIsSet" computerName="runnervmwhb2z" duration="00:00:00.0007070" startTime="2025-10-06T02:02:32.2439116+00:00" endTime="2025-10-06T02:02:32.2447123+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="05b34b6f-c118-480e-bc74-3e87d9ec36a0" />
+    <UnitTestResult executionId="977f0374-e9be-4957-9801-42bafdf35089" testId="1f3f0578-aaed-55c6-cd32-0bdf3d32a491" testName="TestNoConstraints" computerName="runnervmwhb2z" duration="00:00:00.0017251" startTime="2025-10-06T02:02:32.1965152+00:00" endTime="2025-10-06T02:02:32.1984168+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="977f0374-e9be-4957-9801-42bafdf35089" />
+    <UnitTestResult executionId="fee7ad65-dff7-4932-a7c0-eda7ced943c5" testId="89936067-5119-9ccb-e318-002e81155e30" testName="TestClassName" computerName="runnervmwhb2z" duration="00:00:00.0001933" startTime="2025-10-06T02:02:32.1895969+00:00" endTime="2025-10-06T02:02:32.1898574+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fee7ad65-dff7-4932-a7c0-eda7ced943c5" />
+    <UnitTestResult executionId="064bbfbd-833c-40fa-91c8-0ccdc97c4de5" testId="dc59bc3d-4df6-649a-30c1-7df13c69c3c9" testName="ControlTestFilbertWithPropertyChangedShouldRaisePropertyChangedEvent" computerName="runnervmwhb2z" duration="00:00:00.0009402" startTime="2025-10-06T02:02:32.0267047+00:00" endTime="2025-10-06T02:02:32.0278536+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="064bbfbd-833c-40fa-91c8-0ccdc97c4de5" />
+    <UnitTestResult executionId="9c6588c0-fd8b-4e71-9e2c-89144252df61" testId="24beee13-e931-53e5-c9cf-9bdb893b2c88" testName="TestInterfaceName" computerName="runnervmwhb2z" duration="00:00:00.0002374" startTime="2025-10-06T02:02:32.1892013+00:00" endTime="2025-10-06T02:02:32.1895560+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9c6588c0-fd8b-4e71-9e2c-89144252df61" />
+    <UnitTestResult executionId="b6e58168-e373-4c79-84b6-b75eae8bc899" testId="ad2d8b1b-1127-107d-1caa-bcf72774fe46" testName="CreateInstanceAllowsPropertyReadWriteAccess" computerName="runnervmwhb2z" duration="00:00:00.0024118" startTime="2025-10-06T02:02:32.1922264+00:00" endTime="2025-10-06T02:02:32.1947341+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b6e58168-e373-4c79-84b6-b75eae8bc899" />
+    <UnitTestResult executionId="b8c093be-fda5-4e97-a27b-a25898e687b0" testId="446eaf13-643e-0832-2e1a-4dca80acf1be" testName="TestInterfaceWithRemoteTypeProperty" computerName="runnervmwhb2z" duration="00:00:00.0019412" startTime="2025-10-06T02:02:32.2214576+00:00" endTime="2025-10-06T02:02:32.2235171+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b8c093be-fda5-4e97-a27b-a25898e687b0" />
+    <UnitTestResult executionId="8065276b-24ea-4d19-89a0-4bec86d1747c" testId="49e4eba6-f366-57af-c082-c0a3f528f9e5" testName="TestAttributesOnPropertiesAreSet" computerName="runnervmwhb2z" duration="00:00:00.0016383" startTime="2025-10-06T02:02:31.9494511+00:00" endTime="2025-10-06T02:02:31.9512548+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8065276b-24ea-4d19-89a0-4bec86d1747c" />
+    <UnitTestResult executionId="31c1c4bf-f6e9-4f95-b702-0be82fb408ba" testId="68eda68b-ea14-7e74-a0dd-b17d21cf94ff" testName="TestInterfaceExtendingAnother" computerName="runnervmwhb2z" duration="00:00:00.0017018" startTime="2025-10-06T02:02:32.1510561+00:00" endTime="2025-10-06T02:02:32.1528510+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="31c1c4bf-f6e9-4f95-b702-0be82fb408ba" />
+    <UnitTestResult executionId="99058854-ede9-45b2-9e1f-1d5ed96f6879" testId="277661f4-e9e6-ec43-8264-005b762b14aa" testName="TestFilbertWithPropertyChangeShouldRaiseBoth" computerName="runnervmwhb2z" duration="00:00:00.0018601" startTime="2025-10-06T02:02:32.0845937+00:00" endTime="2025-10-06T02:02:32.0865471+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="99058854-ede9-45b2-9e1f-1d5ed96f6879" />
+    <UnitTestResult executionId="289465b3-2c49-4841-a605-c05e75ae3278" testId="c8fdf668-630c-1a48-eb08-cec7168ff359" testName="TestByteDefaultValueIsSet" computerName="runnervmwhb2z" duration="00:00:00.0004827" startTime="2025-10-06T02:02:32.2399544+00:00" endTime="2025-10-06T02:02:32.2405090+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="289465b3-2c49-4841-a605-c05e75ae3278" />
+    <UnitTestResult executionId="1166758d-9f83-4c11-90cf-e00c56c8b45c" testId="35d3a9d0-aab8-d06f-d09e-bf3a5762d230" testName="TestInterfaceWithAGuidMethodWithRefArg" computerName="runnervmwhb2z" duration="00:00:00.0038220" startTime="2025-10-06T02:02:32.1448598+00:00" endTime="2025-10-06T02:02:32.1487764+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1166758d-9f83-4c11-90cf-e00c56c8b45c" />
+    <UnitTestResult executionId="53afd801-2c8c-4876-b39e-2a337bbe57df" testId="b6d1d514-ac0e-d9db-2474-ff1240ae6410" testName="TestGenericParameterConstrainedToReference" computerName="runnervmwhb2z" duration="00:00:00.0001496" startTime="2025-10-06T02:02:32.1984488+00:00" endTime="2025-10-06T02:02:32.1986655+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="53afd801-2c8c-4876-b39e-2a337bbe57df" />
+    <UnitTestResult executionId="a1cf173f-6eb5-449e-97a7-c54d043a1d8c" testId="a582b358-d109-2cae-c92a-6c6ba43814e0" testName="GivenAPropertyChangesOnAnObjectThenTheChangedPropertiesDictionaryShouldRegisterThatChange" computerName="runnervmwhb2z" duration="00:00:00.0042847" startTime="2025-10-06T02:02:32.0865754+00:00" endTime="2025-10-06T02:02:32.0910360+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a1cf173f-6eb5-449e-97a7-c54d043a1d8c" />
+    <UnitTestResult executionId="6982a732-3ca4-476c-9e78-976a59b0fa31" testId="f307dc55-1b59-9880-ace4-0aa7a2d42279" testName="TestInlineMappedReadonlyPropertiesWork" computerName="runnervmwhb2z" duration="00:00:00.0012495" startTime="2025-10-06T02:02:32.2258234+00:00" endTime="2025-10-06T02:02:32.2271594+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6982a732-3ca4-476c-9e78-976a59b0fa31" />
+    <UnitTestResult executionId="dfc5a3fe-ed49-4e83-8cfc-fea38f837816" testId="8e96a6f1-2757-7c7a-b380-b5607f523e89" testName="TestGenericParameterConstrainedToBaseClass" computerName="runnervmwhb2z" duration="00:00:00.0001067" startTime="2025-10-06T02:02:32.2004219+00:00" endTime="2025-10-06T02:02:32.2005998+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dfc5a3fe-ed49-4e83-8cfc-fea38f837816" />
+    <UnitTestResult executionId="9a3ff45f-49e6-48a9-816a-926330d10dff" testId="9037d45d-ed95-8755-2834-4533e32e79f7" testName="TestImplementationSupportsCloneableIfTypeCreatorSpecifiesICloneableFacet" computerName="runnervmwhb2z" duration="00:00:00.0035336" startTime="2025-10-06T02:02:32.1068898+00:00" endTime="2025-10-06T02:02:32.1108131+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9a3ff45f-49e6-48a9-816a-926330d10dff" />
+    <UnitTestResult executionId="cdd171d3-d0a9-4c46-b3de-e739ccaf010b" testId="26fac203-f452-f7b2-39a0-5c1de5636c3a" testName="TestDefaultValueIsSetWhenSpecified" computerName="runnervmwhb2z" duration="00:00:00.0095495" startTime="2025-10-06T02:02:32.1766784+00:00" endTime="2025-10-06T02:02:32.1862988+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cdd171d3-d0a9-4c46-b3de-e739ccaf010b" />
+    <UnitTestResult executionId="61a142fd-46a2-4502-b278-bb0be8343c92" testId="50a101ad-5272-b066-9a63-e6d2c7901cad" testName="TestNonPrimitiveClassType" computerName="runnervmwhb2z" duration="00:00:00.0014943" startTime="2025-10-06T02:02:32.1132068+00:00" endTime="2025-10-06T02:02:32.1149319+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="61a142fd-46a2-4502-b278-bb0be8343c92" />
+    <UnitTestResult executionId="1f750a71-5cbe-46ea-ac46-5b3a365d3cbe" testId="9db55693-41c4-5b92-e8a8-1182d2bba015" testName="TestGenericParameterConstrainedToNewAndBaseClassAndInterface" computerName="runnervmwhb2z" duration="00:00:00.0001074" startTime="2025-10-06T02:02:32.2001912+00:00" endTime="2025-10-06T02:02:32.2003890+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1f750a71-5cbe-46ea-ac46-5b3a365d3cbe" />
+    <UnitTestResult executionId="2026d880-fb4b-4d66-9283-84814c76d475" testId="4806bb46-3219-8cf8-d3c4-a88393c38e7a" testName="TestMultipleInheritanceWithCollisionWithSameType" computerName="runnervmwhb2z" duration="00:00:00.0029728" startTime="2025-10-06T02:02:32.1628339+00:00" endTime="2025-10-06T02:02:32.1659037+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2026d880-fb4b-4d66-9283-84814c76d475" />
+    <UnitTestResult executionId="1454c611-9402-43cb-86bc-5db296bacb5b" testId="78a48876-7cb9-04f1-9a10-f9053fe221dd" testName="GenericParameterConstrainedToReferenceAndNewAndInterface" computerName="runnervmwhb2z" duration="00:00:00.0001994" startTime="2025-10-06T02:02:32.1988480+00:00" endTime="2025-10-06T02:02:32.1991190+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1454c611-9402-43cb-86bc-5db296bacb5b" />
+    <UnitTestResult executionId="e85615fa-39a4-44a1-9b20-cface899f303" testId="1a964783-4129-3691-8ba3-073427dab093" testName="TestInterfaceWithAnArrayMethodWithOutArg" computerName="runnervmwhb2z" duration="00:00:00.0020991" startTime="2025-10-06T02:02:32.1488136+00:00" endTime="2025-10-06T02:02:32.1510190+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e85615fa-39a4-44a1-9b20-cface899f303" />
+    <UnitTestResult executionId="de1283f6-018e-461f-8bb0-cdd347d48042" testId="3b1d4173-fe0a-0370-56d5-71c1cdf5b4f0" testName="TestNonGenericInterfaceType" computerName="runnervmwhb2z" duration="00:00:00.0009081" startTime="2025-10-06T02:02:32.1182502+00:00" endTime="2025-10-06T02:02:32.1192473+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="de1283f6-018e-461f-8bb0-cdd347d48042" />
+    <UnitTestResult executionId="4f2e43b0-e29e-4a3d-9062-5e8aa62b7b99" testId="624dba2c-730e-06ef-e509-f82a332f71aa" testName="TestICloneableImplementation" computerName="runnervmwhb2z" duration="00:00:00.0061521" startTime="2025-10-06T02:02:32.0950506+00:00" endTime="2025-10-06T02:02:32.1013929+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4f2e43b0-e29e-4a3d-9062-5e8aa62b7b99" />
+    <UnitTestResult executionId="bbf12504-3f79-4aea-bacb-025afb18a6f7" testId="2c835226-6bc8-32e1-25bd-8eccbe8199fc" testName="TestFacetsAreInjectedProperly" computerName="runnervmwhb2z" duration="00:00:00.0015776" startTime="2025-10-06T02:02:32.1947625+00:00" endTime="2025-10-06T02:02:32.1964862+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bbf12504-3f79-4aea-bacb-025afb18a6f7" />
+    <UnitTestResult executionId="65eda576-ff2d-4c41-9aa1-ae57e7bf2150" testId="f43d201f-5d44-0310-ebf7-4122525848de" testName="TestDoubleDefaultValueIsSet" computerName="runnervmwhb2z" duration="00:00:00.0002184" startTime="2025-10-06T02:02:32.2424599+00:00" endTime="2025-10-06T02:02:32.2427475+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="65eda576-ff2d-4c41-9aa1-ae57e7bf2150" />
+    <UnitTestResult executionId="fffe8230-5165-4a54-bfd0-2cbd5beface6" testId="e008d10b-2c82-dda7-3863-0b8c85676216" testName="TestInterfaceWithRemoteTypeProperty" computerName="runnervmwhb2z" duration="00:00:00.0019992" startTime="2025-10-06T02:02:32.1560310+00:00" endTime="2025-10-06T02:02:32.1581203+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fffe8230-5165-4a54-bfd0-2cbd5beface6" />
+    <UnitTestResult executionId="39cacd91-b0db-4478-8a08-d0fde1397d32" testId="24aa40be-525b-ef2e-7e74-53504f31af06" testName="TestCreateInstanceWithDefaultEnumValueMinusOneShouldCreate" computerName="runnervmwhb2z" duration="00:00:00.0016213" startTime="2025-10-06T02:02:32.1874629+00:00" endTime="2025-10-06T02:02:32.1891711+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="39cacd91-b0db-4478-8a08-d0fde1397d32" />
+    <UnitTestResult executionId="9f311f0f-9c4d-45ac-a1ea-aee62688d5b7" testId="2ba18717-bbfe-d480-4a05-8a279e8b2e1d" testName="TestGenericParameterConstrainedToReferenceAndNew" computerName="runnervmwhb2z" duration="00:00:00.0000701" startTime="2025-10-06T02:02:32.1986874+00:00" endTime="2025-10-06T02:02:32.1988224+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9f311f0f-9c4d-45ac-a1ea-aee62688d5b7" />
+    <UnitTestResult executionId="f4e45a8c-b19c-4061-b106-fc543c0384cd" testId="fec90648-93d3-ba18-716e-f5390cb4bade" testName="TestDynamicInstanceIsInitializedWithStaticSuppliedValue" computerName="runnervmwhb2z" duration="00:00:00.0040884" startTime="2025-10-06T02:02:32.0141608+00:00" endTime="2025-10-06T02:02:32.0183735+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f4e45a8c-b19c-4061-b106-fc543c0384cd" />
+    <UnitTestResult executionId="a7a53c45-a4f4-4ec6-899a-512c5f82db6f" testId="b16eb923-7a96-55d1-593b-1495b5480127" testName="TestFilbertWithPropertyChangingShouldRaisePropertyChangingEvent" computerName="runnervmwhb2z" duration="00:00:00.0016156" startTime="2025-10-06T02:02:32.0828549+00:00" endTime="2025-10-06T02:02:32.0845646+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a7a53c45-a4f4-4ec6-899a-512c5f82db6f" />
+    <UnitTestResult executionId="ab279fd9-776e-4973-8518-b869032ed802" testId="06fbfaaa-890f-11d8-e61e-66d95021892e" testName="TestInterfaceWithEvent" computerName="runnervmwhb2z" duration="00:00:00.0036674" startTime="2025-10-06T02:02:32.1581708+00:00" endTime="2025-10-06T02:02:32.1619372+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ab279fd9-776e-4973-8518-b869032ed802" />
+    <UnitTestResult executionId="f3ffa00a-e260-4dd6-9467-8fb85fd7dc5b" testId="af1c22b1-2db3-44d7-2ab9-25b5ffb2e7a4" testName="ShouldBeAbleToSetAndGetUnmappedImmutablePropertyViaDLR" computerName="runnervmwhb2z" duration="00:00:00.0154440" startTime="2025-10-06T02:02:32.2008424+00:00" endTime="2025-10-06T02:02:32.2164562+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f3ffa00a-e260-4dd6-9467-8fb85fd7dc5b" />
+    <UnitTestResult executionId="5504532b-c3f1-412d-baac-db3a88bb372e" testId="74c425c5-a880-6140-a5ae-742b1221c089" testName="ControlTestFilbertWithPropertyChangeShouldRaiseBoth" computerName="runnervmwhb2z" duration="00:00:00.0013219" startTime="2025-10-06T02:02:32.0768868+00:00" endTime="2025-10-06T02:02:32.0783509+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5504532b-c3f1-412d-baac-db3a88bb372e" />
+    <UnitTestResult executionId="5cfaebf8-2bcb-423b-9897-f83829ddea13" testId="ae50e21e-e5ee-22e8-00ec-dbcfd2dacf5a" testName="TestDynamicInstanceCanBeCalledFromLinq" computerName="runnervmwhb2z" duration="00:00:00.0081542" startTime="2025-10-06T02:02:32.0184160+00:00" endTime="2025-10-06T02:02:32.0266711+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5cfaebf8-2bcb-423b-9897-f83829ddea13" />
+    <UnitTestResult executionId="5e46aecc-7003-4f2f-9981-03a90d7e44a5" testId="44797205-2206-2ded-3cfc-da1d8eaeaabc" testName="TestFilbertWithPropertyChangedShouldRaisePropertyChangedEvent" computerName="runnervmwhb2z" duration="00:00:00.0043130" startTime="2025-10-06T02:02:32.0784167+00:00" endTime="2025-10-06T02:02:32.0828245+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5e46aecc-7003-4f2f-9981-03a90d7e44a5" />
+    <UnitTestResult executionId="867234ab-d712-4035-801f-bceb74518696" testId="946ecd54-6d3f-6646-acef-abd14321b5f7" testName="TestNonGenericInterfaceTypeImplementingAllProperties" computerName="runnervmwhb2z" duration="00:00:00.0012427" startTime="2025-10-06T02:02:32.1282347+00:00" endTime="2025-10-06T02:02:32.1295720+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="867234ab-d712-4035-801f-bceb74518696" />
+    <UnitTestResult executionId="aa1e76e4-2d03-4400-b0cf-ce1996b63f38" testId="41a626bb-b7a2-1dfc-c6a2-47602e47ad9d" testName="GettingAReadonlyPropertyValueBeforeInitializingShouldThrow" computerName="runnervmwhb2z" duration="00:00:00.0028249" startTime="2025-10-06T02:02:32.2185370+00:00" endTime="2025-10-06T02:02:32.2214344+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aa1e76e4-2d03-4400-b0cf-ce1996b63f38" />
+    <UnitTestResult executionId="a353b9e7-2085-46e3-a191-3b9e2d43e82b" testId="48a2ee22-c6ec-1432-f5fa-7edb7a33bec0" testName="TestCharDefaultValueIsSet" computerName="runnervmwhb2z" duration="00:00:00.0004384" startTime="2025-10-06T02:02:32.2405384+00:00" endTime="2025-10-06T02:02:32.2410447+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a353b9e7-2085-46e3-a191-3b9e2d43e82b" />
+    <UnitTestResult executionId="d630fa8c-0697-4443-a5ff-540d5896be70" testId="351c2aff-1a80-dc60-0c03-8591e4d4a0d3" testName="TestAttributesOnTypeAreSet" computerName="runnervmwhb2z" duration="00:00:00.0434344" startTime="2025-10-06T02:02:31.8862922+00:00" endTime="2025-10-06T02:02:31.9435596+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d630fa8c-0697-4443-a5ff-540d5896be70" />
+    <UnitTestResult executionId="3fecaac5-5676-4502-bd7c-a3282a6f7475" testId="2d2b1f8b-d363-92ff-e9ce-4de214ac0937" testName="TestDynamicInstanceIsInitializedWithDynamicSuppliedValue" computerName="runnervmwhb2z" duration="00:00:00.0595794" startTime="2025-10-06T02:02:31.9543340+00:00" endTime="2025-10-06T02:02:32.0140813+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3fecaac5-5676-4502-bd7c-a3282a6f7475" />
+    <UnitTestResult executionId="ac9508c2-9cea-4915-a60b-461e27a47bb5" testId="d1608198-ff7a-3a12-fef5-4df59e73c4d7" testName="TestGetOnlyMappedPropertyShouldNotThrow" computerName="runnervmwhb2z" duration="00:00:00.0036384" startTime="2025-10-06T02:02:32.1201006+00:00" endTime="2025-10-06T02:02:32.1238549+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ac9508c2-9cea-4915-a60b-461e27a47bb5" />
+    <UnitTestResult executionId="eb4afe40-6a85-41d5-8b3e-b231fc534b7a" testId="667b6834-bf2a-e302-14c9-7e66793305a5" testName="TestInt16DefaultValueIsSet" computerName="runnervmwhb2z" duration="00:00:00.0004326" startTime="2025-10-06T02:02:32.2410670+00:00" endTime="2025-10-06T02:02:32.2415797+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eb4afe40-6a85-41d5-8b3e-b231fc534b7a" />
+    <UnitTestResult executionId="0fcb7fd1-2b21-4c95-9495-bbd63ff78625" testId="685335f9-0822-a28c-906c-692a8341c85e" testName="TestNewHiddenProperty" computerName="runnervmwhb2z" duration="00:00:00.0020525" startTime="2025-10-06T02:02:32.1260538+00:00" endTime="2025-10-06T02:02:32.1281995+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0fcb7fd1-2b21-4c95-9495-bbd63ff78625" />
+    <UnitTestResult executionId="3991a71b-54c8-4584-9471-50902abb3e8f" testId="bc32ab21-4e8b-8e99-7fe1-69346e0531df" testName="TestDecimalDefaultValueIsSet" computerName="runnervmwhb2z" duration="00:00:00.0002281" startTime="2025-10-06T02:02:32.2427764+00:00" endTime="2025-10-06T02:02:32.2430708+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3991a71b-54c8-4584-9471-50902abb3e8f" />
+    <UnitTestResult executionId="b2a620fa-63a2-48ed-9f74-5578d930df78" testId="61bf47dd-8427-3934-f6d3-837a2d2b00ad" testName="ShouldNotBeAbleToSetAndGetMappedImmutablePropertyViaDLR" computerName="runnervmwhb2z" duration="00:00:00.0019118" startTime="2025-10-06T02:02:32.2164975+00:00" endTime="2025-10-06T02:02:32.2185039+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b2a620fa-63a2-48ed-9f74-5578d930df78" />
+    <UnitTestResult executionId="bcf9b403-ec24-4e18-a436-96bc5bf1fda6" testId="96516056-64a4-0033-6e75-710d6c912778" testName="TestEnumDefaultValueIsSet" computerName="runnervmwhb2z" duration="00:00:00.0007117" startTime="2025-10-06T02:02:32.2456170+00:00" endTime="2025-10-06T02:02:32.2464208+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bcf9b403-ec24-4e18-a436-96bc5bf1fda6" />
+    <UnitTestResult executionId="d3080e1a-423d-4aed-bb50-ff0274e9ae37" testId="1d2c52c6-c1bc-079d-d9e7-09ce05875fa7" testName="TestInt32DefaultValueIsSet" computerName="runnervmwhb2z" duration="00:00:00.0001925" startTime="2025-10-06T02:02:32.2416025+00:00" endTime="2025-10-06T02:02:32.2418665+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d3080e1a-423d-4aed-bb50-ff0274e9ae37" />
+    <UnitTestResult executionId="4e5a9d41-d591-4ec7-a9f2-fe757bfcdf2d" testId="45d5681a-898a-105d-8c8f-58672f76d531" testName="TestPropertyWithDefaultValueIsNoticed" computerName="runnervmwhb2z" duration="00:00:00.0081436" startTime="2025-10-06T02:02:32.1683356+00:00" endTime="2025-10-06T02:02:32.1766545+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4e5a9d41-d591-4ec7-a9f2-fe757bfcdf2d" />
+    <UnitTestResult executionId="26bdbacb-452b-4f92-8bca-12d47c246063" testId="fd0cff8b-f40e-5243-ea7c-7f6fa42cc35d" testName="TestInterfaceTypeWithGenericPropertiesImplementingAllProperties" computerName="runnervmwhb2z" duration="00:00:00.0021420" startTime="2025-10-06T02:02:32.1296003+00:00" endTime="2025-10-06T02:02:32.1318394+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="26bdbacb-452b-4f92-8bca-12d47c246063" />
+    <UnitTestResult executionId="2ea269e9-93f0-4354-998e-884897e6eacb" testId="a8079325-f343-16c5-db70-e45c6a2adb94" testName="ControlTestFilbertWithPropertyChangingShouldRaisePropertyChangingEvent" computerName="runnervmwhb2z" duration="00:00:00.0008782" startTime="2025-10-06T02:02:32.0278806+00:00" endTime="2025-10-06T02:02:32.0288771+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2ea269e9-93f0-4354-998e-884897e6eacb" />
+    <UnitTestResult executionId="e5223f92-08b1-481e-b97c-75c17f35dfa8" testId="7a880dcb-c4dd-a0a7-536d-e6c2d9bfec25" testName="TestDefaultMappedReadonlyPropertiesWork" computerName="runnervmwhb2z" duration="00:00:00.0021901" startTime="2025-10-06T02:02:32.2235400+00:00" endTime="2025-10-06T02:02:32.2258005+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e5223f92-08b1-481e-b97c-75c17f35dfa8" />
+    <UnitTestResult executionId="cc142d68-450c-49fd-a107-8e4bf7c52246" testId="0ef2496f-c367-4048-6858-544344be7032" testName="TestAttributesOnEventsAreSet" computerName="runnervmwhb2z" duration="00:00:00.0010929" startTime="2025-10-06T02:02:31.9529468+00:00" endTime="2025-10-06T02:02:31.9542961+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cc142d68-450c-49fd-a107-8e4bf7c52246" />
+    <UnitTestResult executionId="c160de92-62dc-4cc5-9f93-b3b20c0fedb6" testId="9f0fb774-b32b-e9f9-9f78-55809994f17d" testName="TestStringDefaultValueIsSet" computerName="runnervmwhb2z" duration="00:00:00.0003062" startTime="2025-10-06T02:02:32.2447407+00:00" endTime="2025-10-06T02:02:32.2451391+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c160de92-62dc-4cc5-9f93-b3b20c0fedb6" />
+    <UnitTestResult executionId="e5d0d99b-4f84-45e9-9174-85dc2c1572e6" testId="f4b2ba25-8133-412e-be23-0c1f3f3d19c0" testName="TestGenericParameterConstrainedToBaseClassAndTwoInterfaces" computerName="runnervmwhb2z" duration="00:00:00.0001104" startTime="2025-10-06T02:02:32.2006250+00:00" endTime="2025-10-06T02:02:32.2008157+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e5d0d99b-4f84-45e9-9174-85dc2c1572e6" />
+    <UnitTestResult executionId="a83463dd-b028-49ea-b096-b8596bef6da3" testId="6f625e69-f84d-9e84-1e92-ecdd41a10fbb" testName="TestNonCloneableInterfaceDoesNotHaveCloneMethod" computerName="runnervmwhb2z" duration="00:00:00.0053495" startTime="2025-10-06T02:02:32.1014212+00:00" endTime="2025-10-06T02:02:32.1068620+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a83463dd-b028-49ea-b096-b8596bef6da3" />
+    <UnitTestResult executionId="f78eb66b-dfaf-4934-b788-8e2457c71688" testId="a20179df-df2b-e141-58fc-376a8bfdd419" testName="TestDynamicChangeTrackedPropertyTypeIsPropertyChangingNotificationSink" computerName="runnervmwhb2z" duration="00:00:00.0037858" startTime="2025-10-06T02:02:32.0910654+00:00" endTime="2025-10-06T02:02:32.0950117+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f78eb66b-dfaf-4934-b788-8e2457c71688" />
+    <UnitTestResult executionId="ec07c884-d50d-4688-baa1-c282ffdfd486" testId="449b6ea1-29e2-a7cb-deaf-40988a0c9b0f" testName="TestMultipleInheritanceWithCollisionWithDifferentType" computerName="runnervmwhb2z" duration="00:00:00.0012266" startTime="2025-10-06T02:02:32.1659416+00:00" endTime="2025-10-06T02:02:32.1672648+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ec07c884-d50d-4688-baa1-c282ffdfd486" />
+    <UnitTestResult executionId="39e700c1-d4e6-410d-a38e-5d131e28c63e" testId="ef26b7fc-b124-37d4-431b-226f0fe25083" testName="TestAttributesOnMethodsAreSet" computerName="runnervmwhb2z" duration="00:00:00.0012102" startTime="2025-10-06T02:02:31.9516218+00:00" endTime="2025-10-06T02:02:31.9529204+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="39e700c1-d4e6-410d-a38e-5d131e28c63e" />
+    <UnitTestResult executionId="554f0bce-c5ac-4181-ac5d-da32a28e8ac8" testId="762f622d-f4b6-f30a-c4fc-20473f66c824" testName="FacetInterfaceIsImplementedOnEmittedType" computerName="runnervmwhb2z" duration="00:00:00.0009014" startTime="2025-10-06T02:02:32.1907408+00:00" endTime="2025-10-06T02:02:32.1917960+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="554f0bce-c5ac-4181-ac5d-da32a28e8ac8" />
+    <UnitTestResult executionId="099c4e12-d1b1-4477-b414-d022df8dd6fc" testId="ae253cd8-42b2-f909-5fb0-ecbffdc61179" testName="TestDynamicIsObject" computerName="runnervmwhb2z" duration="00:00:00.0007056" startTime="2025-10-06T02:02:32.1192760+00:00" endTime="2025-10-06T02:02:32.1200732+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="099c4e12-d1b1-4477-b414-d022df8dd6fc" />
+    <UnitTestResult executionId="d5f2009f-fe96-40e8-8b8a-ef3b7e354729" testId="90a2405b-b789-0228-66ee-2fd158c5fd5a" testName="TestInterfaceWithAnIntMethodWithArgs" computerName="runnervmwhb2z" duration="00:00:00.0021525" startTime="2025-10-06T02:02:32.1361204+00:00" endTime="2025-10-06T02:02:32.1413963+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d5f2009f-fe96-40e8-8b8a-ef3b7e354729" />
+    <UnitTestResult executionId="3afe89dd-aa99-4d09-b100-91485366474a" testId="f2bd7d03-357e-4ced-e2eb-7f1fc21d9911" testName="TestInterfaceWithGenericMethods" computerName="runnervmwhb2z" duration="00:00:00.0031603" startTime="2025-10-06T02:02:32.1149597+00:00" endTime="2025-10-06T02:02:32.1182137+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3afe89dd-aa99-4d09-b100-91485366474a" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="TestFacetsAreInjectedProperly" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="2c835226-6bc8-32e1-25bd-8eccbe8199fc">
+      <Execution id="bbf12504-3f79-4aea-bacb-025afb18a6f7" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.FacetInjectionTests" name="TestFacetsAreInjectedProperly" />
+    </UnitTest>
+    <UnitTest name="TestInterfaceWithAGuidMethodWithRefArg" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="35d3a9d0-aab8-d06f-d09e-bf3a5762d230">
+      <Execution id="1166758d-9f83-4c11-90cf-e00c56c8b45c" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestInterfaceWithAGuidMethodWithRefArg" />
+    </UnitTest>
+    <UnitTest name="TestDynamicChangeTrackedPropertyTypeIsPropertyChangingNotificationSink" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="a20179df-df2b-e141-58fc-376a8bfdd419">
+      <Execution id="f78eb66b-dfaf-4934-b788-8e2457c71688" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.ChangeTrackedPropertyTypeTests" name="TestDynamicChangeTrackedPropertyTypeIsPropertyChangingNotificationSink" />
+    </UnitTest>
+    <UnitTest name="TestDoubleDefaultValueIsSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="f43d201f-5d44-0310-ebf7-4122525848de">
+      <Execution id="65eda576-ff2d-4c41-9aa1-ae57e7bf2150" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.SetDefaultValueTests" name="TestDoubleDefaultValueIsSet" />
+    </UnitTest>
+    <UnitTest name="FacetInterfaceIsImplementedOnEmittedType" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="762f622d-f4b6-f30a-c4fc-20473f66c824">
+      <Execution id="554f0bce-c5ac-4181-ac5d-da32a28e8ac8" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.EmittedTypeShapeTests" name="FacetInterfaceIsImplementedOnEmittedType" />
+    </UnitTest>
+    <UnitTest name="TestInterfaceWithRemoteTypeProperty" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="446eaf13-643e-0832-2e1a-4dca80acf1be">
+      <Execution id="b8c093be-fda5-4e97-a27b-a25898e687b0" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.MappedTypeTests" name="TestInterfaceWithRemoteTypeProperty" />
+    </UnitTest>
+    <UnitTest name="TestInterfaceWithAnArrayMethodWithOutArg" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="1a964783-4129-3691-8ba3-073427dab093">
+      <Execution id="e85615fa-39a4-44a1-9b20-cface899f303" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestInterfaceWithAnArrayMethodWithOutArg" />
+    </UnitTest>
+    <UnitTest name="TestNonCloneableInterfaceDoesNotHaveCloneMethod" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="6f625e69-f84d-9e84-1e92-ecdd41a10fbb">
+      <Execution id="a83463dd-b028-49ea-b096-b8596bef6da3" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CloneableTests" name="TestNonCloneableInterfaceDoesNotHaveCloneMethod" />
+    </UnitTest>
+    <UnitTest name="TestHiddenProperty" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="e060b20d-0e00-4e5b-5a22-da44ce75235e">
+      <Execution id="a2d6cc6a-dc4a-4272-b165-4367126f3299" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestHiddenProperty" />
+    </UnitTest>
+    <UnitTest name="TestBooleanDefaultValueIsSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="04dc7e40-053e-2dfb-07fd-9a38791a6762">
+      <Execution id="7cf5caa4-9559-4877-8848-099c9a058521" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.SetDefaultValueTests" name="TestBooleanDefaultValueIsSet" />
+    </UnitTest>
+    <UnitTest name="TestDefaultValueIsSetOnObjectCreatedWithDefaultConstructorWhenSpecified" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="b241d3d9-c9dd-8250-097f-6b7f87ced7cd">
+      <Execution id="d3bd10d6-07c2-459f-b159-b7b7072c541e" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.DefaultValueTypeCreatorTests" name="TestDefaultValueIsSetOnObjectCreatedWithDefaultConstructorWhenSpecified" />
+    </UnitTest>
+    <UnitTest name="TestInterfaceWithGenericMethods" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="f2bd7d03-357e-4ced-e2eb-7f1fc21d9911">
+      <Execution id="3afe89dd-aa99-4d09-b100-91485366474a" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestInterfaceWithGenericMethods" />
+    </UnitTest>
+    <UnitTest name="TestNonGenericInterfaceType" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="3b1d4173-fe0a-0370-56d5-71c1cdf5b4f0">
+      <Execution id="de1283f6-018e-461f-8bb0-cdd347d48042" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestNonGenericInterfaceType" />
+    </UnitTest>
+    <UnitTest name="TestEnumDefaultValueIsSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="96516056-64a4-0033-6e75-710d6c912778">
+      <Execution id="bcf9b403-ec24-4e18-a436-96bc5bf1fda6" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.SetDefaultValueTests" name="TestEnumDefaultValueIsSet" />
+    </UnitTest>
+    <UnitTest name="TestGenericParameterConstrainedToBaseClassAndTwoInterfaces" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="f4b2ba25-8133-412e-be23-0c1f3f3d19c0">
+      <Execution id="e5d0d99b-4f84-45e9-9174-85dc2c1572e6" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.GenericMethodTests" name="TestGenericParameterConstrainedToBaseClassAndTwoInterfaces" />
+    </UnitTest>
+    <UnitTest name="TestICloneableImplementation" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="624dba2c-730e-06ef-e509-f82a332f71aa">
+      <Execution id="4f2e43b0-e29e-4a3d-9062-5e8aa62b7b99" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CloneableTests" name="TestICloneableImplementation" />
+    </UnitTest>
+    <UnitTest name="TestInterfaceExtendingAnother" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="68eda68b-ea14-7e74-a0dd-b17d21cf94ff">
+      <Execution id="31c1c4bf-f6e9-4f95-b702-0be82fb408ba" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestInterfaceExtendingAnother" />
+    </UnitTest>
+    <UnitTest name="TestCharDefaultValueIsSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="48a2ee22-c6ec-1432-f5fa-7edb7a33bec0">
+      <Execution id="a353b9e7-2085-46e3-a191-3b9e2d43e82b" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.SetDefaultValueTests" name="TestCharDefaultValueIsSet" />
+    </UnitTest>
+    <UnitTest name="TestDefaultMappedReadonlyPropertiesWork" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="7a880dcb-c4dd-a0a7-536d-e6c2d9bfec25">
+      <Execution id="e5223f92-08b1-481e-b97c-75c17f35dfa8" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.MappedTypeTests" name="TestDefaultMappedReadonlyPropertiesWork" />
+    </UnitTest>
+    <UnitTest name="TestNonPrimitiveClassType" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="50a101ad-5272-b066-9a63-e6d2c7901cad">
+      <Execution id="61a142fd-46a2-4502-b278-bb0be8343c92" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestNonPrimitiveClassType" />
+    </UnitTest>
+    <UnitTest name="GivenAPropertyChangesOnAnObjectThenTheChangedPropertiesDictionaryShouldRegisterThatChange" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="a582b358-d109-2cae-c92a-6c6ba43814e0">
+      <Execution id="a1cf173f-6eb5-449e-97a7-c54d043a1d8c" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.ChangeTrackedPropertyTypeTests" name="GivenAPropertyChangesOnAnObjectThenTheChangedPropertiesDictionaryShouldRegisterThatChange" />
+    </UnitTest>
+    <UnitTest name="TestDynamicInstanceIsInitializedWithDynamicSuppliedValue" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="2d2b1f8b-d363-92ff-e9ce-4de214ac0937">
+      <Execution id="3fecaac5-5676-4502-bd7c-a3282a6f7475" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.AnonymousInterfaceImplementationTests" name="TestDynamicInstanceIsInitializedWithDynamicSuppliedValue" />
+    </UnitTest>
+    <UnitTest name="GivenAnInterfaceTypeThenCreationOfObjectsShouldBeFasterWithSquid" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="7fcb4d21-8d60-6311-c294-0fba2465ad06">
+      <Execution id="78a0ae28-5d8e-42f5-b213-721a2bc4e303" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.TimingTests" name="GivenAnInterfaceTypeThenCreationOfObjectsShouldBeFasterWithSquid" />
+    </UnitTest>
+    <UnitTest name="TestCreateInstanceWithDefaultEnumValueMinusOneShouldCreate" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="24aa40be-525b-ef2e-7e74-53504f31af06">
+      <Execution id="39cacd91-b0db-4478-8a08-d0fde1397d32" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.DefaultValueTypeCreatorTests" name="TestCreateInstanceWithDefaultEnumValueMinusOneShouldCreate" />
+    </UnitTest>
+    <UnitTest name="TestTypeWasCreated" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="3f339f40-72d6-e9b0-f757-7158bbf26670">
+      <Execution id="7f0e0ca4-ca5b-4762-b6b0-1aa1773cc7c5" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.SetDefaultValueTests" name="TestTypeWasCreated" />
+    </UnitTest>
+    <UnitTest name="GenericParameterConstrainedToReferenceAndNewAndInterface" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="78a48876-7cb9-04f1-9a10-f9053fe221dd">
+      <Execution id="1454c611-9402-43cb-86bc-5db296bacb5b" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.GenericMethodTests" name="GenericParameterConstrainedToReferenceAndNewAndInterface" />
+    </UnitTest>
+    <UnitTest name="TestGetOnlyMappedPropertyShouldNotThrow" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="d1608198-ff7a-3a12-fef5-4df59e73c4d7">
+      <Execution id="ac9508c2-9cea-4915-a60b-461e27a47bb5" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestGetOnlyMappedPropertyShouldNotThrow" />
+    </UnitTest>
+    <UnitTest name="TestMultipleInheritanceWithCollisionWithDifferentType" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="449b6ea1-29e2-a7cb-deaf-40988a0c9b0f">
+      <Execution id="ec07c884-d50d-4688-baa1-c282ffdfd486" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestMultipleInheritanceWithCollisionWithDifferentType" />
+    </UnitTest>
+    <UnitTest name="TestInterfaceWithAnIntMethodWithArgs" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="90a2405b-b789-0228-66ee-2fd158c5fd5a">
+      <Execution id="d5f2009f-fe96-40e8-8b8a-ef3b7e354729" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestInterfaceWithAnIntMethodWithArgs" />
+    </UnitTest>
+    <UnitTest name="TestPropertyWithDefaultValueIsNoticed" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="45d5681a-898a-105d-8c8f-58672f76d531">
+      <Execution id="4e5a9d41-d591-4ec7-a9f2-fe757bfcdf2d" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.DefaultValueTypeCreatorTests" name="TestPropertyWithDefaultValueIsNoticed" />
+    </UnitTest>
+    <UnitTest name="ShouldNotBeAbleToSetAndGetMappedImmutablePropertyViaDLR" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="61bf47dd-8427-3934-f6d3-837a2d2b00ad">
+      <Execution id="b2a620fa-63a2-48ed-9f74-5578d930df78" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.InitializationCheckedDynamicTests" name="ShouldNotBeAbleToSetAndGetMappedImmutablePropertyViaDLR" />
+    </UnitTest>
+    <UnitTest name="TestDynamicInstanceCanBeCalledFromLinq" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="ae50e21e-e5ee-22e8-00ec-dbcfd2dacf5a">
+      <Execution id="5cfaebf8-2bcb-423b-9897-f83829ddea13" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.AnonymousInterfaceImplementationTests" name="TestDynamicInstanceCanBeCalledFromLinq" />
+    </UnitTest>
+    <UnitTest name="TestGenericParameterConstrainedToNewAndBaseClassAndInterface" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="9db55693-41c4-5b92-e8a8-1182d2bba015">
+      <Execution id="1f750a71-5cbe-46ea-ac46-5b3a365d3cbe" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.GenericMethodTests" name="TestGenericParameterConstrainedToNewAndBaseClassAndInterface" />
+    </UnitTest>
+    <UnitTest name="TestInt64DefaultValueIsSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="dee556bb-4ad8-bf83-e66d-693bdee7a91d">
+      <Execution id="318bf59f-fa1b-40ba-92d1-ff2e63a695e8" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.SetDefaultValueTests" name="TestInt64DefaultValueIsSet" />
+    </UnitTest>
+    <UnitTest name="TestSingleDefaultValueIsSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="842fb997-7ae0-2f0f-da44-9c48f717707d">
+      <Execution id="05b34b6f-c118-480e-bc74-3e87d9ec36a0" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.SetDefaultValueTests" name="TestSingleDefaultValueIsSet" />
+    </UnitTest>
+    <UnitTest name="TestGenericParameterConstrainedToNewAndBaseClass" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="fde4027b-9d5e-430d-5a19-69c720ceac23">
+      <Execution id="49fda633-2f96-4074-a0bd-714a61040b2b" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.GenericMethodTests" name="TestGenericParameterConstrainedToNewAndBaseClass" />
+    </UnitTest>
+    <UnitTest name="TestNewHiddenProperty" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="685335f9-0822-a28c-906c-692a8341c85e">
+      <Execution id="0fcb7fd1-2b21-4c95-9495-bbd63ff78625" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestNewHiddenProperty" />
+    </UnitTest>
+    <UnitTest name="TestInterfaceWithRemoteTypeProperty" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="e008d10b-2c82-dda7-3863-0b8c85676216">
+      <Execution id="fffe8230-5165-4a54-bfd0-2cbd5beface6" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestInterfaceWithRemoteTypeProperty" />
+    </UnitTest>
+    <UnitTest name="ControlTestFilbertWithPropertyChangeShouldRaiseBoth" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="74c425c5-a880-6140-a5ae-742b1221c089">
+      <Execution id="5504532b-c3f1-412d-baac-db3a88bb372e" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.ChangeNotificationTests" name="ControlTestFilbertWithPropertyChangeShouldRaiseBoth" />
+    </UnitTest>
+    <UnitTest name="ShouldBeAbleToSetAndGetUnmappedImmutablePropertyViaDLR" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="af1c22b1-2db3-44d7-2ab9-25b5ffb2e7a4">
+      <Execution id="f3ffa00a-e260-4dd6-9467-8fb85fd7dc5b" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.InitializationCheckedDynamicTests" name="ShouldBeAbleToSetAndGetUnmappedImmutablePropertyViaDLR" />
+    </UnitTest>
+    <UnitTest name="TestDynamicInstanceIsInitializedWithStaticSuppliedValue" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="fec90648-93d3-ba18-716e-f5390cb4bade">
+      <Execution id="f4e45a8c-b19c-4061-b106-fc543c0384cd" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.AnonymousInterfaceImplementationTests" name="TestDynamicInstanceIsInitializedWithStaticSuppliedValue" />
+    </UnitTest>
+    <UnitTest name="TestInterfaceName" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="24beee13-e931-53e5-c9cf-9bdb893b2c88">
+      <Execution id="9c6588c0-fd8b-4e71-9e2c-89144252df61" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.DynamicTypeCreatorTests" name="TestInterfaceName" />
+    </UnitTest>
+    <UnitTest name="TestAttributesOnMethodsAreSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="ef26b7fc-b124-37d4-431b-226f0fe25083">
+      <Execution id="39e700c1-d4e6-410d-a38e-5d131e28c63e" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.AddCustomAttributeTests" name="TestAttributesOnMethodsAreSet" />
+    </UnitTest>
+    <UnitTest name="TestDefaultValueIsSetWhenSpecified" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="26fac203-f452-f7b2-39a0-5c1de5636c3a">
+      <Execution id="cdd171d3-d0a9-4c46-b3de-e739ccaf010b" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.DefaultValueTypeCreatorTests" name="TestDefaultValueIsSetWhenSpecified" />
+    </UnitTest>
+    <UnitTest name="TestTypeDefaultValueIsSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="18b91f20-0129-a8f8-fa28-8e8f66403845">
+      <Execution id="2f6ecb4f-3557-422a-b852-ce45e6bf2e7b" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.SetDefaultValueTests" name="TestTypeDefaultValueIsSet" />
+    </UnitTest>
+    <UnitTest name="TestFacetsAreInjectedProperly" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="1b6e1024-1ac0-ac31-bbcf-239fec4771a3">
+      <Execution id="9a1a8ca6-f95e-44aa-99ba-6d97fc6df74a" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestFacetsAreInjectedProperly" />
+    </UnitTest>
+    <UnitTest name="ControlTestFilbertWithPropertyChangedShouldRaisePropertyChangedEvent" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="dc59bc3d-4df6-649a-30c1-7df13c69c3c9">
+      <Execution id="064bbfbd-833c-40fa-91c8-0ccdc97c4de5" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.ChangeNotificationTests" name="ControlTestFilbertWithPropertyChangedShouldRaisePropertyChangedEvent" />
+    </UnitTest>
+    <UnitTest name="TestIllegalDefaultValueShouldThrow" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="080b3cee-97e7-b019-97bc-b0db70b9b988">
+      <Execution id="1f05630c-6e3d-46d3-86fe-415dd411c8ed" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.SetDefaultValueTests" name="TestIllegalDefaultValueShouldThrow" />
+    </UnitTest>
+    <UnitTest name="TestNoConstraints" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="1f3f0578-aaed-55c6-cd32-0bdf3d32a491">
+      <Execution id="977f0374-e9be-4957-9801-42bafdf35089" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.GenericMethodTests" name="TestNoConstraints" />
+    </UnitTest>
+    <UnitTest name="TestInt32DefaultValueIsSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="1d2c52c6-c1bc-079d-d9e7-09ce05875fa7">
+      <Execution id="d3080e1a-423d-4aed-bb50-ff0274e9ae37" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.SetDefaultValueTests" name="TestInt32DefaultValueIsSet" />
+    </UnitTest>
+    <UnitTest name="GettingAReadonlyPropertyValueBeforeInitializingShouldThrow" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="41a626bb-b7a2-1dfc-c6a2-47602e47ad9d">
+      <Execution id="aa1e76e4-2d03-4400-b0cf-ce1996b63f38" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.InitializationCheckedDynamicTests" name="GettingAReadonlyPropertyValueBeforeInitializingShouldThrow" />
+    </UnitTest>
+    <UnitTest name="TestInt16DefaultValueIsSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="667b6834-bf2a-e302-14c9-7e66793305a5">
+      <Execution id="eb4afe40-6a85-41d5-8b3e-b231fc534b7a" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.SetDefaultValueTests" name="TestInt16DefaultValueIsSet" />
+    </UnitTest>
+    <UnitTest name="TestGenericParameterConstrainedToReference" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="b6d1d514-ac0e-d9db-2474-ff1240ae6410">
+      <Execution id="53afd801-2c8c-4876-b39e-2a337bbe57df" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.GenericMethodTests" name="TestGenericParameterConstrainedToReference" />
+    </UnitTest>
+    <UnitTest name="TestInlineMappedReadonlyPropertiesWork" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="f307dc55-1b59-9880-ace4-0aa7a2d42279">
+      <Execution id="6982a732-3ca4-476c-9e78-976a59b0fa31" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.MappedTypeTests" name="TestInlineMappedReadonlyPropertiesWork" />
+    </UnitTest>
+    <UnitTest name="TestAttributesOnTypeAreSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="351c2aff-1a80-dc60-0c03-8591e4d4a0d3">
+      <Execution id="d630fa8c-0697-4443-a5ff-540d5896be70" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.AddCustomAttributeTests" name="TestAttributesOnTypeAreSet" />
+    </UnitTest>
+    <UnitTest name="TestDecimalDefaultValueIsSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="bc32ab21-4e8b-8e99-7fe1-69346e0531df">
+      <Execution id="3991a71b-54c8-4584-9471-50902abb3e8f" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.SetDefaultValueTests" name="TestDecimalDefaultValueIsSet" />
+    </UnitTest>
+    <UnitTest name="TestDynamicIsObject" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="ae253cd8-42b2-f909-5fb0-ecbffdc61179">
+      <Execution id="099c4e12-d1b1-4477-b414-d022df8dd6fc" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestDynamicIsObject" />
+    </UnitTest>
+    <UnitTest name="TestGenericParameterConstrainedToReferenceAndNew" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="2ba18717-bbfe-d480-4a05-8a279e8b2e1d">
+      <Execution id="9f311f0f-9c4d-45ac-a1ea-aee62688d5b7" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.GenericMethodTests" name="TestGenericParameterConstrainedToReferenceAndNew" />
+    </UnitTest>
+    <UnitTest name="TestInterfaceTypeWithGenericPropertiesImplementingAllProperties" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="fd0cff8b-f40e-5243-ea7c-7f6fa42cc35d">
+      <Execution id="26bdbacb-452b-4f92-8bca-12d47c246063" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestInterfaceTypeWithGenericPropertiesImplementingAllProperties" />
+    </UnitTest>
+    <UnitTest name="TestNonGenericInterfaceTypeImplementingAllProperties" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="946ecd54-6d3f-6646-acef-abd14321b5f7">
+      <Execution id="867234ab-d712-4035-801f-bceb74518696" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestNonGenericInterfaceTypeImplementingAllProperties" />
+    </UnitTest>
+    <UnitTest name="TestFilbertWithPropertyChangeShouldRaiseBoth" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="277661f4-e9e6-ec43-8264-005b762b14aa">
+      <Execution id="99058854-ede9-45b2-9e1f-1d5ed96f6879" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.ChangeNotificationTests" name="TestFilbertWithPropertyChangeShouldRaiseBoth" />
+    </UnitTest>
+    <UnitTest name="PropertyFilterExcludesConfiguredProperty" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="6f7c54a3-7d41-bd56-ffa0-23f945740b78">
+      <Execution id="472bd32c-b060-4e96-b4a7-679e4274983c" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.EmittedTypeShapeTests" name="PropertyFilterExcludesConfiguredProperty" />
+    </UnitTest>
+    <UnitTest name="TestByteDefaultValueIsSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="c8fdf668-630c-1a48-eb08-cec7168ff359">
+      <Execution id="289465b3-2c49-4841-a605-c05e75ae3278" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.SetDefaultValueTests" name="TestByteDefaultValueIsSet" />
+    </UnitTest>
+    <UnitTest name="TestGenericParameterConstrainedToBaseClass" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="8e96a6f1-2757-7c7a-b380-b5607f523e89">
+      <Execution id="dfc5a3fe-ed49-4e83-8cfc-fea38f837816" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.GenericMethodTests" name="TestGenericParameterConstrainedToBaseClass" />
+    </UnitTest>
+    <UnitTest name="TestInterfaceWithAVoidMethodNoArgs" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="d869ca4f-e5ec-bce3-b8bc-5ad55e330439">
+      <Execution id="f32bc3b0-0e43-4bb6-9de8-61a6768a0c19" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestInterfaceWithAVoidMethodNoArgs" />
+    </UnitTest>
+    <UnitTest name="TestAttributesOnPropertiesAreSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="49e4eba6-f366-57af-c082-c0a3f528f9e5">
+      <Execution id="8065276b-24ea-4d19-89a0-4bec86d1747c" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.AddCustomAttributeTests" name="TestAttributesOnPropertiesAreSet" />
+    </UnitTest>
+    <UnitTest name="TestArrayDefaultValueIsSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="22e84818-5a2b-7822-12ca-e45127de0856">
+      <Execution id="4674a318-36dd-4b99-a1d9-c85564cf5ce5" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.SetDefaultValueTests" name="TestArrayDefaultValueIsSet" />
+    </UnitTest>
+    <UnitTest name="CreateInstanceAllowsPropertyReadWriteAccess" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="ad2d8b1b-1127-107d-1caa-bcf72774fe46">
+      <Execution id="b6e58168-e373-4c79-84b6-b75eae8bc899" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.EmittedTypeShapeTests" name="CreateInstanceAllowsPropertyReadWriteAccess" />
+    </UnitTest>
+    <UnitTest name="TestFilbertWithPropertyChangedShouldRaisePropertyChangedEvent" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="44797205-2206-2ded-3cfc-da1d8eaeaabc">
+      <Execution id="5e46aecc-7003-4f2f-9981-03a90d7e44a5" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.ChangeNotificationTests" name="TestFilbertWithPropertyChangedShouldRaisePropertyChangedEvent" />
+    </UnitTest>
+    <UnitTest name="TestInterfaceWithACharMethodWithParamsArg" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="a9324463-490c-b7ff-8008-202ecfb5144e">
+      <Execution id="6fa84103-5318-4d9f-aacb-5d34950b2b37" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestInterfaceWithACharMethodWithParamsArg" />
+    </UnitTest>
+    <UnitTest name="ControlTestFilbertWithPropertyChangingShouldRaisePropertyChangingEvent" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="a8079325-f343-16c5-db70-e45c6a2adb94">
+      <Execution id="2ea269e9-93f0-4354-998e-884897e6eacb" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.ChangeNotificationTests" name="ControlTestFilbertWithPropertyChangingShouldRaisePropertyChangingEvent" />
+    </UnitTest>
+    <UnitTest name="TestInterfaceHidingAMethod" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="4daf1044-6efd-90df-6fbb-a0149dbcacfa">
+      <Execution id="fd89fa92-b87b-46b4-835c-3b838d7d50a5" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestInterfaceHidingAMethod" />
+    </UnitTest>
+    <UnitTest name="TestFilbertWithPropertyChangingShouldRaisePropertyChangingEvent" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="b16eb923-7a96-55d1-593b-1495b5480127">
+      <Execution id="a7a53c45-a4f4-4ec6-899a-512c5f82db6f" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.ChangeNotificationTests" name="TestFilbertWithPropertyChangingShouldRaisePropertyChangingEvent" />
+    </UnitTest>
+    <UnitTest name="TestMultipleInheritanceWithCollisionWithSameType" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="4806bb46-3219-8cf8-d3c4-a88393c38e7a">
+      <Execution id="2026d880-fb4b-4d66-9283-84814c76d475" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestMultipleInheritanceWithCollisionWithSameType" />
+    </UnitTest>
+    <UnitTest name="TestInterfaceWithEvent" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="06fbfaaa-890f-11d8-e61e-66d95021892e">
+      <Execution id="ab279fd9-776e-4973-8518-b869032ed802" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CreateInstanceTests" name="TestInterfaceWithEvent" />
+    </UnitTest>
+    <UnitTest name="TestImplementationSupportsCloneableIfTypeCreatorSpecifiesICloneableFacet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="9037d45d-ed95-8755-2834-4533e32e79f7">
+      <Execution id="9a3ff45f-49e6-48a9-816a-926330d10dff" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.CloneableTests" name="TestImplementationSupportsCloneableIfTypeCreatorSpecifiesICloneableFacet" />
+    </UnitTest>
+    <UnitTest name="TestStringDefaultValueIsSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="9f0fb774-b32b-e9f9-9f78-55809994f17d">
+      <Execution id="c160de92-62dc-4cc5-9f93-b3b20c0fedb6" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.SetDefaultValueTests" name="TestStringDefaultValueIsSet" />
+    </UnitTest>
+    <UnitTest name="TestAttributesOnEventsAreSet" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="0ef2496f-c367-4048-6858-544344be7032">
+      <Execution id="cc142d68-450c-49fd-a107-8e4bf7c52246" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.AddCustomAttributeTests" name="TestAttributesOnEventsAreSet" />
+    </UnitTest>
+    <UnitTest name="TestClassName" storage="/home/runner/work/brightsword/brightsword/brightsword.squid.tests/bin/release/net10.0/brightsword.squid.tests.dll" id="89936067-5119-9ccb-e318-002e81155e30">
+      <Execution id="fee7ad65-dff7-4932-a7c0-eda7ced943c5" />
+      <TestMethod codeBase="/home/runner/work/brightsword/brightsword/BrightSword.Squid.Tests/bin/Release/net10.0/BrightSword.Squid.Tests.dll" adapterTypeName="executor://mstestadapter/v2" className="BrightSword.Squid.Tests.DynamicTypeCreatorTests" name="TestClassName" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="04dc7e40-053e-2dfb-07fd-9a38791a6762" executionId="7cf5caa4-9559-4877-8848-099c9a058521" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6f7c54a3-7d41-bd56-ffa0-23f945740b78" executionId="472bd32c-b060-4e96-b4a7-679e4274983c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="080b3cee-97e7-b019-97bc-b0db70b9b988" executionId="1f05630c-6e3d-46d3-86fe-415dd411c8ed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="22e84818-5a2b-7822-12ca-e45127de0856" executionId="4674a318-36dd-4b99-a1d9-c85564cf5ce5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dee556bb-4ad8-bf83-e66d-693bdee7a91d" executionId="318bf59f-fa1b-40ba-92d1-ff2e63a695e8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1b6e1024-1ac0-ac31-bbcf-239fec4771a3" executionId="9a1a8ca6-f95e-44aa-99ba-6d97fc6df74a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b241d3d9-c9dd-8250-097f-6b7f87ced7cd" executionId="d3bd10d6-07c2-459f-b159-b7b7072c541e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d869ca4f-e5ec-bce3-b8bc-5ad55e330439" executionId="f32bc3b0-0e43-4bb6-9de8-61a6768a0c19" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7fcb4d21-8d60-6311-c294-0fba2465ad06" executionId="78a0ae28-5d8e-42f5-b213-721a2bc4e303" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3f339f40-72d6-e9b0-f757-7158bbf26670" executionId="7f0e0ca4-ca5b-4762-b6b0-1aa1773cc7c5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4daf1044-6efd-90df-6fbb-a0149dbcacfa" executionId="fd89fa92-b87b-46b4-835c-3b838d7d50a5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fde4027b-9d5e-430d-5a19-69c720ceac23" executionId="49fda633-2f96-4074-a0bd-714a61040b2b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e060b20d-0e00-4e5b-5a22-da44ce75235e" executionId="a2d6cc6a-dc4a-4272-b165-4367126f3299" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="18b91f20-0129-a8f8-fa28-8e8f66403845" executionId="2f6ecb4f-3557-422a-b852-ce45e6bf2e7b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a9324463-490c-b7ff-8008-202ecfb5144e" executionId="6fa84103-5318-4d9f-aacb-5d34950b2b37" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="842fb997-7ae0-2f0f-da44-9c48f717707d" executionId="05b34b6f-c118-480e-bc74-3e87d9ec36a0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1f3f0578-aaed-55c6-cd32-0bdf3d32a491" executionId="977f0374-e9be-4957-9801-42bafdf35089" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="89936067-5119-9ccb-e318-002e81155e30" executionId="fee7ad65-dff7-4932-a7c0-eda7ced943c5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dc59bc3d-4df6-649a-30c1-7df13c69c3c9" executionId="064bbfbd-833c-40fa-91c8-0ccdc97c4de5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="24beee13-e931-53e5-c9cf-9bdb893b2c88" executionId="9c6588c0-fd8b-4e71-9e2c-89144252df61" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ad2d8b1b-1127-107d-1caa-bcf72774fe46" executionId="b6e58168-e373-4c79-84b6-b75eae8bc899" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="446eaf13-643e-0832-2e1a-4dca80acf1be" executionId="b8c093be-fda5-4e97-a27b-a25898e687b0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="49e4eba6-f366-57af-c082-c0a3f528f9e5" executionId="8065276b-24ea-4d19-89a0-4bec86d1747c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="68eda68b-ea14-7e74-a0dd-b17d21cf94ff" executionId="31c1c4bf-f6e9-4f95-b702-0be82fb408ba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="277661f4-e9e6-ec43-8264-005b762b14aa" executionId="99058854-ede9-45b2-9e1f-1d5ed96f6879" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c8fdf668-630c-1a48-eb08-cec7168ff359" executionId="289465b3-2c49-4841-a605-c05e75ae3278" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="35d3a9d0-aab8-d06f-d09e-bf3a5762d230" executionId="1166758d-9f83-4c11-90cf-e00c56c8b45c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b6d1d514-ac0e-d9db-2474-ff1240ae6410" executionId="53afd801-2c8c-4876-b39e-2a337bbe57df" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a582b358-d109-2cae-c92a-6c6ba43814e0" executionId="a1cf173f-6eb5-449e-97a7-c54d043a1d8c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f307dc55-1b59-9880-ace4-0aa7a2d42279" executionId="6982a732-3ca4-476c-9e78-976a59b0fa31" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8e96a6f1-2757-7c7a-b380-b5607f523e89" executionId="dfc5a3fe-ed49-4e83-8cfc-fea38f837816" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9037d45d-ed95-8755-2834-4533e32e79f7" executionId="9a3ff45f-49e6-48a9-816a-926330d10dff" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="26fac203-f452-f7b2-39a0-5c1de5636c3a" executionId="cdd171d3-d0a9-4c46-b3de-e739ccaf010b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="50a101ad-5272-b066-9a63-e6d2c7901cad" executionId="61a142fd-46a2-4502-b278-bb0be8343c92" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9db55693-41c4-5b92-e8a8-1182d2bba015" executionId="1f750a71-5cbe-46ea-ac46-5b3a365d3cbe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4806bb46-3219-8cf8-d3c4-a88393c38e7a" executionId="2026d880-fb4b-4d66-9283-84814c76d475" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="78a48876-7cb9-04f1-9a10-f9053fe221dd" executionId="1454c611-9402-43cb-86bc-5db296bacb5b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1a964783-4129-3691-8ba3-073427dab093" executionId="e85615fa-39a4-44a1-9b20-cface899f303" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3b1d4173-fe0a-0370-56d5-71c1cdf5b4f0" executionId="de1283f6-018e-461f-8bb0-cdd347d48042" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="624dba2c-730e-06ef-e509-f82a332f71aa" executionId="4f2e43b0-e29e-4a3d-9062-5e8aa62b7b99" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2c835226-6bc8-32e1-25bd-8eccbe8199fc" executionId="bbf12504-3f79-4aea-bacb-025afb18a6f7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f43d201f-5d44-0310-ebf7-4122525848de" executionId="65eda576-ff2d-4c41-9aa1-ae57e7bf2150" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e008d10b-2c82-dda7-3863-0b8c85676216" executionId="fffe8230-5165-4a54-bfd0-2cbd5beface6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="24aa40be-525b-ef2e-7e74-53504f31af06" executionId="39cacd91-b0db-4478-8a08-d0fde1397d32" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2ba18717-bbfe-d480-4a05-8a279e8b2e1d" executionId="9f311f0f-9c4d-45ac-a1ea-aee62688d5b7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fec90648-93d3-ba18-716e-f5390cb4bade" executionId="f4e45a8c-b19c-4061-b106-fc543c0384cd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b16eb923-7a96-55d1-593b-1495b5480127" executionId="a7a53c45-a4f4-4ec6-899a-512c5f82db6f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="06fbfaaa-890f-11d8-e61e-66d95021892e" executionId="ab279fd9-776e-4973-8518-b869032ed802" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="af1c22b1-2db3-44d7-2ab9-25b5ffb2e7a4" executionId="f3ffa00a-e260-4dd6-9467-8fb85fd7dc5b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="74c425c5-a880-6140-a5ae-742b1221c089" executionId="5504532b-c3f1-412d-baac-db3a88bb372e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ae50e21e-e5ee-22e8-00ec-dbcfd2dacf5a" executionId="5cfaebf8-2bcb-423b-9897-f83829ddea13" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="44797205-2206-2ded-3cfc-da1d8eaeaabc" executionId="5e46aecc-7003-4f2f-9981-03a90d7e44a5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="946ecd54-6d3f-6646-acef-abd14321b5f7" executionId="867234ab-d712-4035-801f-bceb74518696" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="41a626bb-b7a2-1dfc-c6a2-47602e47ad9d" executionId="aa1e76e4-2d03-4400-b0cf-ce1996b63f38" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="48a2ee22-c6ec-1432-f5fa-7edb7a33bec0" executionId="a353b9e7-2085-46e3-a191-3b9e2d43e82b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="351c2aff-1a80-dc60-0c03-8591e4d4a0d3" executionId="d630fa8c-0697-4443-a5ff-540d5896be70" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2d2b1f8b-d363-92ff-e9ce-4de214ac0937" executionId="3fecaac5-5676-4502-bd7c-a3282a6f7475" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d1608198-ff7a-3a12-fef5-4df59e73c4d7" executionId="ac9508c2-9cea-4915-a60b-461e27a47bb5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="667b6834-bf2a-e302-14c9-7e66793305a5" executionId="eb4afe40-6a85-41d5-8b3e-b231fc534b7a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="685335f9-0822-a28c-906c-692a8341c85e" executionId="0fcb7fd1-2b21-4c95-9495-bbd63ff78625" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bc32ab21-4e8b-8e99-7fe1-69346e0531df" executionId="3991a71b-54c8-4584-9471-50902abb3e8f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="61bf47dd-8427-3934-f6d3-837a2d2b00ad" executionId="b2a620fa-63a2-48ed-9f74-5578d930df78" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="96516056-64a4-0033-6e75-710d6c912778" executionId="bcf9b403-ec24-4e18-a436-96bc5bf1fda6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1d2c52c6-c1bc-079d-d9e7-09ce05875fa7" executionId="d3080e1a-423d-4aed-bb50-ff0274e9ae37" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="45d5681a-898a-105d-8c8f-58672f76d531" executionId="4e5a9d41-d591-4ec7-a9f2-fe757bfcdf2d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fd0cff8b-f40e-5243-ea7c-7f6fa42cc35d" executionId="26bdbacb-452b-4f92-8bca-12d47c246063" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a8079325-f343-16c5-db70-e45c6a2adb94" executionId="2ea269e9-93f0-4354-998e-884897e6eacb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7a880dcb-c4dd-a0a7-536d-e6c2d9bfec25" executionId="e5223f92-08b1-481e-b97c-75c17f35dfa8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0ef2496f-c367-4048-6858-544344be7032" executionId="cc142d68-450c-49fd-a107-8e4bf7c52246" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9f0fb774-b32b-e9f9-9f78-55809994f17d" executionId="c160de92-62dc-4cc5-9f93-b3b20c0fedb6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f4b2ba25-8133-412e-be23-0c1f3f3d19c0" executionId="e5d0d99b-4f84-45e9-9174-85dc2c1572e6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6f625e69-f84d-9e84-1e92-ecdd41a10fbb" executionId="a83463dd-b028-49ea-b096-b8596bef6da3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a20179df-df2b-e141-58fc-376a8bfdd419" executionId="f78eb66b-dfaf-4934-b788-8e2457c71688" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="449b6ea1-29e2-a7cb-deaf-40988a0c9b0f" executionId="ec07c884-d50d-4688-baa1-c282ffdfd486" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ef26b7fc-b124-37d4-431b-226f0fe25083" executionId="39e700c1-d4e6-410d-a38e-5d131e28c63e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="762f622d-f4b6-f30a-c4fc-20473f66c824" executionId="554f0bce-c5ac-4181-ac5d-da32a28e8ac8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ae253cd8-42b2-f909-5fb0-ecbffdc61179" executionId="099c4e12-d1b1-4477-b414-d022df8dd6fc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="90a2405b-b789-0228-66ee-2fd158c5fd5a" executionId="d5f2009f-fe96-40e8-8b8a-ef3b7e354729" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f2bd7d03-357e-4ced-e2eb-7f1fc21d9911" executionId="3afe89dd-aa99-4d09-b100-91485366474a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="79" executed="78" passed="78" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>Test 'PropertyFilterExcludesConfiguredProperty' was skipped in the test run.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.0.0+e341b939fe (64-bit .NET 10.0.0-rc.1.25451.107)
+[xUnit.net 00:00:00.08]   Discovering: BrightSword.Squid.Tests
+[xUnit.net 00:00:00.09]   Discovered:  BrightSword.Squid.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

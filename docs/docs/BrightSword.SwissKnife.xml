@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BrightSword.SwissKnife</name>
+    </assembly>
+    <members>
+        <member name="T:BrightSword.SwissKnife.AttributeExtensions">
+            <summary>
+            Provides extension methods for retrieving custom attributes and their values from types and members.
+            </summary>
+            <remarks>
+            These helpers simplify attribute discovery and value extraction for reflection scenarios.
+            </remarks>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BrightSword.SwissKnife.AttributeExtensions.GetCustomAttribute``1(System.Type,System.Reflection.BindingFlags)" -->
+        <!-- Badly formed XML comment ignored for member "M:BrightSword.SwissKnife.AttributeExtensions.GetCustomAttribute``1(System.Reflection.MemberInfo,System.Reflection.BindingFlags)" -->
+        <!-- Badly formed XML comment ignored for member "M:BrightSword.SwissKnife.AttributeExtensions.GetCustomAttributeValue``2(System.Type,System.Func{``0,``1},``1,System.Reflection.BindingFlags)" -->
+        <!-- Badly formed XML comment ignored for member "M:BrightSword.SwissKnife.AttributeExtensions.GetCustomAttributeValue``2(System.Reflection.MemberInfo,System.Func{``0,``1},``1,System.Reflection.BindingFlags)" -->
+        <member name="T:BrightSword.SwissKnife.CoerceExtensions">
+            <summary>
+            Provides extension methods for type coercion and conversion with fallback/default handling.
+            </summary>
+            <remarks>
+            These helpers simplify safe type conversion, including enums and primitives, with custom parsing logic.
+            </remarks>
+        </member>
+        <member name="M:BrightSword.SwissKnife.CoerceExtensions.CoerceType(System.Object,System.Type,System.Object)">
+            <summary>
+            Attempts to coerce an object to the specified target type, using default value if conversion fails.
+            </summary>
+            <param name="value">The value to convert.</param>
+            <param name="targetType">The target type.</param>
+            <param name="defaultValue">The value to use if conversion fails.</param>
+            <returns>The converted value, or <paramref name="defaultValue"/> if conversion fails.</returns>
+            <example>
+            <code>
+            object val = "42";
+            int result = (int)val.CoerceType(typeof(int), 0); // 42
+            </code>
+            </example>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BrightSword.SwissKnife.CoerceExtensions.CoerceType``1(System.Object,System.Type,System.Object@,System.Func{System.Type,System.Object,``0},System.Object)" -->
+        <member name="M:BrightSword.SwissKnife.CoerceExtensions.CoerceType(System.Object,System.Type,System.Object@,System.Func{System.Type,System.Boolean},System.Func{System.Type,System.Object,System.Object},System.Object)">
+            <summary>
+            Attempts to coerce an object to the specified target type using custom check and parse functions.
+            </summary>
+            <param name="value">The value to convert.</param>
+            <param name="targetType">The target type.</param>
+            <param name="returnValue">The parsed value if successful.</param>
+            <param name="checkFunc">Function to check if the type is supported.</param>
+            <param name="parseFunc">Custom parse function.</param>
+            <param name="defaultValue">The value to use if conversion fails.</param>
+            <returns>True if conversion succeeded, false otherwise.</returns>
+            <example>
+            <code>
+            object val = "42";
+            bool success = val.CoerceType(typeof(int), out var result, t => t == typeof(int), (t, v) => int.Parse(v.ToString()), 0);
+            </code>
+            </example>
+        </member>
+        <member name="T:BrightSword.SwissKnife.Functional">
+            <summary>
+            Provides functional programming helpers for memoization and fixed-point combinators.
+            </summary>
+            <remarks>
+            These helpers enable efficient recursive and memoized function definitions in .NET.
+            </remarks>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BrightSword.SwissKnife.Functional.Y``2(System.Func{System.Func{``0,``1},System.Func{``0,``1}})" -->
+        <!-- Badly formed XML comment ignored for member "M:BrightSword.SwissKnife.Functional.MemoizeFix``2(System.Func{System.Func{``0,``1},System.Func{``0,``1}})" -->
+        <!-- Badly formed XML comment ignored for member "M:BrightSword.SwissKnife.Functional.MemoizeFix``3(System.Func{System.Func{``0,``1,``2},System.Func{``0,``1,``2}})" -->
+        <!-- Badly formed XML comment ignored for member "M:BrightSword.SwissKnife.Functional.MemoizeFix``4(System.Func{System.Func{``0,``1,``2,``3},System.Func{``0,``1,``2,``3}})" -->
+        <member name="M:BrightSword.SwissKnife.Functional.Trace``2(System.Func{``0,``1})">
+            <summary>
+            Private helper for tracing the invocation of a function. Emits a Trace message on invocation.
+            </summary>
+            <typeparam name="TArgument">The argument type.</typeparam>
+            <typeparam name="TResult">The result type.</typeparam>
+            <param name="func">The function to trace.</param>
+        </member>
+        <member name="T:BrightSword.SwissKnife.StringExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:System.String"/> to split into segments by camel case, underscores, spaces, or punctuation.
+            </summary>
+            <remarks>
+            These helpers simplify string tokenization for display, parsing, or formatting scenarios.
+            </remarks>
+        </member>
+        <member name="M:BrightSword.SwissKnife.StringExtensions.SplitCamelCase(System.String)">
+            <summary>
+            Splits a camel-case string into its constituent segments.
+            </summary>
+            <param name="this">The string to split.</param>
+            <returns>An enumerable of segments split by camel case.</returns>
+            <example>
+            <code>
+            var segments = "CamelCaseString".SplitCamelCase(); // ["Camel", "Case", "String"]
+            </code>
+            </example>
+        </member>
+        <member name="M:BrightSword.SwissKnife.StringExtensions.SplitCamelCaseAndUnderscore(System.String)">
+            <summary>
+            Splits a string into segments by camel case and underscores.
+            </summary>
+            <param name="this">The string to split.</param>
+            <returns>An enumerable of segments split by camel case and underscores.</returns>
+            <example>
+            <code>
+            var segments = "Camel_CaseString".SplitCamelCaseAndUnderscore(); // ["Camel", "Case", "String"]
+            </code>
+            </example>
+        </member>
+        <member name="M:BrightSword.SwissKnife.StringExtensions.SplitDotted(System.String)">
+            <summary>
+            Splits a string into segments by dots.
+            </summary>
+            <param name="this">The string to split.</param>
+            <returns>An enumerable of segments split by dots.</returns>
+            <example>
+            <code>
+            var segments = "A.B.C".SplitDotted(); // ["A", "B", "C"]
+            </code>
+            </example>
+        </member>
+        <member name="M:BrightSword.SwissKnife.StringExtensions.SplitIntoSegments(System.String,System.Boolean,System.Boolean,System.Boolean,System.Char[])">
+            <summary>
+            Splits a string into segments by spaces, camel case, punctuation, or custom separators.
+            </summary>
+            <param name="this">The string to split.</param>
+            <param name="splitBySpace">Whether to split on spaces.</param>
+            <param name="splitOnCamelCase">Whether to split on camel case.</param>
+            <param name="splitOnPunctuation">Whether to split on punctuation.</param>
+            <param name="separators">Custom separator characters.</param>
+            <returns>An enumerable of segments.</returns>
+            <example>
+            <code>
+            var segments = "A_B C.D".SplitIntoSegments(true, true, true, '_', '.'); // ["A", "B", "C", "D"]
+            </code>
+            </example>
+        </member>
+        <member name="M:BrightSword.SwissKnife.StringExtensions.GetNextSegment(System.String,System.Int32@,System.Int32@,System.Boolean@,System.Boolean,System.Boolean,System.Boolean,System.Char[])">
+            <summary>
+            Private helper for segment extraction. Returns the next segment in the string based on the provided rules.
+            </summary>
+            <param name="this">The input string.</param>
+            <param name="iStart">Start index (by reference).</param>
+            <param name="iEnd">End index (by reference).</param>
+            <param name="endOfString">Set to true when the end of the string is reached.</param>
+            <param name="respectSpace">Whether to respect spaces as separators.</param>
+            <param name="respectCamelCase">Whether to split on camel case.</param>
+            <param name="respectPunctuation">Whether to split on punctuation.</param>
+            <param name="separators">Custom separator characters.</param>
+            <returns>The next segment as a string.</returns>
+        </member>
+        <member name="T:BrightSword.SwissKnife.TypeExtensions">
+            <summary>
+            Provides extension methods for <see cref="T:System.Type"/> to simplify reflection and type-name helpers.
+            This file adds a small set of helpers the Squid project expects: PrintableName, RenameToConcreteType,
+            and methods to enumerate members across interface inheritance.
+            </summary>
+        </member>
+        <member name="M:BrightSword.SwissKnife.TypeExtensions.PrintableName(System.Type)">
+            <summary>
+            Friendly printable name similar to the original project's intent.
+            </summary>
+            <param name="this">The <see cref="T:System.Type"/> to get the printable name for.</param>
+        </member>
+        <member name="M:BrightSword.SwissKnife.TypeExtensions.Name(System.Type)">
+            <summary>
+            Backwards-compatible Name() extension used by tests and older code.
+            </summary>
+            <param name="this">The <see cref="T:System.Type"/> to get the name for.</param>
+        </member>
+        <member name="M:BrightSword.SwissKnife.TypeExtensions.RenameToConcreteType(System.Type)">
+            <summary>
+            Heuristic used by the Squid project to convert interface type names to a concrete class-like name.
+            Example: IMyInterface -> MyInterface; IList&lt;T&gt; -> List&lt;T&gt;.
+            </summary>
+            <param name="this">The <see cref="T:System.Type"/> to rename.</param>
+        </member>
+        <member name="M:BrightSword.SwissKnife.TypeExtensions.GetAllProperties(System.Type,System.Reflection.BindingFlags)">
+            <summary>
+            Return all properties including inherited interface properties and base class properties.
+            </summary>
+            <param name="this">The <see cref="T:System.Type"/> to get properties for.</param>
+            <param name="bindingFlags">The binding flags to use when searching for properties.</param>
+        </member>
+        <member name="M:BrightSword.SwissKnife.TypeExtensions.GetAllMethods(System.Type,System.Reflection.BindingFlags)">
+            <summary>
+            Methods and events helpers used by Squid.
+            </summary>
+            <param name="this">The <see cref="T:System.Type"/> to get methods for.</param>
+            <param name="bindingFlags">The binding flags to use when searching for methods.</param>
+        </member>
+        <member name="M:BrightSword.SwissKnife.TypeExtensions.GetAllEvents(System.Type,System.Reflection.BindingFlags)">
+            <summary>
+            Gets all events including inherited interface events and base class events.
+            </summary>
+            <param name="this">The <see cref="T:System.Type"/> to get events for.</param>
+            <param name="bindingFlags">The binding flags to use when searching for events.</param>
+        </member>
+        <member name="T:BrightSword.SwissKnife.Validator">
+            <summary>
+            Provides guard and validation helpers for runtime argument and condition checking.
+            </summary>
+            <remarks>
+            These helpers throw exceptions when conditions or predicates fail, simplifying defensive programming.
+            </remarks>
+        </member>
+        <member name="M:BrightSword.SwissKnife.Validator.Check(System.Boolean,System.String)">
+            <summary>
+            Throws an <see cref="T:System.Exception"/> if the condition is false.
+            (This overload preserves legacy behavior.)
+            </summary>
+            <param name="condition">The condition to check.</param>
+            <param name="message">The exception message if the condition fails.</param>
+            <exception cref="T:System.InvalidOperationException">Thrown if <paramref name="condition"/> is false.</exception>
+            <example>
+            <code>
+            Validator.Check(x > 0, "x must be positive");
+            </code>
+            </example>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BrightSword.SwissKnife.Validator.Check``1(System.Boolean,System.String)" -->
+        <member name="M:BrightSword.SwissKnife.Validator.Check(System.Func{System.Boolean},System.String)">
+            <summary>
+            Throws an <see cref="T:System.Exception"/> if the predicate returns false.
+            (This overload preserves legacy behavior.)
+            </summary>
+            <param name="predicate">The predicate to evaluate.</param>
+            <param name="message">The exception message if the predicate fails.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if <paramref name="predicate"/> is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown if <paramref name="predicate"/> returns false.</exception>
+            <example>
+            <code>
+            Validator.Check(() => x > 0, "x must be positive");
+            </code>
+            </example>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BrightSword.SwissKnife.Validator.Check``1(System.Func{System.Boolean},System.String)" -->
+    </members>
+</doc>
