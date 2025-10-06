@@ -116,4 +116,4 @@ jobs:
           PR_BODY="This PR contains an automated docs update produced by CI. If the change is acceptable, merge to update the 'gh-pages' branch."
           API_JSON=$(jq -n --arg title "$PR_TITLE" --arg head "$PR_BRANCH" --arg base "gh-pages" --arg body "$PR_BODY" '{title:$title,head:$head,base:$base,body:$body}')
           RESP=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/${{ github.repository }}/pulls -d "$API_JSON")
-          echo "PR created: $(echo "$RESP" | jq -r .html_url // "(no url)")"
+          echo "PR created: $(echo "$RESP" | jq -r '.html_url // "(no url)"')"
