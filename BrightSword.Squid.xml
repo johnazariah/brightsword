@@ -1,0 +1,513 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BrightSword.Squid</name>
+    </assembly>
+    <members>
+        <member name="T:BrightSword.Squid.API.INotifyPropertyChanged">
+            <summary>
+            Defines a notification contract for types that want to be informed after a property has changed.
+            This interface is used by the Squid emitted types to notify interested base types about property changes.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.API.INotifyPropertyChanged.OnPropertyChanged(System.String,System.Type,System.Object,System.Object)">
+            <summary>
+            Called when a property value has changed.
+            </summary>
+            <param name="propertyName">The name of the property that changed.</param>
+            <param name="propertyType">The runtime type of the property.</param>
+            <param name="currentValue">The previous value of the property.</param>
+            <param name="newValue">The new value being assigned to the property.</param>
+        </member>
+        <member name="T:BrightSword.Squid.API.INotifyPropertyChanging">
+            <summary>
+            Defines a notification contract for types that wish to be informed before a property value changes.
+            Implementations return a boolean indicating whether the change should proceed.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.API.INotifyPropertyChanging.OnPropertyChanging(System.String,System.Type,System.Object,System.Object)">
+            <summary>
+            Called before a property value is changed. Implementations may veto the change by returning false.
+            </summary>
+            <param name="propertyName">The name of the property to be changed.</param>
+            <param name="propertyType">The runtime type of the property.</param>
+            <param name="currentValue">The current value of the property.</param>
+            <param name="newValue">The new value that will be assigned if the change is allowed.</param>
+            <returns><c>true</c> if the change may proceed; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="T:BrightSword.Squid.API.ITypeCreator`1">
+            <summary>
+            Contract for a factory type that can create instances of a generated or concrete type.
+            Implementations typically emit or cache runtime-generated types for interface-backed DTOs.
+            </summary>
+            <typeparam name="T">The public type produced by the creator. Must be a reference type.</typeparam>
+        </member>
+        <member name="P:BrightSword.Squid.API.ITypeCreator`1.Type">
+            <summary>
+            Gets the runtime <see cref="P:BrightSword.Squid.API.ITypeCreator`1.Type"/> produced by this creator. For emitted types this
+            will trigger type generation on first access.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.API.ITypeCreator`1.CreateInstance(System.Object)">
+            <summary>
+            Creates an instance of the type produced by this creator. Optionally maps values from a
+            dynamic source object into the newly created instance.
+            </summary>
+            <param name="source">An optional dynamic object providing values to map into the created instance.</param>
+            <returns>A new instance of <typeparamref name="T"/>.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Squid.Behaviours.CloneBehaviour" -->
+        <member name="T:BrightSword.Squid.Behaviours.FieldValueSetInstructionHelper">
+            <summary>
+            Helper that generates IL instructions to set field values for emitted types.
+            This class yields <see cref="T:System.Action`1"/> sequences that emit the
+            required opcodes to initialize fields with given values.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Behaviours.FieldValueSetInstructionHelper.GenerateCodeToSetFieldValue(System.Reflection.FieldInfo,System.Object)">
+            <summary>
+            Generate IL instructions to set <paramref name="field"/> to <paramref name="value"/>.
+            This method supports a variety of simple runtime types (primitives, enums, decimal,
+            string, Type, arrays of simple types and IList{int}/IList{string}) and will attempt to
+            use <see cref="T:System.ComponentModel.TypeConverter"/> conversions for string-typed attribute values when
+            appropriate. For unsupported combinations a <see cref="T:System.NotSupportedException"/> is thrown.
+            </summary>
+            <param name="field">The target field to initialize.</param>
+            <param name="value">The value to set for the field. May be null for reference types.</param>
+            <returns>An enumerable of actions which, when executed against an <see cref="T:System.Reflection.Emit.ILGenerator"/>, emit the instructions to set the field.</returns>
+        </member>
+        <member name="M:BrightSword.Squid.Behaviours.FieldValueSetInstructionHelper.GenerateCode(System.Reflection.FieldInfo,System.Boolean)">
+            <summary>
+            Generate IL to set a boolean field.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Behaviours.FieldValueSetInstructionHelper.GenerateCode(System.Reflection.FieldInfo,System.Char)">
+            <summary>
+            Generate IL to set a char field.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Behaviours.FieldValueSetInstructionHelper.GenerateCode(System.Reflection.FieldInfo,System.Single)">
+            <summary>
+            Generate IL to set a float field.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Behaviours.FieldValueSetInstructionHelper.GenerateCode(System.Reflection.FieldInfo,System.Double)">
+            <summary>
+            Generate IL to set a double field.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Behaviours.FieldValueSetInstructionHelper.GenerateCode(System.Reflection.FieldInfo,System.Int64)">
+            <summary>
+            Generate IL to set a long/integral field.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Behaviours.FieldValueSetInstructionHelper.GenerateCode(System.Reflection.FieldInfo,System.String)">
+            <summary>
+            Generate IL to set a string field.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Behaviours.FieldValueSetInstructionHelper.GenerateCode(System.Reflection.FieldInfo,System.Decimal)">
+            <summary>
+            Generate IL to set a decimal field by emitting the constructor that takes the internal bits.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Behaviours.FieldValueSetInstructionHelper.GenerateCode(System.Reflection.FieldInfo,System.Enum)">
+            <summary>
+            Generate IL to set an enum-typed field by writing its integral value.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Behaviours.FieldValueSetInstructionHelper.GenerateCode(System.Reflection.FieldInfo,System.Type)">
+            <summary>
+            Generate IL to store a System.Type instance into a field using the <c>ldtoken</c> instruction
+            followed by a call to <see cref="M:System.Type.GetTypeFromHandle(System.RuntimeTypeHandle)"/>.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Behaviours.FieldValueSetInstructionHelper.GenerateCodeForArray``1(System.Collections.Generic.IList{``0},System.Reflection.FieldInfo,System.Func{``0,System.Action{System.Reflection.Emit.ILGenerator}[]})">
+            <summary>
+            Generate IL instructions for populating an array field with the provided list items.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Behaviours.FieldValueSetInstructionHelper.GenerateCode(System.Reflection.FieldInfo,System.Collections.Generic.IList{System.Int32})">
+            <summary>
+            Generate IL to initialize an integer array field.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.Behaviours.FieldValueSetInstructionHelper.GenerateCode(System.Reflection.FieldInfo,System.Collections.Generic.IList{System.String})">
+            <summary>
+            Generate IL to initialize a string array field.
+            </summary>
+        </member>
+        <member name="T:BrightSword.Squid.Behaviours.IBehaviour">
+            <summary>
+            Represents a behaviour that can be composed into emitted types. Behaviours expose operations
+            that take a <see cref="T:System.Reflection.Emit.TypeBuilder"/> and return a modified <see cref="T:System.Reflection.Emit.TypeBuilder"/>.
+            </summary>
+        </member>
+        <member name="P:BrightSword.Squid.Behaviours.IBehaviour.Operations">
+            <summary>
+            A sequence of operations that will be applied to a <see cref="T:System.Reflection.Emit.TypeBuilder"/> when building a type.
+            Each operation receives the current <see cref="T:System.Reflection.Emit.TypeBuilder"/> and must return the modified builder.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Squid.Dynamic`1" -->
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Squid.Dynamic`2" -->
+        <member name="T:BrightSword.Squid.Extensions.TypeExtensions">
+            <summary>
+            Extension methods for <see cref="T:System.Type"/> used by the Squid type creators.
+            Provides helpers for generating concrete type names and locating members.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BrightSword.Squid.Extensions.TypeExtensions.GetNonGenericPartOfClassName(System.Type)" -->
+        <!-- Badly formed XML comment ignored for member "M:BrightSword.Squid.Extensions.TypeExtensions.GetGenericMethodOnType(System.Type,System.String,System.Type[])" -->
+        <member name="M:BrightSword.Squid.Extensions.TypeExtensions.GetAllNonExcludedProperties(System.Type,System.Type[])">
+            <summary>
+            Returns all properties of the type excluding properties declared by the optional
+            <paramref name="excludedTypes"/>.
+            </summary>
+            <param name="self">The type to inspect.</param>
+            <param name="excludedTypes">Types whose properties should be excluded from the result.</param>
+            <returns>An enumerable of <see cref="T:System.Reflection.PropertyInfo"/> not declared on the excluded types.</returns>
+        </member>
+        <member name="M:BrightSword.Squid.Extensions.TypeExtensions.GetAllNonExcludedMethods(System.Type,System.Type[])">
+            <summary>
+            Returns all methods of the type excluding methods declared by the optional
+            <paramref name="excludedTypes"/>.
+            </summary>
+            <param name="self">The type to inspect.</param>
+            <param name="excludedTypes">Types whose methods should be excluded from the result.</param>
+            <returns>An enumerable of <see cref="T:System.Reflection.MethodInfo"/> not declared on the excluded types.</returns>
+        </member>
+        <member name="M:BrightSword.Squid.Extensions.TypeExtensions.GetAllNonExcludedEvents(System.Type,System.Type[])">
+            <summary>
+            Returns all events of the type excluding events declared by the optional
+            <paramref name="excludedTypes"/>.
+            </summary>
+            <param name="self">The type to inspect.</param>
+            <param name="excludedTypes">Types whose events should be excluded from the result.</param>
+            <returns>An enumerable of <see cref="T:System.Reflection.EventInfo"/> not declared on the excluded types.</returns>
+        </member>
+        <member name="T:BrightSword.Squid.Extensions.TypeMapExtensions">
+            <summary>
+            Helpers to map between generic or mappable types and their intended concrete counterparts.
+            These extension methods are used by the runtime type generator to choose appropriate
+            concrete backing types for interface properties (for example mapping <c>IList{T}</c> to <c>List{T}</c>).
+            </summary>
+            <remarks>
+            <para>
+            <see cref="M:BrightSword.Squid.Extensions.TypeMapExtensions.MapGenericTypeIfPossible(System.Type,System.Type,System.Type[])"/> attempts to construct the
+            <paramref name="mapTo"/> generic type using the generic arguments from <paramref name="mapFrom"/>
+            and then delegates to <see cref="M:BrightSword.Squid.Extensions.TypeMapExtensions.MapTypeIfPossible(System.Type,System.Type,System.Type[])"/> to determine
+            whether the mapping should be applied based on the <paramref name="mappableTypes"/>.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:BrightSword.Squid.Extensions.TypeMapExtensions.MapGenericTypeIfPossible(System.Type,System.Type,System.Type[])">
+            <summary>
+            If <paramref name="mapFrom"/> is a generic type, attempts to construct <paramref name="mapTo"/>
+            using the same generic type arguments and returns it when one of the <paramref name="mappableTypes"/>
+            is assignable to <paramref name="mapFrom"/>. Returns <c>null</c> when no mapping applies.
+            </summary>
+            <param name="mapFrom">The source type to map from (typically a declared property type).</param>
+            <param name="mapTo">The generic type definition to construct with the source's generic arguments.</param>
+            <param name="mappableTypes">Candidate types whose assignability will determine whether the mapping applies.</param>
+            <returns>The constructed target type when applicable; otherwise <c>null</c>.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BrightSword.Squid.Extensions.TypeMapExtensions.MapTypeIfPossible(System.Type,System.Type,System.Type[])" -->
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1" -->
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1"/> class
+            with default mapping and behaviour registration.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.#ctor(System.Func{System.Type,System.Type}[])">
+            <summary>
+            Initializes a new instance and appends user-supplied type mappers.
+            </summary>
+            <param name="userSuppliedTypeMaps">Optional type mapping functions to be used when deciding backing types.</param>
+        </member>
+        <member name="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.TrackReadonlyPropertyInitialized">
+            <summary>
+            When true, generated types include support to track initialization of read-only properties.
+            </summary>
+        </member>
+        <member name="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.SaveAssemblyToDisk">
+            <summary>
+            When true, assemblies may be persisted to disk by overrides of <see cref="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.PersistAssembly(System.Reflection.Emit.AssemblyBuilder)"/>.
+            </summary>
+        </member>
+        <member name="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.AssemblyName">
+            <summary>
+            Gets or sets the logical name used for the dynamic assembly used during emission.
+            </summary>
+        </member>
+        <member name="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.InterfaceName">
+            <summary>
+            The printable interface name used for diagnostics and assembly naming.
+            </summary>
+        </member>
+        <member name="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.ClassName">
+            <summary>
+            The generated class name to use when emitting the concrete type.
+            </summary>
+        </member>
+        <member name="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.BaseType">
+            <summary>
+            The base type the emitted type will inherit from.
+            </summary>
+        </member>
+        <member name="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.FacetInterfaces">
+            <summary>
+            Additional facet interfaces to implement on the emitted type.
+            </summary>
+        </member>
+        <member name="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.FieldValueSetInstructionHelper">
+            <summary>
+            Helper used to generate IL instructions for setting field default values.
+            </summary>
+        </member>
+        <member name="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.SpecialBehaviours">
+            <summary>
+            Special behaviours registered by the type creator (mapping behaviour key to behaviour instance).
+            </summary>
+        </member>
+        <member name="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.DefaultConstructorInstructionsAddCustomConstructionInstructions">
+            <summary>
+            Allows subclasses to inject arbitrary IL construction instructions into the default constructor.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.AddProperties(System.Reflection.Emit.TypeBuilder)">
+            <summary>
+            Adds properties declared on the interface to the emitted type.
+            </summary>
+            <param name="typeBuilder">The active <see cref="T:System.Reflection.Emit.TypeBuilder"/>.</param>
+            <returns>The modified <see cref="T:System.Reflection.Emit.TypeBuilder"/>.</returns>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.PropertyFilter(System.Reflection.PropertyInfo)">
+            <summary>
+            Filter invoked for each property discovered on the interface. Subclasses may override
+            to exclude specific properties from emission.
+            </summary>
+            <param name="propertyInfo">The property being considered.</param>
+            <returns>True to emit the property; false to skip it.</returns>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.AddProperty(System.Reflection.Emit.TypeBuilder,System.Reflection.PropertyInfo)">
+            <summary>
+            Adds a single property (get/set accessors) to the emitted type.
+            </summary>
+            <param name="typeBuilder">The active <see cref="T:System.Reflection.Emit.TypeBuilder"/>.</param>
+            <param name="propertyInfo">The property metadata to implement.</param>
+            <returns>The modified <see cref="T:System.Reflection.Emit.TypeBuilder"/>.</returns>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.AddPropertyAccessor(System.Reflection.Emit.TypeBuilder,System.Reflection.Emit.PropertyBuilder,System.Reflection.PropertyInfo)">
+            <summary>
+            Adds the getter accessor method for a property, wiring up overrides when the
+            interface declares a specific method implementation requirement.
+            </summary>
+            <param name="typeBuilder">The active <see cref="T:System.Reflection.Emit.TypeBuilder"/>.</param>
+            <param name="propertyBuilder">The property builder.</param>
+            <param name="propertyInfo">The property metadata.</param>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.GenerateCodeForAccessor(System.Reflection.Emit.TypeBuilder,System.Reflection.Emit.MethodBuilder,System.Reflection.PropertyInfo)">
+            <summary>
+            Emits IL for a property getter, choosing tracked or normal accessor generation
+            based on the property's backing configuration.
+            </summary>
+            <param name="typeBuilder">The active <see cref="T:System.Reflection.Emit.TypeBuilder"/>.</param>
+            <param name="methodBuilder">The getter <see cref="T:System.Reflection.Emit.MethodBuilder"/>.</param>
+            <param name="propertyInfo">The property metadata.</param>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.GenerateCodeForNormalAccessor(System.Reflection.Emit.TypeBuilder,System.Reflection.Emit.MethodBuilder,System.Reflection.PropertyInfo)">
+            <summary>
+            Emits a simple getter that loads and returns the backing field value.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.GenerateCodeForTrackedAccessor(System.Reflection.Emit.TypeBuilder,System.Reflection.Emit.MethodBuilder,System.Reflection.PropertyInfo)">
+            <summary>
+            Emits a getter that verifies the property has been initialized before returning
+            its value; throws <see cref="T:System.MethodAccessException"/> when the initialization
+            check fails.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.AddPropertyMutator(System.Reflection.Emit.TypeBuilder,System.Reflection.Emit.PropertyBuilder,System.Reflection.PropertyInfo)">
+            <summary>
+            Adds the setter accessor for a property when the interface declares one.
+            Read-only mapped properties are skipped.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.GenerateCodeForMutator(System.Reflection.Emit.TypeBuilder,System.Reflection.Emit.MethodBuilder,System.Reflection.PropertyInfo)">
+            <summary>
+            Chooses and emits the appropriate mutator implementation depending on read-only status
+            and whether change notifications are required.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.GenerateCodeForNormalMutator(System.Reflection.Emit.TypeBuilder,System.Reflection.Emit.MethodBuilder,System.Reflection.PropertyInfo)">
+            <summary>
+            Emits a straightforward setter that assigns the incoming value to the backing field.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.GenerateCodeForTrackedMutator(System.Reflection.Emit.TypeBuilder,System.Reflection.Emit.MethodBuilder,System.Reflection.PropertyInfo)">
+            <summary>
+            Emits a tracked setter which records initialization for read-only properties when enabled.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.GenerateCodeForChangeTrackedMutator(System.Reflection.Emit.TypeBuilder,System.Reflection.Emit.MethodBuilder,System.Reflection.PropertyInfo,System.Boolean,System.Boolean)">
+            <summary>
+            Emits a setter that supports OnPropertyChanging and OnPropertyChanged semantics
+            by invoking the corresponding methods on the base type when applicable.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.AddMethods(System.Reflection.Emit.TypeBuilder)">
+            <summary>
+            Adds methods declared on the interface to the emitted type. Non-special-name methods are implemented
+            with a default body that throws <see cref="T:System.NotImplementedException"/> unless overridden.
+            </summary>
+            <param name="typeBuilder">The active <see cref="T:System.Reflection.Emit.TypeBuilder"/>.</param>
+            <returns>The modified <see cref="T:System.Reflection.Emit.TypeBuilder"/>.</returns>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.MethodFilter(System.Reflection.MethodInfo)">
+            <summary>
+            Filter invoked for each method discovered on the interface. Subclasses may override
+            to exclude or transform methods prior to emission.
+            </summary>
+            <param name="methodInfo">Method metadata being considered.</param>
+            <returns>True to emit the method; false to skip it.</returns>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.AddMethod(System.Reflection.Emit.TypeBuilder,System.Reflection.MethodInfo)">
+            <summary>
+            Adds a single method implementation to the emitted type. Generic method parameters
+            are created on the emitted method and constraints are applied to keep parity with the
+            interface declaration. The default body raises <see cref="T:System.NotImplementedException"/>.
+            </summary>
+            <param name="typeBuilder">The active <see cref="T:System.Reflection.Emit.TypeBuilder"/>.</param>
+            <param name="methodInfo">Metadata describing the method to implement.</param>
+            <returns>The modified <see cref="T:System.Reflection.Emit.TypeBuilder"/>.</returns>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.GenerateMethodBody(System.Reflection.Emit.MethodBuilder)">
+            <summary>
+            Default method body generator that throws <see cref="T:System.NotImplementedException"/>.
+            Subclasses can override to provide custom method bodies.
+            </summary>
+            <param name="methodBuilder">The method builder for the method body to generate.</param>
+        </member>
+        <member name="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.InitializePropertyField">
+            <summary>
+            Field used by the emitted type to store the set of initialized read-only properties.
+            This is populated by <see cref="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.AddInitializePropertyTrackingSupport(System.Reflection.Emit.TypeBuilder)"/> when enabled.
+            </summary>
+        </member>
+        <member name="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.InitializePropertyValueMethod">
+            <summary>
+            Method builder reference for the emitted InitializePropertyValue method.
+            </summary>
+        </member>
+        <member name="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.IsPropertyValueInitializedMethod">
+            <summary>
+            Method builder reference for the emitted IsPropertyValueInitialized method.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.AddInitializePropertyTrackingSupport(System.Reflection.Emit.TypeBuilder)">
+            <summary>
+            Adds support to the emitted type to track initialization of read-only properties.
+            This will create a backing HashSet and helper methods used by tracked accessors/mutators.
+            </summary>
+            <param name="typeBuilder">The active <see cref="T:System.Reflection.Emit.TypeBuilder"/>.</param>
+            <returns>The modified <see cref="T:System.Reflection.Emit.TypeBuilder"/>.</returns>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.BuildMethodInitializePropertyValue(System.Reflection.Emit.TypeBuilder,System.Reflection.FieldInfo)">
+            <summary>
+            Builds the helper method that marks a property as initialized at runtime.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.BuildMethodIsPropertyValueInitialized(System.Reflection.Emit.TypeBuilder,System.Reflection.FieldInfo)">
+            <summary>
+            Builds the helper method that checks whether a property has been marked initialized.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.BuildField_InitializedProperties(System.Reflection.Emit.TypeBuilder)">
+            <summary>
+            Builds the private field used to store initialized property names.
+            </summary>
+        </member>
+        <member name="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.InstanceFactory">
+            <summary>
+            Caches and returns a factory delegate that constructs instances of the emitted type.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.CreateInstance(System.Object)">
+            <summary>
+            Creates a new instance of <typeparamref name="T"/>. When <paramref name="source"/> is supplied the method maps dynamic values into the created instance using <see cref="T:BrightSword.Feber.Samples.FastMapper`1"/>.
+            </summary>
+            <param name="source">Optional dynamic source object to map values from.</param>
+            <returns>A new instance of the generated or concrete type.</returns>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.BuildInstanceFactory">
+            <summary>
+            Builds a simple compiled lambda factory that invokes the parameterless constructor of the generated type.
+            </summary>
+            <returns>A delegate that constructs instances of <typeparamref name="T"/>.</returns>
+        </member>
+        <member name="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.Type">
+            <summary>
+            Lazily returns the runtime <see cref="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.Type"/> generated for <typeparamref name="T"/>. Accessing this will trigger type emission on first use.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.BuildType">
+            <summary>
+            Builds and returns the concrete emitted <see cref="P:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.Type"/> for the interface <typeparamref name="T"/>.
+            If <typeparamref name="T"/> is already a class type the method returns <typeparamref name="T"/> unchanged.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.GetModuleBuilder(System.Reflection.Emit.AssemblyBuilder)">
+            <summary>
+            Obtains the module builder used for emission. Subclasses can override to influence module naming.
+            </summary>
+            <param name="assemblyBuilder">The assembly builder being used to emit types.</param>
+            <returns>A <see cref="T:System.Reflection.Emit.ModuleBuilder"/> used to create types.</returns>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.GetAssemblyDllName">
+            <summary>
+            Returns a DLL filename for the dynamic assembly when persisted to disk.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.GetAssemblyBuilder(System.Reflection.AssemblyName)">
+            <summary>
+            Creates the <see cref="T:System.Reflection.Emit.AssemblyBuilder"/> used to host emitted types. Override to change assembly access or attributes.
+            </summary>
+            <param name="assemblyName">The logical assembly name to define.</param>
+            <returns>An <see cref="T:System.Reflection.Emit.AssemblyBuilder"/> configured for runtime emission.</returns>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.PersistAssembly(System.Reflection.Emit.AssemblyBuilder)">
+            <summary>
+            Persist the generated assembly to disk. Default implementation is a no-op because not all runtimes support saving.
+            Subclasses can override to implement actual persistence when supported.
+            </summary>
+            <param name="assemblyBuilder">The assembly builder that was used to create the type.</param>
+        </member>
+        <member name="M:BrightSword.Squid.TypeCreators.BasicDataTransferObjectTypeCreator`1.BuildTypeBuilder(System.Reflection.Emit.ModuleBuilder)">
+            <summary>
+            Constructs the <see cref="T:System.Reflection.Emit.TypeBuilder"/> for the emitted type and applies all configured behaviours, interfaces and class operations.
+            </summary>
+            <param name="moduleBuilder">The module builder used to define the type.</param>
+            <returns>The constructed <see cref="T:System.Reflection.Emit.TypeBuilder"/> ready to call <c>CreateType()</c> on.</returns>
+        </member>
+        <member name="T:BrightSword.Squid.TypeCreators.PropertyBackingFieldMap">
+            <summary>
+            Mapping information used internally by the type creator to associate a declared property with a backing field on the emitted type.
+            </summary>
+            <remarks>
+            Instances of this type track whether the property is read-only from the interface's perspective, the concrete backing field type used for storage, the optional mapped type for get-only mapped properties, and the runtime FieldBuilder that represents the field once the type is being emitted.
+            </remarks>
+            <example>
+            <code>
+            // The type creator populates a dictionary keyed by PropertyInfo mapping to PropertyBackingFieldMap
+            var map = creator.BackingFieldProperties;
+            foreach (var kv in map)
+            {
+                Console.WriteLine(kv.Key.Name + " -> " + kv.Value.BackingFieldType.Name);
+            }
+            </code>
+            </example>
+        </member>
+    </members>
+</doc>
