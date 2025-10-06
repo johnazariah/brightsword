@@ -76,5 +76,5 @@ node_modules/
 *.rej
 *.scc
 # Local CI/runtime artifacts
-# bumped_versions.json is produced by tools/bump_versions.py and should not be committed
-bumped_versions.json
+artifacts/
+package-dependencies.json

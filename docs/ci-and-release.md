@@ -9,9 +9,9 @@ What was added
 - Package dependency graph generator: `scripts/generate-package-dependencies.ps1` producing `package-dependencies.json` with `dependencies`, `dependents`, `dependentsRecursive`, and `publishOrder`.
 - CI workflows:
   - `.github/workflows/ci.yml`: build/test, collect XML docs, generate dependency manifest for PRs.
-  - `.github/workflows/regenerate-package-deps.yml`: regenerate `package-dependencies.json` on PRs and push updates to the PR branch.
-  - `.github/workflows/publish-packages.yml`: manual and tag-triggered package publish in dependency order with permission guard.
-  - `.github/workflows/gh-pages.yml`: publish `artifacts/docs` to GitHub Pages on push to `main`.
+  - Reusable workflows: `.github/workflows/build-and-test.yml` (build/test and produce artifacts) and `.github/workflows/pack.yml` (pack packages and upload artifacts). These are `workflow_call`-style workflows intended to be invoked by other top-level workflows to reduce duplication.
+  - `.github/workflows/publish-packages.yml`: manual and tag-triggered package publish in dependency order with permission guard (now calls the reusable `pack.yml`).
+  - `.github/workflows/gh-pages.yml`: publish `artifacts/docs` to GitHub Pages on push to `main` (now calls the reusable `build-and-test.yml`).
 
 Motivation
 - Single source of truth for versions to make reviews simpler and reduce accidental mismatched versions.
@@ -19,6 +19,17 @@ Motivation
 - Publish dependent packages automatically when an upstream package is released so consumers always resolve package references.
 - Maintain up-to-date dependency manifest to speed CI decisions and reduce exploratory work.
 - Publish docs automatically to GitHub Pages to keep user-facing documentation current.
+
+Reusable workflows (summary and recommended usage)
+- `build-and-test.yml` (path: `.github/workflows/build-and-test.yml`)
+  - Purpose: restore, build packages, build tests, run tests, collect XML docs and per-project `docs/` markdown, and upload a `ci-artifacts` artifact containing `artifacts/docs` and test results.
+  - Inputs: `configuration` (default `Release`), `dotnet-version` (default `10.0.x`).
+  - How to call: top-level workflows use a `uses: ./.github/workflows/build-and-test.yml` job with `with` inputs. Example in `gh-pages.yml` uses the job to produce docs.
+
+- `pack.yml` (path: `.github/workflows/pack.yml`)
+  - Purpose: run MSBuild `Pack` target to produce nupkgs into `artifacts/packages` and upload a `packages` artifact.
+  - Inputs: `configuration` (default `Release`).
+  - How to call: top-level publish workflows should call this reusable workflow (example: `publish-packages.yml` calls it as `uses: ./.github/workflows/pack.yml`) so packing logic is consistent across CI and publish flows.
 
 How to use (quick commands)
 - Local build and test (always run before PR):
@@ -39,14 +50,14 @@ CI publishing notes
 - Secrets required for publishing: `NUGET_API_KEY` (and optionally `NUGET_SOURCE`).
 
 Docs publishing
-- CI collects XML docs and `docs/` markdown into `artifacts/docs` during CI runs. `gh-pages` workflow publishes this folder to GitHub Pages.
+- CI collects XML docs and `docs/` markdown into `artifacts/docs` during CI runs. `gh-pages` workflow publishes this folder to GitHub Pages. When using the reusable `build-and-test.yml`, the produced artifact name is `ci-artifacts` and contains `artifacts/docs`.
 - To improve HTML docs, add a doc generation script (DocFX, MkDocs) and wire it into `ci.yml` to produce `artifacts/docs`.
 
 Where to look
 - `version.props`, `versioning.targets`
 - `Directory.Build.props`
 - `scripts/generate-package-dependencies.ps1`
-- `.github/workflows/ci.yml`, `.github/workflows/regenerate-package-deps.yml`, `.github/workflows/publish-packages.yml`, `.github/workflows/gh-pages.yml`
+- `.github/workflows/ci.yml`, `.github/workflows/build-and-test.yml`, `.github/workflows/pack.yml`, `.github/workflows/publish-packages.yml`, `.github/workflows/gh-pages.yml`
 
 Validation and safety
 - Prefer opening a PR for version bumps rather than committing from CI. Use `/p:Commit=true` only with governance.

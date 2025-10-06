@@ -129,20 +129,27 @@ try {
 
     # Compute recursive dependents (DFS)
     function Get-RecursiveDependents([string]$pkg, [hashtable]$dependentsMap) {
-        $seen = New-Object System.Collections.Generic.HashSet[string]
-        $stack = New-Object System.Collections.Generic.Stack[string]
+        # Use plain PowerShell collections to maximize compatibility across pwsh versions
+        $seen = @{}
+        $stack = @()
         if ($dependentsMap.ContainsKey($pkg)) {
-            foreach ($d in $dependentsMap[$pkg]) { $stack.Push($d) }
+            foreach ($d in $dependentsMap[$pkg]) { $stack += $d }
         }
+
         while ($stack.Count -gt 0) {
-            $cur = $stack.Pop()
-            if ($seen.Add($cur)) {
+            $idx = $stack.Count - 1
+            $cur = $stack[$idx]
+            if ($idx -eq 0) { $stack = @() } else { $stack = $stack[0..($idx - 1)] }
+
+            if (-not $seen.ContainsKey($cur)) {
+                $seen[$cur] = $true
                 if ($dependentsMap.ContainsKey($cur)) {
-                    foreach ($n in $dependentsMap[$cur]) { $stack.Push($n) }
+                    foreach ($n in $dependentsMap[$cur]) { $stack += $n }
                 }
             }
         }
-        return $seen.ToArray()
+
+        return $seen.Keys
     }
 
     $dependentsRecursive = @{

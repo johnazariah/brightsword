@@ -1,4 +1,4 @@
-name: Publish docs to GitHub Pages
+name: Build and publish docs to GitHub Pages
 
 on:
   push:
@@ -12,33 +12,34 @@ permissions:
   id-token: write
 
 jobs:
-  build-and-deploy:
+  build-docs:
+    name: Build docs artifacts (reusable build-and-test)
+    uses: ./.github/workflows/build-and-test.yml
+    with:
+      configuration: 'Release'
+
+  publish-docs:
+    name: Publish docs to gh-pages
     runs-on: ubuntu-latest
-
+    needs: build-docs
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Download docs artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ci-artifacts
+          path: artifacts/docs
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '10.0.x'
+      - name: Verify docs artifact
+        run: |
+          echo "Verifying artifacts/docs exists and is not empty"
+          if [ ! -d "artifacts/docs" ]; then echo "No docs found at artifacts/docs"; exit 1; fi
+          COUNT=$(find artifacts/docs -type f | wc -l)
+          echo "Files found: $COUNT"
+          if [ "$COUNT" -eq "0" ]; then echo "No files in artifacts/docs"; exit 1; fi
 
-    - name: Normalize text file encodings to UTF-8
-      run: pwsh -NoProfile -NonInteractive -File ./scripts/convert-files-to-utf8.ps1
-
-    - name: Restore and build docs artifacts
-      run: |
-        dotnet restore
-        dotnet build -c Release --no-restore
-        # Ensure artifacts/docs exists, otherwise generate via script
-        if [ -d "artifacts/docs" ]; then ls -la artifacts/docs; else echo "No artifacts/docs; generating"; pwsh -NoProfile -NonInteractive -File ./scripts/generate-docs.ps1 || true; fi
-
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_branch: gh-pages
-        publish_dir: ./artifacts/docs
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./artifacts/docs
