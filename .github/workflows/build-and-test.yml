@@ -31,11 +31,13 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ inputs.dotnet-version }}
+          # Prefer explicit input, fall back to caller environment variable DOTNET_VERSION
+          dotnet-version: ${{ inputs.dotnet-version || env.DOTNET_VERSION }}
 
       - name: Run repository MSBuild (build & test)
         run: |
           echo "Invoking MSBuild build-and-test targets"
+          # Quote the /t argument so shells do not split the semicolon-separated target list
           dotnet msbuild Build.proj /t:"Restore;BuildPackages;BuildTests;Test" /p:Configuration=${{ inputs.configuration }} /v:minimal
 
       - name: Normalize text file encodings to UTF-8
