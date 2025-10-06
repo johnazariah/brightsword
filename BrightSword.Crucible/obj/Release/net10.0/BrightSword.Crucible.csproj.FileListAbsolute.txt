@@ -1,0 +1,13 @@
+/home/runner/work/brightsword/brightsword/BrightSword.Crucible/bin/Release/net10.0/BrightSword.Crucible.deps.json
+/home/runner/work/brightsword/brightsword/BrightSword.Crucible/bin/Release/net10.0/BrightSword.Crucible.dll
+/home/runner/work/brightsword/brightsword/BrightSword.Crucible/bin/Release/net10.0/BrightSword.Crucible.pdb
+/home/runner/work/brightsword/brightsword/BrightSword.Crucible/bin/Release/net10.0/BrightSword.Crucible.xml
+/home/runner/work/brightsword/brightsword/BrightSword.Crucible/obj/Release/net10.0/BrightSword.Crucible.csproj.AssemblyReference.cache
+/home/runner/work/brightsword/brightsword/BrightSword.Crucible/obj/Release/net10.0/BrightSword.Crucible.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/brightsword/brightsword/BrightSword.Crucible/obj/Release/net10.0/BrightSword.Crucible.csproj.CoreCompileInputs.cache
+/home/runner/work/brightsword/brightsword/BrightSword.Crucible/obj/Release/net10.0/BrightSword.Crucible.sourcelink.json
+/home/runner/work/brightsword/brightsword/BrightSword.Crucible/obj/Release/net10.0/BrightSword.Crucible.dll
+/home/runner/work/brightsword/brightsword/BrightSword.Crucible/obj/Release/net10.0/refint/BrightSword.Crucible.dll
+/home/runner/work/brightsword/brightsword/BrightSword.Crucible/obj/Release/net10.0/BrightSword.Crucible.xml
+/home/runner/work/brightsword/brightsword/BrightSword.Crucible/obj/Release/net10.0/BrightSword.Crucible.pdb
+/home/runner/work/brightsword/brightsword/BrightSword.Crucible/obj/Release/net10.0/ref/BrightSword.Crucible.dll
