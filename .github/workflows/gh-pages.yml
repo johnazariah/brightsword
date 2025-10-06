@@ -99,13 +99,15 @@ jobs:
           echo "Contents of repo root after copying docs:"
           ls -la || true
 
-          # Ensure there is something to commit. If no files were copied, abort with helpful message.
-          if [ -z "$(git ls-files)" ]; then
+          # Stage all files for commit
+          git add -A
+
+          # Ensure there is something to commit. If no files were staged, abort with helpful message.
+          if [ -z "$(git status --porcelain)" ]; then
             echo "No files to commit after copying docs. Check the generator output and that artifacts/docs contained generated files."
             exit 1
           fi
 
-          git add -A
           git commit -m "chore(docs): update gh-pages from CI ${{ github.sha }}"
           git push origin "$PR_BRANCH"
 
