@@ -103,8 +103,7 @@ try {
                 $html += "<tr><td><code>" + [System.Net.WebUtility]::HtmlEncode($display) + "</code></td><td>" + $kind + "</td><td>" + [System.Net.WebUtility]::HtmlEncode($summary) + "</td></tr>"
             }
             $html += "</tbody></table>"
--            $html += "<p><a href='../README.md'>Back to project README</a></p>"
-+            $html += "<p><a href='../README.html'>Back to project README</a></p>"
+            $html += "<p><a href='../README.html'>Back to project README</a></p>"
             $html += "</body></html>"
             [System.IO.File]::WriteAllText($outFile, $html, [System.Text.Encoding]::UTF8)
             Write-Host "Wrote API page: $outFile"
@@ -117,28 +116,27 @@ try {
             $safeName = ($tn -replace '[^a-zA-Z0-9_.-]','_') -replace '\\','_'
             $idxHtml += "<li><a href='$safeName.html'>$tn</a></li>"
         }
--        $idxHtml += "</ul><p><a href='../README.md'>Back to README</a></p></body></html>"
-+        $idxHtml += "</ul><p><a href='../README.html'>Back to README</a></p></body></html>"
+        $idxHtml += "</ul><p><a href='../README.html'>Back to README</a></p></body></html>"
         [System.IO.File]::WriteAllText($apiIndex, $idxHtml, [System.Text.Encoding]::UTF8)
         Write-Host "Wrote API index: $apiIndex"
     }
 
-+    # Convert project README.md files to README.html for consistent site layout
-+    foreach ($p in $projectDocs) {
-+        $projName = $p.Name
-+        $readmePath = Join-Path $OutDir "$projName\README.md"
-+        $htmlPath = Join-Path $OutDir "$projName\README.html"
-+        if (Test-Path $readmePath) {
-+            $md = Get-Content -Raw -Path $readmePath
-+            $htmlBody = Convert-MarkdownToHtml $md
-+            $page = "<html><head><meta charset='utf-8'><title>$projName</title></head><body>" + $htmlBody + "</body></html>"
-+            [System.IO.File]::WriteAllText($htmlPath, $page, [System.Text.Encoding]::UTF8)
-+            Write-Host "Generated project README HTML: $htmlPath"
-+        }
-+    }
+    # Convert project README.md files to README.html for consistent site layout
+    foreach ($p in $projectDocs) {
+        $projName = $p.Name
+        $readmePath = Join-Path $OutDir "$projName\README.md"
+        $htmlPath = Join-Path $OutDir "$projName\README.html"
+        if (Test-Path $readmePath) {
+            $md = Get-Content -Raw -Path $readmePath
+            $htmlBody = Convert-MarkdownToHtml $md
+            $page = "<html><head><meta charset='utf-8'><title>$projName</title></head><body>" + $htmlBody + "</body></html>"
+            [System.IO.File]::WriteAllText($htmlPath, $page, [System.Text.Encoding]::UTF8)
+            Write-Host "Generated project README HTML: $htmlPath"
+        }
+    }
 
-     # Copy project docs into artifacts/docs/<ProjectName>/... (exclude scanning under OutDir)
-     $mdDirs = Get-ChildItem -Recurse -Directory -Filter docs | Where-Object { $_.FullName -notmatch "\\obj\\|\\bin\\" -and $_.FullName -notlike "$fullOutDir*" }
+    # Copy project docs into artifacts/docs/<ProjectName>/... (exclude scanning under OutDir)
+    $mdDirs = Get-ChildItem -Recurse -Directory -Filter docs | Where-Object { $_.FullName -notmatch "\\obj\\|\\bin\\" -and $_.FullName -notlike "$fullOutDir*" }
     $projectDocs = @()
     foreach ($d in $mdDirs) {
         $projectDir = Split-Path $d.FullName -Parent
