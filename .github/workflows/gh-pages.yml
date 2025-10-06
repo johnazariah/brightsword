@@ -12,6 +12,91 @@ permissions:
   id-token: write
 
 jobs:
+  test-gh-pages-push:
+    name: Test GitHub Pages Push Permission
+    runs-on: ubuntu-latest
+
+    steps:
+        - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
+            persist-credentials: false  # we'll set our own remote
+
+        - name: Configure git identity
+          run: |
+            git config --global user.name  "github-actions[bot]"
+            git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+        - name: Set remote with GITHUB_TOKEN
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+              git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
+              echo "Remote:"
+              git remote -v
+
+        - name: Fetch gh-pages
+          run: |
+            git fetch origin gh-pages || true
+            git branch -a
+            git log --oneline -n 1 || true
+            git log --oneline origin/gh-pages -n 1 || true
+
+        - name: Check push permission + reason (dry-run)
+          id: check_push
+          shell: bash
+          run: |
+            set -euo pipefail
+
+            # Try a verbose dry-run so we can inspect the exact error
+            set +e
+            DRYRUN_OUTPUT="$(git push --porcelain --dry-run origin HEAD:gh-pages 2>&1)"
+            STATUS=$?
+            set -e
+
+            echo "---- git push --dry-run output ----"
+            echo "$DRYRUN_OUTPUT"
+            echo "-----------------------------------"
+
+            # Classify common failure modes
+            if [ $STATUS -eq 0 ]; then
+                echo "can_push=true" >> "$GITHUB_OUTPUT"
+                echo "reason=ok" >> "$GITHUB_OUTPUT"
+                echo "✅ Dry-run push would succeed"
+                exit 0
+            fi
+
+            # Permission errors
+            if echo "$DRYRUN_OUTPUT" | grep -qiE "Permission to .+ denied|Authentication failed|HTTP Basic: Access denied|cannot read Username"; then
+                echo "can_push=false" >> "$GITHUB_OUTPUT"
+                echo "reason=auth" >> "$GITHUB_OUTPUT"
+                echo "❌ Dry-run failed: authentication/permissions"
+                exit 1
+            fi
+
+            # Protected branch
+            if echo "$DRYRUN_OUTPUT" | grep -qiE "protected branch hook declined|cannot lock ref|protected.*branch"; then
+                echo "can_push=false" >> "$GITHUB_OUTPUT"
+                echo "reason=protected" >> "$GITHUB_OUTPUT"
+                echo "❌ Dry-run failed: branch protection on gh-pages"
+                exit 1
+            fi
+
+            # Non fast-forward
+            if echo "$DRYRUN_OUTPUT" | grep -qi "non-fast-forward"; then
+                echo "can_push=false" >> "$GITHUB_OUTPUT"
+                echo "reason=non_ff" >> "$GITHUB_OUTPUT"
+                echo "❌ Dry-run failed: non-fast-forward (history diverged)"
+                exit 1
+            fi
+
+            # Fallback
+            echo "can_push=false" >> "$GITHUB_OUTPUT"
+            echo "reason=unknown" >> "$GITHUB_OUTPUT"
+            echo "❌ Dry-run failed: unknown reason"
+            exit 1
+
   publish-docs:
     name: Build, Generate and Publish docs to gh-pages
     runs-on: ubuntu-latest
@@ -69,7 +154,6 @@ jobs:
           else
             echo "can_push=false" >> $GITHUB_OUTPUT
             echo "Dry-run push failed"
-            exit 1
           fi
 
       - name: Deploy to GitHub Pages (direct push)
