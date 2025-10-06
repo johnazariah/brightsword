@@ -109,7 +109,8 @@ jobs:
           fi
 
           git commit -m "chore(docs): update gh-pages from CI ${{ github.sha }}"
-          git push origin "$PR_BRANCH"
+          # Use force-with-lease to update branch if remote already exists but avoid overwriting unrelated changes
+          git push --force-with-lease origin "$PR_BRANCH"
 
           # Create PR via GitHub API
           PR_TITLE="Automated docs update from CI (${GITHUB_SHA:0:7})"
