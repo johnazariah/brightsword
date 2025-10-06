@@ -36,7 +36,7 @@ jobs:
       - name: Run repository MSBuild (build & test)
         run: |
           echo "Invoking MSBuild build-and-test targets"
-          dotnet msbuild Build.proj /t:Restore;BuildPackages;BuildTests;Test /p:Configuration=${{ inputs.configuration }} /v:minimal
+          dotnet msbuild Build.proj /t:"Restore;BuildPackages;BuildTests;Test" /p:Configuration=${{ inputs.configuration }} /v:minimal
 
       - name: Normalize text file encodings to UTF-8
         if: always()
