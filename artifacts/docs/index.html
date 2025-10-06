@@ -1,0 +1,201 @@
+﻿<html><head><meta charset='utf-8'><title>BrightSword Documentation</title><style>body{font-family:Segoe UI,Arial,Helvetica,sans-serif;max-width:900px;margin:40px auto;padding:0 20px;color:#222}header h1{margin:0} nav ul{list-style:none;padding:0} nav li{margin:6px 0}</style></head><body><header><h1>BrightSword Documentation</h1><p>Documentation and API references for the BrightSword libraries.</p></header><section><h1>BrightSword Monorepo</h1>
+<p></p>
+<p>A collection of high-quality .NET libraries for utilities, testing, automated code generation, and advanced serialization.</p>
+<p></p>
+<p>[![CI Build](https://github.com/brightsword/BrightSword/actions/workflows/ci.yml/badge.svg)](https://github.com/brightsword/BrightSword/actions/workflows/ci.yml)</p>
+<p>[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)</p>
+<p></p>
+<h2>&#240;Ÿ“&#166; Packages</h2>
+<p></p>
+<p>This monorepo contains the following NuGet packages:</p>
+<p></p>
+<p>| Package | Version | Description |</p>
+<p>|---------|---------|-------------|</p>
+<p>| [BrightSword.SwissKnife](./BrightSword.SwissKnife) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.SwissKnife.svg)](https://www.nuget.org/packages/BrightSword.SwissKnife/) | Utility classes and extension methods for .NET development |</p>
+<p>| [BrightSword.Crucible](./BrightSword.Crucible) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.Crucible.svg)](https://www.nuget.org/packages/BrightSword.Crucible/) | Unit testing utilities for MSTest |</p>
+<p>| [BrightSword.Feber](./BrightSword.Feber) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.Feber.svg)](https://www.nuget.org/packages/BrightSword.Feber/) | Automated delegate generation using Expression trees |</p>
+<p>| [BrightSword.Squid](./BrightSword.Squid) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.Squid.svg)](https://www.nuget.org/packages/BrightSword.Squid/) | Runtime type emission utilities |</p>
+<p></p>
+<h2>&#128295; Quick Start</h2>
+<p></p>
+<h3>Prerequisites</h3>
+<ul>
+<li>[.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) and `pwsh` (PowerShell) available.</li>
+<p></p>
+<h3>Canonical build entrypoint</h3>
+<ul>
+<li>Use the repository MSBuild driver: `dotnet msbuild Build.proj` so local runs match CI.</li>
+<p></p>
+<h2>&#128736; Contributor Quick Commands</h2>
+<p></p>
+<p>Use these copy-paste examples to perform common tasks locally (they match CI behavior).</p>
+<p></p>
+<ul>
+<li>Full CI-equivalent (clean, restore, build, test, pack):</li>
+<p></p>
+<pre><code># From repo root (PowerShell: quote multi-target argument)
+dotnet msbuild Build.proj /t:CI /p:Configuration=Release /v:minimal
+</code></pre>
+<p></p>
+<ul>
+<li>Restore, build and run tests (multi-target quoting required in PowerShell):</li>
+<p></p>
+<pre><code>dotnet msbuild Build.proj /t:&quot;Restore;BuildPackages;BuildTests;Test&quot; /p:Configuration=Release
+</code></pre>
+<p></p>
+<ul>
+<li>Pack a single project into `artifacts/packages`:</li>
+<p></p>
+<pre><code>dotnet msbuild Build.proj /t:PackSingle /p:Configuration=Release;Package=BrightSword.SwissKnife
+</code></pre>
+<p></p>
+<ul>
+<li>Generate dependency manifest (used by CI):</li>
+<p></p>
+<pre><code>pwsh ./scripts/generate-package-dependencies.ps1
+</code></pre>
+<p></p>
+<ul>
+<li>Generate docs (placeholder generator used by GitHub Pages workflow):</li>
+<p></p>
+<pre><code># build required projects first
+dotnet msbuild Build.proj /t:&quot;Restore;BuildPackages&quot; /p:Configuration=Release
+pwsh ./scripts/generate-docs.ps1
+ls artifacts/docs   # verify index.html
+</code></pre>
+<p></p>
+<ul>
+<li>Bump a project&#39;s version (MSBuild `IncrementVersion` target):</li>
+<p></p>
+<pre><code># Increment patch locally (no commit)
+dotnet msbuild /t:IncrementVersion /p:ProjectName=BrightSword.SwissKnife /p:Level=Patch
+# To increment and commit locally (be careful):
+dotnet msbuild /t:IncrementVersion /p:ProjectName=BrightSword.SwissKnife /p:Level=Patch /p:Commit=true
+</code></pre>
+<p></p>
+<ul>
+<li>Publish (recommended via GitHub Actions):</li>
+<p>  - Run the `Publish packages in dependency order` workflow manually from Actions and supply the `package` input, or push a tag containing the package id (example: `v-BrightSword.SwissKnife-1.1.1`).</p>
+<p></p>
+<p></p>
+<h2>&#128218; Documentation</h2>
+<p></p>
+<ul>
+<li>See per-project docs under each project&#39;s `docs/` folder (e.g., `BrightSword.SwissKnife/docs/`). The GH-Pages workflow publishes `artifacts/docs` to `gh-pages`.</li>
+<p></p>
+<h2>&#128257; CI / CD</h2>
+<p></p>
+<ul>
+<li>CI uses `Build.proj` (`/t:CI`) as the canonical pipeline and publishes packages using the dependency-aware `publish-packages.yml` workflow.</li>
+<p></p>
+<h2>Files of interest</h2>
+<ul>
+<li>`Build.proj` — centralized MSBuild targets used by local and CI builds.</li>
+<ul>
+<li>`version.props`, `versioning.targets` — centralized versioning and `IncrementVersion` target.</li>
+<ul>
+<li>`Directory.Build.props` — packaging defaults and `LangVersion`.</li>
+<ul>
+<li>`scripts/generate-package-dependencies.ps1` — dependency graph generator.</li>
+<ul>
+<li>`scripts/generate-docs.ps1` — placeholder docs generator used by GH-Pages workflow.</li>
+<ul>
+<li>`.github/workflows/*` — CI, regen-deps, publish-packages and gh-pages workflows.</li>
+<p></p>
+<p>If you want this README expanded into a contributor quickstart page under `docs/`, I can add that in a follow-up change.</p>
+<p></p>
+<p>---</p>
+<p></p>
+<h2>Package Highlights</h2>
+<p></p>
+<h3>BrightSword.SwissKnife</h3>
+<p>Utility classes and extension methods that provide robust, dependency-light helpers for common programming tasks like reflection, validation, collections, and string manipulation.</p>
+<p></p>
+<h3>BrightSword.Crucible</h3>
+<p>Testing utilities for MSTest that make exception testing more expressive with the `ExpectException&lt;T&gt;` extension method.</p>
+<p></p>
+<h3>BrightSword.Feber</h3>
+<p>Automated delegate generation using LINQ Expression trees. Compose property-based operations (copying, printing, validation) once per type and execute them efficiently with cached compiled delegates.</p>
+<p></p>
+<p><strong>Performance</strong>: </p>
+<ul>
+<li>First call: ~10-100ms (reflection + expression building + JIT)</li>
+<ul>
+<li>Subsequent calls: &lt;0.001ms (cached compiled delegate)</li>
+<p></p>
+<h3>BrightSword.Squid</h3>
+<p>Runtime type emission utilities for creating types dynamically using Reflection.Emit. Includes support for data transfer objects, behaviors, and advanced type creation scenarios.</p>
+<p></p>
+<h2>Run Samples and Tests</h2>
+<p></p>
+<p>This repository targets .NET 10. Use the SDK pinned in `global.json`.</p>
+<p></p>
+<h3>Run the Feber Sample</h3>
+<p></p>
+<pre><code># Build and run the sample
+dotnet run --project BrightSword.Feber.SamplesApp/BrightSword.Feber.SamplesApp.csproj
+</code></pre>
+<p></p>
+<h3>Run Tests</h3>
+<p></p>
+<pre><code># Run all tests
+dotnet test
+
+# Run specific test project
+dotnet test BrightSword.SwissKnife.Tests/BrightSword.SwissKnife.Tests.csproj
+</code></pre>
+<p></p>
+<h2>&#240;Ÿ“„ License</h2>
+<p></p>
+<p>This project is licensed under the <strong>Creative Commons Legal Code (CC0 1.0 Universal)</strong>.</p>
+<p></p>
+<p>You are free to:</p>
+<ul>
+<li>**Share** &#226;€” copy and redistribute the material in any medium or format</li>
+<ul>
+<li>**Adapt** &#226;€” remix, transform, and build upon the material for any purpose, even commercially</li>
+<p></p>
+<p>Under the following terms:</p>
+<ul>
+<li>**Attribution** &#226;€” You must give appropriate credit to BrightSword Technologies Pte Ltd, provide a link to the license, and indicate if changes were made.</li>
+<p></p>
+<p>See the full license at [https://creativecommons.org/licenses/by/4.0/](https://creativecommons.org/licenses/by/4.0/)</p>
+<p></p>
+<h2>&#240;Ÿ™ Acknowledgments</h2>
+<p></p>
+<ul>
+<li>Developed and maintained by [BrightSword Technologies Pte Ltd](https://brightsword.com)</li>
+<ul>
+<li>Copyright &#194;&#169; BrightSword Technologies Pte Ltd, Singapore</li>
+<p></p>
+<h2>&#240;Ÿ“ž Support</h2>
+<p></p>
+<ul>
+<li>**Documentation**: [GitHub Pages](https://brightsword.github.io/BrightSword/)</li>
+<ul>
+<li>**Issues**: [GitHub Issues](https://github.com/brightsword/BrightSword/issues)</li>
+<ul>
+<li>**Discussions**: [GitHub Discussions](https://github.com/brightsword/BrightSword/discussions)</li>
+<p></p>
+<p>---</p>
+<p></p>
+<p><strong>Built with &#226;&#164;&#239;&#184; by BrightSword Technologies</strong></p>
+<p></p>
+</section><nav><h2>Project documentation</h2><ul>
+<li>brightsword (no README)</li>
+<li><a href='BrightSword.Squid/README.md'>BrightSword.Squid</a></li>
+<li><a href='BrightSword.Feber/README.md'>BrightSword.Feber</a></li>
+<li><a href='BrightSword.SwissKnife/README.md'>BrightSword.SwissKnife</a></li>
+<li><a href='BrightSword.Crucible/README.md'>BrightSword.Crucible</a></li>
+<li><a href='/home/runner/work/brightsword/brightsword/docs/ARCHITECTURE.md'>ARCHITECTURE.md</a></li>
+<li><a href='/home/runner/work/brightsword/brightsword/docs/BUILD.md'>BUILD.md</a></li>
+<li><a href='/home/runner/work/brightsword/brightsword/docs/ci-and-release.md'>ci-and-release.md</a></li>
+<li><a href='/home/runner/work/brightsword/brightsword/docs/CICD.md'>CICD.md</a></li>
+<li><a href='/home/runner/work/brightsword/brightsword/docs/CONTRIBUTING.md'>CONTRIBUTING.md</a></li>
+<li><a href='/home/runner/work/brightsword/brightsword/docs/GITHUB_PAGES_QUICKSTART.md'>GITHUB_PAGES_QUICKSTART.md</a></li>
+<li><a href='/home/runner/work/brightsword/brightsword/docs/GITHUB_PAGES.md'>GITHUB_PAGES.md</a></li>
+<li><a href='/home/runner/work/brightsword/brightsword/docs/IMPLEMENTATION_SUMMARY.md'>IMPLEMENTATION_SUMMARY.md</a></li>
+<li><a href='/home/runner/work/brightsword/brightsword/docs/pr-checklist.md'>pr-checklist.md</a></li>
+<li><a href='/home/runner/work/brightsword/brightsword/docs/VERSIONING.md'>VERSIONING.md</a></li>
+<li><a href='/home/runner/work/brightsword/brightsword/docs/WARNING_RESOLUTION.md'>WARNING_RESOLUTION.md</a></li>
+</ul></nav><footer><p>Generated on: 2025-10-06T04:25:28.0767914+00:00</p></footer></body></html>

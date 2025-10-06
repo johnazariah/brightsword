@@ -1,0 +1,161 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "BrightSword.Squid/1.0.0-preview": {
+        "dependencies": {
+          "BrightSword.Feber": "2.0.3-preview",
+          "BrightSword.SwissKnife": "1.0.19-preview",
+          "Microsoft.CodeAnalysis.PublicApiAnalyzers": "3.3.4",
+          "Microsoft.SourceLink.GitHub": "8.0.0"
+        },
+        "runtime": {
+          "BrightSword.Squid.dll": {}
+        }
+      },
+      "Microsoft.Build.Tasks.Git/8.0.0": {},
+      "Microsoft.CodeAnalysis.PublicApiAnalyzers/3.3.4": {},
+      "Microsoft.SourceLink.Common/8.0.0": {},
+      "Microsoft.SourceLink.GitHub/8.0.0": {
+        "dependencies": {
+          "Microsoft.Build.Tasks.Git": "8.0.0",
+          "Microsoft.SourceLink.Common": "8.0.0"
+        }
+      },
+      "System.Configuration.ConfigurationManager/8.0.0": {
+        "dependencies": {
+          "System.Diagnostics.EventLog": "8.0.0",
+          "System.Security.Cryptography.ProtectedData": "8.0.0"
+        },
+        "runtime": {
+          "lib/net8.0/System.Configuration.ConfigurationManager.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
+          }
+        }
+      },
+      "System.Diagnostics.EventLog/8.0.0": {
+        "runtime": {
+          "lib/net8.0/System.Diagnostics.EventLog.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net8.0/System.Diagnostics.EventLog.Messages.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
+          },
+          "runtimes/win/lib/net8.0/System.Diagnostics.EventLog.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
+          }
+        }
+      },
+      "System.Security.Cryptography.ProtectedData/8.0.0": {
+        "runtime": {
+          "lib/net8.0/System.Security.Cryptography.ProtectedData.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.23.53103"
+          }
+        }
+      },
+      "BrightSword.Feber/2.0.3-preview": {
+        "dependencies": {
+          "BrightSword.SwissKnife": "1.0.19-preview"
+        },
+        "runtime": {
+          "BrightSword.Feber.dll": {
+            "assemblyVersion": "1.0.16.0",
+            "fileVersion": "1.0.16.0"
+          }
+        }
+      },
+      "BrightSword.SwissKnife/1.0.19-preview": {
+        "dependencies": {
+          "System.Configuration.ConfigurationManager": "8.0.0"
+        },
+        "runtime": {
+          "BrightSword.SwissKnife.dll": {
+            "assemblyVersion": "1.0.9.0",
+            "fileVersion": "1.0.9.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "BrightSword.Squid/1.0.0-preview": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Build.Tasks.Git/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bZKfSIKJRXLTuSzLudMFte/8CempWjVamNUR5eHJizsy+iuOuO/k2gnh7W0dHJmYY0tBf+gUErfluCv5mySAOQ==",
+      "path": "microsoft.build.tasks.git/8.0.0",
+      "hashPath": "microsoft.build.tasks.git.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.CodeAnalysis.PublicApiAnalyzers/3.3.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kNLTfXtXUWDHVt5iaPkkiPuyHYlMgLI6SOFT4w88bfeI2vqSeGgHunFkdvlaCM8RDfcY0t2+jnesQtidRJJ/DA==",
+      "path": "microsoft.codeanalysis.publicapianalyzers/3.3.4",
+      "hashPath": "microsoft.codeanalysis.publicapianalyzers.3.3.4.nupkg.sha512"
+    },
+    "Microsoft.SourceLink.Common/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dk9JPxTCIevS75HyEQ0E4OVAFhB2N+V9ShCXf8Q6FkUQZDkgLI12y679Nym1YqsiSysuQskT7Z+6nUf3yab6Vw==",
+      "path": "microsoft.sourcelink.common/8.0.0",
+      "hashPath": "microsoft.sourcelink.common.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.SourceLink.GitHub/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-G5q7OqtwIyGTkeIOAc3u2ZuV/kicQaec5EaRnc0pIeSnh9LUjj+PYQrJYBURvDt7twGl2PKA7nSN0kz1Zw5bnQ==",
+      "path": "microsoft.sourcelink.github/8.0.0",
+      "hashPath": "microsoft.sourcelink.github.8.0.0.nupkg.sha512"
+    },
+    "System.Configuration.ConfigurationManager/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JlYi9XVvIREURRUlGMr1F6vOFLk7YSY4p1vHo4kX3tQ0AGrjqlRWHDi66ImHhy6qwXBG3BJ6Y1QlYQ+Qz6Xgww==",
+      "path": "system.configuration.configurationmanager/8.0.0",
+      "hashPath": "system.configuration.configurationmanager.8.0.0.nupkg.sha512"
+    },
+    "System.Diagnostics.EventLog/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-fdYxcRjQqTTacKId/2IECojlDSFvp7LP5N78+0z/xH7v/Tuw5ZAxu23Y6PTCRinqyu2ePx+Gn1098NC6jM6d+A==",
+      "path": "system.diagnostics.eventlog/8.0.0",
+      "hashPath": "system.diagnostics.eventlog.8.0.0.nupkg.sha512"
+    },
+    "System.Security.Cryptography.ProtectedData/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+TUFINV2q2ifyXauQXRwy4CiBhqvDEDZeVJU7qfxya4aRYOKzVBpN+4acx25VcPB9ywUN6C0n8drWl110PhZEg==",
+      "path": "system.security.cryptography.protecteddata/8.0.0",
+      "hashPath": "system.security.cryptography.protecteddata.8.0.0.nupkg.sha512"
+    },
+    "BrightSword.Feber/2.0.3-preview": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "BrightSword.SwissKnife/1.0.19-preview": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

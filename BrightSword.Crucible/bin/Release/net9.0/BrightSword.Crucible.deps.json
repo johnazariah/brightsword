@@ -1,0 +1,80 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "BrightSword.Crucible/1.0.16-preview": {
+        "dependencies": {
+          "MSTest.TestFramework": "2.2.10",
+          "Microsoft.CodeAnalysis.PublicApiAnalyzers": "3.3.4",
+          "Microsoft.SourceLink.GitHub": "8.0.0"
+        },
+        "runtime": {
+          "BrightSword.Crucible.dll": {}
+        }
+      },
+      "Microsoft.Build.Tasks.Git/8.0.0": {},
+      "Microsoft.CodeAnalysis.PublicApiAnalyzers/3.3.4": {},
+      "Microsoft.SourceLink.Common/8.0.0": {},
+      "Microsoft.SourceLink.GitHub/8.0.0": {
+        "dependencies": {
+          "Microsoft.Build.Tasks.Git": "8.0.0",
+          "Microsoft.SourceLink.Common": "8.0.0"
+        }
+      },
+      "MSTest.TestFramework/2.2.10": {
+        "runtime": {
+          "lib/net5.0/Microsoft.VisualStudio.TestPlatform.TestFramework.dll": {
+            "assemblyVersion": "14.0.0.0",
+            "fileVersion": "14.0.7126.11"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "BrightSword.Crucible/1.0.16-preview": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.Build.Tasks.Git/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bZKfSIKJRXLTuSzLudMFte/8CempWjVamNUR5eHJizsy+iuOuO/k2gnh7W0dHJmYY0tBf+gUErfluCv5mySAOQ==",
+      "path": "microsoft.build.tasks.git/8.0.0",
+      "hashPath": "microsoft.build.tasks.git.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.CodeAnalysis.PublicApiAnalyzers/3.3.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kNLTfXtXUWDHVt5iaPkkiPuyHYlMgLI6SOFT4w88bfeI2vqSeGgHunFkdvlaCM8RDfcY0t2+jnesQtidRJJ/DA==",
+      "path": "microsoft.codeanalysis.publicapianalyzers/3.3.4",
+      "hashPath": "microsoft.codeanalysis.publicapianalyzers.3.3.4.nupkg.sha512"
+    },
+    "Microsoft.SourceLink.Common/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dk9JPxTCIevS75HyEQ0E4OVAFhB2N+V9ShCXf8Q6FkUQZDkgLI12y679Nym1YqsiSysuQskT7Z+6nUf3yab6Vw==",
+      "path": "microsoft.sourcelink.common/8.0.0",
+      "hashPath": "microsoft.sourcelink.common.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.SourceLink.GitHub/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-G5q7OqtwIyGTkeIOAc3u2ZuV/kicQaec5EaRnc0pIeSnh9LUjj+PYQrJYBURvDt7twGl2PKA7nSN0kz1Zw5bnQ==",
+      "path": "microsoft.sourcelink.github/8.0.0",
+      "hashPath": "microsoft.sourcelink.github.8.0.0.nupkg.sha512"
+    },
+    "MSTest.TestFramework/2.2.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JZRVXKq19uRhkj8MuzsU8zJhPV2JV3ZToFPAIg+BU53L1L9mNDfm9jXerdRfbrE4HBcf2M54Ij80zPOdlha3+Q==",
+      "path": "mstest.testframework/2.2.10",
+      "hashPath": "mstest.testframework.2.2.10.nupkg.sha512"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "7e1EGYdBjjo=",
+  "success": true,
+  "projectFilePath": "/home/runner/work/brightsword/brightsword/BrightSword.Crucible/BrightSword.Crucible.csproj",
+  "expectedPackageFiles": [
+    "/home/runner/.nuget/packages/microsoft.build.tasks.git/8.0.0/microsoft.build.tasks.git.8.0.0.nupkg.sha512",
+    "/home/runner/.nuget/packages/microsoft.codeanalysis.publicapianalyzers/3.3.4/microsoft.codeanalysis.publicapianalyzers.3.3.4.nupkg.sha512",
+    "/home/runner/.nuget/packages/microsoft.sourcelink.common/8.0.0/microsoft.sourcelink.common.8.0.0.nupkg.sha512",
+    "/home/runner/.nuget/packages/microsoft.sourcelink.github/8.0.0/microsoft.sourcelink.github.8.0.0.nupkg.sha512",
+    "/home/runner/.nuget/packages/mstest.testframework/2.2.10/mstest.testframework.2.2.10.nupkg.sha512"
+  ],
+  "logs": []
+}

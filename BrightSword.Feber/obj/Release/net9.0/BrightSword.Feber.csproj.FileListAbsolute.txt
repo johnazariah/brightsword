@@ -1,0 +1,17 @@
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/bin/Release/net9.0/BrightSword.Feber.deps.json
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/bin/Release/net9.0/BrightSword.Feber.dll
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/bin/Release/net9.0/BrightSword.Feber.pdb
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/bin/Release/net9.0/BrightSword.Feber.xml
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/bin/Release/net9.0/BrightSword.SwissKnife.dll
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/bin/Release/net9.0/BrightSword.SwissKnife.pdb
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/bin/Release/net9.0/BrightSword.SwissKnife.xml
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/obj/Release/net9.0/BrightSword.Feber.csproj.AssemblyReference.cache
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/obj/Release/net9.0/BrightSword.Feber.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/obj/Release/net9.0/BrightSword.Feber.csproj.CoreCompileInputs.cache
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/obj/Release/net9.0/BrightSword.Feber.sourcelink.json
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/obj/Release/net9.0/BrightSw.4B674543.Up2Date
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/obj/Release/net9.0/BrightSword.Feber.dll
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/obj/Release/net9.0/refint/BrightSword.Feber.dll
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/obj/Release/net9.0/BrightSword.Feber.xml
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/obj/Release/net9.0/BrightSword.Feber.pdb
+/home/runner/work/brightsword/brightsword/BrightSword.Feber/obj/Release/net9.0/ref/BrightSword.Feber.dll

@@ -1,0 +1,13 @@
+/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/bin/Release/net9.0/BrightSword.SwissKnife.deps.json
+/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/bin/Release/net9.0/BrightSword.SwissKnife.dll
+/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/bin/Release/net9.0/BrightSword.SwissKnife.pdb
+/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/bin/Release/net9.0/BrightSword.SwissKnife.xml
+/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/obj/Release/net9.0/BrightSword.SwissKnife.csproj.AssemblyReference.cache
+/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/obj/Release/net9.0/BrightSword.SwissKnife.GeneratedMSBuildEditorConfig.editorconfig
+/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/obj/Release/net9.0/BrightSword.SwissKnife.csproj.CoreCompileInputs.cache
+/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/obj/Release/net9.0/BrightSword.SwissKnife.sourcelink.json
+/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/obj/Release/net9.0/BrightSword.SwissKnife.dll
+/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/obj/Release/net9.0/refint/BrightSword.SwissKnife.dll
+/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/obj/Release/net9.0/BrightSword.SwissKnife.xml
+/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/obj/Release/net9.0/BrightSword.SwissKnife.pdb
+/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/obj/Release/net9.0/ref/BrightSword.SwissKnife.dll

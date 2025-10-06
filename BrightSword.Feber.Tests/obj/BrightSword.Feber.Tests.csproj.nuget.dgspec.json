@@ -1,0 +1,257 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/runner/work/brightsword/brightsword/BrightSword.Feber.Tests/BrightSword.Feber.Tests.csproj": {}
+  },
+  "projects": {
+    "/home/runner/work/brightsword/brightsword/BrightSword.Feber.Tests/BrightSword.Feber.Tests.csproj": {
+      "version": "0.0.2",
+      "restore": {
+        "projectUniqueName": "/home/runner/work/brightsword/brightsword/BrightSword.Feber.Tests/BrightSword.Feber.Tests.csproj",
+        "projectName": "BrightSword.Feber.Tests",
+        "projectPath": "/home/runner/work/brightsword/brightsword/BrightSword.Feber.Tests/BrightSword.Feber.Tests.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/work/brightsword/brightsword/BrightSword.Feber.Tests/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/runner/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/home/runner/work/brightsword/brightsword/BrightSword.Feber/BrightSword.Feber.csproj": {
+                "projectPath": "/home/runner/work/brightsword/brightsword/BrightSword.Feber/BrightSword.Feber.csproj"
+              },
+              "/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/BrightSword.SwissKnife.csproj": {
+                "projectPath": "/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/BrightSword.SwissKnife.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "FsCheck.Xunit": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[17.14.1, )"
+            },
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "xunit": {
+              "target": "Package",
+              "version": "[2.9.0, )"
+            },
+            "xunit.runner.visualstudio": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.305/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/runner/work/brightsword/brightsword/BrightSword.Feber/BrightSword.Feber.csproj": {
+      "version": "2.0.3-preview",
+      "restore": {
+        "projectUniqueName": "/home/runner/work/brightsword/brightsword/BrightSword.Feber/BrightSword.Feber.csproj",
+        "projectName": "BrightSword.Feber",
+        "projectPath": "/home/runner/work/brightsword/brightsword/BrightSword.Feber/BrightSword.Feber.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/work/brightsword/brightsword/BrightSword.Feber/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/runner/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/BrightSword.SwissKnife.csproj": {
+                "projectPath": "/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/BrightSword.SwissKnife.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.CodeAnalysis.PublicApiAnalyzers": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.3.4, )"
+            },
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Roslynator.Analyzers": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[4.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.305/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/BrightSword.SwissKnife.csproj": {
+      "version": "1.0.19-preview",
+      "restore": {
+        "projectUniqueName": "/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/BrightSword.SwissKnife.csproj",
+        "projectName": "BrightSword.SwissKnife",
+        "projectPath": "/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/BrightSword.SwissKnife.csproj",
+        "packagesPath": "/home/runner/.nuget/packages/",
+        "outputPath": "/home/runner/work/brightsword/brightsword/BrightSword.SwissKnife/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/runner/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.300"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.CodeAnalysis.PublicApiAnalyzers": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.3.4, )"
+            },
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "Roslynator.Analyzers": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[4.0.0, )"
+            },
+            "System.Configuration.ConfigurationManager": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.305/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
