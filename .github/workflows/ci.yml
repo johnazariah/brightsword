@@ -19,7 +19,6 @@ jobs:
     uses: ./.github/workflows/build-and-test.yml
     with:
       configuration: 'Release'
-      dotnet-version: ${{ env.DOTNET_VERSION }}
 
   generate-deps:
     name: Generate package-dependencies.json
