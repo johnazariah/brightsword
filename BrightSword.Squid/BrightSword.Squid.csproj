@@ -4,7 +4,7 @@
   <Import Project="version.props" />
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <AssemblyName>BrightSword.Squid</AssemblyName>
     <RootNamespace>BrightSword.Squid</RootNamespace>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
