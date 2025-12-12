@@ -132,6 +132,9 @@ dotnet test
 
 # Run specific test project
 dotnet test BrightSword.SwissKnife.Tests/BrightSword.SwissKnife.Tests.csproj
+
+# Run Validator class tests
+dotnet test BrightSword.SwissKnife.Tests/BrightSword.SwissKnife.Tests.csproj --filter "FullyQualifiedName~BrightSword.SwissKnife.ValidatorTests"
 ```
 
 ## ðŸ“„ License
