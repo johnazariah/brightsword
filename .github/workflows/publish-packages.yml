@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "Checking permission for actor: ${{ github.actor }}"
           RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/${{ github.repository }}/collaborators/${{ github.actor }}/permission")
-          PERM=$(echo "$RESPONSE" | jq -r .permission // empty)
+          PERM=$(echo "$RESPONSE" | jq -r '.permission // empty')
           echo "Repo permission: $PERM"
           if [ -z "$PERM" ] || [ "$PERM" = "none" ]; then
             echo "Permission denied"; exit 1
