@@ -78,14 +78,21 @@ jobs:
       - name: Publish
         shell: pwsh
         run: |
+          $ErrorActionPreference = 'Continue'
           if (-not $env:NUGET_API_KEY) { Write-Error "NUGET_API_KEY secret is required"; exit 1 }
           $source = if ($env:NUGET_SOURCE) { $env:NUGET_SOURCE } else { "https://api.nuget.org/v3/index.json" }
           $nupkgs = Get-ChildItem -Path artifacts/packages -Filter "*.nupkg" -File | Where-Object { $_.Name -notlike "*.snupkg" }
           if ($nupkgs.Count -eq 0) { Write-Error "No .nupkg files found"; exit 1 }
 
           Write-Host "Publishing $($nupkgs.Count) packages to $source"
+          $failed = @()
           foreach ($pkg in $nupkgs) {
             Write-Host "  Pushing $($pkg.Name)..."
             dotnet nuget push $pkg.FullName --api-key $env:NUGET_API_KEY --source $source --skip-duplicate
+            if ($LASTEXITCODE -ne 0) { $failed += $pkg.Name }
+          }
+          if ($failed.Count -gt 0) {
+            Write-Error "Failed to push: $($failed -join ', ')"
+            exit 1
           }
           Write-Host "All packages published successfully"
