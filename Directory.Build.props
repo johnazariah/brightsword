@@ -52,9 +52,9 @@
     <CurrentYear>$([System.DateTime]::Now.ToString(yyyy))</CurrentYear>
   </PropertyGroup>
 
-  <!-- Include docs README in package root for any project that has one -->
+  <!-- Include docs README in package root for any project that has one (skip if project root already has README.md) -->
   <ItemGroup>
-    <None Include="docs/README.md" Pack="true" PackagePath="" Condition="Exists('docs/README.md')" />
+    <None Include="docs/README.md" Pack="true" PackagePath="" Condition="Exists('docs/README.md') And !Exists('README.md')" />
   </ItemGroup>
 
 </Project>
