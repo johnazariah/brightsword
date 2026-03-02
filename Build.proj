@@ -25,7 +25,8 @@
       BrightSword.SwissKnife;
       BrightSword.Crucible;
       BrightSword.Feber;
-      BrightSword.Squid
+      BrightSword.Squid;
+      BrightSword.Packages
     </PackageProjects>
     
     <!-- Test Projects -->
@@ -42,6 +43,7 @@
     <PackageProject Include="$(MSBuildThisFileDirectory)BrightSword.Crucible\BrightSword.Crucible.csproj" />
     <PackageProject Include="$(MSBuildThisFileDirectory)BrightSword.Feber\BrightSword.Feber.csproj" />
     <PackageProject Include="$(MSBuildThisFileDirectory)BrightSword.Squid\BrightSword.Squid.csproj" />
+    <PackageProject Include="$(MSBuildThisFileDirectory)BrightSword.Packages\BrightSword.Packages.csproj" />
   </ItemGroup>
 
   <!-- Define test projects as items -->
@@ -127,5 +129,8 @@
   <Target Name="CI" DependsOnTargets="Clean;Restore;BuildPackages;BuildTests;Test;Pack">
     <Message Text="CI build completed successfully" Importance="high" />
   </Target>
+
+  <!-- Import versioning targets for IncrementVersion -->
+  <Import Project="versioning.targets" />
 
 </Project>

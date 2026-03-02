@@ -77,4 +77,4 @@ node_modules/
 *.scc
 # Local CI/runtime artifacts
 artifacts/
-package-dependencies.json
+package-dependencies.jsoncoverage.json

@@ -1,0 +1,172 @@
+{
+  "generated": "2026-03-02T19:10:44.4602655+10:00",
+  "dependencies": {
+    "RemotePropertyTypeAssembly": "RemotePropertyInterfaceAssembly",
+    "BrightSword.Feber.Tests": [
+      "BrightSword.Feber",
+      "BrightSword.SwissKnife"
+    ],
+    "RemoteBaseInterfaceAssembly": "RemotePropertyInterfaceAssembly",
+    "BrightSword.Feber": "BrightSword.SwissKnife",
+    "BrightSword.Feber.SamplesApp": "BrightSword.Feber",
+    "BrightSword.SwissKnife.Tests": "BrightSword.SwissKnife",
+    "RemotePropertyInterfaceAssembly": null,
+    "BrightSword.Crucible": null,
+    "BrightSword.Squid.Samples": "BrightSword.Squid",
+    "RemoteInterfaceAssembly": [
+      "RemoteBaseInterfaceAssembly",
+      "RemotePropertyInterfaceAssembly"
+    ],
+    "BrightSword.Packages": [
+      "BrightSword.SwissKnife",
+      "BrightSword.Crucible",
+      "BrightSword.Feber",
+      "BrightSword.Squid"
+    ],
+    "BrightSword.Squid.Tests": [
+      "BrightSword.Squid",
+      "BrightSword.Crucible",
+      "BrightSword.SwissKnife"
+    ],
+    "BrightSword.Squid": [
+      "BrightSword.Feber",
+      "BrightSword.SwissKnife"
+    ],
+    "BrightSword.SwissKnife": null
+  },
+  "dependents": {
+    "RemotePropertyTypeAssembly": [],
+    "BrightSword.Feber.Tests": [],
+    "RemoteBaseInterfaceAssembly": [
+      "RemoteInterfaceAssembly"
+    ],
+    "BrightSword.Feber": [
+      "BrightSword.Feber.Tests",
+      "BrightSword.Feber.SamplesApp",
+      "BrightSword.Packages",
+      "BrightSword.Squid"
+    ],
+    "BrightSword.Feber.SamplesApp": [],
+    "BrightSword.SwissKnife.Tests": [],
+    "RemotePropertyInterfaceAssembly": [
+      "RemotePropertyTypeAssembly",
+      "RemoteBaseInterfaceAssembly",
+      "RemoteInterfaceAssembly"
+    ],
+    "BrightSword.Crucible": [
+      "BrightSword.Packages",
+      "BrightSword.Squid.Tests"
+    ],
+    "BrightSword.Squid.Samples": [],
+    "BrightSword.SwissKnife": [
+      "BrightSword.Feber.Tests",
+      "BrightSword.Feber",
+      "BrightSword.SwissKnife.Tests",
+      "BrightSword.Packages",
+      "BrightSword.Squid.Tests",
+      "BrightSword.Squid"
+    ],
+    "BrightSword.Packages": [],
+    "BrightSword.Squid.Tests": [],
+    "RemoteInterfaceAssembly": [],
+    "BrightSword.Squid": [
+      "BrightSword.Squid.Samples",
+      "BrightSword.Packages",
+      "BrightSword.Squid.Tests"
+    ]
+  },
+  "dependentsRecursive": {
+    "RemotePropertyTypeAssembly": null,
+    "BrightSword.Feber.Tests": null,
+    "RemoteBaseInterfaceAssembly": "RemoteInterfaceAssembly",
+    "BrightSword.Feber": [
+      "BrightSword.Feber.SamplesApp",
+      "BrightSword.Feber.Tests",
+      "BrightSword.Packages",
+      "BrightSword.Squid",
+      "BrightSword.Squid.Samples",
+      "BrightSword.Squid.Tests"
+    ],
+    "BrightSword.Feber.SamplesApp": null,
+    "BrightSword.SwissKnife.Tests": null,
+    "RemotePropertyInterfaceAssembly": [
+      "RemoteBaseInterfaceAssembly",
+      "RemoteInterfaceAssembly",
+      "RemotePropertyTypeAssembly"
+    ],
+    "BrightSword.Crucible": [
+      "BrightSword.Packages",
+      "BrightSword.Squid.Tests"
+    ],
+    "BrightSword.Squid.Samples": null,
+    "BrightSword.SwissKnife": [
+      "BrightSword.Feber",
+      "BrightSword.Feber.SamplesApp",
+      "BrightSword.Feber.Tests",
+      "BrightSword.Packages",
+      "BrightSword.Squid",
+      "BrightSword.Squid.Samples",
+      "BrightSword.Squid.Tests",
+      "BrightSword.SwissKnife.Tests"
+    ],
+    "BrightSword.Packages": null,
+    "BrightSword.Squid.Tests": null,
+    "RemoteInterfaceAssembly": null,
+    "BrightSword.Squid": [
+      "BrightSword.Packages",
+      "BrightSword.Squid.Samples",
+      "BrightSword.Squid.Tests"
+    ]
+  },
+  "publishOrder": {
+    "RemotePropertyTypeAssembly": "RemotePropertyTypeAssembly",
+    "BrightSword.Feber.Tests": "BrightSword.Feber.Tests",
+    "RemoteBaseInterfaceAssembly": [
+      "RemoteInterfaceAssembly",
+      "RemoteBaseInterfaceAssembly"
+    ],
+    "BrightSword.Feber": [
+      "BrightSword.Feber.SamplesApp",
+      "BrightSword.Feber.Tests",
+      "BrightSword.Packages",
+      "BrightSword.Squid.Samples",
+      "BrightSword.Squid.Tests",
+      "BrightSword.Squid",
+      "BrightSword.Feber"
+    ],
+    "BrightSword.Feber.SamplesApp": "BrightSword.Feber.SamplesApp",
+    "BrightSword.SwissKnife.Tests": "BrightSword.SwissKnife.Tests",
+    "RemotePropertyInterfaceAssembly": [
+      "RemoteInterfaceAssembly",
+      "RemotePropertyTypeAssembly",
+      "RemoteBaseInterfaceAssembly",
+      "RemotePropertyInterfaceAssembly"
+    ],
+    "BrightSword.Crucible": [
+      "BrightSword.Packages",
+      "BrightSword.Squid.Tests",
+      "BrightSword.Crucible"
+    ],
+    "BrightSword.Squid.Samples": "BrightSword.Squid.Samples",
+    "BrightSword.SwissKnife": [
+      "BrightSword.Feber.SamplesApp",
+      "BrightSword.Feber.Tests",
+      "BrightSword.Packages",
+      "BrightSword.Squid.Samples",
+      "BrightSword.Squid.Tests",
+      "BrightSword.SwissKnife.Tests",
+      "BrightSword.Squid",
+      "BrightSword.Feber",
+      "BrightSword.SwissKnife"
+    ],
+    "BrightSword.Packages": "BrightSword.Packages",
+    "BrightSword.Squid.Tests": "BrightSword.Squid.Tests",
+    "RemoteInterfaceAssembly": "RemoteInterfaceAssembly",
+    "BrightSword.Squid": [
+      "BrightSword.Packages",
+      "BrightSword.Squid.Samples",
+      "BrightSword.Squid.Tests",
+      "BrightSword.Squid"
+    ]
+  }
+}

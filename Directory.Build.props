@@ -36,10 +36,12 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
-    <!-- Version properties - will be overridden by project-specific version.props -->
+    <!-- Version properties — single suite version from version.props -->
     <VersionPrefix>1.0.0</VersionPrefix>
     <VersionSuffix Condition="'$(GITHUB_REF_TYPE)' != 'tag'">preview</VersionSuffix>
   </PropertyGroup>
+
+  <Import Project="$(MSBuildThisFileDirectory)version.props" />
 
   <!-- Common package references for all projects -->
   <ItemGroup>

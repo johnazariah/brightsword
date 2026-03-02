@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+
+  <PropertyGroup>
+    <AssemblyName>BrightSword.Packages</AssemblyName>
+    <RootNamespace>BrightSword.Packages</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+    <!-- This is a metapackage - no source code -->
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>false</SuppressDependenciesWhenPacking>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <!-- Reference all BrightSword library projects.
+       PrivateAssets="none" ensures they appear as NuGet dependencies in the .nupkg -->
+  <ItemGroup>
+    <ProjectReference Include="..\BrightSword.SwissKnife\BrightSword.SwissKnife.csproj" PrivateAssets="none" />
+    <ProjectReference Include="..\BrightSword.Crucible\BrightSword.Crucible.csproj" PrivateAssets="none" />
+    <ProjectReference Include="..\BrightSword.Feber\BrightSword.Feber.csproj" PrivateAssets="none" />
+    <ProjectReference Include="..\BrightSword.Squid\BrightSword.Squid.csproj" PrivateAssets="none" />
+  </ItemGroup>
+
+</Project>

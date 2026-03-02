@@ -28,8 +28,9 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Run MSBuild Pack target
+      - name: Restore and Pack
         run: |
+          dotnet msbuild Build.proj /t:Restore /v:minimal
           dotnet msbuild Build.proj /t:Pack /p:Configuration=${{ inputs.configuration }} /v:minimal
 
       - name: Upload package artifacts

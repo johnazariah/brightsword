@@ -1,5 +1,8 @@
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+
+[assembly: InternalsVisibleTo("BrightSword.SwissKnife.Tests")]
 
 [assembly: AssemblyConfiguration("")]
 [assembly: Guid("3f7c074f-209e-40a8-8ff6-63a609b12dc1")]
