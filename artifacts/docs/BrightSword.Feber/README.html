@@ -1,0 +1,85 @@
+﻿<html><head><meta charset='utf-8'><title>BrightSword.Feber</title></head><body><h1>BrightSword.Feber Documentation</h1>
+<p></p>
+<p><strong>Automated delegate generation using LINQ Expression trees for property-based operations</strong></p>
+<p></p>
+<h2>Overview</h2>
+<p></p>
+<p>BrightSword.Feber provides builder classes that automate the generation of compiled delegates for property-based operations. It uses LINQ Expression trees to scan object properties and compose efficient, type-safe operations at runtime.</p>
+<p></p>
+<p>The library is designed to maximize runtime performance by building and compiling expression trees once per type, then caching the resulting delegates. This eliminates the overhead of repeated reflection while providing the flexibility of runtime code generation.</p>
+<p></p>
+<h2>Installation</h2>
+<p></p>
+<pre><code>dotnet add package BrightSword.Feber
+</code></pre>
+<p></p>
+<h2>Key Concepts</h2>
+<p></p>
+<h3>ActionBuilder</h3>
+<p></p>
+<p>Generates `Action&lt;T&gt;` or `Action&lt;TLeft, TRight&gt;` delegates that perform side-effecting operations on object properties.</p>
+<p></p>
+<h3>FunctionBuilder</h3>
+<p></p>
+<p>Generates `Func&lt;T, TResult&gt;` delegates that fold/aggregate property values into a result.</p>
+<p></p>
+<h3>OperationBuilder</h3>
+<p></p>
+<p>Base classes that scan properties and compose Expression trees for each property.</p>
+<p></p>
+<h2>Usage Examples</h2>
+<p></p>
+<p>See the sample application and test suite for working examples:</p>
+<ul>
+<li>`BrightSword.Feber.SamplesApp` - Console app with examples</li>
+<ul>
+<li>`BrightSword.Feber.Tests` - Comprehensive test suite</li>
+<p></p>
+<h2>API Reference</h2>
+<p></p>
+<p>See the following documentation files for details:</p>
+<ul>
+<li>[ActionBuilder.md](ActionBuilder.md)</li>
+<ul>
+<li>[FunctionBuilder.md](FunctionBuilder.md)</li>
+<ul>
+<li>[OperationBuilders.md](OperationBuilders.md)</li>
+<ul>
+<li>[DynamicExpressionUtilities.md](DynamicExpressionUtilities.md)</li>
+<p></p>
+<h2>Available Classes</h2>
+<p></p>
+<ul>
+<li>**ActionBuilder**</li>
+<ul>
+<li>**FunctionBuilder**</li>
+<ul>
+<li>**OperationBuilders**</li>
+<ul>
+<li>**DynamicExpressionUtilities**</li>
+<p></p>
+<h2>Version History</h2>
+<p></p>
+<h3>2.0.3 (Current)</h3>
+<ul>
+<li>Improved expression caching</li>
+<ul>
+<li>Better null handling</li>
+<ul>
+<li>Enhanced documentation</li>
+<ul>
+<li>.NET 10 support</li>
+<p></p>
+<h2>Contributing</h2>
+<p></p>
+<p>See the [Contributing Guidelines](../../docs/CONTRIBUTING.md).</p>
+<p></p>
+<h2>License</h2>
+<p></p>
+<p>This project is licensed under the Creative Commons Legal Code (CC0 1.0 Universal). See the [main repository LICENSE](../../LICENSE) for details.</p>
+<p></p>
+<p>---</p>
+<p></p>
+<p><strong>Part of the BrightSword family of libraries</strong></p>
+<p></p>
+</body></html>
