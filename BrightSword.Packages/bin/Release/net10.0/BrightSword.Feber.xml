@@ -1,0 +1,313 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BrightSword.Feber</name>
+    </assembly>
+    <members>
+        <member name="T:BrightSword.Feber.BuilderWarmup">
+            <summary>
+            Small helper to warm up compiled delegates produced by builders.
+            Call Warmup with a collection of actions that access the builder's compiled delegate to force compilation on startup.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Feber.BuilderWarmup.Warmup(System.Collections.Generic.IEnumerable{System.Action})">
+            <summary>
+            Execute each warmup action (wrap in try/catch if you don't want exceptions to bubble).
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Feber.Core.ActionBuilder`2" -->
+        <member name="P:BrightSword.Feber.Core.ActionBuilder`2.Action">
+            <summary>
+            Gets a compiled <see cref="T:System.Action`1"/> that executes the composed operation expressions for the provided instance.
+            </summary>
+            <remarks>
+            The action is compiled lazily and cached in the private field <c>_action</c>. On first access the implementation calls
+            <see cref="M:BrightSword.Feber.Core.ActionBuilder`2.BuildAction"/> which composes <see cref="!:OperationExpressions"/> into a single block and compiles it into an <see cref="T:System.Action`1"/> delegate.
+            Derived types may override <see cref="M:BrightSword.Feber.Core.ActionBuilder`2.BuildAction"/> to customize how the delegate is constructed or cached.
+            </remarks>
+            <returns>A compiled delegate of type <see cref="T:System.Action`1"/>.</returns>
+        </member>
+        <member name="M:BrightSword.Feber.Core.ActionBuilder`2.BuildAction">
+            <summary>
+            Creates and compiles an <see cref="T:System.Action`1"/> from the sequence of <see cref="!:OperationExpressions"/>.
+            </summary>
+            <remarks>
+            The default implementation wraps <see cref="!:OperationExpressions"/> into an expression block and compiles that block into
+            an <see cref="T:System.Action`1"/> using <see cref="P:BrightSword.Feber.Core.UnaryOperationBuilderBase`2.InstanceParameterExpression"/> as the parameter.
+            Override this method to change compilation strategy (for example to emit different expression shapes or to change caching behavior).
+            </remarks>
+            <returns>A compiled <see cref="T:System.Action`1"/> delegate that executes the built operations for a given instance.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Feber.Core.ActionBuilder`3" -->
+        <member name="P:BrightSword.Feber.Core.ActionBuilder`3.Action">
+            <summary>
+            Gets a compiled <see cref="T:System.Action`2"/> which executes the composed operation expressions using the left/right instance parameters.
+            </summary>
+            <remarks>
+            The compiled action is cached in <c>_action</c>. By default this property invokes <see cref="M:BrightSword.Feber.Core.ActionBuilder`3.BuildAction"/> on first access to produce the delegate.
+            Override <see cref="M:BrightSword.Feber.Core.ActionBuilder`3.BuildAction"/> to change how the delegate is constructed or cached.
+            </remarks>
+            <returns>A compiled delegate of type <see cref="T:System.Action`2"/>.</returns>
+        </member>
+        <member name="M:BrightSword.Feber.Core.ActionBuilder`3.BuildAction">
+            <summary>
+            Creates and compiles an <see cref="T:System.Action`2"/> from the sequence of <see cref="!:OperationExpressions"/>.
+            </summary>
+            <remarks>
+            The default implementation composes the <see cref="!:OperationExpressions"/> into an expression block and compiles it using
+            <see cref="P:BrightSword.Feber.Core.BinaryOperationBuilderBase`3.LeftInstanceParameterExpression"/> and
+            <see cref="P:BrightSword.Feber.Core.BinaryOperationBuilderBase`3.RightInstanceParameterExpression"/> as parameters.
+            </remarks>
+            <returns>A compiled <see cref="T:System.Action`2"/> delegate that executes the built operations for given left and right instances.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:BrightSword.Feber.Core.DynamicExpressionUtilities.GetDynamicPropertyAccessorExpression``1(System.Linq.Expressions.ParameterExpression,System.Reflection.PropertyInfo)" -->
+        <member name="M:BrightSword.Feber.Core.DynamicExpressionUtilities.GetDynamicPropertyAccessorExpression``1(System.Linq.Expressions.ParameterExpression,System.String,System.Type)">
+            <summary>
+            Builds an expression that reads a dynamic property by name from the provided <see cref="T:System.Linq.Expressions.ParameterExpression"/> and casts it to <paramref name="propertyType"/>.
+            </summary>
+            <typeparam name="T">The compile-time type used as the dynamic binder context.</typeparam>
+            <param name="parameterExpression">Parameter expression representing the instance to read from.</param>
+            <param name="propertyName">Name of the dynamic property to read.</param>
+            <param name="propertyType">Target CLR type to convert the dynamic result to.</param>
+            <returns>An <see cref="T:System.Linq.Expressions.Expression"/> that reads the named dynamic property and converts it to the specified type.</returns>
+        </member>
+        <member name="M:BrightSword.Feber.Core.DynamicExpressionUtilities.GetDynamicPropertyMutatorExpression``1(System.Linq.Expressions.ParameterExpression,System.Reflection.PropertyInfo,System.Linq.Expressions.Expression)">
+            <summary>
+            Builds an expression that assigns a value to a dynamic property described by <paramref name="propertyInfo"/> on the provided <paramref name="parameterExpression"/>.
+            </summary>
+            <typeparam name="T">The compile-time type used as the dynamic binder context.</typeparam>
+            <param name="parameterExpression">Parameter expression representing the instance to write to.</param>
+            <param name="propertyInfo">Property information describing the dynamic property to write.</param>
+            <param name="valueExpression">Expression that produces the value to assign to the property.</param>
+            <returns>An <see cref="T:System.Linq.Expressions.Expression"/> that assigns <paramref name="valueExpression"/> to the named dynamic property.</returns>
+        </member>
+        <member name="M:BrightSword.Feber.Core.DynamicExpressionUtilities.GetDynamicPropertyMutatorExpression``1(System.Linq.Expressions.ParameterExpression,System.String,System.Linq.Expressions.Expression)">
+            <summary>
+            Builds an expression that assigns a value to a dynamic property by name on the provided <paramref name="parameterExpression"/>.
+            </summary>
+            <typeparam name="T">The compile-time type used as the dynamic binder context.</typeparam>
+            <param name="parameterExpression">Parameter expression representing the instance to write to.</param>
+            <param name="propertyName">Name of the dynamic property to write.</param>
+            <param name="valueExpression">Expression that produces the value to assign to the property.</param>
+            <returns>An <see cref="T:System.Linq.Expressions.Expression"/> representing the dynamic set-member call.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Feber.Core.UnaryFunctionBuilderBase`3" -->
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Feber.Core.BinaryFunctionBuilderBase`4" -->
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Feber.Core.FunctionBuilder`3" -->
+        <member name="P:BrightSword.Feber.Core.FunctionBuilder`3.Function">
+            <summary>
+            Gets the compiled <see cref="T:System.Func`2"/> produced from the composed operation expressions.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Feber.Core.FunctionBuilder`3.BuildFunction">
+            <summary>
+            Builds the function by folding <see cref="!:OperationExpressions"/> starting from <see cref="!:Seed"/> via <see cref="!:Conjunction"/> and compiling the resulting expression.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Feber.Core.FunctionBuilder`4" -->
+        <member name="P:BrightSword.Feber.Core.FunctionBuilder`4.Function">
+            <summary>
+            Gets the compiled <see cref="T:System.Func`3"/> produced from the composed operation expressions.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Feber.Core.FunctionBuilder`4.BuildFunction">
+            <summary>
+            Builds the binary function by folding <see cref="!:OperationExpressions"/> starting from <see cref="!:Seed"/> via <see cref="!:Conjunction"/> and compiling the resulting expression.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Feber.Core.IOperationBuilder`1" -->
+        <member name="P:BrightSword.Feber.Core.IOperationBuilder`1.FilteredProperties">
+            <summary>
+            Returns the public instance properties of <typeparamref name="TProto"/> filtered by the builder's filter.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Feber.Core.IUnaryOperationBuilder`2" -->
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Feber.Core.IBinaryOperationBuilder`3" -->
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Feber.Core.OperationBuilderBase`1" -->
+        <member name="P:BrightSword.Feber.Core.OperationBuilderBase`1.PropertyFilter">
+            <summary>
+            Predicate used to filter properties on <typeparamref name="TProto"/>. Override to change which properties are included.
+            </summary>
+        </member>
+        <member name="P:BrightSword.Feber.Core.OperationBuilderBase`1.FilteredProperties">
+            <summary>
+            Returns the public instance properties of <typeparamref name="TProto"/> filtered by <see cref="P:BrightSword.Feber.Core.OperationBuilderBase`1.PropertyFilter"/>.
+            </summary>
+        </member>
+        <member name="P:BrightSword.Feber.Core.OperationBuilderBase`1.OperationExpressions">
+            <summary>
+            Returns the sequence of <see cref="T:System.Linq.Expressions.Expression"/> instances produced for each filtered property.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Feber.Core.OperationBuilderBase`1.BuildPropertyExpression(System.Reflection.PropertyInfo)">
+            <summary>
+            Build the expression for a single property. Override in subclasses to implement per-property behavior.
+            </summary>
+            <param name="propertyInfo">Property being processed.</param>
+            <returns>An <see cref="T:System.Linq.Expressions.Expression"/> that represents the operation for the property.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Feber.Core.UnaryOperationBuilderBase`2" -->
+        <member name="P:BrightSword.Feber.Core.UnaryOperationBuilderBase`2.InstanceParameterExpression">
+            <summary>
+            ParameterExpression representing the instance passed to compiled delegates. Tests or custom builders may override to provide a different parameter expression.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Feber.Core.UnaryOperationBuilderBase`2.PropertyExpression(System.Reflection.PropertyInfo,System.Linq.Expressions.ParameterExpression)">
+            <summary>
+            Implement this method to produce an <see cref="T:System.Linq.Expressions.Expression"/> for a single property given the instance parameter expression.
+            </summary>
+            <param name="propertyInfo">Property being processed.</param>
+            <param name="instanceParameter">ParameterExpression representing the instance passed to compiled delegates.</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Feber.Core.BinaryOperationBuilderBase`3" -->
+        <member name="P:BrightSword.Feber.Core.BinaryOperationBuilderBase`3.LeftInstanceParameterExpression">
+            <summary>
+            ParameterExpression representing the left instance passed to compiled delegates.
+            </summary>
+        </member>
+        <member name="P:BrightSword.Feber.Core.BinaryOperationBuilderBase`3.RightInstanceParameterExpression">
+            <summary>
+            ParameterExpression representing the right instance passed to compiled delegates.
+            </summary>
+        </member>
+        <member name="M:BrightSword.Feber.Core.BinaryOperationBuilderBase`3.PropertyExpression(System.Reflection.PropertyInfo,System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.ParameterExpression)">
+            <summary>
+            Implement this method to produce an <see cref="T:System.Linq.Expressions.Expression"/> for a single property given left/right instance parameter expressions.
+            </summary>
+            <param name="propertyInfo">Property being processed.</param>
+            <param name="leftInstanceParameter">ParameterExpression representing the left instance.</param>
+            <param name="rightInstanceParameter">ParameterExpression representing the right instance.</param>
+        </member>
+        <member name="T:BrightSword.Feber.Samples.CloneFactory`3">
+            <summary>
+            Sample clone factory that demonstrates using an <see cref="T:BrightSword.Feber.Core.ActionBuilder`3"/>
+            to copy matching public properties from a source object to a destination object.
+            </summary>
+            <remarks>
+            The inner <see cref="T:BrightSword.Feber.Samples.CloneFactory`3.CloneFactoryBuilder"/> overrides <see cref="!:ActionBuilder&lt;TProto, TLeftInstance,TRightInstance&gt;.PropertyExpression"/>
+            (via the binary subclass) to produce per-property <see cref="T:System.Linq.Expressions.Expression"/> values which either assign matching properties or emit a no-op.
+            This demonstrates matching properties by name and type and shows how builders can compose assignment expressions into a compiled delegate.
+            </remarks>
+            <typeparam name="TProto">Prototype type used to determine which properties to process (often the same as the source/destination).</typeparam>
+            <typeparam name="TSource">Source object type whose properties are read.</typeparam>
+            <typeparam name="TDestination">Destination object type whose properties are written.</typeparam>
+        </member>
+        <member name="M:BrightSword.Feber.Samples.CloneFactory`3.CloneFactoryBuilder.PropertyExpression(System.Reflection.PropertyInfo,System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.ParameterExpression)">
+            <summary>
+            Build per-property expression used by the clone operation.
+            If both source and destination declare a matching public property with a getter/setter, this method returns an assignment expression.
+            Otherwise it returns a default(void) expression (no-op) so the composed block skips the property.
+            </summary>
+            <param name="propertyInfo">The prototype property currently being processed.</param>
+            <param name="leftInstanceParameter">ParameterExpression for the destination instance.</param>
+            <param name="rightInstanceParameter">ParameterExpression for the source instance.</param>
+        </member>
+        <member name="M:BrightSword.Feber.Samples.CloneFactory`3.CloneFactoryBuilder.MatchProperty(System.Collections.Generic.IEnumerable{System.Reflection.PropertyInfo},System.Reflection.PropertyInfo)">
+            <summary>
+            Helper used to find a property in a collection that matches name and type of the prototype property.
+            </summary>
+            <param name="properties">Collection of properties to search.</param>
+            <param name="propertyInfo">Prototype property to match against.</param>
+        </member>
+        <member name="T:BrightSword.Feber.Samples.FastComparer`1.FastComparerBuilder">
+            <summary>
+            Implements a <see cref="T:BrightSword.Feber.Core.FunctionBuilder`4"/> that compares all public properties for equality.
+            </summary>
+            <remarks>
+            This builder demonstrates the Seed/Conjunction pattern used by <see cref="T:BrightSword.Feber.Core.FunctionBuilder`3"/>:
+            - <see cref="P:BrightSword.Feber.Samples.FastComparer`1.FastComparerBuilder.Seed"/> provides the initial value (true)
+            - <see cref="P:BrightSword.Feber.Samples.FastComparer`1.FastComparerBuilder.Conjunction"/> is <see cref="M:System.Linq.Expressions.Expression.AndAlso(System.Linq.Expressions.Expression,System.Linq.Expressions.Expression)"/>, folding per-property equality checks into a single boolean expression
+            - <see cref="M:BrightSword.Feber.Samples.FastComparer`1.FastComparerBuilder.PropertyExpression(System.Reflection.PropertyInfo,System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.ParameterExpression)"/> generates an equality test for each property
+            The resulting compiled function evaluates whether all properties are equal between two instances.
+            </remarks>
+        </member>
+        <member name="M:BrightSword.Feber.Samples.FastComparer`1.FastComparerBuilder.PropertyExpression(System.Reflection.PropertyInfo,System.Linq.Expressions.ParameterExpression,System.Linq.Expressions.ParameterExpression)">
+            <summary>
+            Produce an expression comparing the property on left and right instances using <see cref="M:System.Linq.Expressions.Expression.Equal(System.Linq.Expressions.Expression,System.Linq.Expressions.Expression)"/>.
+            </summary>
+            <param name="propertyInfo">Property being compared.</param>
+            <param name="leftInstanceParameter">Left instance parameter expression.</param>
+            <param name="rightInstanceParameter">Right instance parameter expression.</param>
+        </member>
+        <member name="T:BrightSword.Feber.Samples.FastMapper`1.DynamicToDynamicMapperBuilder">
+            <summary>
+            Maps from a dynamic source (object) to a dynamic destination (object) using runtime binder expressions.
+            </summary>
+            <remarks>
+            Demonstrates <see cref="M:BrightSword.Feber.Core.DynamicExpressionUtilities.GetDynamicPropertyAccessorExpression``1(System.Linq.Expressions.ParameterExpression,System.Reflection.PropertyInfo)"/> and
+            <see cref="M:BrightSword.Feber.Core.DynamicExpressionUtilities.GetDynamicPropertyMutatorExpression``1(System.Linq.Expressions.ParameterExpression,System.Reflection.PropertyInfo,System.Linq.Expressions.Expression)"/> to read/write properties dynamically in expression trees.
+            </remarks>
+        </member>
+        <member name="T:BrightSword.Feber.Samples.FastMapper`1.DynamicToStaticBackingFieldsMapperBuilder">
+            <summary>
+            Maps from a dynamic source to static destination backing fields (private fields) when properties are implemented with backing fields.
+            </summary>
+            <remarks>
+            Shows how to locate a backing field conventionally named _propertyName and assign the dynamic value to that field.
+            Useful if the destination exposes read-only properties backed by private fields.
+            </remarks>
+        </member>
+        <member name="T:BrightSword.Feber.Samples.FastMapper`1.DynamicToStaticMapperBuilder">
+            <summary>
+            Maps dynamic source properties into static destination properties.
+            </summary>
+        </member>
+        <member name="T:BrightSword.Feber.Samples.FastMapper`1.StaticToDynamicMapperBuilder">
+            <summary>
+            Maps static source properties into a dynamic destination by emitting dynamic mutator calls.
+            </summary>
+        </member>
+        <member name="T:BrightSword.Feber.Samples.FastMapper`1.StaticToStaticMapperBuilder">
+            <summary>
+            Simple static-to-static mapper: generates assignments between matching properties.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:BrightSword.Feber.Samples.LazyActionBuilderExample`2" -->
+        <member name="T:BrightSword.Feber.Samples.PrettyPrinter">
+            <summary>
+            Pretty-print an object's public properties to the console.
+            </summary>
+            <example>
+            <code>
+            public class Person { public string Name { get; set; } public int Age { get; set; } }
+            var p = new Person { Name = "Ada", Age = 30 };
+            // The extension method below calls into the compiled builder which writes each property to Console.
+            p.Print();
+            </code>
+            </example>
+        </member>
+        <member name="T:BrightSword.Feber.Samples.PrettyPrinter.PrettyPrinterImpl`1.PrettyPrinterBuilder">
+            <summary>
+            A simple pretty-printer builder that writes each property name/value pair to <see cref="T:System.Console"/>.
+            </summary>
+            <remarks>
+            The <see cref="M:BrightSword.Feber.Samples.PrettyPrinter.PrettyPrinterImpl`1.PrettyPrinterBuilder.PropertyExpression(System.Reflection.PropertyInfo,System.Linq.Expressions.ParameterExpression)"/> override demonstrates how to build an expression that
+            converts a property value to string (with special-casing for string properties) and then calls Console.WriteLine.
+            The composed block will call WriteLine for each property when the <see cref="P:BrightSword.Feber.Core.ActionBuilder`2.Action"/> delegate is executed.
+            </remarks>
+        </member>
+        <member name="M:BrightSword.Feber.Samples.SimpleSerializer.Serialize``1(``0)">
+            <summary>
+            Serialize an object's public properties into a simple comma-delimited key:value string using the compiled sample builder.
+            </summary>
+            <example>
+            <code>
+            public class Person { public string Name { get; set; } public int Age { get; set; } }
+            var p = new Person { Name = "Ada", Age = 30 };
+            var s = p.Serialize(); // {Name:Ada,Age:30,}
+            </code>
+            </example>
+            <typeparam name="T">Type being serialized.</typeparam>
+        </member>
+        <member name="T:BrightSword.Feber.Samples.SimpleSerializer`1.SimpleSerializerBuilder">
+            <summary>
+            Builds a serializer string by concatenating per-property fragments using a seed/Conjunction pattern.
+            </summary>
+            <remarks>
+            Demonstrates using <see cref="!:FunctionBuilder&lt;TProto,TInstance,TResult&gt;.Seed"/> and <see cref="!:FunctionBuilder&lt;TProto,TInstance,TResult&gt;.Conjunction"/>
+            to fold property expressions into a single string result. Property values are converted to strings (with a special ISO format for DateTime)
+            and concatenated using <see cref="M:System.String.Concat(System.String,System.String)"/>.
+            </remarks>
+        </member>
+    </members>
+</doc>
