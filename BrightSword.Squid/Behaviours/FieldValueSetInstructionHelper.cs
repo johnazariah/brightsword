@@ -277,14 +277,11 @@ namespace BrightSword.Squid.Behaviours
         private static Action<ILGenerator> GenerateCodeToWriteIntegralValue(long value)
         {
             // Prefer the smallest opcode that can hold the value where possible.
+            // Note: Ldc_I4_S sign-extends its operand, so only use it for sbyte range (-128..127).
+            // Values 128-255 must NOT use Ldc_I4_S as the byte cast would be sign-extended incorrectly.
             if (value is >= sbyte.MinValue and <= sbyte.MaxValue)
             {
                 return _ => _.Emit(OpCodes.Ldc_I4_S, (sbyte)value);
-            }
-
-            if (value is >= byte.MinValue and <= byte.MaxValue)
-            {
-                return _ => _.Emit(OpCodes.Ldc_I4_S, (byte)value);
             }
 
             return value is >= int.MinValue and <= int.MaxValue ? (_ => _.Emit(OpCodes.Ldc_I4, (int)value)) : (_ => _.Emit(OpCodes.Ldc_I8, value));

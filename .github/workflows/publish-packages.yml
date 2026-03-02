@@ -1,11 +1,8 @@
-name: Publish packages in dependency order
+name: Publish all BrightSword packages
 
 on:
   workflow_dispatch:
     inputs:
-      package:
-        description: 'PackageId to publish (e.g. BrightSword.Squid)'
-        required: false
       configuration:
         description: 'Build configuration'
         required: false
@@ -21,34 +18,26 @@ jobs:
   check_permission:
     name: Ensure dispatcher is a repository member
     runs-on: ubuntu-latest
-    outputs:
-      allowed: ${{ steps.check.outputs.allowed }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Check collaborator permission
-        id: check
         run: |
           echo "Checking permission for actor: ${{ github.actor }}"
           RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/${{ github.repository }}/collaborators/${{ github.actor }}/permission")
           PERM=$(echo "$RESPONSE" | jq -r .permission // empty)
           echo "Repo permission: $PERM"
           if [ -z "$PERM" ] || [ "$PERM" = "none" ]; then
-            echo "allowed=false" >> $GITHUB_OUTPUT
-            exit 1
+            echo "Permission denied"; exit 1
           fi
           case "$PERM" in
-            admin|write|maintain)
-              echo "allowed=true" >> $GITHUB_OUTPUT ;;
-            *)
-              echo "allowed=false" >> $GITHUB_OUTPUT ; exit 1 ;;
+            admin|write|maintain) echo "Allowed" ;;
+            *) echo "Insufficient permission: $PERM"; exit 1 ;;
           esac
 
-  generate_manifest:
-    name: Generate package dependency manifest
+  build_test_pack:
+    name: Build, test, and pack all packages
     runs-on: ubuntu-latest
     needs: check_permission
     steps:
@@ -57,147 +46,46 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Ensure PowerShell is available
-        run: |
-          pwsh -c "Write-Host 'PowerShell available:' $PSVersionTable.PSVersion"
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
 
-      - name: Run generator
-        run: pwsh -NoProfile -NonInteractive -File ./scripts/generate-package-dependencies.ps1
+      - name: CI build (restore, build, test, pack)
+        run: dotnet msbuild Build.proj /t:CI /p:Configuration=${{ inputs.configuration || 'Release' }} /v:minimal
 
-      - name: Upload manifest
+      - name: Upload packages
         uses: actions/upload-artifact@v4
         with:
-          name: package-deps
-          path: package-dependencies.json
+          name: packages
+          path: artifacts/packages
           retention-days: 7
 
-  determine_packages:
-    name: Determine target packages to publish
-    runs-on: ubuntu-latest
-    needs: generate_manifest
-    outputs:
-      order: ${{ steps.order.outputs.order }}
-    steps:
-      - name: Download manifest
-        uses: actions/download-artifact@v4
-        with:
-          name: package-deps
-          path: .
-
-      - name: Determine target packages
-        id: determine
-        shell: pwsh
-        run: |
-          $inputPackage = '${{ github.event.inputs.package }}'
-          if ($inputPackage -and $inputPackage.Trim() -ne '') {
-            Write-Host "Manual dispatch for package: $inputPackage"
-            Write-Output "packages=$inputPackage" | Out-File -FilePath $GITHUB_OUTPUT -Encoding UTF8 -Append
-            exit 0
-          }
-
-          if ($env:GITHUB_REF -and $env:GITHUB_REF.StartsWith('refs/tags/')) {
-            $tag = $env:GITHUB_REF.Substring(10)
-            Write-Host "Tag detected: $tag"
-            $json = Get-Content package-dependencies.json -Raw | ConvertFrom-Json
-            foreach ($pkg in $json.publishOrder.psobject.Properties.Name) {
-              if ($tag -like "*$pkg*") {
-                Write-Host "Tag name contains package id: $pkg"
-                Write-Output "packages=$pkg" | Out-File -FilePath $GITHUB_OUTPUT -Encoding UTF8 -Append
-                exit 0
-              }
-            }
-
-            $sha = $env:GITHUB_SHA
-            if (-not $sha) { Write-Error "GITHUB_SHA not set"; exit 1 }
-            $files = git show --name-only --pretty="" $sha | Where-Object { $_ -ne '' }
-            $candidates = @()
-            foreach ($f in $files) {
-              foreach ($cs in Get-ChildItem -Recurse -Filter *.csproj | Where-Object { -not $_.FullName.Contains('obj') -and -not $_.FullName.Contains('bin') }) {
-                $projDir = Split-Path $cs.FullName -Parent
-                if ($f -like "$projDir/*" -or $f -like "*/$($cs.Name)" -or $f -like "$($cs.Name)") {
-                  $xml = [xml](Get-Content $cs.FullName -Raw)
-                  $pid = $xml.SelectSingleNode("/*[local-name()='Project']/*[local-name()='PropertyGroup']/*[local-name()='PackageId']")
-                  if ($pid -and $pid.InnerText.Trim() -ne '') { $candidates += $pid.InnerText.Trim(); break }
-                  $an = $xml.SelectSingleNode("/*[local-name()='Project']/*[local-name()='PropertyGroup']/*[local-name()='AssemblyName']")
-                  if ($an -and $an.InnerText.Trim() -ne '') { $candidates += $an.InnerText.Trim(); break }
-                  $candidates += [System.IO.Path]::GetFileNameWithoutExtension($cs.FullName); break
-                }
-              }
-            }
-            $candidates = $candidates | Select-Object -Unique
-            if ($candidates.Count -gt 0) {
-              Write-Host "Inferred packages from tag commit: $($candidates -join ',')"
-              Write-Output ("packages=" + ($candidates -join ';')) | Out-File -FilePath $GITHUB_OUTPUT -Encoding UTF8 -Append
-              exit 0
-            }
-
-            Write-Error "Could not determine package to publish from tag. Please supply package via workflow_dispatch input or use tag name containing package id."
-            exit 1
-          }
-
-          Write-Error "No package specified and not a tag push. Provide package via workflow_dispatch input."
-          exit 1
-
-      - name: Determine publish order
-        id: order
-        shell: pwsh
-        run: |
-          $pkgInput = '${{ steps.determine.outputs.packages }}'
-          if (-not $pkgInput) { Write-Error "No packages determined"; exit 1 }
-          $pkgs = $pkgInput.Split(';') | Where-Object { $_ -ne '' }
-          $json = Get-Content package-dependencies.json -Raw | ConvertFrom-Json
-          $finalOrder = @()
-          foreach ($p in $pkgs) {
-            if (-not $json.publishOrder.$p) { Write-Error "Package '$p' not present in publishOrder"; exit 1 }
-            $seq = $json.publishOrder.$p
-            foreach ($s in $seq) { if ($finalOrder -notcontains $s) { $finalOrder += $s } }
-          }
-          Write-Host "Computed final publish order: $($finalOrder -join ',')"
-          $o = $finalOrder -join ';'
-          Write-Output "order=$o" | Out-File -FilePath $GITHUB_OUTPUT -Encoding UTF8 -Append
-
-  pack_all:
-    name: Pack all packages (reusable)
-    needs: determine_packages
-    uses: ./.github/workflows/pack.yml
-    with:
-      configuration: ${{ github.event.inputs.configuration }}
-
   publish:
-    name: Publish packages in order
+    name: Publish all packages to NuGet
     runs-on: ubuntu-latest
-    needs: [pack_all, determine_packages]
+    needs: build_test_pack
     env:
       NUGET_SOURCE: ${{ secrets.NUGET_SOURCE }}
       NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-      CONFIGURATION: ${{ github.event.inputs.configuration }}
     steps:
-      - name: Download packages artifact
+      - name: Download packages
         uses: actions/download-artifact@v4
         with:
           name: packages
           path: artifacts/packages
 
-      - name: Publish packages
+      - name: Publish
         shell: pwsh
         run: |
           if (-not $env:NUGET_API_KEY) { Write-Error "NUGET_API_KEY secret is required"; exit 1 }
-          $order = '${{ needs.determine_packages.outputs.order }}'.Split(';') | Where-Object { $_ -ne '' }
-          if ($order.Count -eq 0) { Write-Error "No packages to publish"; exit 1 }
+          $source = if ($env:NUGET_SOURCE) { $env:NUGET_SOURCE } else { "https://api.nuget.org/v3/index.json" }
+          $nupkgs = Get-ChildItem -Path artifacts/packages -Filter "*.nupkg" -File | Where-Object { $_.Name -notlike "*.snupkg" }
+          if ($nupkgs.Count -eq 0) { Write-Error "No .nupkg files found"; exit 1 }
 
-          foreach ($pkg in $order) {
-            Write-Host "--- Publishing package: $pkg ---"
-            $nupkgs = Get-ChildItem -Path artifacts/packages -Filter "$pkg*.nupkg" -File -Recurse
-            if (-not $nupkgs -or $nupkgs.Count -eq 0) {
-              Write-Error "No nupkg found for package $pkg in artifacts/packages"
-              exit 1
-            }
-
-            foreach ($n in $nupkgs) {
-              Write-Host "Pushing $($n.FullName) to ${env:NUGET_SOURCE:-https://api.nuget.org/v3/index.json}"
-              dotnet nuget push $n.FullName --api-key $env:NUGET_API_KEY --source ${env:NUGET_SOURCE:-https://api.nuget.org/v3/index.json} --skip-duplicate
-            }
+          Write-Host "Publishing $($nupkgs.Count) packages to $source"
+          foreach ($pkg in $nupkgs) {
+            Write-Host "  Pushing $($pkg.Name)..."
+            dotnet nuget push $pkg.FullName --api-key $env:NUGET_API_KEY --source $source --skip-duplicate
           }
-
-      - name: Done
-        run: echo "Publish job completed"
+          Write-Host "All packages published successfully"

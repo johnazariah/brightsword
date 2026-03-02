@@ -40,5 +40,19 @@ namespace BrightSword.SwissKnife.Tests
             var name = typeof(C).GetCustomAttributeValue<SampleAttr, string>(a => a.Name, "def");
             Assert.Equal("Cls", name);
         }
+
+        [Fact]
+        public void GetCustomAttributeReturnsNullWhenAbsent()
+        {
+            var attr = typeof(AttributeExtensionsTests).GetCustomAttribute<SampleAttr>();
+            Assert.Null(attr);
+        }
+
+        [Fact]
+        public void GetCustomAttributeValueReturnsDefaultWhenAbsent()
+        {
+            var name = typeof(AttributeExtensionsTests).GetCustomAttributeValue<SampleAttr, string>(a => a.Name, "default");
+            Assert.Equal("default", name);
+        }
     }
 }
