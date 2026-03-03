@@ -56,6 +56,11 @@
         "dest": "squid"
       },
       {
+        "files": [ "**.md" ],
+        "src": "BrightSword.Packages/docs",
+        "dest": "packages"
+      },
+      {
         "files": [ "README.md", "toc.yml" ]
       }
     ],
@@ -72,7 +77,7 @@
       "_appFooter": "© BrightSword Technologies Pte Ltd, Singapore",
       "_enableSearch": true,
       "_gitContribute": {
-        "repo": "https://github.com/brightsword/BrightSword",
+        "repo": "https://github.com/johnazariah/brightsword",
         "branch": "main"
       }
     },

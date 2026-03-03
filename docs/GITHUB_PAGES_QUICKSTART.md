@@ -3,7 +3,7 @@
 ## ?? Quick Setup (5 minutes)
 
 ### Step 1: Enable GitHub Pages
-1. Go to: https://github.com/brightsword/BrightSword/settings/pages
+1. Go to: https://github.com/johnazariah/brightsword/settings/pages
 2. Under **Source**, select: **GitHub Actions**
 3. Click **Save**
 
@@ -19,7 +19,7 @@ git push origin main
 ### Step 3: View Your Docs
 After 2-5 minutes, visit:
 ```
-https://brightsword.github.io/BrightSword/
+https://johnazariah.github.io/brightsword/
 ```
 
 ## ?? Update Documentation
@@ -188,7 +188,7 @@ Edit `docfx.json`:
 
 ## ?? Useful Links
 
-- **Your Docs**: https://brightsword.github.io/BrightSword/
+- **Your Docs**: https://johnazariah.github.io/brightsword/
 - **DocFX Docs**: https://dotnet.github.io/docfx/
 - **Full Setup Guide**: [docs/GITHUB_PAGES.md](GITHUB_PAGES.md)
 

@@ -32,7 +32,7 @@ Generated Site (_site/):
         ? GitHub Actions
 
 GitHub Pages:
-https://brightsword.github.io/BrightSword/
+https://johnazariah.github.io/brightsword/
 ```
 
 ## Setup Instructions
@@ -68,7 +68,7 @@ After the workflow completes (usually 2-5 minutes):
 
 **Your documentation will be available at:**
 ```
-https://brightsword.github.io/BrightSword/
+https://johnazariah.github.io/brightsword/
 ```
 
 ## Local Development
@@ -475,6 +475,6 @@ If you encounter issues:
 
 ---
 
-**Your documentation site**: https://brightsword.github.io/BrightSword/
+**Your documentation site**: https://johnazariah.github.io/brightsword/
 
 **Last updated**: When you push to main

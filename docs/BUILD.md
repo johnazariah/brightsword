@@ -29,30 +29,31 @@ BrightSword/
 ??? .github/workflows/       # CI/CD GitHub Actions workflows
 ??? BrightSword.SwissKnife/  # Utilities package source
 ?   ??? docs/                # Package-specific documentation
-?   ??? version.props        # Version configuration
 ?   ??? *.csproj             # Project file
 ??? BrightSword.Crucible/    # MSTest utilities package
 ?   ??? docs/                # Package-specific documentation
-?   ??? version.props        # Version configuration
 ?   ??? *.csproj             # Project file
 ??? BrightSword.Feber/       # Expression builder package
 ?   ??? docs/                # Package-specific documentation
 ?   ??? Core/                # ActionBuilder, FunctionBuilder
-?   ??? version.props        # Version configuration
 ?   ??? *.csproj             # Project file
 ??? BrightSword.Squid/       # Type emission package
 ?   ??? docs/                # Package-specific documentation
-?   ??? version.props        # Version configuration
+?   ??? *.csproj             # Project file
+??? BrightSword.Packages/    # Metapackage referencing all packages
 ?   ??? *.csproj             # Project file
 ??? *.Tests/                 # Test projects
 ??? *.Samples/               # Sample applications
 ??? docs/                    # Monorepo documentation (this folder)
+??? scripts/                 # Build and CI helper scripts
 ??? artifacts/               # Build output (gitignored)
 ?   ??? packages/            # NuGet packages
 ?   ??? test-results/        # Test results
 ??? Build.proj               # MSBuild orchestration script
 ??? build.ps1                # PowerShell build wrapper
 ??? increment-version.ps1    # Version management script
+??? version.props            # Unified version (single VersionPrefix for all packages)
+??? versioning.targets       # MSBuild IncrementVersion target
 ??? Directory.Build.props    # Common MSBuild properties
 ??? Directory.Build.targets  # Common MSBuild targets
 ```
@@ -173,7 +174,7 @@ NuGet packages are created in `artifacts/packages/` with the naming convention:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/brightsword/BrightSword.git
+git clone https://github.com/johnazariah/brightsword.git
 cd BrightSword
 ```
 
@@ -221,20 +222,33 @@ Common properties for all projects:
 - **Documentation**: Enabled with XML comments
 - **SourceLink**: Enabled for debugging
 
-### version.props Files
+### version.props
 
-Each package has its own `version.props` file:
+There is a single `version.props` file at the repository root containing a unified `VersionPrefix` shared by all packages. There are no per-project `version.props` files. All five packages (SwissKnife, Crucible, Feber, Squid, BrightSword.Packages) ship together at the same version.
 
 ```xml
 <Project>
   <PropertyGroup>
-    <VersionPrefix>1.0.0</VersionPrefix>
-    <PackageId>BrightSword.PackageName</PackageId>
-    <Description>Package description</Description>
-    <IsPackable>true</IsPackable>
+    <VersionPrefix>2.0.0</VersionPrefix>
   </PropertyGroup>
 </Project>
 ```
+
+To bump the version for all packages:
+
+```bash
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch
+```
+
+### Canonical Build Command
+
+The canonical CI-equivalent build command is:
+
+```bash
+dotnet msbuild Build.proj /t:CI /p:Configuration=Release
+```
+
+This runs Clean, Restore, Build, Test, and Pack in a single invocation.
 
 ### Build Targets
 

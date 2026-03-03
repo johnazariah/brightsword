@@ -8,7 +8,7 @@ The CI/CD system uses **GitHub Actions** with three main workflows:
 
 1. **CI Build** (`ci.yml`) - Builds and tests on every push
 2. **Pull Request Validation** (`pr-validation.yml`) - Validates PRs to main
-3. **Release** (`release.yml`) - Publishes packages to NuGet.org
+3. **Publish Packages** (`publish-packages.yml`) - Publishes packages to NuGet.org
 
 ## Workflows
 
@@ -69,12 +69,12 @@ git push origin feature/my-feature
 - Check for breaking changes
 - Verify appropriate version increments
 
-### 3. Release Workflow
+### 3. Publish Packages Workflow
 
-**File**: `.github/workflows/release.yml`
+**File**: `.github/workflows/publish-packages.yml`
 
 **Triggers**:
-- Tags matching `v*.*.*` pattern
+- Tags matching `v*` pattern (e.g., `v2.0.0`)
 - Manual workflow dispatch
 
 **Steps**:
@@ -85,16 +85,16 @@ git push origin feature/my-feature
 5. Build solution
 6. Run tests
 7. Create packages
-8. Publish to NuGet.org
+8. Publish all packages to NuGet.org
 9. Create GitHub Release
 
 **Example**:
 ```bash
-# Tag a release
-git tag swissknife-v1.0.20
-git push origin swissknife-v1.0.20
+# Tag a release (all packages ship together at unified version)
+git tag v2.0.1
+git push origin v2.0.1
 
-# This triggers the release workflow
+# This triggers the publish workflow for all packages
 ```
 
 ## Branch Strategy
@@ -219,7 +219,7 @@ Download from:
 
 ```bash
 # Add package source
-dotnet nuget add source https://nuget.pkg.github.com/brightsword/index.json \
+dotnet nuget add source https://nuget.pkg.github.com/johnazariah/index.json \
   --name github \
   --username YOUR-GITHUB-USERNAME \
   --password YOUR-GITHUB-TOKEN \
@@ -231,7 +231,7 @@ dotnet add package BrightSword.SwissKnife --version 1.0.20-preview
 
 ### To NuGet.org
 
-**Automatic**: On version tags (e.g., `swissknife-v1.0.20`)
+**Automatic**: On version tags (e.g., `v2.0.1`)
 
 ```yaml
 - name: Publish to NuGet.org
@@ -266,52 +266,26 @@ Feber (depends on SwissKnife)
 Squid (depends on Feber and SwissKnife)
 ```
 
-### Publishing Dependent Packages
+### Publishing All Packages
 
-When publishing a base package, dependent packages should be republished:
+All five packages (SwissKnife, Crucible, Feber, Squid, BrightSword.Packages) ship together at a unified version. When publishing, all packages are built and published in a single workflow run — no dependency cascade is needed.
 
-**Scenario**: Update SwissKnife
+**Scenario**: Release a new version
 
-1. **Increment SwissKnife version**:
-   ```powershell
-   ./increment-version.ps1 -Package BrightSword.SwissKnife -Component Minor
-   ```
-
-2. **Tag and release SwissKnife**:
+1. **Increment the unified version**:
    ```bash
-   git tag swissknife-v1.1.0
-   git push origin swissknife-v1.1.0
+   dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch
    ```
 
-3. **Update and release Feber**:
-   ```powershell
-   ./increment-version.ps1 -Package BrightSword.Feber -Component Patch
-   git tag feber-v2.0.4
-   git push origin feber-v2.0.4
+2. **Commit and tag the release**:
+   ```bash
+   git add version.props
+   git commit -m "chore: bump version to 2.0.1"
+   git tag v2.0.1
+   git push origin main --tags
    ```
 
-4. **Update and release Squid**:
-   ```powershell
-   ./increment-version.ps1 -Package BrightSword.Squid -Component Patch
-   git tag squid-v1.0.1
-   git push origin squid-v1.0.1
-   ```
-
-### Future: Automated Cascade Publishing
-
-A future enhancement could automate dependent package publishing:
-
-```yaml
-# Detect changes to base packages
-# Automatically increment and publish dependents
-- name: Publish dependent packages
-  if: contains(github.ref, 'swissknife')
-  run: |
-    # Increment Feber
-    # Tag and trigger Feber release
-    # Increment Squid
-    # Tag and trigger Squid release
-```
+3. **GitHub Actions automatically builds, tests, and publishes all packages**.
 
 ## Monitoring and Logs
 
@@ -449,8 +423,8 @@ GitHub sends emails for:
 Add to README.md:
 
 ```markdown
-[![CI Build](https://github.com/brightsword/BrightSword/actions/workflows/ci.yml/badge.svg)](https://github.com/brightsword/BrightSword/actions/workflows/ci.yml)
-[![Release](https://github.com/brightsword/BrightSword/actions/workflows/release.yml/badge.svg)](https://github.com/brightsword/BrightSword/actions/workflows/release.yml)
+[![CI Build](https://github.com/johnazariah/brightsword/actions/workflows/ci.yml/badge.svg)](https://github.com/johnazariah/brightsword/actions/workflows/ci.yml)
+[![Publish Packages](https://github.com/johnazariah/brightsword/actions/workflows/publish-packages.yml/badge.svg)](https://github.com/johnazariah/brightsword/actions/workflows/publish-packages.yml)
 ```
 
 ## Troubleshooting
@@ -466,7 +440,7 @@ ls artifacts/packages/*.nupkg
 **Issue**: "Package already exists"
 ```bash
 # Solution: Increment version or use --skip-duplicate
-./increment-version.ps1 -Package BrightSword.SwissKnife
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch
 ```
 
 **Issue**: "Authentication failed"

@@ -2,7 +2,7 @@
 
 A collection of high-quality .NET libraries for utilities, testing, automated code generation, and advanced serialization.
 
-[![CI Build](https://github.com/brightsword/BrightSword/actions/workflows/ci.yml/badge.svg)](https://github.com/brightsword/BrightSword/actions/workflows/ci.yml)
+[![CI Build](https://github.com/johnazariah/brightsword/actions/workflows/ci.yml/badge.svg)](https://github.com/johnazariah/brightsword/actions/workflows/ci.yml)
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
 
 ## ðŸ“¦ Packages
@@ -15,6 +15,7 @@ This monorepo contains the following NuGet packages:
 | [BrightSword.Crucible](./BrightSword.Crucible) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.Crucible.svg)](https://www.nuget.org/packages/BrightSword.Crucible/) | Unit testing utilities for MSTest |
 | [BrightSword.Feber](./BrightSword.Feber) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.Feber.svg)](https://www.nuget.org/packages/BrightSword.Feber/) | Automated delegate generation using Expression trees |
 | [BrightSword.Squid](./BrightSword.Squid) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.Squid.svg)](https://www.nuget.org/packages/BrightSword.Squid/) | Runtime type emission utilities |
+| [BrightSword.Packages](./BrightSword.Packages) | [![NuGet](https://img.shields.io/nuget/v/BrightSword.Packages.svg)](https://www.nuget.org/packages/BrightSword.Packages/) | Metapackage bundling all BrightSword libraries |
 
 ## 🔧 Quick Start
 
@@ -62,17 +63,17 @@ pwsh ./scripts/generate-docs.ps1
 ls artifacts/docs   # verify index.html
 ```
 
-- Bump a project's version (MSBuild `IncrementVersion` target):
+- Bump the unified version (MSBuild `IncrementVersion` target):
 
 ```bash
-# Increment patch locally (no commit)
-dotnet msbuild /t:IncrementVersion /p:ProjectName=BrightSword.SwissKnife /p:Level=Patch
+# Increment patch locally (no commit) — applies to all 5 packages
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch
 # To increment and commit locally (be careful):
-dotnet msbuild /t:IncrementVersion /p:ProjectName=BrightSword.SwissKnife /p:Level=Patch /p:Commit=true
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch /p:Commit=true
 ```
 
 - Publish (recommended via GitHub Actions):
-  - Run the `Publish packages in dependency order` workflow manually from Actions and supply the `package` input, or push a tag containing the package id (example: `v-BrightSword.SwissKnife-1.1.1`).
+  - Push a `v*` tag (e.g. `v2.0.1`) to trigger the `publish-packages.yml` workflow, which publishes all 5 packages in dependency order.
 
 
 ## 📚 Documentation
@@ -91,7 +92,9 @@ dotnet msbuild /t:IncrementVersion /p:ProjectName=BrightSword.SwissKnife /p:Leve
 - `scripts/generate-docs.ps1` — placeholder docs generator used by GH-Pages workflow.
 - `.github/workflows/*` — CI, regen-deps, publish-packages and gh-pages workflows.
 
-If you want this README expanded into a contributor quickstart page under `docs/`, I can add that in a follow-up change.
+### ✅ Test Coverage
+
+The repository includes **508 tests** across all packages with **>85% line and branch coverage**.
 
 ---
 
@@ -154,9 +157,9 @@ See the full license at [https://creativecommons.org/licenses/by/4.0/](https://c
 
 ## ðŸ“ž Support
 
-- **Documentation**: [GitHub Pages](https://brightsword.github.io/BrightSword/)
-- **Issues**: [GitHub Issues](https://github.com/brightsword/BrightSword/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/brightsword/BrightSword/discussions)
+- **Documentation**: [GitHub Pages](https://johnazariah.github.io/brightsword/)
+- **Issues**: [GitHub Issues](https://github.com/johnazariah/brightsword/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/johnazariah/brightsword/discussions)
 
 ---
 
