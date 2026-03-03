@@ -8,7 +8,7 @@ Before submitting a PR that changes code, packaging, or docs, run this checklist
 - [ ] Run `dotnet test -c Release --no-build`
 
 2. Versioning (if changing public API or package content)
-- [ ] Bump the package version using `dotnet msbuild /t:IncrementVersion /p:ProjectName=<ProjectName> /p:Level=Patch` or edit `version.props` and explain the change in PR.
+- [ ] Bump the package version using `dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch` or edit the root `version.props` and explain the change in PR. All packages share a single unified version.
 - [ ] Include the `version.props` change in your PR if you bumped versions.
 
 3. Packaging

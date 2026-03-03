@@ -20,28 +20,27 @@ BrightSword/
 ?   ??? docs/                        # Package documentation
 ?   ??? Properties/                  # Assembly info
 ?   ??? *.cs                         # Source files
-?   ??? version.props                # Version configuration
 ?   ??? BrightSword.SwissKnife.csproj
 ?
 ??? BrightSword.Crucible/            # MSTest utilities package
 ?   ??? docs/                        # Package documentation
 ?   ??? *.cs                         # Source files
-?   ??? version.props                # Version configuration
 ?   ??? BrightSword.Crucible.csproj
 ?
 ??? BrightSword.Feber/               # Expression builder package
 ?   ??? docs/                        # Package documentation
 ?   ??? Core/                        # Builder classes
 ?   ??? *.cs                         # Source files
-?   ??? version.props                # Version configuration
 ?   ??? BrightSword.Feber.csproj
 ?
 ??? BrightSword.Squid/               # Type emission package
 ?   ??? docs/                        # Package documentation
 ?   ??? Properties/                  # Assembly info
 ?   ??? *.cs                         # Source files
-?   ??? version.props                # Version configuration
 ?   ??? BrightSword.Squid.csproj
+?
+??? BrightSword.Packages/            # Metapackage (bundles all libraries)
+?   ??? BrightSword.Packages.csproj
 ?
 ??? *.Tests/                         # Test projects
 ?   ??? *Tests.csproj
@@ -60,9 +59,15 @@ BrightSword/
 ?   ??? packages/                    # NuGet packages
 ?   ??? test-results/                # Test results
 ?
+??? scripts/                         # Build and CI helper scripts
+?   ??? generate-package-dependencies.ps1
+?   ??? generate-docs.ps1
+?   ??? increment-version.ps1
+?
 ??? Build.proj                       # MSBuild orchestration
 ??? build.ps1                        # PowerShell build wrapper
-??? increment-version.ps1            # Version management
+??? version.props                    # Unified version (all packages)
+??? versioning.targets               # IncrementVersion MSBuild target
 ??? Directory.Build.props            # Common MSBuild properties
 ??? Directory.Build.targets          # Common MSBuild targets
 ??? README.md                        # Main README
@@ -202,6 +207,11 @@ BrightSword/
 ? Crucible             ?
 ? (MSTest Utilities)   ?
 ????????????????????????
+
+????????????????????????????????????????
+? BrightSword.Packages                ?
+? (Metapackage - depends on all)      ?
+????????????????????????????????????????
 ```
 
 **Publishing Order**:
@@ -209,6 +219,7 @@ BrightSword/
 2. Crucible (independent - only depends on MSTest)
 3. Feber (depends on SwissKnife)
 4. Squid (depends on Feber and SwissKnife)
+5. Packages (metapackage - depends on all)
 
 ## Build System Architecture
 
@@ -225,16 +236,16 @@ Directory.Build.props
     ??? NuGet metadata
     ??? Default values
 
-Project/version.props
-    ??? Package-specific versions
-    ??? Package metadata
-    ??? Override defaults
+version.props (root)
+    ??? Single unified VersionPrefix for all packages
+
+versioning.targets
+    ??? IncrementVersion MSBuild target
 
 Directory.Build.targets
     ??? Common targets (post-build steps)
 
 Project.csproj
-    ??? Import version.props
     ??? Project-specific settings
     ??? Dependencies
 ```
@@ -271,7 +282,7 @@ Code Change
 ?????????????????????????????????
 ? Pull Request to main          ? ? PR Validation
 ?????????????????????????????????
-? Tag (swissknife-v1.0.0)       ? ? Release
+? Tag (v2.0.0)                  ? ? Release
 ?????????????????????????????????
 ? Push to main                  ? ? Documentation
 ?????????????????????????????????
@@ -300,7 +311,7 @@ Code Change
 ### Release Pipeline
 
 ```
-Tag pushed (swissknife-v1.0.20)
+Tag pushed (v2.0.1)
     ?
 ????????????????????????????
 ? Extract version from tag ?
@@ -321,9 +332,9 @@ Tag pushed (swissknife-v1.0.20)
 
 ```
 Developer
-    ? ./increment-version.ps1
-version.props
-    ? MSBuild Import
+    ? dotnet msbuild Build.proj /t:IncrementVersion
+version.props (root)
+    ? MSBuild Import (Directory.Build.props)
 Project.csproj
     ? MSBuild
 Assembly (DLL)
@@ -337,14 +348,14 @@ NuGet.org
 
 ```xml
 <!-- version.props -->
-<VersionPrefix>1.0.19</VersionPrefix>
+<VersionPrefix>2.0.0</VersionPrefix>
 
 <!-- Directory.Build.props -->
 <VersionSuffix Condition="'$(GITHUB_REF_TYPE)' != 'tag'">preview</VersionSuffix>
 
 <!-- Result -->
-Version: 1.0.19           (on tag)
-Version: 1.0.19-preview   (on branch)
+Version: 2.0.0             (on tag)
+Version: 2.0.0-preview     (on branch)
 ```
 
 ## Testing Strategy
@@ -484,23 +495,18 @@ private readonly Lazy<Action<T>> _action = new(() => BuildAction());
    mkdir BrightSword.NewPackage
    ```
 
-2. **Create version.props**:
-   ```xml
-   <Project>
-     <PropertyGroup>
-       <VersionPrefix>1.0.0</VersionPrefix>
-       <PackageId>BrightSword.NewPackage</PackageId>
-       <Description>Package description</Description>
-       <IsPackable>true</IsPackable>
-     </PropertyGroup>
-   </Project>
-   ```
+2. **Add package metadata to root `version.props`**:
+   The package inherits the unified `VersionPrefix` from the root `version.props` automatically.
+   Add any package-specific metadata (e.g. `PackageId`, `Description`) to the `.csproj` file.
 
 3. **Create .csproj**:
    ```xml
    <Project Sdk="Microsoft.NET.Sdk">
-     <Import Project="version.props" />
-     <!-- Project settings -->
+     <PropertyGroup>
+       <PackageId>BrightSword.NewPackage</PackageId>
+       <Description>Package description</Description>
+       <IsPackable>true</IsPackable>
+     </PropertyGroup>
    </Project>
    ```
 

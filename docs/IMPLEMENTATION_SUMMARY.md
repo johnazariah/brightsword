@@ -28,15 +28,19 @@ This document summarizes the comprehensive build, versioning, CI/CD, and documen
   - Parameters: Target, Configuration, Package, Verbosity
   - Colorized output and helpful messages
 
-**Package-specific version files:**
-- `BrightSword.SwissKnife/version.props` - v1.0.19 (Utilities and extensions)
-- `BrightSword.Crucible/version.props` - v1.0.16 (MSTest utilities)
-- `BrightSword.Feber/version.props` - v2.0.3 (Expression-based delegate generation)
-- `BrightSword.Squid/version.props` - v1.0.0 (Runtime type emission)
+**Unified version file (root `version.props`):**
+- `version.props` - v2.0.0 (shared by all packages)
+
+**Packages:**
+- BrightSword.SwissKnife (Utilities and extensions)
+- BrightSword.Crucible (MSTest utilities)
+- BrightSword.Feber (Expression-based delegate generation)
+- BrightSword.Squid (Runtime type emission)
+- BrightSword.Packages (Metapackage referencing all packages)
 
 **Updated project files:**
-- All .csproj files now import their respective version.props
-- Cleaned up inline version properties
+- All .csproj files import the root version.props
+- No per-project version.props files
 - Consistent structure across all packages
 
 ### ✅ Task 2: Versioning Strategy
@@ -44,15 +48,15 @@ This document summarizes the comprehensive build, versioning, CI/CD, and documen
 **Implementation:**
 - **`increment-version.ps1`** - Automated version management
   - Increments Major, Minor, or Patch versions
-  - Updates version.props files
-  - Supports individual packages (including Crucible) or all packages
+  - Updates the root version.props file
+  - All packages share a single unified version
   - WhatIf mode for preview
   - XML-preserving updates
 
 **Versioning approach:**
 - Semantic Versioning 2.0.0 (MAJOR.MINOR.PATCH)
-- Independent version numbers per package
-- Version stored in version.props files
+- Unified version number for all packages
+- Version stored in root version.props
 - Automatic preview suffix for non-tag builds
 
 **Documentation:**
@@ -78,11 +82,10 @@ This document summarizes the comprehensive build, versioning, CI/CD, and documen
   - Comprehensive validation (build, test, breaking changes check)
   - Posts status comment on PR
 
-- **`.github/workflows/release.yml`** - Release and Publishing
-  - Triggers: Version tags (v*.*.*), manual workflow dispatch
-  - Builds, tests, and publishes to NuGet.org
+- **`.github/workflows/publish-packages.yml`** - Release and Publishing
+  - Triggers: Version tags (`v*`), manual workflow dispatch
+  - Builds, tests, and publishes all packages to NuGet.org
   - Creates GitHub Releases with artifacts
-  - Handles dependent package publishing
 
 - **`.github/workflows/docs.yml`** - Documentation Deployment
   - Triggers: Push to main, manual dispatch
@@ -186,8 +189,8 @@ This document summarizes the comprehensive build, versioning, CI/CD, and documen
 
 - **`docs/VERSIONING.md`** - Versioning Strategy ✅ **UPDATED**
   - Semantic Versioning explained
-  - **All four packages listed with current versions**
-  - Version storage (version.props files)
+  - **All five packages listed with current versions**
+  - Version storage (root version.props)
   - Manual and automated version management
   - **Dependency management including Crucible as independent**
   - Release process
@@ -256,27 +259,24 @@ BrightSword/
 │   ├── workflows/
 │   │   ├── ci.yml                    # CI Build workflow
 │   │   ├── pr-validation.yml         # PR validation workflow
-│   │   ├── release.yml               # Release workflow
+│   │   ├── publish-packages.yml      # Publish packages workflow
 │   │   └── docs.yml                  # Documentation deployment
 │   └── copilot-instructions.md       # Development guidelines
 │
 ├── BrightSword.SwissKnife/
 │   ├── docs/
 │   │   └── README.md                 # Package documentation
-│   ├── version.props                 # Version: 1.0.19
-│   └── BrightSword.SwissKnife.csproj # Updated with version import
+│   └── BrightSword.SwissKnife.csproj # Project file
 │
-├── BrightSword.Crucible/             ✅ NOW INCLUDED
+├── BrightSword.Crucible/
 │   ├── docs/
 │   │   └── README.md                 # Package documentation
-│   ├── version.props                 # Version: 1.0.16
-│   └── BrightSword.Crucible.csproj   # Updated with version import
+│   └── BrightSword.Crucible.csproj   # Project file
 │
 ├── BrightSword.Feber/
 │   ├── docs/
-│   │   └── README.md                 # Package documentation ✅ CORRECTED
-│   ├── version.props                 # Version: 2.0.3
-│   └── BrightSword.Feber.csproj      # Updated with version import
+│   │   └── README.md                 # Package documentation
+│   └── BrightSword.Feber.csproj      # Project file
 │
 ├── BrightSword.Squid/
 │   ├── docs/
@@ -285,8 +285,10 @@ BrightSword/
 │   │   ├── Behaviours.md
 │   │   ├── Examples.md
 │   │   └── ... (other existing docs)
-│   ├── version.props                 # Version: 1.0.0
-│   └── BrightSword.Squid.csproj      # Updated with version import
+│   └── BrightSword.Squid.csproj      # Project file
+│
+├── BrightSword.Packages/             # Metapackage referencing all packages
+│   └── BrightSword.Packages.csproj   # Project file
 │
 ├── docs/
 │   ├── BUILD.md                      # Build guide ✅ UPDATED
@@ -299,9 +301,12 @@ BrightSword/
 ├── api/
 │   └── index.md                      # API documentation homepage ✅ UPDATED
 │
-├── Build.proj                        # MSBuild orchestration ✅ UPDATED
+├── Build.proj                        # MSBuild orchestration
 ├── build.ps1                         # PowerShell build wrapper
-├── increment-version.ps1             # Version management script ✅ UPDATED
+├── increment-version.ps1             # Version management script
+├── version.props                     # Unified version (single VersionPrefix for all packages)
+├── versioning.targets                # MSBuild IncrementVersion target
+├── scripts/                          # Build and CI helper scripts
 ├── Directory.Build.props             # Common MSBuild properties
 ├── Directory.Build.targets           # Common MSBuild targets
 ├── docfx.json                        # DocFX configuration ✅ UPDATED
@@ -340,38 +345,32 @@ BrightSword/
 ### Version Management
 
 ```powershell
-# Increment patch version (1.0.19 -> 1.0.20)
-./increment-version.ps1 -Package BrightSword.SwissKnife
+# Increment patch version for all packages (e.g., 2.0.0 -> 2.0.1)
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch
 
-# Increment Crucible version (1.0.16 -> 1.0.17)
-./increment-version.ps1 -Package BrightSword.Crucible
+# Increment minor version (e.g., 2.0.0 -> 2.1.0)
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Minor
 
-# Increment minor version (2.0.3 -> 2.1.0)
-./increment-version.ps1 -Package BrightSword.Feber -Component Minor
-
-# Increment major version (1.0.0 -> 2.0.0)
-./increment-version.ps1 -Package BrightSword.Squid -Component Major
-
-# Preview changes without modifying files
-./increment-version.ps1 -Package BrightSword.SwissKnife -WhatIf
+# Increment major version (e.g., 2.0.0 -> 3.0.0)
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Major
 ```
 
 ### Release Process
 
 ```bash
 # 1. Increment version
-./increment-version.ps1 -Package BrightSword.Crucible -Component Patch
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch
 
 # 2. Commit changes
-git add BrightSword.Crucible/version.props
-git commit -m "chore: bump Crucible to 1.0.17"
+git add version.props
+git commit -m "chore: bump version to 2.0.1"
 git push
 
-# 3. Tag release
-git tag crucible-v1.0.17
-git push origin crucible-v1.0.17
+# 3. Tag release (all packages ship together)
+git tag v2.0.1
+git push origin v2.0.1
 
-# 4. GitHub Actions automatically builds, tests, and publishes
+# 4. GitHub Actions automatically builds, tests, and publishes all packages
 ```
 
 ## CI/CD Workflows
@@ -380,7 +379,7 @@ git push origin crucible-v1.0.17
 
 - **Every push** → CI Build workflow
 - **PR to main** → PR Validation workflow
-- **Tag push (v*.*.*)** → Release workflow
+- **Tag push (v*)** → Publish Packages workflow
 - **Push to main** → Documentation deployment
 
 ### Manual Triggers
@@ -399,30 +398,35 @@ Configure in GitHub repository settings (Settings → Secrets and variables → 
 
 ## Package Overview
 
-### BrightSword.SwissKnife (v1.0.19)
+### BrightSword.SwissKnife (v2.0.0)
 **Utilities and extension methods**
 - No dependencies
 - Base package for Feber and Squid
 - Extension methods, reflection helpers, utilities
 
-### BrightSword.Crucible (v1.0.16) ✅
+### BrightSword.Crucible (v2.0.0)
 **MSTest testing utilities**
 - Independent package
 - Depends only on MSTest.TestFramework
 - Fluent exception testing with `ExpectException<T>()`
 
-### BrightSword.Feber (v2.0.3) ✅
+### BrightSword.Feber (v2.0.0)
 **Expression-based delegate generation**
 - Depends on SwissKnife
 - Automates property-based operations using LINQ Expressions
 - ActionBuilder and FunctionBuilder for compiled delegates
 - Performance: First call ~10-100ms, subsequent <0.001ms
 
-### BrightSword.Squid (v1.0.0)
+### BrightSword.Squid (v2.0.0)
 **Runtime type emission**
 - Depends on Feber and SwissKnife
 - Dynamic type creation using Reflection.Emit
 - Behavior composition and DTO generation
+
+### BrightSword.Packages (v2.0.0)
+**Metapackage**
+- References all BrightSword packages
+- Convenient single-package install for consumers
 
 ## Dependency Graph
 
@@ -434,6 +438,10 @@ Feber (depends on SwissKnife)
 Squid (depends on Feber and SwissKnife)
 
 Crucible (independent - only MSTest)
+
+BrightSword.Packages (metapackage - references all)
+
+All packages share a unified version (v2.0.0) from the root version.props.
 ```
 
 ## Next Steps
@@ -451,9 +459,9 @@ Crucible (independent - only MSTest)
    ./build.ps1 -Target CI
    ```
 
-4. **Test version increment** (including Crucible):
+4. **Test version increment**:
    ```powershell
-   ./increment-version.ps1 -Package BrightSword.Crucible -WhatIf
+   dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch
    ```
 
 ### Future Enhancements
@@ -480,14 +488,14 @@ Crucible (independent - only MSTest)
    - Implement actual breaking change detection in PR validation
    - Use Microsoft.DotNet.ApiCompat
 
-6. **Automated Dependency Publishing**:
-   - Automatically detect and publish dependent packages
-   - Chain releases when base packages are updated (SwissKnife → Feber → Squid)
+6. **Release Automation**:
+   - Automated version bumping and tagging from CI
+   - All packages ship together at a unified version
 
 ## Validation Checklist
 
-- [x] Build system creates all four packages successfully
-- [x] Version management script updates versions for all packages including Crucible
+- [x] Build system creates all five packages successfully
+- [x] Version management updates the unified version for all packages
 - [x] CI workflows are configured and ready
 - [x] Documentation is comprehensive and well-structured
 - [x] All project files are updated and consistent
@@ -519,10 +527,11 @@ Crucible (independent - only MSTest)
 ---
 
 **Implementation completed and corrected**
-**All four packages properly documented:**
+**All five packages properly documented:**
 - ✅ **BrightSword.SwissKnife** - Utilities and extensions
 - ✅ **BrightSword.Crucible** - MSTest utilities
 - ✅ **BrightSword.Feber** - Expression-based delegate generation
 - ✅ **BrightSword.Squid** - Runtime type emission
+- ✅ **BrightSword.Packages** - Metapackage
 
 **All tasks from `.github/copilot-instructions.md` have been addressed**

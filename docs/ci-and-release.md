@@ -39,13 +39,15 @@ How to use (quick commands)
 - Generate dependency manifest locally:
   - `pwsh ./scripts/generate-package-dependencies.ps1`
 - Bump a project version locally (no commit):
-  - `dotnet msbuild /t:IncrementVersion /p:ProjectName=BrightSword.SwissKnife /p:Level=Patch`
+  - `dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch`
+  - This bumps the unified `VersionPrefix` in the root `version.props` for all packages.
 - Produce packages locally:
   - `dotnet pack BrightSword.SwissKnife/BrightSword.SwissKnife.csproj -c Release -o ./artifacts/packages`
 
 CI publishing notes
-- Tag-triggered releases: push `vX.Y.Z` tag and include the package id in the tag name (recommended) or ensure changed files are part of the tagged commit so the publish workflow can infer the package(s).
-- Manual dispatch: use the `package` input to explicitly name the PackageId to publish.
+- All five packages (SwissKnife, Crucible, Feber, Squid, BrightSword.Packages) share a single unified version from the root `version.props`. There are no per-project version files.
+- Tag-triggered releases: push a `v*` tag (e.g., `v2.0.1`). The `publish-packages.yml` workflow publishes all packages together — no dependency ordering or cascade is needed.
+- Manual dispatch: use the GitHub Actions UI to trigger `publish-packages.yml`.
 - Permission guard: only collaborators (admin/write/maintain) may dispatch the publish workflow.
 - Secrets required for publishing: `NUGET_API_KEY` (and optionally `NUGET_SOURCE`).
 

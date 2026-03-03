@@ -50,9 +50,9 @@ Pack a single project (msbuild PackSingle target)
 
 Bump a project's version (MSBuild IncrementVersion)
 - Increment patch for `BrightSword.SwissKnife` locally (no commit):
-  - `dotnet msbuild /t:IncrementVersion /p:ProjectName=BrightSword.SwissKnife /p:Level=Patch`
+  - `dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch`
 - Increment and commit the change locally (careful):
-  - `dotnet msbuild /t:IncrementVersion /p:ProjectName=BrightSword.SwissKnife /p:Level=Patch /p:Commit=true`
+  - `dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch /p:Commit=true`
 
 Generate package dependency manifest
 - Run the generator locally to produce `package-dependencies.json`:
@@ -170,7 +170,7 @@ Release and cross-package publishing policy ( important )
 How CI should handle a package publish
 1. Identify the package(s) that changed in the PR or the release tag.
 2. For each changed package:
-   - Run `dotnet msbuild /t:IncrementVersion /p:ProjectName=<ProjectName> /p:Level=Patch` (or Minor/Major) locally or from a release job to produce the next `VersionPrefix` in `version.props`. Use `/p:Commit=true` only in trusted automation with git push credentials; otherwise capture the new version and apply it via PR or release commits.
+   - Run `dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch` (or Minor/Major) locally or from a release job to produce the next `VersionPrefix` in `version.props`. Use `/p:Commit=true` only in trusted automation with git push credentials; otherwise capture the new version and apply it via PR or release commits.
 3. Using the dependency graph, compute the set of dependent packages (recursively). For each dependent package:
    - Bump its version (typically Patch), update any package references if you publish to an internal feed, run build/tests, pack and publish. This ensures downstream consumers receive updated packages with updated dependency constraints.
 4. Publish order: publish the changed package(s) first, then their dependents in dependency-order to ensure published packages can resolve upstream dependencies.
@@ -196,7 +196,7 @@ To help future agents and maintainers, the following changes were added to this 
 1) Centralized versioning (`version.props` + `versioning.targets`)
 - What: `version.props` now contains per-project `VersionPrefix`, `PackageId`, and metadata. `versioning.targets` provides an MSBuild `IncrementVersion` target that supports `Level=Patch|Minor|Major` and optionally commits the change (`/p:Commit=true`).
 - Why: single source of truth for package versions simplifies reviews and makes coordinated version bumps easier. `IncrementVersion` enables scripted bumps without manual edits.
-- How to use locally: run `dotnet msbuild /t:IncrementVersion /p:ProjectName=BrightSword.SwissKnife /p:Level=Patch` (omit `Commit=true` unless you want the file committed by the local Git client). Validate by opening `version.props` to see the updated `VersionPrefix`.
+- How to use locally: run `dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch` (omit `Commit=true` unless you want the file committed by the local Git client). Validate by opening `version.props` to see the updated `VersionPrefix`.
 
 2) Packaging standardization (`Directory.Build.props`) and README handling
 - What: `Directory.Build.props` now sets common packaging properties (authors, license, repository, `GenerateDocumentationFile`, `PackageReadmeFile=README.md`), and includes any `docs/README.md` into packages by default. Per-project `PackageReadmeFile` entries were removed so the behavior is centralized.

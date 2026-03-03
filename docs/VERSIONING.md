@@ -4,12 +4,15 @@ This document describes the versioning strategy for the BrightSword monorepo.
 
 ## Overview
 
-The BrightSword monorepo contains multiple independent NuGet packages, each with its own version number:
+The BrightSword monorepo ships all packages as a **unified suite** at a single shared version. All 5 packages are always released together at the same version number:
 
-- **BrightSword.SwissKnife** - Currently: 1.0.19 (Utilities and extensions)
-- **BrightSword.Crucible** - Currently: 1.0.16 (MSTest utilities)
-- **BrightSword.Feber** - Currently: 2.0.3 (Expression-based delegate generation)
-- **BrightSword.Squid** - Currently: 1.0.0 (Runtime type emission)
+- **BrightSword.SwissKnife** — Utilities and extensions
+- **BrightSword.Crucible** — MSTest utilities
+- **BrightSword.Feber** — Expression-based delegate generation
+- **BrightSword.Squid** — Runtime type emission
+- **BrightSword.Packages** — Metapackage bundling all libraries
+
+**Current version: 2.0.0**
 
 ## Semantic Versioning
 
@@ -21,169 +24,126 @@ MAJOR.MINOR.PATCH
 
 ### Version Components
 
-- **MAJOR** - Incremented for incompatible API changes
-- **MINOR** - Incremented for new backwards-compatible functionality
-- **PATCH** - Incremented for backwards-compatible bug fixes
+- **MAJOR** — Incremented for incompatible API changes in any package
+- **MINOR** — Incremented for new backwards-compatible functionality in any package
+- **PATCH** — Incremented for backwards-compatible bug fixes in any package
 
 ### Examples
 
 ```
-1.0.0 -> 1.0.1  (Patch: Bug fix)
-1.0.1 -> 1.1.0  (Minor: New feature)
-1.1.0 -> 2.0.0  (Major: Breaking change)
+2.0.0 -> 2.0.1  (Patch: Bug fix in any package)
+2.0.1 -> 2.1.0  (Minor: New feature in any package)
+2.1.0 -> 3.0.0  (Major: Breaking change in any package)
 ```
 
 ## Version Storage
 
-### version.props Files
+### Root version.props
 
-Each package has a `version.props` file in its directory:
+All packages share a **single `VersionPrefix`** defined in the root `version.props`:
 
 ```xml
-<!-- BrightSword.SwissKnife/version.props -->
+<!-- version.props (repo root) -->
 <Project>
   <PropertyGroup>
-    <VersionPrefix>1.0.19</VersionPrefix>
-    <PackageId>BrightSword.SwissKnife</PackageId>
-    <Description>Utility classes and extension methods for .NET development</Description>
-    <IsPackable>true</IsPackable>
+    <VersionPrefix>2.0.0</VersionPrefix>
   </PropertyGroup>
 </Project>
 ```
 
-```xml
-<!-- BrightSword.Crucible/version.props -->
-<Project>
-  <PropertyGroup>
-    <VersionPrefix>1.0.16</VersionPrefix>
-    <PackageId>BrightSword.Crucible</PackageId>
-    <Description>Unit testing utilities for MSTest</Description>
-    <IsPackable>true</IsPackable>
-  </PropertyGroup>
-</Project>
-```
+There are **no per-project `version.props` files**. Every package inherits its version from this single root file via `Directory.Build.props`.
 
-### Directory.Build.props
+### Preview Suffix
 
-Common version properties are defined in the root `Directory.Build.props`:
+A `-preview` suffix is automatically added for non-tag builds:
 
 ```xml
-<PropertyGroup>
-  <VersionPrefix>1.0.0</VersionPrefix>
-  <VersionSuffix Condition="'$(GITHUB_REF_TYPE)' != 'tag'">preview</VersionSuffix>
-</PropertyGroup>
+<!-- Directory.Build.props -->
+<VersionSuffix Condition="'$(GITHUB_REF_TYPE)' != 'tag'">preview</VersionSuffix>
 ```
 
-Project-specific `version.props` files override `VersionPrefix`.
+This means:
+- Tag builds (releases): `2.0.0`
+- Branch/PR builds: `2.0.0-preview`
 
 ## Version Management
 
-### Manual Version Updates
+### Automated Version Increment (Recommended)
 
-Edit the `version.props` file for the package:
+Use the MSBuild `IncrementVersion` target to bump the unified version:
 
 ```bash
-# Open the file
-code BrightSword.SwissKnife/version.props
+# Increment patch (2.0.0 -> 2.0.1)
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch
 
-# Update VersionPrefix
-<VersionPrefix>1.0.20</VersionPrefix>
+# Increment minor (2.0.0 -> 2.1.0)
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Minor
+
+# Increment major (2.0.0 -> 3.0.0)
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Major
+
+# Increment and commit locally (be careful):
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch /p:Commit=true
 ```
 
-### Automated Version Increment
+This edits the single `VersionPrefix` in root `version.props`, which applies to all 5 packages.
 
-Use the `increment-version.ps1` script:
+### PowerShell Script
+
+The `scripts/increment-version.ps1` script provides an alternative interface:
 
 ```powershell
-# Increment patch version (default)
-./increment-version.ps1 -Package BrightSword.SwissKnife
-# 1.0.19 -> 1.0.20
-
-# Increment minor version
-./increment-version.ps1 -Package BrightSword.Feber -Component Minor
-# 2.0.3 -> 2.1.0
-
-# Increment major version
-./increment-version.ps1 -Package BrightSword.Squid -Component Major
-# 1.0.0 -> 2.0.0
-
-# Increment all packages
-./increment-version.ps1 -Package All -Component Patch
+./scripts/increment-version.ps1
 ```
 
-### Preview Versions
+### Manual Version Updates
 
-Preview/pre-release versions are automatically generated for non-tag builds:
+Edit the root `version.props` directly:
 
+```bash
+code version.props
+# Change <VersionPrefix>2.0.0</VersionPrefix> to <VersionPrefix>2.0.1</VersionPrefix>
 ```
-1.0.19-preview
-1.0.16-preview
-2.0.3-preview
-```
-
-This is controlled by `VersionSuffix` in `Directory.Build.props`.
 
 ## Dependency Management
 
 ### Package Dependencies
 
-Packages in the monorepo depend on each other:
+Packages in the monorepo depend on each other via project references:
 
 ```
 BrightSword.Crucible
-??? (Independent - only depends on MSTest)
+  (Independent - only depends on MSTest)
 
 BrightSword.Feber
-??? depends on BrightSword.SwissKnife
+  depends on BrightSword.SwissKnife
 
 BrightSword.Squid
-??? depends on BrightSword.Feber
-??? depends on BrightSword.SwissKnife
+  depends on BrightSword.Feber
+  depends on BrightSword.SwissKnife
+
+BrightSword.Packages (metapackage)
+  depends on all 4 libraries
 ```
+
+### Build Order
+
+The dependency graph determines the **build and publish order**, but not version management (since all packages share the same version):
+
+1. SwissKnife (base - no dependencies)
+2. Crucible (independent - only depends on MSTest)
+3. Feber (depends on SwissKnife)
+4. Squid (depends on Feber and SwissKnife)
+5. Packages (metapackage - depends on all)
 
 ### Version Pinning
 
-Project references use the built assemblies directly, not NuGet packages:
-
-```xml
-<!-- BrightSword.Feber.csproj -->
-<ItemGroup>
-  <ProjectReference Include="..\BrightSword.SwissKnife\BrightSword.SwissKnife.csproj" />
-</ItemGroup>
-```
-
-When packed, the NuGet package references the minimum version:
+Project references use built assemblies directly. When packed, the NuGet dependency version matches the unified suite version:
 
 ```xml
 <!-- Generated in .nupkg -->
-<dependency id="BrightSword.SwissKnife" version="1.0.19" />
+<dependency id="BrightSword.SwissKnife" version="2.0.0" />
 ```
-
-### Updating Dependent Packages
-
-When updating a base package, consider updating dependent packages:
-
-**Example**: Updating SwissKnife
-
-1. **Update SwissKnife**:
-   ```powershell
-   ./increment-version.ps1 -Package BrightSword.SwissKnife -Component Minor
-   # 1.0.19 -> 1.1.0
-   ```
-
-2. **Consider updating Feber** (depends on SwissKnife):
-   ```powershell
-   ./increment-version.ps1 -Package BrightSword.Feber -Component Patch
-   # 2.0.3 -> 2.0.4
-   ```
-
-3. **Consider updating Squid** (depends on both):
-   ```powershell
-   ./increment-version.ps1 -Package BrightSword.Squid -Component Patch
-   # 1.0.0 -> 1.0.1
-   ```
-
-4. **Crucible is independent** - Update only if needed for its own changes
 
 ## Release Process
 
@@ -191,17 +151,17 @@ When updating a base package, consider updating dependent packages:
 
 ```bash
 # Create release branch
-git checkout -b release/swissknife-1.1.0
+git checkout -b release/v2.0.1
 
 # Increment version
-./increment-version.ps1 -Package BrightSword.SwissKnife -Component Minor
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch
 
 # Commit version change
-git add BrightSword.SwissKnife/version.props
-git commit -m "chore: bump SwissKnife to 1.1.0"
+git add version.props
+git commit -m "chore: bump version to 2.0.1"
 
 # Push and create PR
-git push origin release/swissknife-1.1.0
+git push origin release/v2.0.1
 ```
 
 ### 2. Merge to Main
@@ -212,51 +172,48 @@ After PR approval, merge to `main`.
 
 ```bash
 # Tag the release
-git tag swissknife-v1.1.0
+git tag v2.0.1
 
-# Push tag
-git push origin swissknife-v1.1.0
+# Push tag to trigger automated publish
+git push origin v2.0.1
 ```
 
 ### 4. Automated Publishing
 
-GitHub Actions will:
-1. Detect the tag
-2. Build the package
-3. Run tests
-4. Create NuGet package
-5. Publish to NuGet.org
-6. Create GitHub Release
+When a `v*` tag is pushed, the `publish-packages.yml` workflow:
+1. Detects the tag
+2. Builds all packages
+3. Runs all tests
+4. Packs all 5 NuGet packages
+5. Publishes to NuGet.org in dependency order
+6. Creates GitHub Release
 
 ## Version Naming Conventions
 
 ### Git Tags
 
-Tags follow this pattern:
+Tags follow a simple unified pattern:
 
 ```
-{package}-v{version}
+v{version}
 ```
 
 Examples:
-- `swissknife-v1.0.20`
-- `crucible-v1.0.17`
-- `feber-v2.1.0`
-- `squid-v1.0.1`
+- `v2.0.0`
+- `v2.0.1`
+- `v2.1.0`
 
 ### NuGet Packages
 
-Package files follow NuGet conventions:
+All packages share the same version:
 
 ```
-{PackageId}.{Version}.nupkg
-{PackageId}.{Version}.snupkg
+BrightSword.SwissKnife.2.0.1.nupkg
+BrightSword.Crucible.2.0.1.nupkg
+BrightSword.Feber.2.0.1.nupkg
+BrightSword.Squid.2.0.1.nupkg
+BrightSword.Packages.2.0.1.nupkg
 ```
-
-Examples:
-- `BrightSword.SwissKnife.1.0.20.nupkg`
-- `BrightSword.Crucible.1.0.17.nupkg`
-- `BrightSword.Feber.2.1.0.snupkg`
 
 ### Git Branches
 
@@ -265,8 +222,7 @@ Branch names should be descriptive:
 ```
 feature/add-new-functionality
 fix/resolve-bug-123
-release/swissknife-1.1.0
-release/crucible-1.0.17
+release/v2.0.1
 hotfix/critical-security-fix
 ```
 
@@ -274,7 +230,7 @@ hotfix/critical-security-fix
 
 ### Guidelines
 
-**Breaking changes require a MAJOR version increment.**
+**Breaking changes in any package require a MAJOR version increment for the entire suite.**
 
 Breaking changes include:
 - Removing public APIs
@@ -295,11 +251,11 @@ For breaking changes:
 ### Example
 
 ```markdown
-## Breaking Changes in 2.0.0
+## Breaking Changes in 3.0.0
 
 ### Removed Obsolete Methods
 
-The following methods marked obsolete in 1.x have been removed:
+The following methods marked obsolete in 2.x have been removed:
 
 - `StringExtensions.OldMethod()` - Use `NewMethod()` instead
 
@@ -307,13 +263,13 @@ The following methods marked obsolete in 1.x have been removed:
 
 `ProcessData` now requires a cancellation token:
 
-```csharp
-// Old (1.x)
+`csharp
+// Old (2.x)
 public void ProcessData(string data)
 
-// New (2.0)
+// New (3.0)
 public Task ProcessData(string data, CancellationToken cancellationToken)
-```
+`
 
 ### Migration Guide
 
@@ -324,25 +280,25 @@ public Task ProcessData(string data, CancellationToken cancellationToken)
 
 ## Preview Releases
 
-### Creating Previews
+### Automatic Previews
 
-Preview releases use the format:
+Non-tag builds automatically receive a `-preview` suffix:
 
 ```
-1.1.0-preview.1
-1.1.0-preview.2
-1.1.0-rc.1
+2.0.1-preview
 ```
 
-To create a preview:
+This is controlled by `VersionSuffix` in `Directory.Build.props`. Pushing to any branch or creating a PR produces preview packages.
 
-```powershell
-# Manually edit version.props
-<VersionPrefix>1.1.0</VersionPrefix>
+### Manual Previews
+
+For numbered preview releases, edit `version.props`:
+
+```xml
+<VersionPrefix>2.1.0</VersionPrefix>
+<!-- and in Directory.Build.props set: -->
 <VersionSuffix>preview.1</VersionSuffix>
 ```
-
-Or push to a feature branch - CI will automatically add `-preview` suffix.
 
 ### Publishing Previews
 
@@ -352,13 +308,13 @@ Previews are published to:
 
 ## Version Query
 
-### Current Versions
+### Current Version
 
-View current versions:
+View the current unified version:
 
 ```bash
-# Check version.props files
-Get-Content BrightSword.*/version.props | Select-String "VersionPrefix"
+# Check root version.props
+Get-Content version.props | Select-String "VersionPrefix"
 
 # Check NuGet.org
 dotnet package search BrightSword --exact-match
@@ -367,9 +323,9 @@ dotnet package search BrightSword --exact-match
 ### Version History
 
 See version history:
-- GitHub Releases: https://github.com/brightsword/BrightSword/releases
+- GitHub Releases: https://github.com/johnazariah/brightsword/releases
 - NuGet.org: Package page version history
-- Git tags: `git tag -l`
+- Git tags: `git tag -l "v*"`
 
 ## Best Practices
 
@@ -384,17 +340,16 @@ See version history:
 Include version in commit messages:
 
 ```
-chore(swissknife): bump version to 1.0.20
-chore(crucible): bump version to 1.0.17
-fix(feber): critical bug - bump to 2.0.4
-feat(squid): major refactor - bump to 2.0.0
+chore: bump version to 2.0.1
+fix: critical bug - bump to 2.0.2
+feat: new feature - bump to 2.1.0
 ```
 
 ### Testing
 
 Before incrementing MAJOR version:
-1. Run all tests
-2. Check for breaking changes
+1. Run all 508 tests
+2. Check for breaking changes across all packages
 3. Update documentation
 4. Create migration guide
 
@@ -405,28 +360,6 @@ Update documentation with version-specific information:
 - When features were deprecated
 - When features were removed
 - Minimum version requirements
-
-## Package-Specific Version Considerations
-
-### SwissKnife
-- Most stable package with infrequent updates
-- Breaking changes are rare
-- Usually patch or minor version increments
-
-### Crucible
-- Independent of other BrightSword packages
-- Can be versioned independently
-- Tied to MSTest framework versions
-
-### Feber
-- Breaking changes should be carefully considered
-- Expression tree API is sensitive
-- Performance characteristics documented per version
-
-### Squid
-- Type emission API may evolve
-- Tied to .NET runtime capabilities
-- May have major versions for runtime changes
 
 ---
 

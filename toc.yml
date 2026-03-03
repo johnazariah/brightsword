@@ -10,6 +10,8 @@
     href: feber/README.md
   - name: BrightSword.Squid
     href: squid/README.md
+  - name: BrightSword.Packages
+    href: packages/README.md
 - name: Documentation
   items:
   - name: Build Guide

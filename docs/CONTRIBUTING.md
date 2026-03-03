@@ -72,7 +72,7 @@ git clone https://github.com/YOUR_USERNAME/BrightSword.git
 cd BrightSword
 
 # Add upstream remote
-git remote add upstream https://github.com/brightsword/BrightSword.git
+git remote add upstream https://github.com/johnazariah/brightsword.git
 
 # Build
 ./build.ps1
@@ -268,14 +268,14 @@ We use [Semantic Versioning](https://semver.org/):
 Use the provided script to increment versions:
 
 ```powershell
-# Patch version (1.0.0 -> 1.0.1)
-./increment-version.ps1 -Package BrightSword.SwissKnife
+# Patch version (2.0.0 -> 2.0.1)
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Patch
 
-# Minor version (1.0.0 -> 1.1.0)
-./increment-version.ps1 -Package BrightSword.Feber -Component Minor
+# Minor version (2.0.0 -> 2.1.0)
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Minor
 
-# Major version (1.0.0 -> 2.0.0)
-./increment-version.ps1 -Package BrightSword.Squid -Component Major
+# Major version (2.0.0 -> 3.0.0)
+dotnet msbuild Build.proj /t:IncrementVersion /p:Level=Major
 ```
 
 ## Documentation

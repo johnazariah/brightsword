@@ -51,7 +51,7 @@ See the following documentation files for details:
 
 ## Version History
 
-### 2.0.3 (Current)
+### 2.0.0 (Current)
 - Improved expression caching
 - Better null handling
 - Enhanced documentation

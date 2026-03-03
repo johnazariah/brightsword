@@ -28,7 +28,7 @@ See the test project for comprehensive examples.
 
 ## Version History
 
-### 1.0.16 (Current)
+### 2.0.0 (Current)
 - Initial monorepo release
 - .NET 10 support
 - Enhanced documentation
