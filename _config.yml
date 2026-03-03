@@ -1,0 +1,21 @@
+﻿title: BrightSword Documentation
+description: API documentation and guides for the BrightSword .NET libraries
+remote_theme: just-the-docs/just-the-docs@v0.10.0
+color_scheme: light
+
+permalink: pretty
+
+exclude:
+  - "*.xml"
+
+aux_links:
+  "GitHub":
+    - "https://github.com/johnazariah/brightsword"
+  "NuGet":
+    - "https://www.nuget.org/profiles/BrightSword"
+
+nav_external_links:
+  - title: GitHub Repository
+    url: https://github.com/johnazariah/brightsword
+
+footer_content: "BrightSword &copy; 2025. Distributed under <a href=\"https://creativecommons.org/licenses/by/4.0/\">CC BY 4.0</a>."
