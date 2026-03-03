@@ -248,21 +248,29 @@ public class PrettyPrinterTests
     {
         var dto = new FeberTestDto { Name = "Alice", Age = 30 };
 
+        // Use a lock to prevent parallel tests from interfering with Console.Out redirection
         var writer = new System.IO.StringWriter();
-        var originalOut = Console.Out;
-        Console.SetOut(writer);
-        try
+        TextWriter originalOut;
+        string output;
+        lock (Console.Out)
         {
-            dto.Print();
-            var output = writer.ToString();
-            Assert.Contains("Name", output);
-            Assert.Contains("Alice", output);
-            Assert.Contains("Age", output);
-            Assert.Contains("30", output);
+            originalOut = Console.Out;
+            Console.SetOut(writer);
+            try
+            {
+                dto.Print();
+                Console.Out.Flush();
+                output = writer.ToString();
+            }
+            finally
+            {
+                Console.SetOut(originalOut);
+            }
         }
-        finally
-        {
-            Console.SetOut(originalOut);
-        }
+
+        Assert.Contains("Name", output);
+        Assert.Contains("Alice", output);
+        Assert.Contains("Age", output);
+        Assert.Contains("30", output);
     }
 }

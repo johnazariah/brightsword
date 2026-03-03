@@ -20,7 +20,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          persist-credentials: false
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
 
       - name: Build packages (restore & build)
         run: |
@@ -39,92 +43,10 @@ jobs:
           echo "Files found: $COUNT"
           if [ "$COUNT" -eq "0" ]; then echo "No files in artifacts/docs"; exit 1; fi
 
-      - name: Configure git
-        run: |
-          echo "Checking whether GITHUB_TOKEN can push to gh-pages branch..."
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '10.0.x'
-
-      - name: Set remote with token
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
-
-      - name: Check push permission for GITHUB_TOKEN
-        id: check_push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          git fetch origin gh-pages || true
-          if git push --dry-run origin HEAD:gh-pages >/dev/null 2>&1; then
-            echo "can_push=true" >> $GITHUB_OUTPUT
-            echo "Dry-run push would succeed"
-          else
-            echo "can_push=false" >> $GITHUB_OUTPUT
-            echo "Dry-run push failed"
-          fi
-
-      - name: Deploy to GitHub Pages (direct push)
-        if: steps.check_push.outputs.can_push == 'true'
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: ./artifacts/docs
-
-      - name: Create PR with docs if direct push blocked
-        if: steps.check_push.outputs.can_push == 'false'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_BRANCH: gh-pages-docs-${{ github.sha }}
-        run: |
-          set -euo pipefail
-          echo "Creating a pull request with docs because direct push is blocked"
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Inspect generated docs layout for debugging
-          echo "Contents of artifacts/docs (post-generation):"
-          ls -la artifacts/docs || true
-
-          # Create an orphan branch to contain only the docs
-          git checkout --orphan "$PR_BRANCH"
-          git rm -rf . >/dev/null 2>&1 || true
-
-          # Copy docs into repo root using a tar stream to avoid rsync 'vanished' issues
-          if [ -d "artifacts/docs" ]; then
-            echo "Streaming artifacts/docs into repo root via tar"
-            (cd artifacts/docs && tar -cf - .) | tar -C . -xvf - || true
-          else
-            echo "No artifacts/docs directory found to copy"
-          fi
-
-          echo "Contents of repo root after copying docs:"
-          ls -la || true
-
-          # Stage all files for commit
-          git add -A
-
-          # Ensure there is something to commit. If no files were staged, abort with helpful message.
-          if [ -z "$(git status --porcelain)" ]; then
-            echo "No files to commit after copying docs. Check the generator output and that artifacts/docs contained generated files."
-            exit 1
-          fi
-
-          git commit -m "chore(docs): update gh-pages from CI ${{ github.sha }}"
-          # Use force-with-lease to update branch if remote already exists but avoid overwriting unrelated changes
-          git push --force-with-lease origin "$PR_BRANCH"
-
-          # Create PR via GitHub API
-          PR_TITLE="Automated docs update from CI (${GITHUB_SHA:0:7})"
-          PR_BODY="This PR contains an automated docs update produced by CI. If the change is acceptable, merge to update the 'gh-pages' branch."
-          API_JSON=$(jq -n --arg title "$PR_TITLE" --arg head "$PR_BRANCH" --arg base "gh-pages" --arg body "$PR_BODY" '{title:$title,head:$head,base:$base,body:$body}')
-          RESP=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" -H "Accept: application/vnd.github+json" https://api.github.com/repos/${{ github.repository }}/pulls -d "$API_JSON")
-          echo "PR created: $(echo "$RESP" | jq -r '.html_url // "(no url)"')"
+          force_orphan: true
